@@ -7,6 +7,9 @@
 
   <ItemGroup>
     <PackageReference Include="VueCliMiddleware" Version="3.0.0" />
+    <None Include="app-pwa\dist\**">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 

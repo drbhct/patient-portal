@@ -28,7 +28,10 @@ namespace Patient.Portal.App
             services.AddControllers();
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp";
+                configuration.RootPath = "app-pwa";
+
+                // When deploying uncomment this!
+                //configuration.RootPath = "app-pwa/dist";
             });
         }
 
