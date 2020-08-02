@@ -5,7 +5,7 @@ Theme Version: 	2.3.0
 */
 html,
 body {
-	background: #ecedf0;
+	background: white;
 	width: 100%;
 }
 
@@ -15,7 +15,7 @@ html {
 }
 
 body {
-	color: #777;
+	color: black;
 	font-family: "Open Sans", Arial, sans-serif;
 	line-height: 22px;
 	margin: 0;
@@ -49,6 +49,8 @@ a:active {
 	top: 0;
 }
 
+
+
 /* Layout Base - Inner Wrapper */
 .inner-wrapper {
 	display: table;
@@ -62,7 +64,7 @@ a:active {
 /* Layout Base - Content Body */
 .content-body {
 	display: table-cell;
-	padding: 40px;
+	/*padding: 40px; commented out by Rizza Herrero*/
 	position: relative;
 	vertical-align: top;
 }
@@ -94,6 +96,43 @@ a:active {
 		margin-top: 15px;
 	}
 }
+
+/*Added by Rizza Herrero*/
+
+.fa-sign-out-alt {
+	color: white;
+}
+
+.fa-question-circle {
+	color: white;
+}
+
+/* Dashed border */
+hr.dashed {
+	border-top: 3px dashed #bbb;
+  }
+  
+  /* Dotted border */
+  hr.dotted {
+	border-top: 3px dotted #bbb;
+  }
+  
+  /* Solid border */
+  hr.solid {
+	border-top: 3px solid #00000094;
+
+	margin-left: 25px;
+    height: 0;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Rounded border */
+  hr.rounded {
+	border-top: 8px solid #bbb;
+	border-radius: 5px;
+  }
+
+/*END*/
 
 /* Layout Base - Page Header */
 .page-header {
@@ -399,7 +438,7 @@ a:active {
 @media only screen and (max-width: 767px) {
 	html,
 	body {
-		background: #ecedf0;
+		background: white;
 	}
 
 	html.mobile-device .sidebar-left,
@@ -434,7 +473,7 @@ a:active {
 	.header .logo-container {
 		height: 60px;
 		left: 0;
-		position: fixed;
+		/* position: fixed commented out by Rizza Herrero ; */
 		right: 0;
 		top: 0;
 		z-index: 99;
@@ -442,10 +481,10 @@ a:active {
 
 	.header .header-right {
 		background: #FFF;
-		float: none !important;
+		/* float: none !important;
 		height: 60px;
 		margin-top: 60px;
-		width: 100%;
+		width: 100%; commented out by Rizza Herrero */
 	}
 
 	.inner-wrapper {
@@ -454,7 +493,13 @@ a:active {
 	}
 
 	.content-body {
-		padding: 0 15px 15px;
+		/*padding: 0 15px 15px; Commented by Rizza Herrero*/
+	}
+
+	.dash-task-col-action{
+		text-align: center;
+		float:none !important;
+	
 	}
 
 	.page-header {
@@ -3952,12 +3997,33 @@ html.dark .inner-menu .inner-menu-toggle-inside:after {
 	height: 56px;
 }
 
+/*Added by Rizza Herrero*/
+.header-nav2 {
+	padding-left:40px;
+}
+
+.logged-info{
+	line-height: 1px !important;
+	color: white !important;
+	font-size: 11px !important;
+	padding-right: 20px !important;
+}
+
+/*END*/
+
 html.has-left-sidebar-half .header {
 	z-index: 1011;
 }
 
 /* Header Mobile */
 @media only screen and (max-width: 767px) {
+	/* Added by Rizza Herrero */
+	.nav-link {
+		display: block;
+		padding: 1rem 0.5rem;
+	}
+	/* End*/
+
 	.header .logo-container {
 		background-image: -webkit-gradient(linear, left top, left bottom, from(#F6F6F6), color-stop(45%, #FFFFFF));
 		background-image: linear-gradient(#F6F6F6 0%, #FFFFFF 45%);
@@ -3980,22 +4046,24 @@ html.has-left-sidebar-half .header {
 /* Header Dark */
 html.dark .header,
 html.header-dark .header {
-	background: #1D2127;
-	border-bottom-color: #161a1e;
-	border-top-color: #1D2127;
+	/*background: #1D2127;  commented out by Rizza Herrero*/ 
+	background: #0c529c;
+	border-bottom-color: #0c529c;
+	border-top-color: #0c529c;
 }
 
 @media only screen and (max-width: 767px) {
 	html.dark .header .logo-container,
 	html.header-dark .header .logo-container {
-		background: #1D2127;
-		border-bottom-color: #161a1e;
-		border-top-color: #1D2127;
+		background: #0c529c; /*modified by Rizza Herrero*/
+		border-bottom-color: #0c529c; /*modified by Rizza Herrero*/
+		border-top-color: #0c529c; /*modified by Rizza Herrero*/
 	}
 
 	html.dark .header .header-right,
 	html.header-dark .header .header-right {
-		background: #1D2127;
+		background:  #0c529c; /*modified by Rizza Herrero*/
+		font-size: 10px; /* added by Rizza Herrero */
 	}
 }
 
@@ -6215,9 +6283,9 @@ html.dark .call-to-action.call-to-action-grey:before {
 
 .card-header {
 	background: #f6f6f6;
-	border-radius: 5px 5px 0 0 !important;
+	border-radius: 5px 5px 5px 5px !important;
 	border-bottom: 1px solid #DADADA;
-	padding: 18px;
+	/*padding: 18px;  commented out by Rizza Herrero*/
 	position: relative;
 }
 
@@ -6274,6 +6342,89 @@ html.dark .call-to-action.call-to-action-grey:before {
 	border-bottom: 0 none;
 	border-right: 0 none;
 }
+
+/* Added by Rizza Herrero*/
+.card-body.bg-orange {
+	background: #ffa500;
+	color: #FFF;
+	border-bottom: 0 none;
+	border-right: 0 none;
+}
+
+.summary-icon.bg-orange {
+	background: #ffa500;
+	color: #FFF;
+	border-bottom: 0 none;
+	border-right: 0 none;
+}
+
+.card-body.bg-green {
+	background: #90ee90;
+	color: #FFF;
+	border-bottom: 0 none;
+	border-right: 0 none;
+}
+
+.summary-icon.bg-green {
+	background: #90ee90;
+	border-bottom: 0 none;
+	border-right: 0 none;
+}
+
+.card-body.bg-purple {
+	background: #6a5acd;
+	color: #FFF;
+	border-bottom: 0 none;
+	border-right: 0 none;
+}
+
+.summary-icon.bg-purple {
+	background: #6a5acd;
+	border-bottom: 0 none;
+	border-right: 0 none;
+}
+
+.card-body.bg-red {
+	background: #f08080;
+	color: #FFF;
+	border-bottom: 0 none;
+	border-right: 0 none;
+}
+
+.summary-icon.bg-red {
+	background: #f08080;
+	border-bottom: 0 none;
+	border-right: 0 none;
+}
+
+.card-spacing{
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.dash-task-btn{
+	width:150px;
+}
+
+.dash-task-col-title{
+	display:block;
+}
+
+.dash-task-col-action{
+	display:block; float:right;
+
+}
+.dash-divider{
+	width: 400px;
+	height: 30px;
+	margin-bottom: 10px;
+}
+
+.dash-appt-title{
+	font-size: 14px;
+    font-weight: 600 !important;
+}
+/* END */
 
 .card-actions {
 	right: 15px;
@@ -6872,6 +7023,40 @@ html .card-dark .card-title {
 
 	.card-actions a {
 		vertical-align: top;
+	}
+
+	/*added by Rizza Herrero*/
+	.card {
+		background: transparent;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		border: none;
+		width: 100px;
+		height: 100px;
+		padding: 0 5px 0 5px;
+		margin-left: -5px;
+	}
+
+	.card-body{
+		padding: 0 !important;
+	}
+
+	.summary-icon{
+		margin:auto;
+	}
+
+	.widget-summary.widget-summary-sm .summary-icon {
+		width: 50px;
+		height: 50px;
+		line-height: 50px;
+		font-size: 27.2px;
+		font-size: 2.7rem;
+		padding-top:10px;
+		margin-bottom:10px;
+	}
+
+	.widget-summary.widget-summary-sm .widget-title{
+		font-size:11px;
 	}
 }
 
@@ -15045,8 +15230,8 @@ ul.simple-bullet-list li.orange:before {
 }
 
 .widget-summary .summary-icon {
-	margin-right: 15px;
-	width: 90px;
+	/*margin-right: 15px; 
+	width: 90px; commented out by Rizza Herrero*/
 	height: 90px;
 	line-height: 90px;
 	font-size: 51.2px;
@@ -15102,10 +15287,11 @@ ul.simple-bullet-list li.orange:before {
 	background-color: rgba(0, 0, 0, 0.1);
 }
 
+/* commented out by Rizza Herrero
 .bg-primary .widget-summary .summary-footer {
 	border-top: 1px solid #fff;
 	border-top-color: rgba(255, 255, 255, 0.2);
-}
+}*/
 
 .bg-primary .widget-summary .summary-footer a {
 	color: #FFF;
@@ -15349,11 +15535,11 @@ ul.simple-bullet-list li.orange:before {
 }
 
 .widget-summary.widget-summary-sm .summary-icon {
-	width: 50px;
+	/*width: 50px; commented out by Rizza Herrero */
 	height: 50px;
 	line-height: 50px;
-	font-size: 27.2px;
-	font-size: 1.7rem;
+	/*font-size: 27.2px;
+	/*font-size: 1.7rem; /*commented out by Rizza Herrero */
 }
 
 .widget-summary.widget-summary-sm .summary {
