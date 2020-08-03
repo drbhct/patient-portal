@@ -1,7 +1,7 @@
 <template>
   <section class="body">
     <!-- start: header -->
-    <header class="header" v-show="currentRouteName!=='login'">
+    <header class="header" v-show="showHeader">
       <div class="logo-container">
         <a href="../2.3.0" class="logo">
           <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
@@ -89,6 +89,15 @@ export default {
         route = route.toLowerCase()
       }
       return route
+    },
+    showHeader () {
+      switch (this.currentRouteName) {
+        case 'landing':
+        case 'account':
+          return false
+        default:
+          return true
+      }
     }
   }
 }
