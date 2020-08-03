@@ -1,1 +1,63 @@
 /* Add here all your CSS customizations */
+
+body {
+	background: white;
+	width: 100%;
+  }
+
+  
+.fa-sign-out-alt {
+	color: white;
+  }
+  
+  .fa-question-circle {
+	color: white;
+  }
+
+  /* Header Dark */
+html.dark .header,
+html.header-dark .header {
+  background: #0c529c !important;
+  border-bottom-color: #0c529c !important;
+  border-top-color: #0c529c !important;
+}
+
+html.dark .header .logo-container,
+html.header-dark .header .logo-container {
+  background: #0c529c;
+  border-bottom-color: #0c529c;
+  border-top-color: #0c529c;
+}
+
+html.dark .header .header-right,
+html.header-dark .header .header-right {
+  background: #0c529c; /*modified by Rizza Herrero*/
+  font-size: 10px;
+}
+
+.header .logo-container {
+  position: static;
+}
+
+.header .header-right {
+  background: #fff;
+  /* float: none !important;
+    height: 60px;
+    margin-top: 60px;
+    width: 100%; commented out by Rizza Herrero */
+}
+
+.content-body {
+  padding: 0;
+}
+
+.header-nav2 {
+	padding-left: 40px;
+  }
+
+  .logged-info {
+	line-height: 1px !important;
+	color: white !important;
+	font-size: 11px !important;
+	padding-right: 20px !important;
+  }

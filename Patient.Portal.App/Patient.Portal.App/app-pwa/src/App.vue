@@ -15,29 +15,29 @@
         >
           <i class="fas fa-bars" aria-label="Toggle sidebar"></i>
         </div>
-      </div>
 
-      <!-- start: search & user box -->
-      <div class="header-right">
-        <nav class="header-nav2">
-          <ul class="nav">
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fas fa-sign-out-alt fa-2x"></i>
-              </a>
-            </li>
-            <li>
-              <a href="#" class="nav-link">
-                <i class="fas fa-question-circle fa-2x"></i>
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <div class="logged-info d-none d-sm-block">
-          <span>Signed in as Baker Mayfield</span>
+        <!-- start: search & user box -->
+        <div class="header-right">
+          <nav class="header-nav2">
+            <ul class="nav">
+              <li>
+                <a href="#" class="nav-link">
+                  <i class="fas fa-sign-out-alt fa-2x"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="nav-link">
+                  <i class="fas fa-question-circle fa-2x"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <div class="logged-info d-none d-sm-block">
+            <span>Signed in as Baker Mayfield</span>
+          </div>
         </div>
+        <!-- end: search & user box -->
       </div>
-      <!-- end: search & user box -->
     </header>
     <!-- end: header -->
     <router-view></router-view>
