@@ -94,6 +94,7 @@ export default {
       switch (this.currentRouteName) {
         case 'landing':
         case 'account':
+        case 'createaccount':
           return false
         default:
           return true
