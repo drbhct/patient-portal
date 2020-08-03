@@ -5,7 +5,7 @@
         <div class="row mb-3 justify-content-md-center">
           <div class="col-xl-8 mb-5">
             <img
-              src="img/Healthcore Logo White (Transparent).png"
+              src="img/Healthcore Logo Dark(Transparent).png"
               alt
               height="80"
               class="img-fluid"
