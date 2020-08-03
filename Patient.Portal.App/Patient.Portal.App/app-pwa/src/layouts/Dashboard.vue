@@ -371,6 +371,10 @@ export default {}
     margin-left: -5px !important;
   }
 
+  .card-header{
+    padding-top:70px;
+  }
+
   .card-body {
     padding: 0 !important;
   }

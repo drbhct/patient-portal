@@ -1,121 +1,119 @@
 /* Add here all your CSS customizations */
 
 body {
-    background: white;
-    width: 100%;
+  background: white;
+  width: 100%;
 }
 
-
 .fa-sign-out-alt {
-    color: white;
+  color: white;
 }
 
 .fa-question-circle {
-    color: white;
+  color: white;
 }
 
 /* Header Dark */
 html.dark .header,
 html.header-dark .header {
-    background: #0c529c !important;
-    border-bottom-color: #0c529c !important;
-    border-top-color: #0c529c !important;
+  background: #0c529c !important;
+  border-bottom-color: #0c529c !important;
+  border-top-color: #0c529c !important;
 }
 
-    html.dark .header .logo-container,
-    html.header-dark .header .logo-container {
-        background: #0c529c;
-        border-bottom-color: #0c529c;
-        border-top-color: #0c529c;
-    }
+html.dark .header .logo-container,
+html.header-dark .header .logo-container {
+  background: #0c529c;
+  border-bottom-color: #0c529c;
+  border-top-color: #0c529c;
+}
 
-    html.dark .header .header-right,
-    html.header-dark .header .header-right {
-        background: #0c529c; /*modified by Rizza Herrero*/
-        font-size: 10px;
-    }
-
+html.dark .header .header-right,
+html.header-dark .header .header-right {
+  background: #0c529c; /*modified by Rizza Herrero*/
+  font-size: 10px;
+}
+/*
 .header .logo-container {
-    position: static;
-}
+  position: static;
+}*/
 
 .header .header-right {
-    background: #fff;
-    /* float: none !important;
+  background: #fff;
+  /* float: none !important;
     height: 60px;
     margin-top: 60px;
     width: 100%; commented out by Rizza Herrero */
 }
 
 .content-body {
-    padding: 0;
+  padding: 0;
 }
 
 .header-nav2 {
-    padding-left: 40px;
+  padding-left: 40px;
 }
 
 .logged-info {
-    line-height: 1px !important;
-    color: white !important;
-    font-size: 11px !important;
-    padding-right: 20px !important;
+  line-height: 1px !important;
+  color: white !important;
+  font-size: 11px !important;
+  padding-right: 20px !important;
 }
 
 /* Header Mobile */
 @media only screen and (max-width: 767px) {
-    /* Added by Rizza Herrero */
-    .nav-link {
-        display: block;
-        padding: 1rem 0.5rem;
-    }
-    /* End*/
+  /* Added by Rizza Herrero */
+  .nav-link {
+    display: block;
+    padding: 1rem 0.5rem;
+  }
+  /* End*/
 
-    /* Header Dark */
-    html.dark .header,
-    html.header-dark .header {
-        background: #0c529c !important;
-        border-bottom-color: #0c529c !important;
-        border-top-color: #0c529c !important;
-    }
+  /* Header Dark */
+  html.dark .header,
+  html.header-dark .header {
+    background: #0c529c !important;
+    border-bottom-color: #0c529c !important;
+    border-top-color: #0c529c !important;
+  }
 
-        html.dark .header .logo-container,
-        html.header-dark .header .logo-container {
-            background: #0c529c;
-            border-bottom-color: #0c529c;
-            border-top-color: #0c529c;
-        }
+  html.dark .header .logo-container,
+  html.header-dark .header .logo-container {
+    background: #0c529c;
+    border-bottom-color: #0c529c;
+    border-top-color: #0c529c;
+  }
 
-        html.dark .header .header-right,
-        html.header-dark .header .header-right {
-            background: #0c529c; /*modified by Rizza Herrero*/
-            font-size: 10px; /* added by Rizza Herrero */
-        }
+  html.dark .header .header-right,
+  html.header-dark .header .header-right {
+    background: #0c529c; /*modified by Rizza Herrero*/
+    font-size: 10px; /* added by Rizza Herrero */
+  }
+/*
+  .header .logo-container {
+    height: 60px;
+    left: 0;
+    position: static;
+    right: 0;
+    top: 0;
+    z-index: 99;
+  }
+*/
+  .header .header-right {
+    background: #fff;
+    float: right !important;
+    height: 0 !important;
+    margin-top: 0 !important;
+    width: unset !important;
+  }
 
-    .header .logo-container {
-        height: 60px;
-        left: 0;
-        position: static;
-        right: 0;
-        top: 0;
-        z-index: 99;
-    }
+  .inner-wrapper {
+    min-height: 0;
+    padding-top: 0;
+  }
 
-    .header .header-right {
-        background: #fff;
-        float: right !important;
-        height: 0 !important;
-        margin-top: 0 !important;
-        width: unset !important;
-    }
-
-    .inner-wrapper {
-        min-height: 0;
-        padding-top: 0;
-    }
-
-    .content-body {
-        padding: unset;
-    }
-
+  .content-body {
+    padding: unset;
+  }
 }
