@@ -13,41 +13,65 @@
           <nav id="menu" class="nav-main" role="navigation">
             <ul class="nav nav-main">
               <!-- temporary hide for layout showcase -->
-              <!-- <li>
-                <a class="nav-link" href="layouts-default.html">
+              <li>
+                <!-- <a class="nav-link" href="layouts-default.html">
                   <i class="far fa-comment" aria-hidden="true"></i>
                   <span>Messages</span>
-                </a>
-              </li>-->
+                </a> -->
+                <router-link to="/menu/messages" class="nav-link">
+                  <i class="far fa-comment" aria-hidden="true"></i>
+                  <span>Messages</span>
+                </router-link>
+              </li>
               <li>
-                <a class="nav-link" href="layouts-default.html">
+                <!-- <a class="nav-link" href="layouts-default.html">
                   <i class="fas fa-file" aria-hidden="true"></i>
                   <span>Documents</span>
-                </a>
+                </a> -->
+                <router-link to="/menu/documents" class="nav-link">
+                  <i class="fas fa-file" aria-hidden="true"></i>
+                  <span>Documents</span>
+                </router-link>
               </li>
               <li>
-                <a class="nav-link" href="layouts-default.html">
+                <!-- <a class="nav-link" href="layouts-default.html">
                   <i class="far fa-calendar" aria-hidden="true"></i>
                   <span>Appointments</span>
-                </a>
+                </a> -->
+                <router-link to="/menu/appointments" class="nav-link">
+                  <i class="far fa-calendar" aria-hidden="true"></i>
+                  <span>Appointments</span>
+                </router-link>
               </li>
               <li>
-                <a class="nav-link" href="layouts-default.html">
+                <!-- <a class="nav-link" href="layouts-default.html">
                   <i class="fas fa-dollar-sign" aria-hidden="true"></i>
                   <span>Billing</span>
-                </a>
+                </a> -->
+                <router-link to="/menu/billing" class="nav-link">
+                  <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                  <span>Billing</span>
+                </router-link>
               </li>
               <li>
-                <a class="nav-link" href="layouts-default.html">
+                <!-- <a class="nav-link" href="layouts-default.html">
                   <i class="fas fa-user" aria-hidden="true"></i>
                   <span>Profile</span>
-                </a>
+                </a> -->
+                <router-link to="/menu/profile" class="nav-link">
+                  <i class="fas fa-user" aria-hidden="true"></i>
+                  <span>Profile</span>
+                </router-link>
               </li>
               <li>
-                <a class="nav-link" href="layouts-default.html">
+                <!-- <a class="nav-link" href="layouts-default.html">
                   <i class="fas fa-tasks" aria-hidden="true"></i>
                   <span>Tasks</span>
-                </a>
+                </a> -->
+                <router-link to="/menu/tasks" class="nav-link">
+                  <i class="fas fa-tasks" aria-hidden="true"></i>
+                  <span>Documents</span>
+                </router-link>
               </li>
             </ul>
           </nav>

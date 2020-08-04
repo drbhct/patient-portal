@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-4">
     <header class="page-header">
       <h2>
         <i class="far fa-comment" aria-hidden="true"></i>

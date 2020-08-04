@@ -1,16 +1,16 @@
 <template>
   <div>
     <div class="row mt-5 mr-2 ml-2">
-      <div class="col-lg-5">
+      <div class="col-lg-6">
         <div class="row mb-3 justify-content-md-center">
-          <div class="col-xl-8 mb-5">
+          <!-- <div class="col-xl-8 mb-5">
             <img
               src="img/Healthcore Logo Dark(Transparent).png"
               alt
               height="80"
               class="img-fluid"
             />
-          </div>
+          </div> -->
           <div class="col-xl-8 mb-3">
             <section class="card card-featured-left card-featured-secondary">
               <div class="card-body">
