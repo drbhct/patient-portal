@@ -108,7 +108,7 @@
         <div class="col-12 col-lg-6 col-xl-6">
           <form class="form-horizontal">
             <h3>My Task List</h3>
-            <img class="dash-divider" src="img/line-divider-transparent-1.png" />
+            <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
             <div class="form-group row">
               <div class="col-12 col-lg-8 col-xl-8">
                 <table class="w-100">
@@ -132,10 +132,14 @@
                 </table>
               </div>
             </div>
-            <img class="dash-divider" src="img/line-divider-transparent-1.png" />
+            <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
             <div class="form-group row">
-              <div class="col">
+              <div class="col col-lg-6 col-xl-6">
                 <p class="dash-appt-title">Upcoming appointments</p>
+                <ul class="list-unstyled list-text-aligned">
+                  <li>Wednesday 5/6/2020 @ 10:00 am</li>
+                  <li>Tuesday 5/12/2020@ 9:30 am</li>
+                </ul>
               </div>
             </div>
           </form>
@@ -145,7 +149,7 @@
             <button type="button" class="mb-1 mt-1 mr-1 btn btn-new">MAKE NEW APPOINTMENT</button>
           </div>
 
-          <div class="col-lg-6 col-xl-6">
+          <div class="col col-lg-6 col-xl-6">
             <h3>Welcome</h3>
             <p
               class="text-left"
@@ -179,6 +183,10 @@ export default {}
   border-color: black;
   font-weight: 600;
 }
+
+.list-text-aligned{
+    text-align: right !important;
+  }
 
 .p-dash-stat {
   font-size: 12px;
@@ -267,7 +275,7 @@ export default {}
 }
 .dash-divider {
   width: 400px;
-  height: 30px;
+  height: 10px;
   margin-bottom: 10px;
 }
 
@@ -304,6 +312,10 @@ export default {}
   .nav-link {
     display: block;
     padding: 1rem 0.5rem;
+  }
+
+  .list-text-aligned{
+    text-align: left !important;
   }
   /* End*/
 
@@ -371,8 +383,8 @@ export default {}
     margin-left: -5px !important;
   }
 
-  .card-header{
-    padding-top:70px;
+  .card-header {
+    padding-top: 70px;
   }
 
   .card-body {

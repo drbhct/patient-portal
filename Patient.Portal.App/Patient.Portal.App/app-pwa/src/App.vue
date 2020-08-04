@@ -42,6 +42,18 @@
     <a class="scroll-to-top hidden-mobile visible" href="#">
       <i class="fas fa-chevron-up"></i>
     </a>
+
+    <div class="footer-section text-center">
+      <div>
+        <a class="footer-link" href="#">Contact</a> <span class="font-weight-bold">|</span>
+        <a class="footer-link" href="#">Support</a> <span class="font-weight-bold">|</span>
+        <a class="footer-link" href="#">Terms</a> <span class="font-weight-bold">|</span>
+        <a class="footer-link" href="#">Privacy</a>
+      </div>
+      <span class="m-footer__copyright">
+         Copyright {{ new Date().getFullYear() }} &copy; Phunkey Inc. All rights reserved.
+      </span>
+    </div>
   </section>
 </template>
 <script>
