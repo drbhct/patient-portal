@@ -1,6 +1,6 @@
 <template>
-  <div>
-      <h1>Billing</h1>
+  <div class="form">
+    <span>THIS IS THE CONTENT</span>
   </div>
 </template>
 

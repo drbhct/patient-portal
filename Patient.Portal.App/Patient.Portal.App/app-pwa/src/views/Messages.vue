@@ -1,13 +1,7 @@
 <template>
-  <div class="mt-4">
-    <header class="page-header">
-      <h2>
-        <i class="far fa-comment" aria-hidden="true"></i>
-        Messages
-      </h2>
-    </header>
+  <div class="form">
     <div class="row">
-      <table class="table table-bordered table-responsive-md mb-0">
+      <table class="table table-responsive-md table-striped table-bordered mb-0">
         <thead>
           <tr>
             <th>#</th>

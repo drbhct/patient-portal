@@ -12,7 +12,7 @@
         <div class="row">
           <div class="col-lg-1 col-xl-1">
             <!-- start: sidebar -->
-            <aside id="sidebar-left" class="sidebar-left">
+            <aside id="sidebar-left" class="sidebar-left sidebar-width">
               <div class="nano">
                 <div class="nano-content">
                   <nav id="menu" class="nav-main sidebar-padding" role="navigation">
@@ -59,7 +59,7 @@
             </aside>
             <!-- end: sidebar -->
           </div>
-          <div class="col-lg-11 col-xl-11">
+          <div class="col-lg-11 col-xl-11 content-custom">
             <!-- start: page -->
             <router-view></router-view>
             <!-- end: page -->
@@ -104,6 +104,17 @@ export default {
 }
 </script>
 <style scoped>
+  .sidebar-width {
+    width:100px !important;
+  }
+
+  .content-custom {
+    padding-top: 30px;
+    padding-right: 50px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .sidebar-padding {
     padding: 15px;
     background: #f6f6f6;
