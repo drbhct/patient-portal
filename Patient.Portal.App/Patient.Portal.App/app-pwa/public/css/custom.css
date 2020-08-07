@@ -102,6 +102,30 @@ html.header-dark .header .header-right {
 
 }
 
+.bg-blue {
+    background: #007bff;
+    color: #fff !important;
+}
+
+.bg-orange {
+    background: #ffa500;
+    color: #fff !important;
+}
+
+.bg-green {
+    background: #90ee90;
+    color: #fff !important;
+}
+
+.bg-purple {
+    background: #6a5acd;
+    color: #fff !important;
+}
+
+.bg-red {
+    background: #f08080;
+    color: #fff !important;
+}
 /* Header Mobile */
 @media only screen and (max-width: 767px) {
   /* Added by Rizza Herrero */
