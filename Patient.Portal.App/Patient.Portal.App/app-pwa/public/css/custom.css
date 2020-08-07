@@ -13,6 +13,36 @@ body {
   color: white;
 }
 
+.dash-divider {
+  width: 400px;
+  height: 10px;
+  margin-bottom: 10px;
+}
+
+.dash-task-btn {
+  width: 150px;
+}
+
+.dash-task-col-title {
+  display: block;
+}
+
+.dash-task-col-action {
+  display: block;
+  float: right;
+  width: 200px;
+  text-align: center;
+}
+
+.dash-appt-title {
+  font-size: 14px;
+  font-weight: 600 !important;
+}
+
+.list-text-aligned-right {
+  text-align: right !important;
+}
+
 /* Header Dark */
 html.dark .header,
 html.header-dark .header {
@@ -78,6 +108,12 @@ html.header-dark .header .header-right {
   .nav-link {
     display: block;
     padding: 1rem 0.5rem;
+  }
+
+  .dash-task-col-action {
+    text-align: center;
+    float: none !important;
+    width: 100%;
   }
   /* End*/
 
