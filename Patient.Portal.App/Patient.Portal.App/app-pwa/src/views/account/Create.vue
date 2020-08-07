@@ -3,21 +3,14 @@
     <div class="row mt-5 mr-2 ml-2 justify-content-md-center">
       <div class="col-lg-5">
         <div class="row mb-3 justify-content-md-center">
-          <div class="col-xl-8 mb-5">
-            <img
-              src="img/Healthcore Logo Dark(Transparent).png"
-              alt
-              height="80"
-              class="img-fluid"
-            />
-          </div>
           <div class="col-xl-8 mb-3">
-            <section class="card card-featured-left card-featured-secondary">
+            <section class="card card-featured card-featured-primary mb-4 mt-4">
+              <header class="card-header">
+
+                <h2 class="card-title">Account Setup</h2>
+              </header>
               <div class="card-body">
                 <form @submit.prevent="submitForm">
-                  <span>
-                    <h3>Account Setup</h3>
-                  </span>
                   <!-- to error: add class "has-danger" -->
                   <div class="form-group">
                     <label for="exampleInputEmail1">Username</label>
