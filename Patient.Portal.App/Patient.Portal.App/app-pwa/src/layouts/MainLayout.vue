@@ -4,7 +4,7 @@
       <header class="menu-header text-left">
         <div class="menu-header-title ">
           <i class="far fa-calendar" aria-hidden="true"></i>
-          <span class="h-title">Appointments</span>
+          <span class="h-title">{{currentRouteName}}</span>
         </div>
       </header>
 
@@ -15,22 +15,22 @@
             <nav id="menu" class="nav-main sidebar-padding" role="navigation">
               <ul class="nav nav-main">
                 <li>
-                  <router-link to="/menu/messages" class="nav-link bg-blue sidebar-w">
+                  <router-link to="/menu/messages" class="nav-link bg-blue sidebar-w" @click="onClick('messages')">
                     <i class="far fa-comment" aria-hidden="true"></i>
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/menu/documents" class="nav-link bg-green sidebar-w">
+                  <router-link to="/menu/documents" class="nav-link bg-green sidebar-w" @click="onClick('docs')">
                     <i class="fas fa-file" aria-hidden="true"></i>
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/menu/appointments" class="nav-link bg-orange sidebar-w">
+                  <router-link to="/menu/appointments" class="nav-link bg-orange sidebar-w" @click="onClick('appts')">
                     <i class="far fa-calendar" aria-hidden="true"></i>
                   </router-link>
                 </li>
                 <li>
-                  <router-link to="/menu/billing" class="nav-link bg-success sidebar-w">
+                  <router-link to="/menu/billing" class="nav-link bg-success sidebar-w" @click="onClick('billing')">
                     <i class="fas fa-dollar-sign" aria-hidden="true"></i>
                   </router-link>
                 </li>
@@ -57,6 +57,19 @@
     </section>
   </div>
 </template>
+<script>
+export default {
+  computed: {
+    currentRouteName () {
+      let route = this.$route.name
+      if (route) {
+        route = route.toLowerCase()
+      }
+      return route
+    }
+  }
+}
+</script>
 <style scoped>
   .sidebar-padding {
     padding: 15px;
@@ -104,6 +117,7 @@
   .menu-header-title {
     padding-top: 15px;
     font-size: 24px;
+    text-transform:capitalize;
   }
 
   .h3-margin-top {
