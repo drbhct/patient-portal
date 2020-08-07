@@ -1,64 +1,71 @@
 <template>
   <div class="inner-wrapper">
     <section role="main" class="content-body">
-      <header class="menu-header text-left">
+      <header :class="checkMenuHeader" class="menu-header text-left">
         <div class="menu-header-title ">
           <i class="far fa-calendar" aria-hidden="true"></i>
           <span class="h-title">{{currentRouteName}}</span>
         </div>
       </header>
 
-      <!-- start: sidebar -->
-      <aside id="sidebar-left" class="sidebar-left">
-        <div class="nano">
-          <div class="nano-content">
-            <nav id="menu" class="nav-main sidebar-padding" role="navigation">
-              <ul class="nav nav-main">
-                <li>
-                  <router-link to="/menu/messages" class="nav-link bg-blue sidebar-w" @click="onClick('messages')">
-                    <i class="far fa-comment" aria-hidden="true"></i>
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/menu/documents" class="nav-link bg-green sidebar-w" @click="onClick('docs')">
-                    <i class="fas fa-file" aria-hidden="true"></i>
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/menu/appointments" class="nav-link bg-orange sidebar-w" @click="onClick('appts')">
-                    <i class="far fa-calendar" aria-hidden="true"></i>
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/menu/billing" class="nav-link bg-success sidebar-w" @click="onClick('billing')">
-                    <i class="fas fa-dollar-sign" aria-hidden="true"></i>
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/menu/profile" class="nav-link bg-purple sidebar-w">
-                    <i class="fas fa-user" aria-hidden="true"></i>
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/menu/tasks" class="nav-link bg-red sidebar-w">
-                    <i class="fas fa-tasks" aria-hidden="true"></i>
-                  </router-link>
-                </li>
-                <li>
-                  <router-link to="/" class="nav-link bg-gray sidebar-w">
-                    <i class="fas fa-home" aria-hidden="true"></i>
-                  </router-link>
-                </li>
-              </ul>
-            </nav>
+      <div class="content">
+        <div class="row">
+          <div class="col-lg-1 col-xl-1">
+            <!-- start: sidebar -->
+            <aside id="sidebar-left" class="sidebar-left">
+              <div class="nano">
+                <div class="nano-content">
+                  <nav id="menu" class="nav-main sidebar-padding" role="navigation">
+                    <ul class="nav nav-main">
+                      <li v-if="currentRouteName !== 'messages'">
+                        <router-link to="/menu/messages" class="nav-link bg-blue sidebar-w">
+                          <i class="far fa-comment" aria-hidden="true"></i>
+                        </router-link>
+                      </li>
+                      <li v-if="currentRouteName !== 'documents'">
+                        <router-link to="/menu/documents" class="nav-link bg-green sidebar-w">
+                          <i class="fas fa-file" aria-hidden="true"></i>
+                        </router-link>
+                      </li>
+                      <li v-if="currentRouteName !== 'appointments'">
+                        <router-link to="/menu/appointments" class="nav-link bg-orange sidebar-w">
+                          <i class="far fa-calendar" aria-hidden="true"></i>
+                        </router-link>
+                      </li>
+                      <li v-if="currentRouteName !== 'billing'">
+                        <router-link to="/menu/billing" class="nav-link bg-success sidebar-w">
+                          <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                        </router-link>
+                      </li>
+                      <li v-if="currentRouteName !== 'profile'">
+                        <router-link to="/menu/profile" class="nav-link bg-purple sidebar-w">
+                          <i class="fas fa-user" aria-hidden="true"></i>
+                        </router-link>
+                      </li>
+                      <li v-if="currentRouteName !== 'tasks'">
+                        <router-link to="/menu/tasks" class="nav-link bg-red sidebar-w">
+                          <i class="fas fa-tasks" aria-hidden="true"></i>
+                        </router-link>
+                      </li>
+                      <li>
+                        <router-link to="/" class="nav-link bg-gray sidebar-w">
+                          <i class="fas fa-home" aria-hidden="true"></i>
+                        </router-link>
+                      </li>
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            </aside>
+            <!-- end: sidebar -->
+          </div>
+          <div class="col-lg-11 col-xl-11">
+            <!-- start: page -->
+            <router-view></router-view>
+            <!-- end: page -->
           </div>
         </div>
-      </aside>
-      <!-- end: sidebar -->
-
-      <!-- start: page -->
-      <router-view></router-view>
-      <!-- end: page -->
+      </div>
     </section>
   </div>
 </template>
@@ -71,6 +78,27 @@ export default {
         route = route.toLowerCase()
       }
       return route
+    },
+    checkMenuHeader: function () {
+      if (this.currentRouteName === 'messages') {
+        return 'bg-blue'
+      }
+      if (this.currentRouteName === 'documents') {
+        return 'bg-green'
+      }
+      if (this.currentRouteName === 'appointments') {
+        return 'bg-orange'
+      }
+      if (this.currentRouteName === 'billing') {
+        return 'bg-success'
+      }
+      if (this.currentRouteName === 'profile') {
+        return 'bg-purple'
+      }
+      if (this.currentRouteName === 'tasks') {
+        return 'bg-red'
+      }
+      return ''
     }
   }
 }
@@ -145,7 +173,6 @@ export default {
 
     /*HEADER*/
     .menu-header {
-    background: #ffa500 !important;
     color: white !important;
     height: 60px;
     padding-left: 20px;

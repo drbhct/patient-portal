@@ -6,8 +6,10 @@
           <div class="card-body bg-blue">
             <div class="widget-summary widget-summary-sm">
               <div class="justify-content-center text-center">
-                <div class="summary-icon bg-blue">
-                  <i class="far fa-comment"></i>
+                <div class="summary-icon">
+                  <router-link to="/menu/messages" class="bg-blue">
+                    <i class="far fa-comment" aria-hidden="true"></i>
+                  </router-link>
                 </div>
                 <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Messages</span>
               </div>
@@ -20,8 +22,10 @@
           <div class="card-body bg-green">
             <div class="widget-summary widget-summary-sm">
               <div class="justify-content-center text-center">
-                <div class="summary-icon bg-green">
-                  <i class="fas fa-file"></i>
+                <div class="summary-icon">
+                  <router-link to="/menu/documents" class="bg-green">
+                    <i class="fas fa-file" aria-hidden="true"></i>
+                  </router-link>
                 </div>
                 <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Documents</span>
               </div>
@@ -34,22 +38,26 @@
           <div class="card-body bg-orange">
             <div class="widget-summary widget-summary-sm">
               <div class="justify-content-center text-center">
-                <div class="summary-icon bg-orange">
-                  <i class="far fa-calendar"></i>
+                <div class="summary-icon">
+                  <router-link to="/menu/appointments" class="bg-orange">
+                    <i class="far fa-calendar" aria-hidden="true"></i>
+                  </router-link>
                 </div>
                 <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Appointments</span>
+                </div>
               </div>
-            </div>
           </div>
         </section>
       </div>
       <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
         <section class="card mb-4">
-          <div class="card-body bg-success">
+          <div class="card-body bg-dgreen">
             <div class="widget-summary widget-summary-sm">
               <div class="justify-content-center text-center">
-                <div class="summary-icon bg-success">
-                  <i class="fas fa-dollar-sign"></i>
+                <div class="summary-icon">
+                  <router-link to="/menu/billing" class="bg-dgreen">
+                    <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+                  </router-link>
                 </div>
                 <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Billing</span>
               </div>
@@ -62,8 +70,10 @@
           <div class="card-body bg-purple">
             <div class="widget-summary widget-summary-sm">
               <div class="justify-content-center text-center">
-                <div class="summary-icon bg-purple">
-                  <i class="far fa-user"></i>
+                <div class="summary-icon">
+                  <router-link to="/menu/profile" class="bg-purple">
+                    <i class="fas fa-user" aria-hidden="true"></i>
+                  </router-link>
                 </div>
                 <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Profile</span>
               </div>
@@ -76,8 +86,10 @@
           <div class="card-body bg-red">
             <div class="widget-summary widget-summary-sm">
               <div class="justify-content-center text-center">
-                <div class="summary-icon bg-red">
-                  <i class="fas fa-tasks"></i>
+                <div class="summary-icon">
+                  <router-link to="/menu/tasks" class="bg-red">
+                    <i class="fas fa-tasks" aria-hidden="true"></i>
+                  </router-link>
                 </div>
                 <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Tasks</span>
               </div>
@@ -90,6 +102,35 @@
 
 </template>
 <style scoped>
+  .bg-dgreen {
+    background: #28a745;
+    color: #fff !important;
+  }
+
+  .card-body.bg-blue:hover, .card-body.bg-blue:hover a {
+    background: #0063cc !important;
+  }
+
+  .card-body.bg-orange:hover, .card-body.bg-orange:hover a {
+    background: #cc8500 !important;
+  }
+
+  .card-body.bg-green:hover, .card-body.bg-green:hover a {
+    background: #4fe34f !important;
+  }
+
+  .card-body.bg-purple:hover, .card-body.bg-purple:hover a {
+    background: #3e309c !important;
+  }
+
+  .card-body.bg-red:hover, .card-body.bg-red:hover a {
+    background: #ea4848 !important;
+  }
+
+  .card-body.bg-dgreen:hover, .card-body.bg-dgreen:hover a {
+    background: #23903c !important;
+  }
+
   .p-dash-stat {
     font-size: 12px;
   }
