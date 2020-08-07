@@ -1,5 +1,5 @@
 <template>
-  <div class="container d-lg-flex pt-4">
+  <div class="content-body">
     <router-view></router-view>
   </div>
 </template>
