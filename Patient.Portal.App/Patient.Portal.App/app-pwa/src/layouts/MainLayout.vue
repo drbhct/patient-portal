@@ -44,6 +44,11 @@
                     <i class="fas fa-tasks" aria-hidden="true"></i>
                   </router-link>
                 </li>
+                <li>
+                  <router-link to="/" class="nav-link bg-gray sidebar-w">
+                    <i class="fas fa-home" aria-hidden="true"></i>
+                  </router-link>
+                </li>
               </ul>
             </nav>
           </div>
@@ -105,9 +110,41 @@ export default {
     background: #f08080;
     color: #fff;
   }
+  .bg-success {
+    color: #fff !important;
+  }
 
-  /*HEADER*/
-  .menu-header {
+  .bg-gray {
+    background: #b3b3b3;
+    color: white !important;
+  }
+
+  a.bg-blue:hover, a.bg-blue:focus, button.bg-blue:hover, button.bg-blue:focus {
+    background: #0063cc !important;
+  }
+
+  a.bg-orange:hover, a.bg-orange:focus, button.bg-orange:hover, button.bg-orange:focus {
+    background: #cc8500 !important;
+  }
+
+  a.bg-green:hover, a.bg-green:focus, button.bg-green:hover, button.bg-green:focus {
+    background: #4fe34f !important;
+  }
+
+  a.bg-purple:hover, a.bg-purple:focus, button.bg-purple:hover, button.bg-purple:focus {
+    background: #3e309c !important;
+  }
+
+  a.bg-red:hover, a.bg-red:focus, button.bg-red:hover, button.bg-red:focus {
+    background: #ea4848 !important;
+  }
+
+  a.bg-gray:hover, a.bg-gray:focus, button.bg-gray:hover, button.bg-gray:focus {
+    background: #8c8c8c !important;
+  }
+
+    /*HEADER*/
+    .menu-header {
     background: #ffa500 !important;
     color: white !important;
     height: 60px;
@@ -128,6 +165,14 @@ export default {
     padding-left: 20px;
     font-weight: 600;
     font-size:18px;
+  }
+
+  html.sidebar-left-big-icons .sidebar-left .nano .nav-main > li:hover > ul.nav-children {
+    display: block;
+  }
+
+  html.sidebar-left-big-icons .sidebar-left .nano .nav-main > li:hover > a {
+    background: none;
   }
 
   /* Header Mobile */
