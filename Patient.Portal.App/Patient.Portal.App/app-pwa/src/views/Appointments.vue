@@ -1,6 +1,6 @@
 <template>
   <div>
-      <h1>Apointments</h1>
+    <span>testiiiiiiiiiiiiiiiiiii</span>
   </div>
 </template>
 
@@ -10,6 +10,23 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+  .menu-header {
+    background: #ffa500 !important;
+    color:white!important;
+    height:60px;
+    padding-left:20px;
+    width:100%;
+  }
+  .menu-header-title {
+    padding-top:15px;
+    font-size: 24px;
+  }
+  .h3-margin-top {
+    margin-top:auto;
+  }
+  .h-title {
+    padding-left:20px;
+    font-weight:600;
+  }
 </style>

@@ -3,10 +3,10 @@
     <div class="row justify-content-center">
       <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
         <section class="card mb-4">
-          <div class="card-body bg-primary">
+          <div class="card-body bg-blue">
             <div class="widget-summary widget-summary-sm">
               <div class="justify-content-center text-center">
-                <div class="summary-icon bg-primary">
+                <div class="summary-icon bg-blue">
                   <i class="far fa-comment"></i>
                 </div>
                 <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Messages</span>
@@ -103,6 +103,20 @@
     border-radius: 5px 5px 5px 5px !important;
     border-bottom: 1px solid #dadada;
     position: relative;
+  }
+
+  .card-body.bg-blue {
+    background: #007bff;
+    color: #fff;
+    border-bottom: 0 none;
+    border-right: 0 none;
+  }
+
+  .summary-icon.bg-blue {
+    background: #007bff;
+    color: #fff;
+    border-bottom: 0 none;
+    border-right: 0 none;
   }
 
   .card-body.bg-orange {
