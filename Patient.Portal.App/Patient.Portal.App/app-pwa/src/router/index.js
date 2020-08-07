@@ -94,6 +94,30 @@ const routes = [
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName: "about" */ '../views/account/Create.vue')
+      },
+      {
+        path: 'requestpin',
+        name: 'RequestPin',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "about" */ '../views/account/RequestPin.vue')
+      },
+      {
+        path: 'forgotusername',
+        name: 'ForgotUserName',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "about" */ '../views/account/ForgotUserName.vue')
+      },
+      {
+        path: 'forgotpassword',
+        name: 'ForgotPassword',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "about" */ '../views/account/ForgotPassword.vue')
       }
     ]
   }
