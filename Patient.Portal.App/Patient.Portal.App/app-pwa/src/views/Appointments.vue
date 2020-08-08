@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="form">
     <span>testiiiiiiiiiiiiiiiiiii</span>
   </div>
 </template>
