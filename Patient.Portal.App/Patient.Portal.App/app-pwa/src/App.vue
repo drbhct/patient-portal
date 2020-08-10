@@ -77,12 +77,13 @@ export default {
       }
     },
     showMobileMenu () {
-      switch (this.$route.fullPath) {
+      switch (this.$route.fullPath.toLowerCase()) {
         case '/':
         case '/account/create':
         case '/account/landing':
         case '/account/requestpin':
         case '/account/forgotpassword':
+        case '/account/forgotusername':
           return false
         default:
           return true
