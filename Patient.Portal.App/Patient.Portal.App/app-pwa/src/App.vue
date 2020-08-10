@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="header-right">
+      <div class="header-right" v-if="showMobileMenu">
         <nav class="header-nav2">
           <ul class="nav">
             <li>
@@ -81,6 +81,7 @@ export default {
         case '/':
         case '/account/create':
         case '/account/landing':
+        case '/account/requestpin':
           return false
         default:
           return true
