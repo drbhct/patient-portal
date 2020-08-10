@@ -4,7 +4,7 @@
       <div class="col-lg-4 mt-4">
         <section class="card card-featured mb-4">
           <header class="card-header">
-            <h2 class="card-title">Forgot Username</h2>
+            <h2 class="card-title">FORGOT USERNAME</h2>
           </header>
           <div class="card-body">
             <form @submit.prevent="forgetUserName">
@@ -18,12 +18,12 @@
                   required
                 />
               </div>
-              <div class="form-goup">
+              <div class="form-goup text-center">
                   <button type="submit" class="btn btn-primary">SEND MY USERNAME</button>
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group text-center">
                   <router-link to="/account/landing">Return to Login</router-link>
-              </div>
+              </div> -->
             </form>
           </div>
         </section>
