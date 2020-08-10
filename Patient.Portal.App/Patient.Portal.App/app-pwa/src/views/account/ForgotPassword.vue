@@ -4,7 +4,7 @@
       <div class="col-lg-4 mt-4">
         <section class="card card-featured mb-4">
           <header class="card-header">
-            <h2 class="card-title">Request New Password</h2>
+            <h2 class="card-title">REQUEST NEW PASSWORD</h2>
           </header>
           <div class="card-body">
             <form @submit.prevent="forgotPassword">
@@ -18,11 +18,11 @@
                   required
                 />
               </div>
-              <div class="form-goup">
+              <div class="form-goup text-center">
                   <button type="submit" class="btn btn-primary">NEXT</button>
               </div>
-              <div class="form-group">
-                  <router-link to="/account/landing">Return to Login</router-link>
+              <div class="form-group text-center mt-2">
+                  <router-link to="/account/forgotusername">Forgot Username?</router-link>
               </div>
             </form>
           </div>
