@@ -23,6 +23,9 @@
           <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
           <dash-appointments></dash-appointments>
         </div>
+        <div class="d-block d-sm-none">
+          <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
+        </div>
         <div class="col-12 col-lg-6 col-xl-6 offset-lg-2 offset-xl-2">
           <div class="col-12 d-none d-sm-block">
             <button type="button" class="mb-1 mt-1 mr-1 btn btn-new">MAKE NEW APPOINTMENT</button>

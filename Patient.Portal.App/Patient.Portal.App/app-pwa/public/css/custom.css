@@ -29,8 +29,25 @@ body {
 }
 
 .dash-appt-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600 !important;
+  color: #47494e;
+}
+
+.header-d-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #47494e;
+  display: inline;
+  padding: 20px 0 20px 0;
+}
+
+.header-t-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: #47494e;
+  display: inline;
+  padding: 10px 0 10px 0;
 }
 
 .list-text-aligned-right {
@@ -131,6 +148,17 @@ html.header-dark .header .header-right {
   /* Added by Rizza Herrero */
 .body {
   min-height:600px;
+}
+
+.header-d-text {
+  font-size: 16px;
+}
+
+.header-t-text {
+  text-align:center;
+}
+.list-text-aligned-right {
+  text-align:unset !important;
 }
   .nav-link {
     display: block;

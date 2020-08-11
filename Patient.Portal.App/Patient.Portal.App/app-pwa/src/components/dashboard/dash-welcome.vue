@@ -1,6 +1,8 @@
 ﻿<template>
-  <form>
-    <h3>Welcome</h3>
+  <div class="row">
+    <div class="header-d-text">
+      Welcome<span class="d-sm-none"> to Your Patient Portal</span>
+    </div>
     <p
       class="text-left"
     >Access health information online instead of over the phone or in person. The patient portal allows you to:</p>
@@ -14,5 +16,5 @@
     </ul>
 
     <p>If you have any question or concerns, please feel free to contact us. We here to help!</p>
-  </form>
+  </div>
 </template>

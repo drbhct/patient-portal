@@ -1,5 +1,5 @@
 <template>
-    <div class="form-group row">
+    <div class="row">
       <div class="col col-lg-6 col-xl-6">
         <p class="dash-appt-title">Upcoming appointments</p>
         <ul class="list-unstyled list-text-aligned-right">

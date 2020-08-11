@@ -1,8 +1,10 @@
 ﻿<template>
   <form class="form-horizontal">
-    <h3>My Task List</h3>
+    <div class="header-t-text d-block">
+      My Task List
+    </div>
     <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
-    <div class="form-group row">
+    <div class="form-group row mb-3">
       <div class="col-12 col-lg-8 col-xl-8">
         <table class="w-100">
           <tbody>
