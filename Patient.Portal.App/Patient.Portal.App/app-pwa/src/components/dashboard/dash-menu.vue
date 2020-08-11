@@ -250,7 +250,7 @@
       width: 100px !important;
       height: 100px !important;
       padding: 0 5px 0 5px !important;
-      margin-left: -5px !important;
+      margin-left: -3px !important;
     }
 
     .card-header {
@@ -291,6 +291,20 @@
     .inner-wrapper {
       min-height: 0;
       padding-top: 0;
+    }
+  }
+
+  /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+  @media only screen and (max-device-width: 320px) {
+    .card {
+      margin-left: -12px !important;
+    }
+  }
+  /* ----------- iPhone Plus ----------- */
+  @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) {
+    .card {
+      margin-left: 0 !important;
+      padding: 0 !important;
     }
   }
 </style>

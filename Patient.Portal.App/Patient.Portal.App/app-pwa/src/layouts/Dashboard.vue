@@ -23,10 +23,10 @@
           <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
           <dash-appointments></dash-appointments>
         </div>
-        <div class="d-block d-sm-none">
-          <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
-        </div>
         <div class="col-12 col-lg-6 col-xl-6 offset-lg-2 offset-xl-2">
+          <div class="d-block d-sm-none">
+            <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
+          </div>
           <div class="col-12 d-none d-sm-block">
             <button type="button" class="mb-1 mt-1 mr-1 btn btn-new">MAKE NEW APPOINTMENT</button>
           </div>
@@ -67,12 +67,20 @@ export default {
 
 .dash-divider {
   width: 400px;
-  height: 10px;
+  height: 4px;
   margin-bottom: 10px;
 }
-
 /* Header Mobile */
 @media only screen and (max-width: 767px) {
+  .container {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .dash-divider {
+    max-width: 345px;
+  }
+
   .list-text-aligned {
     text-align: left !important;
   }
@@ -149,4 +157,23 @@ export default {
     border-color: black;
   }
 }
+/* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+@media only screen and (max-device-width: 320px) {
+  .dash-divider {
+    width: 290px;
+  }
+  .btn.btn-lg {
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    font-weight: 600;
+  }
+}
+  /* ----------- iPhone Plus ----------- */
+  @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) {
+    .dash-divider {
+      width: 390px;
+    }
+  }
+
+
 </style>
