@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div class="header-right">
+      <div class="header-right" v-show="showMobileMenu">
         <nav class="header-nav2">
           <ul class="nav">
             <li>
@@ -77,10 +77,13 @@ export default {
       }
     },
     showMobileMenu () {
-      switch (this.$route.fullPath) {
+      switch (this.$route.fullPath.toLowerCase()) {
         case '/':
         case '/account/create':
         case '/account/landing':
+        case '/account/requestpin':
+        case '/account/forgotpassword':
+        case '/account/forgotusername':
           return false
         default:
           return true
