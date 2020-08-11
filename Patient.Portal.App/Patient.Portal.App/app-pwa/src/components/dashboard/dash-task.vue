@@ -27,3 +27,10 @@
     </div>
   </form>
 </template>
+<style scoped>
+  .dash-divider {
+    width: 400px;
+    height: 10px;
+    margin-bottom: 10px;
+  }
+</style>

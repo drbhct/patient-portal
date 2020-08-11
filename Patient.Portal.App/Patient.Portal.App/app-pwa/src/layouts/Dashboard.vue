@@ -62,6 +62,12 @@ export default {
   font-weight: 600;
 }
 
+.dash-divider {
+  width: 400px;
+  height: 10px;
+  margin-bottom: 10px;
+}
+
 /* Header Mobile */
 @media only screen and (max-width: 767px) {
   .list-text-aligned {

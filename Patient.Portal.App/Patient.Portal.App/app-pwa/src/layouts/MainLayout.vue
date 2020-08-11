@@ -3,7 +3,7 @@
     <section role="main" class="content-body">
       <header :class="checkMenuHeader" class="menu-header text-left">
         <div class="menu-header-title ">
-          <i class="far fa-calendar" aria-hidden="true"></i>
+          <i :class="menuIcon" aria-hidden="true"></i>
           <span class="h-title">{{currentRouteName}}</span>
         </div>
       </header>
@@ -97,6 +97,27 @@ export default {
       }
       if (this.currentRouteName === 'tasks') {
         return 'bg-red'
+      }
+      return ''
+    },
+    menuIcon: function () {
+      if (this.currentRouteName === 'messages') {
+        return 'far fa-comment'
+      }
+      if (this.currentRouteName === 'documents') {
+        return 'fas fa-file'
+      }
+      if (this.currentRouteName === 'appointments') {
+        return 'far fa-calendar'
+      }
+      if (this.currentRouteName === 'billing') {
+        return 'fas fa-dollar-sign'
+      }
+      if (this.currentRouteName === 'profile') {
+        return 'fas fa-user'
+      }
+      if (this.currentRouteName === 'tasks') {
+        return 'fas fa-tasks'
       }
       return ''
     }
@@ -229,6 +250,10 @@ export default {
       padding-left: 20px;
       font-weight: 600;
       font-size: 16px;
+    }
+
+    .content-custom {
+      padding-right: 20px !important;
     }
   }
 </style>

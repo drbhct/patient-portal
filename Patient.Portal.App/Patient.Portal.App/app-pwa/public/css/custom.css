@@ -13,12 +13,6 @@ body {
   color: white;
 }
 
-.dash-divider {
-  width: 400px;
-  height: 10px;
-  margin-bottom: 10px;
-}
-
 .dash-task-btn {
   width: 150px;
 }
@@ -126,9 +120,18 @@ html.header-dark .header .header-right {
     background: #f08080;
     color: #fff !important;
 }
+
+.btn-new {
+    background-color: #ffc266;
+    border-color: black;
+}
+
 /* Header Mobile */
 @media only screen and (max-width: 767px) {
   /* Added by Rizza Herrero */
+.body {
+  min-height:600px;
+}
   .nav-link {
     display: block;
     padding: 1rem 0.5rem;
