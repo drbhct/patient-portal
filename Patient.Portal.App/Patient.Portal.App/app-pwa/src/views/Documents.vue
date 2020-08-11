@@ -1,6 +1,6 @@
 <template>
-  <div>
-      <h1>Docuemtns</h1>
+  <div class="form">
+    <span>THIS IS WHERE CONTENT GOES</span>
   </div>
 </template>
 
