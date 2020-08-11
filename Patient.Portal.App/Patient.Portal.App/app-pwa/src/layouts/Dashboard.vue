@@ -174,6 +174,4 @@ export default {
       width: 390px;
     }
   }
-
-
 </style>
