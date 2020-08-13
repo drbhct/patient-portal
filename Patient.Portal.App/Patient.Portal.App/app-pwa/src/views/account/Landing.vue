@@ -10,7 +10,7 @@
               height="80"
               class="img-fluid"
             />
-          </div> -->
+          </div>-->
           <div class="col-xl-8 mb-3">
             <section class="card card-featured mb-4">
               <div class="card-body">
@@ -20,7 +20,7 @@
                   </span>
                   <!-- to error: add class "has-danger" -->
                   <div class="form-group">
-                    <label >Username</label>
+                    <label>Username</label>
                     <input
                       type="text"
                       class="form-control form-control-sm"
@@ -29,7 +29,7 @@
                     />
                   </div>
                   <div class="form-group mb-4">
-                    <label >Password</label>
+                    <label>Password</label>
                     <!-- <a href="#" style="float:right;font-size:12px;">Forgot password?</a> -->
                     <input
                       type="password"
@@ -139,6 +139,7 @@
 </template>
 
 <script>
+import api from '../../api/http-common.js'
 export default {
   data () {
     return {
@@ -149,8 +150,15 @@ export default {
     }
   },
   methods: {
-    login () {
-      alert('Loggin in!')
+    async login () {
+      const response = await api.auth.request.login(this.loginForm)
+      const user = response.data
+      if (user.token) {
+        this.$cookies.set('user', response.data, 60 * 60 * 12) // 12 hour after, expire
+        this.$router.push('/') // navigate to dashboard or main home page
+      } else {
+        alert(user.msg)
+      }
     }
   }
 }

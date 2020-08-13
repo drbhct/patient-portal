@@ -21,9 +21,6 @@
               <div class="form-goup text-center">
                   <button type="submit" class="btn btn-primary">SEND MY USERNAME</button>
               </div>
-              <!-- <div class="form-group text-center">
-                  <router-link to="/account/landing">Return to Login</router-link>
-              </div> -->
             </form>
           </div>
         </section>
