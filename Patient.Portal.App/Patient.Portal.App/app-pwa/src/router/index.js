@@ -121,7 +121,6 @@ router.beforeResolve((to, from, next) => {
     if (user) {
       isAuth = true
     }
-    console.log('user', user)
     if (isAuth) {
       next()
     } else {
