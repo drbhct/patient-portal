@@ -1,63 +1,59 @@
 <template>
   <div class="form">
     <div class="col-12 col-lg-12 col-xl-12 col-align-center">
-      <button :disabled="true" type="button" class="mb-4 mt-2 mr-2 btn btn-mar">
+      <button @click="setProfileCurrentPage('MyInfo')"
+              type="button" class="mb-4 mt-2 mr-2 btn btn-mar"
+              v-bind:class="{'disabled' : getProfileCurrentPage !== 'MyInfo' }">
         <i class="fas fa-user fa-2x"></i>
         <span class="btn-title">My Info</span>
       </button>
-      <button type="button" class="mb-4 mt-2 mr-2 btn btn-mar">
+      <button @click="setProfileCurrentPage('LoginInfo')"
+              type="button" class="mb-4 mt-2 mr-2 btn btn-mar"
+              v-bind:class="{'disabled' : getProfileCurrentPage !== 'LoginInfo' }">
         <i class="fas fa-lock fa-2x"></i>
         <span class="btn-title">Login Info</span>
       </button>
-      <button type="button" class="mb-4 mt-2 mr-2 btn btn-mar disabled">
+      <button @click="setProfileCurrentPage('CommInfo')"
+              type="button" class="mb-4 mt-2 mr-2 btn btn-mar"
+              v-bind:class="{'disabled' : getProfileCurrentPage !== 'CommInfo' }">
         <i class="fas fa-comments fa-2x"></i>
         <span class="btn-title">Comm Info</span>
       </button>
-      <button type="button" class="mb-4 mt-2 mr-2 btn btn-mar disabled">
+      <button @click="setProfileCurrentPage('PaymentInfo')"
+              type="button" class="mb-4 mt-2 mr-2 btn btn-mar"
+               v-bind:class="{'disabled' : getProfileCurrentPage !== 'PaymentInfo' }">
         <i class="fas fa-dollar-sign fa-2x"></i>
         <span class="btn-title">Payment</span>
       </button>
     </div>
     <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
-    <div class="col-12 col-lg-8 col-xl-8">
+    <div class="col-12 col-lg-12 col-xl-12">
       <component v-bind:is="getProfileCurrentPage"></component>
     </div>
   </div>
 </template>
 <script>
 import MyInfo from '../components/profile/ProfileInfo.vue'
-import { mapGetters } from 'vuex'
+import LoginInfo from '../components/profile/LoginInfo.vue'
+import CommInfo from '../components/profile/CommInfo.vue'
+import PaymentInfo from '../components/profile/PaymentInfo.vue'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
-    MyInfo
+    MyInfo,
+    LoginInfo,
+    CommInfo,
+    PaymentInfo
   },
   data () {
     return {
     }
   },
   computed: {
-    ...mapGetters(['getProfileCurrentPage']),
-    isDisabled: function (val) {
-      if (val === this.getProfileCurrentPage()) {
-        return 'far fa-comment'
-      }
-      if (this.currentRouteName === 'documents') {
-        return 'fas fa-file'
-      }
-      if (this.currentRouteName === 'appointments') {
-        return 'far fa-calendar'
-      }
-      if (this.currentRouteName === 'billing') {
-        return 'fas fa-dollar-sign'
-      }
-      if (this.currentRouteName === 'profile') {
-        return 'fas fa-user'
-      }
-      if (this.currentRouteName === 'tasks') {
-        return 'fas fa-tasks'
-      }
-      return ''
-    }
+    ...mapGetters(['getProfileCurrentPage'])
+  },
+  methods: {
+    ...mapActions(['setProfileCurrentPage'])
   }
 }
 </script>
