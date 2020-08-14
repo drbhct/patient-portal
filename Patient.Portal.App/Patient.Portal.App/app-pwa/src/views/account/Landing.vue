@@ -153,11 +153,17 @@ export default {
     async login () {
       const response = await api.auth.request.login(this.loginForm)
       const user = response.data
+      this.$swal({
+        toast: true,
+        position: 'top-end',
+        title: user.msg,
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 2000
+      })
       if (user.token) {
         this.$cookies.set('user', response.data, 60 * 60 * 12) // 12 hour after, expire
         this.$router.push('/') // navigate to dashboard or main home page
-      } else {
-        alert(user.msg)
       }
     }
   }
