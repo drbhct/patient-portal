@@ -1,6 +1,6 @@
 <template>
-  <div class="row ml-3">
-    <table class="table table-responsive-md mb-5">
+  <div class="form">
+    <table class="table mb-5 tbl-bordered table-striped">
       <thead>
         <tr>
           <th>#</th>
@@ -37,5 +37,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
 </style>
