@@ -140,6 +140,7 @@
 
 <script>
 import api from '../../api/http-common.js'
+import { mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -150,9 +151,12 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setIsLoading']),
     async login () {
+      this.setIsLoading(true)
       const response = await api.auth.request.login(this.loginForm)
       const user = response.data
+      this.setIsLoading(false)
       this.$swal({
         toast: true,
         position: 'top-end',

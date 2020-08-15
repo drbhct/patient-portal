@@ -1,7 +1,7 @@
 import * as types from '../mutation-types'
 
 const state = {
-  currentBillingPageView: 'MakePayment'
+  currentBillingPageView: 'Default'
 }
 
 const mutations = {

@@ -7,7 +7,7 @@ import * as getters from './getters'
 import messages from './modules/messages.js'
 import billing from './modules/billing.js'
 import profile from './modules/profile.js'
-
+import config from './modules/config.js'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -16,6 +16,7 @@ export default new Vuex.Store({
   modules: {
     messages,
     billing,
-    profile
+    profile,
+    config
   }
 })

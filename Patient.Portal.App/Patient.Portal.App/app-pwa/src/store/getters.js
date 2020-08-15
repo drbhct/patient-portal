@@ -1,3 +1,6 @@
+// config module
+export const getIsLoading = state => state.config.isLoading
+
 // messages module
 export const getMsgCurrentPage = state => state.messages.currentMsgPageView
 

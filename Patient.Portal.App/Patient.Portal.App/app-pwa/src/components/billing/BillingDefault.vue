@@ -28,7 +28,7 @@
       <div>
           <h4>Balance due: $88.46</h4>
           <div class="col-lg-5">
-              <button class="btn-primary btn-lg btn-block">MAKE PAYMENT</button>
+              <button class="btn-primary btn-lg btn-block" @click="setBillingCurrentPage('MakePayment')">MAKE PAYMENT</button>
           </div>
           <h5>* Balance due may not reflect recent payments</h5>
       </div>
@@ -36,8 +36,11 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
-
+  methods: {
+    ...mapActions(['setBillingCurrentPage'])
+  }
 }
 </script>
 

@@ -7,7 +7,7 @@
 <script>
 import Default from '../components/billing/BillingDefault.vue'
 import MakePayment from '../components/billing/MakePayment.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -16,6 +16,9 @@ export default {
   },
   computed: {
     ...mapGetters(['getBillingCurrentPage'])
+  },
+  methods: {
+    ...mapActions(['setBillingCurrentPage'])
   }
 }
 </script>
