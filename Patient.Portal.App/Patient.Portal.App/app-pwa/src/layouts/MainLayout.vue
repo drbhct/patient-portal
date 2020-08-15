@@ -10,7 +10,7 @@
 
       <div class="content">
         <div class="row">
-          <div class="col-lg-1 col-xl-1">
+          <div class="col-lg-1 col-xl-1 col-md-1">
             <!-- start: sidebar -->
             <aside id="sidebar-left" class="sidebar-left sidebar-width">
               <div class="nano">
@@ -59,7 +59,7 @@
             </aside>
             <!-- end: sidebar -->
           </div>
-          <div class="col-lg-11 col-xl-11 content-custom">
+          <div class="col-lg-11 col-xl-11 col-md-10 content-custom">
             <!-- start: page -->
             <router-view></router-view>
             <!-- end: page -->
@@ -253,7 +253,8 @@ export default {
     }
 
     .content-custom {
-      padding-right: 20px !important;
+      padding-right: 15px !important;
+      padding-bottom: 20px !important;
     }
   }
 </style>

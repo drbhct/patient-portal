@@ -7,3 +7,6 @@ export const setMsgCurrentPage = (store, payload) => {
 export const setBillingCurrentPage = (store, payload) => {
   store.commit(types.CURRENT_BILLING_PAGE_VIEW, payload)
 }
+export const setProfileCurrentPage = (store, payload) => {
+  store.commit(types.CURRENT_PROFILE_PAGE_VIEW, payload)
+}

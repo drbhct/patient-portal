@@ -1,12 +1,17 @@
 <template>
   <div class="form">
-    <span>THIS IS WHERE CONTENT GOES</span>
+    <div class="col-12">
+      <list></list>
+    </div>
   </div>
 </template>
 
 <script>
+import List from '../components/documents/DocList.vue'
 export default {
-
+  components: {
+    List
+  }
 }
 </script>
 

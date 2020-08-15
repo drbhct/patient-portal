@@ -1,6 +1,8 @@
 <template>
-  <div class="ml-3">
-    <component v-bind:is="getMsgCurrentPage"></component>
+  <div class="form">
+    <div class="col-12">
+      <component v-bind:is="getMsgCurrentPage"></component>
+    </div>
   </div>
 </template>
 <script>
