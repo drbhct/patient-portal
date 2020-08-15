@@ -5,6 +5,7 @@ import * as getters from './getters'
 
 // module registration
 import messages from './modules/messages.js'
+import billing from './modules/billing.js'
 
 Vue.use(Vuex)
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
   actions,
   getters,
   modules: {
-    messages
+    messages,
+    billing
   }
 })
