@@ -1,10 +1,7 @@
 // messages module
 export const CURRENT_MSG_PAGE_VIEW = 'CURRENT_MSG_PAGE_VIEW'
 
-<<<<<<< HEAD
 // billing module
 export const CURRENT_BILLING_PAGE_VIEW = 'CURRENT_BILLING_PAGE_VIEW'
-=======
 // PROFILE MODULE
 export const CURRENT_PROFILE_PAGE_VIEW = 'CURRENT_PROFILE_PAGE_VIEW'
->>>>>>> origin/Rizza/Profile
