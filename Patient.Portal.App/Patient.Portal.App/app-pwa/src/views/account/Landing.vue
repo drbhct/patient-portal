@@ -166,8 +166,10 @@ export default {
         timer: 2000
       })
       if (user.token) {
-        this.$cookies.set('user', response.data, 60 * 60 * 12) // 12 hour after, expire
-        this.$router.push('/') // navigate to dashboard or main home page
+        if (user.msg === 'Successful Authentication') {
+          this.$cookies.set('user', response.data, 60 * 60 * 12) // 12 hour after, expire
+          this.$router.push('/') // navigate to dashboard or main home page
+        }
       }
     }
   }

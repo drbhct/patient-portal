@@ -13,5 +13,9 @@ module.exports = {
         /^.*\/codemirror\/.*$/
       ]
     }
+  },
+  devServer: {
+    port: 8080, // CHANGE YOUR PORT HERE!
+    https: false
   }
 }
