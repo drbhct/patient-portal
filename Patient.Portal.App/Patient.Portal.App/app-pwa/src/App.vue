@@ -67,6 +67,9 @@ export default {
     Loading
   },
   computed: {
+    version () {
+      return '0.0.1'
+    },
     ...mapGetters(['getIsLoading']),
     currentRouteName () {
       let route = this.$route.name
@@ -105,6 +108,9 @@ export default {
       this.$cookies.remove('user')
       this.$router.push('/account/login')
     }
+  },
+  mounted () {
+    console.info('Vue App v' + this.version + ' <major>/<minor>/<patch>')
   }
 }
 </script>
