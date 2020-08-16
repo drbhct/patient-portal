@@ -19,11 +19,13 @@
     <div class="form-group row">
       <div class="col-lg-3 mx-1 my-1">
         <select class="form-control" v-model="payment.expireMonth" required>
+          <option disabled selected hidden value="">Month</option>
           <option v-for="month in monthList" value="month.value" :key="month.text">{{ month.text }}</option>
         </select>
       </div>
       <div class="col-lg-3 mx-1 my-1">
         <select class="form-control" v-model="payment.expireYear" required>
+          <option disabled selected hidden value="">Year</option>
           <option v-for="year in yearList" value="year" :key="year">{{ year }}</option>
         </select>
       </div>
@@ -69,6 +71,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -83,6 +86,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getBillingBalanceDue']),
     monthList () {
       return [
         { text: 'Jan', value: 1 },
@@ -110,6 +114,9 @@ export default {
   },
   methods: {
     submitPayment () {}
+  },
+  mounted () {
+    this.payment.amount = this.getBillingBalanceDue
   }
 }
 </script>

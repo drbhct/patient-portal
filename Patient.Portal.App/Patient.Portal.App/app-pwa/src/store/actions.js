@@ -12,6 +12,10 @@ export const setBillingCurrentPage = (store, payload) => {
   store.commit(types.CURRENT_BILLING_PAGE_VIEW, payload)
 }
 
+export const setBillingBalanceDue = (store, payload) => {
+  store.commit(types.BILLING_BALANCE_DUE, payload)
+}
+
 export const setProfileCurrentPage = (store, payload) => {
   store.commit(types.CURRENT_PROFILE_PAGE_VIEW, payload)
 }
