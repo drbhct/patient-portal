@@ -151,7 +151,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setIsLoading']),
+    ...mapActions(['setIsLoading', 'setProfileAuthInfo']),
     async login () {
       this.setIsLoading(true)
       const response = await api.auth.request.login(this.loginForm)
@@ -167,6 +167,13 @@ export default {
       })
       if (user.token) {
         if (user.msg === 'Successful Authentication') {
+          this.setProfileAuthInfo({
+            email: response.data.email,
+            firstName: response.data.firstName,
+            lastName: response.data.lastName,
+            userId: response.data.userId,
+            userName: response.data.username
+          })
           this.$cookies.set('user', response.data, 60 * 60 * 12) // 12 hour after, expire
           this.$router.push('/') // navigate to dashboard or main home page
         }

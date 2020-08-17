@@ -19,3 +19,7 @@ export const setBillingBalanceDue = (store, payload) => {
 export const setProfileCurrentPage = (store, payload) => {
   store.commit(types.CURRENT_PROFILE_PAGE_VIEW, payload)
 }
+
+export const setProfileAuthInfo = (store, payload) => {
+  store.commit(types.PROFILE_AUTH_INFO, payload)
+}
