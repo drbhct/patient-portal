@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :active.sync="getIsLoading" :can-cancel="false"></loading>
     <section class="body">
       <!-- start: header -->
       <header class="header">
@@ -20,7 +21,7 @@
           <nav class="header-nav2">
             <ul class="nav">
               <li>
-                <a href="#" class="nav-link">
+                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout">
                   <i class="fas fa-sign-out-alt fa-2x"></i>
                 </a>
               </li>
@@ -58,8 +59,15 @@
   </div>
 </template>
 <script>
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
+import { mapGetters } from 'vuex'
 export default {
+  components: {
+    Loading
+  },
   computed: {
+    ...mapGetters(['getIsLoading']),
     currentRouteName () {
       let route = this.$route.name
       if (route) {
@@ -82,6 +90,7 @@ export default {
         case '/':
         case '/account/create':
         case '/account/landing':
+        case '/account/login':
         case '/account/requestpin':
         case '/account/forgotpassword':
         case '/account/forgotusername':
@@ -89,6 +98,12 @@ export default {
         default:
           return true
       }
+    }
+  },
+  methods: {
+    logout () {
+      this.$cookies.remove('user')
+      this.$router.push('/account/login')
     }
   }
 }

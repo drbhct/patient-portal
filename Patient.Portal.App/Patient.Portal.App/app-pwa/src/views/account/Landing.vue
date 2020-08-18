@@ -10,7 +10,7 @@
               height="80"
               class="img-fluid"
             />
-          </div> -->
+          </div>-->
           <div class="col-xl-8 mb-3">
             <section class="card card-featured mb-4">
               <div class="card-body">
@@ -20,7 +20,7 @@
                   </span>
                   <!-- to error: add class "has-danger" -->
                   <div class="form-group">
-                    <label >Username</label>
+                    <label>Username</label>
                     <input
                       type="text"
                       class="form-control form-control-sm"
@@ -29,7 +29,7 @@
                     />
                   </div>
                   <div class="form-group mb-4">
-                    <label >Password</label>
+                    <label>Password</label>
                     <!-- <a href="#" style="float:right;font-size:12px;">Forgot password?</a> -->
                     <input
                       type="password"
@@ -139,6 +139,8 @@
 </template>
 
 <script>
+import api from '../../api/http-common.js'
+import { mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -149,8 +151,24 @@ export default {
     }
   },
   methods: {
-    login () {
-      alert('Loggin in!')
+    ...mapActions(['setIsLoading']),
+    async login () {
+      this.setIsLoading(true)
+      const response = await api.auth.request.login(this.loginForm)
+      const user = response.data
+      this.setIsLoading(false)
+      this.$swal({
+        toast: true,
+        position: 'top-end',
+        title: user.msg,
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 2000
+      })
+      if (user.token) {
+        this.$cookies.set('user', response.data, 60 * 60 * 12) // 12 hour after, expire
+        this.$router.push('/') // navigate to dashboard or main home page
+      }
     }
   }
 }

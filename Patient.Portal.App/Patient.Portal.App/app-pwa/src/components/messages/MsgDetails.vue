@@ -4,7 +4,7 @@
       <i class="fas fa-angle-left"></i>
       Back to Messages
     </a>
-    <div class="row ml-3">
+    <div class="row mx-1">
       <h3>Missed Appointment 1/12/2020</h3>
       <p class="mt-4">
         <font style="vertical-align: inherit;">

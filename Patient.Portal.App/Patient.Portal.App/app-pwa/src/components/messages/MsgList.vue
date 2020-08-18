@@ -1,6 +1,6 @@
 <template>
-  <div class="form">
-    <table class="table mb-5 tbl-bordered table-striped">
+  <div class="row mx-1">
+    <table class="table table-responsive-md mb-5">
       <thead>
         <tr>
           <th>#</th>
