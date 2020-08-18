@@ -25,7 +25,7 @@
     </div>
     <div class="form-group row">
       <div class="col-lg-6">
-        <button class="btn btn-primary">Update Password</button>
+        <button class="btn btn-primary">UPDATE PASSWORD</button>
       </div>
     </div>
   </form>

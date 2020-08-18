@@ -28,8 +28,13 @@
     <div class="form-group row">
       <div class="col-lg-2"></div>
       <div class="col-lg-4 col-xl-4">
-        <button class="btn btn-primary">Update</button>
+        <button class="btn btn-primary btn-w-160">UPDATE</button>
       </div>
     </div>
   </form>
 </template>
+<style scoped>
+  .btn-w-160 {
+    width: 160px !important;
+  }
+</style>

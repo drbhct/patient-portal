@@ -16,7 +16,7 @@
     </div>
     <div class="form-group row">
       <div class="col-12 col-lg-6 col-xl-6">
-        <button class="btn btn-primary">Update</button>
+        <button class="btn btn-primary btn-w-160">UPDATE</button>
       </div>
     </div>
   </form>
@@ -44,5 +44,8 @@ export default {
 <style scoped>
   h4 {
     font-weight: 600 !important;
+  }
+  .btn-w-160 {
+    width: 160px !important;
   }
 </style>
