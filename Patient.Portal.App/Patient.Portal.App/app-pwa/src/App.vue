@@ -33,7 +33,7 @@
             </ul>
           </nav>
           <div class="logged-info d-none d-sm-block">
-            <span>Signed in as Baker Mayfield</span>
+            <span v-if="getProfileAuthInfo">Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div>
         </div>
       </header>
@@ -70,7 +70,7 @@ export default {
     version () {
       return '0.0.1'
     },
-    ...mapGetters(['getIsLoading']),
+    ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {
       let route = this.$route.name
       if (route) {

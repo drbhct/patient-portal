@@ -3,7 +3,7 @@
     <section role="main" class="content-body">
       <header class="card-header text-center">
         <div class="d-none d-sm-block">
-          <h3>Baker Mayfield</h3>
+          <h3 v-if="getProfileAuthInfo">{{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</h3>
         </div>
 
         <div class="d-block d-sm-none btn-div-new">
@@ -45,6 +45,7 @@ import DashTask from '@/components/dashboard/dash-task.vue'
 import DashAppointments from '@/components/dashboard/dash-appointments.vue'
 import DashWelcome from '@/components/dashboard/dash-welcome.vue'
 import DashMenu from '@/components/dashboard/dash-menu.vue'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
   components: {
@@ -52,6 +53,9 @@ export default {
     DashAppointments,
     DashWelcome,
     DashMenu
+  },
+  computed: {
+    ...mapGetters(['getProfileAuthInfo'])
   }
 }
 </script>
