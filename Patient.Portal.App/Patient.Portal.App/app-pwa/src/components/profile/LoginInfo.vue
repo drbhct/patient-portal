@@ -32,28 +32,11 @@
 </template>
 <style scoped>
   .dash-divider {
-    width: 400px;
+    width: 100%;
     height: 4px;
     margin-bottom: 10px;
   }
   h4 {
     font-weight: 600 !important;
   }
-  /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
-  @media only screen and (min-device-width: 320px) and (max-device-width: 568x) {
-    .dash-divider {
-      width: 320px;
-    }
-  }
-  /* ----------- iphone 6+, 6s+, 7+, 8+ ----------- */
-  @media only screen and (min-device-width: 414px) and (max-device-width : 736px) {
-    .dash-divider {
-      width: 420px;
-    }
-  }
-  @media only screen and (min-device-width: 375px) and (max-device-width: 812px) {
-    .dash-divider {
-      max-width: 375px;
-    }
-  }
-</style>
+ </style>

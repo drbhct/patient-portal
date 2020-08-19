@@ -108,11 +108,6 @@ export default {
     .col-align-center {
       text-align: center !important;
     }
-    .dash-divider {
-      width: 320px;
-      height: 4px;
-      margin-top:0;
-    }
     .btn-mar {
       background-color: #990026;
       color: white;
@@ -129,13 +124,6 @@ export default {
       font-size: 11px;
       width: 60px;
       text-align: center;
-    }
-  }
-  /* ----------- iPhone Plus ----------- */
-  @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) {
-    .dash-divider {
-      width: 415px;
-      height: 4px;
     }
   }
 </style>
