@@ -18,37 +18,37 @@
                   <nav id="menu" class="nav-main sidebar-padding" role="navigation">
                     <ul class="nav nav-main">
                       <li v-if="currentRouteName !== 'messages'">
-                        <router-link to="/menu/messages" class="nav-link bg-blue sidebar-w">
+                        <router-link to="/menu/messages" class="nav-link bg-blue sidebar-w" v-on:click.native="closeSidebar">
                           <i class="far fa-comment" aria-hidden="true"></i>
                         </router-link>
                       </li>
                       <li v-if="currentRouteName !== 'documents'">
-                        <router-link to="/menu/documents" class="nav-link bg-green sidebar-w">
+                        <router-link to="/menu/documents" class="nav-link bg-green sidebar-w" v-on:click.native="closeSidebar">
                           <i class="fas fa-file" aria-hidden="true"></i>
                         </router-link>
                       </li>
                       <li v-if="currentRouteName !== 'appointments'">
-                        <router-link to="/menu/appointments" class="nav-link bg-orange sidebar-w">
+                        <router-link to="/menu/appointments" class="nav-link bg-orange sidebar-w" v-on:click.native="closeSidebar">
                           <i class="far fa-calendar" aria-hidden="true"></i>
                         </router-link>
                       </li>
                       <li v-if="currentRouteName !== 'billing'">
-                        <router-link to="/menu/billing" class="nav-link bg-success sidebar-w">
+                        <router-link to="/menu/billing" class="nav-link bg-success sidebar-w" v-on:click.native="closeSidebar">
                           <i class="fas fa-dollar-sign" aria-hidden="true"></i>
                         </router-link>
                       </li>
                       <li v-if="currentRouteName !== 'profile'">
-                        <router-link to="/menu/profile" class="nav-link bg-purple sidebar-w">
+                        <router-link to="/menu/profile" class="nav-link bg-purple sidebar-w" v-on:click.native="closeSidebar">
                           <i class="fas fa-user" aria-hidden="true"></i>
                         </router-link>
                       </li>
                       <li v-if="currentRouteName !== 'tasks'">
-                        <router-link to="/menu/tasks" class="nav-link bg-red sidebar-w">
+                        <router-link to="/menu/tasks" class="nav-link bg-red sidebar-w" v-on:click.native="closeSidebar">
                           <i class="fas fa-tasks" aria-hidden="true"></i>
                         </router-link>
                       </li>
                       <li>
-                        <router-link to="/" class="nav-link bg-gray sidebar-w">
+                        <router-link to="/" class="nav-link bg-gray sidebar-w" v-on:click.native="closeSidebar">
                           <i class="fas fa-home" aria-hidden="true"></i>
                         </router-link>
                       </li>
@@ -120,6 +120,12 @@ export default {
         return 'fas fa-tasks'
       }
       return ''
+    }
+  },
+  methods: {
+    closeSidebar () {
+      console.log('closing sidebar')
+      document.getElementsByTagName('html')[0].classList.remove('sidebar-left-opened')
     }
   }
 }
