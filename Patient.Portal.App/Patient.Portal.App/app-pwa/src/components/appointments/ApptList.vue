@@ -1,7 +1,12 @@
 ﻿<template>
   <div class="form">
     <h4>Upcoming Appointments</h4>
-    <table class="table mb-5 tbl-bordered table-striped">
+    <table id="tblDemo" class="table mb-5 tbl-bordered table-striped">
+      <thead>
+        <tr>
+          <td>Schedule</td>
+        </tr>
+      </thead>
       <tbody>
         <tr>
           <td><span>Wednesday 5/6/2020 @ 10:00 AM</span></td>
@@ -16,6 +21,10 @@
 
 <script>
 export default {
+  mounted () {
+    // eslint-disable-next-line no-undef
+    $('#tblDemo').DataTable()
+  }
 }
 </script>
 <style scoped>
