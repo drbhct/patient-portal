@@ -33,7 +33,7 @@
             </ul>
           </nav>
           <div class="logged-info d-none d-sm-block">
-            <span>Signed in as Baker Mayfield</span>
+            <span v-if="getProfileAuthInfo">Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div>
         </div>
       </header>
@@ -67,7 +67,10 @@ export default {
     Loading
   },
   computed: {
-    ...mapGetters(['getIsLoading']),
+    version () {
+      return '0.0.1'
+    },
+    ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {
       let route = this.$route.name
       if (route) {
@@ -105,6 +108,9 @@ export default {
       this.$cookies.remove('user')
       this.$router.push('/account/login')
     }
+  },
+  mounted () {
+    console.info('Vue App v' + this.version + ' <major>/<minor>/<patch>')
   }
 }
 </script>

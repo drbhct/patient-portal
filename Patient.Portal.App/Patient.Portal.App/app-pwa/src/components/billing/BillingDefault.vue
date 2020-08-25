@@ -26,7 +26,7 @@
           </table>
       </div>
       <div>
-          <h4>Balance due: $88.46</h4>
+          <h4>Balance due: $ {{ this.getBillingBalanceDue }}</h4>
           <div class="col-lg-5">
               <button class="btn-primary btn-lg btn-block" @click="setBillingCurrentPage('MakePayment')">MAKE PAYMENT</button>
           </div>
@@ -36,10 +36,17 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   methods: {
-    ...mapActions(['setBillingCurrentPage'])
+    ...mapActions(['setBillingCurrentPage', 'setBillingBalanceDue'])
+  },
+  computed: {
+    ...mapGetters(['getBillingBalanceDue'])
+  },
+  mounted () {
+    const balanceDue = 88.46 // TODO: this should be coming from the api
+    this.setBillingBalanceDue(balanceDue)
   }
 }
 </script>

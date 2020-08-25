@@ -14,7 +14,8 @@
         </div>
         <div class="form-group row">
           <div class="col-lg-6 mx-1 my-1">
-            <select class="form-control" v-model="selectedCard">
+            <select class="form-control" v-model="selectedCard" required>
+              <option disabled selected hidden value="">Select Card</option>
               <option>VISA (02/22) - 4212</option>
               <option>MASTERCARD (05/25) - 5433</option>
             </select>
@@ -33,7 +34,7 @@
         </div>
         <div class="form-group row">
           <div class="col-lg-6">
-            <input type="number" class="form-control" placeholder="Enter Amount" v-model="payment.amount"/>
+            <input type="number" step="0.01" class="form-control" placeholder="Enter Amount" v-model="payment.amount" required/>
           </div>
         </div>
         <div class="form-group row">
@@ -49,7 +50,7 @@
 
 <script>
 import OtherCard from './MakePaymentOtherCard.vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {
     OtherCard
@@ -58,15 +59,19 @@ export default {
     return {
       useOtherCard: false,
       saveOtherCard: false,
-      selectedCard: null,
+      selectedCard: '',
       payment: {
         cardNum: '',
         cvc: '',
         expireMonth: '',
         expireYear: '',
-        saveInfo: false
+        saveInfo: false,
+        amount: 0
       }
     }
+  },
+  computed: {
+    ...mapGetters(['getBillingBalanceDue'])
   },
   methods: {
     ...mapActions(['setBillingCurrentPage']),
@@ -74,6 +79,9 @@ export default {
     showOtherCard () {
       this.useOtherCard = true
     }
+  },
+  mounted () {
+    this.payment.amount = this.getBillingBalanceDue
   }
 }
 </script>
