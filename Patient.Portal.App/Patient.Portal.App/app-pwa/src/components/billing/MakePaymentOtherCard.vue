@@ -49,7 +49,7 @@
     </div>
     <div class="form-group row">
       <div class="col-lg-6">
-        <input type="number" class="form-control" placeholder="Enter Amount" v-model="payment.amount"/>
+        <input type="number" class="form-control" placeholder="Enter Amount" v-model="payment.amount"  step="0.01"/>
       </div>
     </div>
 
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -113,7 +113,10 @@ export default {
     }
   },
   methods: {
-    submitPayment () {}
+    ...mapActions(['setBillingCurrentPage']),
+    submitPayment () {
+      this.setBillingCurrentPage('MakePaymentSuccess')
+    }
   },
   mounted () {
     this.payment.amount = this.getBillingBalanceDue

@@ -75,7 +75,9 @@ export default {
   },
   methods: {
     ...mapActions(['setBillingCurrentPage']),
-    submitPayment () {},
+    submitPayment () {
+      this.setBillingCurrentPage('MakePaymentSuccess')
+    },
     showOtherCard () {
       this.useOtherCard = true
     }
