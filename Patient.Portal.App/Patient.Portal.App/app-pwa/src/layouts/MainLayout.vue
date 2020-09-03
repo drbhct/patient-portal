@@ -59,7 +59,7 @@
             </aside>
             <!-- end: sidebar -->
           </div>
-          <div class="col-lg-11 col-xl-11 col-md-10 content-custom">
+          <div class="col-lg-11 col-xl-11 col-md-10 content-custom mb-4">
             <!-- start: page -->
             <router-view></router-view>
             <!-- end: page -->

@@ -4,7 +4,7 @@
       <div class="col-12 col-lg-6 col-xl-6">
         <h3>Payment Information</h3>
       </div>
-      <div class="col-6 col-lg-6 col-xl-6 d-none d-sm-block d-sm-none d-md-block">
+      <div class="col-6 col-lg-6 col-xl-6 d-none d-lg-block d-xl-block">
         <div class="float-right">
           <button class="btn btn-primary btn-w-160">ADD NEW</button>
         </div>
@@ -29,7 +29,7 @@
         <button class="btn btn-primary btn-w-160">UPDATE</button>
       </div>
     </div>
-    <div class="form-group row d-block d-sm-none d-none d-sm-block d-md-none">
+    <div class="form-group row d-lg-none">
       <div class="col-12 col-lg-6 col-xl-6">
         <button class="btn btn-primary btn-w-160">ADD NEW</button>
       </div>

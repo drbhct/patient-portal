@@ -1,10 +1,9 @@
 ﻿<template>
   <div class="form">
-    <h4>Upcoming Appointments</h4>
-    <table id="tblDemo" class="table mb-5 tbl-bordered table-striped">
+    <table id="tblDemo" class="table tbl-bordered table-striped pt-4 w-100">
       <thead>
-        <tr>
-          <td>Schedule</td>
+        <tr class="text-center">
+          <td class="header-text">Appointment</td>
         </tr>
       </thead>
       <tbody>
@@ -28,4 +27,8 @@ export default {
 }
 </script>
 <style scoped>
+  .header-text {
+    font-size: 16px;
+    font-weight: 600 !important;
+  }
 </style>

@@ -17,13 +17,13 @@
 
       <div class="w-100" />
 
-      <div class="container d-lg-flex pt-4">
-        <div class="col-12 col-lg-6 col-xl-6">
+      <div class="container d-lg-flex d-md-flex pt-4">
+        <div class="col-12 col-md-6 col-lg-6 col-xl-6">
           <dash-task></dash-task>
           <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
           <dash-appointments></dash-appointments>
         </div>
-        <div class="col-12 col-lg-6 col-xl-6 offset-lg-2 offset-xl-2">
+        <div class="col-12 col-md-6 col-lg-6 col-xl-6 offset-lg-2 offset-xl-2">
           <div class="d-block d-sm-none">
             <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
           </div>
@@ -31,7 +31,7 @@
             <button type="button" class="mb-1 mt-1 mr-1 btn btn-new">MAKE NEW APPOINTMENT</button>
           </div>
 
-          <div class="col col-lg-6 col-xl-6">
+          <div class="col-12 col-md-12 col-lg-6 col-xl-6">
             <dash-welcome></dash-welcome>
           </div>
         </div>
@@ -176,6 +176,13 @@ export default {
   @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) {
     .dash-divider {
       width: 390px;
+    }
+  }
+
+  /* Landscape IPHONE X */
+  @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
+    .dash-divider {
+      width: 300px;
     }
   }
 </style>
