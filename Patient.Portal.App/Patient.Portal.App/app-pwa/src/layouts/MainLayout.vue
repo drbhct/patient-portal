@@ -52,6 +52,11 @@
                           <i class="fas fa-home" aria-hidden="true"></i>
                         </router-link>
                       </li>
+                      <li>
+                        <a href="javascript:void(0)" @click="logout" class="nav-link bg-dark sidebar-w" title="Logout">
+                          <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                        </a>
+                      </li>
                     </ul>
                   </nav>
                 </div>
@@ -126,6 +131,10 @@ export default {
     closeSidebar () {
       console.log('closing sidebar')
       document.getElementsByTagName('html')[0].classList.remove('sidebar-left-opened')
+    },
+    logout () {
+      this.$cookies.remove('user')
+      this.$router.push('/account/login')
     }
   }
 }
