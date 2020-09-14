@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.1'
+      return '0.0.2'
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {
