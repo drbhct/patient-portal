@@ -62,6 +62,12 @@ export default {
       */
     async login (payload) {
       return await securedJsonRequest.post('/users/authenticate', payload)
+    },
+    /**
+      * @param {String} payload  request user login
+      */
+    async getUser (payload) {
+      return await securedJsonRequest.get(`/PatientPortal/getuser/${payload}`)
     }
   }
 }

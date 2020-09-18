@@ -155,7 +155,10 @@ export default {
     async login () {
       this.setIsLoading(true)
       const response = await api.auth.request.login(this.loginForm)
+      // const userInfo = await api.auth.request.getUser(this.loginForm.userName)
+      // console.log('userInfo', userInfo.data)
       const user = response.data
+      // console.log('user', user)
       this.setIsLoading(false)
       this.$swal({
         toast: true,
