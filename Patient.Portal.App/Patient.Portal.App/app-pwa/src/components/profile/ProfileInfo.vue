@@ -33,6 +33,15 @@
     </div>
   </form>
 </template>
+<script>
+export default {
+  data () {
+    return {
+
+    }
+  }
+}
+</script>
 <style scoped>
   .btn-w-160 {
     width: 160px !important;

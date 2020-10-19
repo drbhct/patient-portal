@@ -22,7 +22,7 @@
                   <div class="form-group">
                     <label>Username</label>
                     <input
-                      type="text"
+                      type="email"
                       class="form-control form-control-sm"
                       required
                       v-model="loginForm.userName"
@@ -153,34 +153,40 @@ export default {
   methods: {
     ...mapActions(['setIsLoading', 'setProfileAuthInfo']),
     async login () {
-      this.setIsLoading(true)
-      const response = await api.auth.request.login(this.loginForm)
-      // const userInfo = await api.auth.request.getUser(this.loginForm.userName)
-      // console.log('userInfo', userInfo.data)
-      const user = response.data
-      // console.log('user', user)
-      this.setIsLoading(false)
-      this.$swal({
-        toast: true,
-        position: 'top-end',
-        title: user.msg,
-        showConfirmButton: false,
-        timerProgressBar: true,
-        timer: 2000
-      })
-      if (user.token) {
-        if (user.msg === 'Successful Authentication') {
-          this.setProfileAuthInfo({
-            email: response.data.email,
-            firstName: response.data.firstName,
-            lastName: response.data.lastName,
-            userId: response.data.userId,
-            userName: response.data.username
-          })
-          this.$cookies.set('user', response.data, 60 * 60 * 12) // 12 hour after, expire
-          this.$router.push('/') // navigate to dashboard or main home page
-        }
+      // this.setIsLoading(true)
+      const apiRes = await api.auth.request.apiLogin()
+      console.log('apiRes', apiRes.data)
+      this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
+      // this.setIsLoading(false)
+
+      const response = await api.auth.request.validateUser(this.loginForm)
+      if (!response.data) {
+        this.$swal({
+          toast: true,
+          position: 'top-end',
+          title: 'Authentication Failed',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          type: 'error'
+        })
+        return
       }
+      console.log('apiRes', response.data)
+      this.setProfileAuthInfo(response.data)
+      // this.setProfileAuthInfo({
+      //   email: response.data.email,
+      //   firstName: response.data.firstName,
+      //   lastName: response.data.lastName,
+      //   userId: response.data.id,
+      //   userName: response.data.username,
+      //   nickName: response.data.nickName,
+      //   mobilePhone: response.data.mobilePhone,
+      //   canEmail: response.data.canEmail,
+      //   canSMS: response.data.canSMS,
+      //   seQues: response.data.seQues
+      // })
+      this.$router.push('/')
     }
   }
 }

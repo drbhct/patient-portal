@@ -55,19 +55,63 @@ securedJsonRequest.interceptors.response.use(
 
 export default {
   request: {
-    /**
-      * @param {Object} payload  request object for login
-      * @param {String} payload.username
-      * @param {String} payload.password
-      */
-    async login (payload) {
-      return await securedJsonRequest.post('/users/authenticate', payload)
+    async apiLogin () {
+      const payload = {
+        username: 'patientportal',
+        password: 'cw5e9ZsEnlsn1sduVzJstwyXTbtP6u4F49yPKm0gKay0VlvrDoa2njmvky4EGT6MnEiT646pmaiOxOFBmbGYl5pgE9fEiGms6GIs'
+      }
+      return await securedJsonRequest.post('/patientportal/authenticate', payload)
     },
     /**
-      * @param {String} payload  request user login
+      * @param {Object} payload  request object for login
+      * @param {String} payload.username email is use for the username field
+      * @param {String} payload.password
       */
-    async getUser (payload) {
-      return await securedJsonRequest.get(`/PatientPortal/getuser/${payload}`)
+    async validateUser (payload) {
+      return await securedJsonRequest.post('/patientportal/validateuser', payload)
+    },
+    /**
+      * @param {Object} payload  request object for updating user info
+      * @param {String} payload.id
+      * @param {String} payload.firstName
+      * @param {String} payload.lastName
+      * @param {String} payload.nickName
+      */
+    async updateUser (payload) {
+      return await securedJsonRequest.post('/patientportal/updateuser', payload)
+    },
+    /**
+      * @param {Object} payload  request object for update user email
+      * @param {String} payload.id
+      * @param {String} payload.email
+      */
+    async updateUserEmail (payload) {
+      return await securedJsonRequest.post('/patientportal/updateuseremail', payload)
+    },
+    /**
+      * @param {Object} payload  request object for updating user mobile phone
+      * @param {String} payload.id
+      * @param {String} payload.mobilePhone
+      */
+    async updateUserMobilephone (payload) {
+      return await securedJsonRequest.post('/patientportal/updateusermobilephone', payload)
+    },
+    /**
+      * @param {Object} payload  request object for updating user comm options
+      * @param {String} payload.id
+      * @param {Boolean} payload.canEmail
+      * @param {Boolean} payload.canSms
+      */
+    async updateUserCommoptions (payload) {
+      return await securedJsonRequest.post('/patientportal/updateusercommoptions', payload)
+    },
+    /**
+      * @param {Object} payload  request object for updating user comm options
+      * @param {String} payload.id
+      * @param {String} payload.pwd
+      */
+    async updateUserPwd (payload) {
+      return await securedJsonRequest.post('/patientportal/updateuserpwd', payload)
     }
   }
 }
