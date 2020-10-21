@@ -23,3 +23,7 @@ export const setProfileCurrentPage = (store, payload) => {
 export const setProfileAuthInfo = (store, payload) => {
   store.commit(types.PROFILE_AUTH_INFO, payload)
 }
+
+export const setProfileMyInfo = (store, payload) => {
+  store.commit(types.PROFILE_MY_INFO, payload)
+}

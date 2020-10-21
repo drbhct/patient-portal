@@ -153,13 +153,14 @@ export default {
   methods: {
     ...mapActions(['setIsLoading', 'setProfileAuthInfo']),
     async login () {
-      // this.setIsLoading(true)
-      const apiRes = await api.auth.request.apiLogin()
-      console.log('apiRes', apiRes.data)
-      this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
-      // this.setIsLoading(false)
+      this.setIsLoading(true)
 
+      const apiRes = await api.auth.request.apiLogin()
+      this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
       const response = await api.auth.request.validateUser(this.loginForm)
+
+      this.setIsLoading(false)
+
       if (!response.data) {
         this.$swal({
           toast: true,
@@ -168,24 +169,20 @@ export default {
           showConfirmButton: false,
           timerProgressBar: true,
           timer: 2000,
-          type: 'error'
+          icon: 'error'
         })
         return
       }
-      console.log('apiRes', response.data)
+      this.$swal({
+        position: 'top',
+        title: 'Authentication Success',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 1000,
+        icon: 'success'
+      })
+
       this.setProfileAuthInfo(response.data)
-      // this.setProfileAuthInfo({
-      //   email: response.data.email,
-      //   firstName: response.data.firstName,
-      //   lastName: response.data.lastName,
-      //   userId: response.data.id,
-      //   userName: response.data.username,
-      //   nickName: response.data.nickName,
-      //   mobilePhone: response.data.mobilePhone,
-      //   canEmail: response.data.canEmail,
-      //   canSMS: response.data.canSMS,
-      //   seQues: response.data.seQues
-      // })
       this.$router.push('/')
     }
   }

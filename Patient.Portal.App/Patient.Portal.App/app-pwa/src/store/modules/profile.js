@@ -11,6 +11,12 @@ const mutations = {
   },
   [types.PROFILE_AUTH_INFO] (state, payload) {
     state.profileAuthInfo = payload
+  },
+  [types.PROFILE_MY_INFO] (state, payload) {
+    state.profileAuthInfo.firstName = payload.firstName
+    state.profileAuthInfo.lastName = payload.lastName
+    state.profileAuthInfo.nickName = payload.nickName
+    state.profileAuthInfo.email = payload.email
   }
 }
 
