@@ -11,7 +11,7 @@
           <td><span>Wednesday 5/6/2020 @ 10:00 AM</span></td>
         </tr>
         <tr>
-          <td><span>Tuesday 5/12/2020 @ 9:30 AM</span></td>
+          <td><span>Tuesday 5/12/2020 @ 10:30 AM</span></td>
         </tr>
       </tbody>
     </table>
