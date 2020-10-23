@@ -156,6 +156,7 @@ export default {
       this.setIsLoading(true)
 
       const apiRes = await api.auth.request.apiLogin()
+      await new Promise(resolve => setTimeout(resolve, 2000))
       this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
       const response = await api.auth.request.validateUser(this.loginForm)
 
@@ -185,6 +186,9 @@ export default {
       this.setProfileAuthInfo(response.data)
       this.$router.push('/')
     }
+  },
+  async mounted () {
+    await api.auth.request.apiLogin()
   }
 }
 </script>
