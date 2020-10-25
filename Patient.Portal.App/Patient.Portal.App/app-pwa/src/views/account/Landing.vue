@@ -159,7 +159,8 @@ export default {
       await new Promise(resolve => setTimeout(resolve, 2000))
       this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
       const response = await api.auth.request.validateUser(this.loginForm)
-
+      const user = await api.auth.request.getUser(this.loginForm.userName)
+      console.log('user', user.data)
       this.setIsLoading(false)
 
       if (!response.data) {
