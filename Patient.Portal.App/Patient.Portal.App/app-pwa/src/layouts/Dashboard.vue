@@ -45,7 +45,8 @@ import DashTask from '@/components/dashboard/dash-task.vue'
 import DashAppointments from '@/components/dashboard/dash-appointments.vue'
 import DashWelcome from '@/components/dashboard/dash-welcome.vue'
 import DashMenu from '@/components/dashboard/dash-menu.vue'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import api from '../api/http-common.js'
 export default {
   name: 'Dashboard',
   components: {
@@ -55,7 +56,14 @@ export default {
     DashMenu
   },
   computed: {
-    ...mapGetters(['getProfileAuthInfo'])
+    ...mapGetters(['getProfileAuthInfo', 'getProfileAuthInfo'])
+  },
+  methods: {
+    ...mapActions(['setProfilePatientAssociated'])
+  },
+  async mounted () {
+    const patientAssosicated = await api.auth.request.getUserPatient(this.getProfileAuthInfo.id)
+    this.setProfilePatientAssociated(patientAssosicated.data)
   }
 }
 </script>

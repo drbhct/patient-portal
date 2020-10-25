@@ -11,3 +11,4 @@ export const getBillingBalanceDue = state => state.billing.balanceDue
 // PROFILE
 export const getProfileCurrentPage = state => state.profile.currentProfilePageView
 export const getProfileAuthInfo = state => state.profile.profileAuthInfo
+export const getProfilePatientAssociated = state => state.profile.patientAssociated

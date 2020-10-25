@@ -118,6 +118,35 @@ export default {
       */
     async getUser (payload) {
       return await securedJsonRequest.get('/patientportal/getUser/' + payload)
+    },
+    /**
+      * @param {String} userId
+      */
+    async getUserPatient (payload) {
+      return await securedJsonRequest.get('/patientportal/getuserpatients/' + payload)
+    },
+    /**
+      * @param {Object} Payload request object for acquiring comm options for the user using associated patient info
+      * @param {Number} payload.facilityId
+      * @param {Number} payload.patientId
+      */
+    async getPatientCommOptions (payload) {
+      return await securedJsonRequest.post('/patientportal/getpatientcommoptions', payload)
+    },
+    /**
+      * API access to update user associated patient communication options
+      * Reminder of the only acceptable combinations:
+      * SendSMS, SendSMS + SendEmail, SendEmail, CallMobilePhone, CallMobilePhone + SendEmail, CallHomePhone, CallHomePhone + SendEmail
+      * @param {Object} Payload request object for updating patient comm options
+      * @param {Number} payload.patientId
+      * @param {Number} payload.facilityId
+      * @param {Number} payload.sendSms
+      * @param {Number} payload.sendEmail
+      * @param {Number} payload.callMobilePhone
+      * @param {Number} payload.callHomePhone
+      */
+    async updatePatientCommOptions (payload) {
+      return await securedJsonRequest.post('/patientportal/updatepatientcommoptions', payload)
     }
   }
 }
