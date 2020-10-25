@@ -112,6 +112,12 @@ export default {
       */
     async updateUserPwd (payload) {
       return await securedJsonRequest.post('/patientportal/updateuserpwd', payload)
+    },
+    /**
+      * @param {String} payload
+      */
+    async getUser (payload) {
+      return await securedJsonRequest.get('/patientportal/getUser/' + payload)
     }
   }
 }
