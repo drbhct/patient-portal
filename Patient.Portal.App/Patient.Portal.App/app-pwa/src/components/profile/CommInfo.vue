@@ -17,7 +17,7 @@
     <div class="form-group row" v-if="commOptions">
       <div class="col-12 col-lg-6 col-xl-6">
         <div class="checkbox-custom checkbox-default">
-          <input type="checkbox" v-model="commOptions.sendSms">
+          <input type="checkbox" v-model="commOptions.sendSms" :disabled="commOptions.callMobilePhone || commOptions.callHomePhone">
           <label>Send via Text Message</label>
         </div>
       </div>
@@ -25,7 +25,7 @@
     <div class="form-group row" v-if="commOptions">
       <div class="col-12 col-lg-6 col-xl-6">
         <div class="checkbox-custom checkbox-default">
-          <input type="checkbox" v-model="commOptions.callHomePhone">
+          <input type="checkbox" v-model="commOptions.callHomePhone" :disabled="commOptions.sendSms || commOptions.callMobilePhone">
           <label>Call Home</label>
         </div>
       </div>
@@ -33,7 +33,7 @@
     <div class="form-group row" v-if="commOptions">
       <div class="col-12 col-lg-6 col-xl-6">
         <div class="checkbox-custom checkbox-default">
-          <input type="checkbox" v-model="commOptions.callMobilePhone">
+          <input type="checkbox" v-model="commOptions.callMobilePhone" :disabled="commOptions.sendSms || commOptions.callHomePhone">
           <label>Call Mobile</label>
         </div>
       </div>
