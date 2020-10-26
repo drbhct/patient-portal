@@ -118,7 +118,8 @@ const router = new VueRouter({
 router.beforeResolve((to, from, next) => {
   if (to.matched.some(route => route.meta.requiresAuth)) {
     let isAuth = false
-    const user = Vue.$cookies.get('user')
+    // const user = Vue.$cookies.get('user')
+    const user = localStorage.getItem('config')
     if (user) {
       isAuth = true
     }
