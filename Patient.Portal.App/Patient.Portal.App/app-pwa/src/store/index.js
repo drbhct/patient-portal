@@ -15,7 +15,8 @@ const vuexLocalStorage = new VuexPersist({
   key: 'vuex', // The key to store the state on in the storage provider.
   storage: window.localStorage,
   paths: [
-    'profile.profileAuthInfo'
+    'profile.profileAuthInfo',
+    'profile.patientAssociated'
   ]
 })
 

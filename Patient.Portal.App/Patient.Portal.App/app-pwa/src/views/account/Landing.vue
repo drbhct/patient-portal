@@ -156,10 +156,12 @@ export default {
       this.setIsLoading(true)
 
       const apiRes = await api.auth.request.apiLogin()
-      await new Promise(resolve => setTimeout(resolve, 2000))
       this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
-      const response = await api.auth.request.validateUser(this.loginForm)
+      await new Promise(resolve => setTimeout(resolve, 2000))
 
+      const response = await api.auth.request.validateUser(this.loginForm)
+      const user = await api.auth.request.getUser(this.loginForm.userName)
+      console.log('user', user.data)
       this.setIsLoading(false)
 
       if (!response.data) {
@@ -188,7 +190,8 @@ export default {
     }
   },
   async mounted () {
-    await api.auth.request.apiLogin()
+    const apiRes = await api.auth.request.apiLogin()
+    this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
   }
 }
 </script>

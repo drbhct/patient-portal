@@ -27,3 +27,7 @@ export const setProfileAuthInfo = (store, payload) => {
 export const setProfileMyInfo = (store, payload) => {
   store.commit(types.PROFILE_MY_INFO, payload)
 }
+
+export const setProfilePatientAssociated = (store, payload) => {
+  store.commit(types.PROFILE_PATIENT_ASSOCIATED, payload)
+}

@@ -2,7 +2,8 @@
 
 const state = {
   currentProfilePageView: 'MyInfo',
-  profileAuthInfo: null
+  profileAuthInfo: null,
+  patientAssociated: null
 }
 
 const mutations = {
@@ -17,6 +18,9 @@ const mutations = {
     state.profileAuthInfo.lastName = payload.lastName
     state.profileAuthInfo.nickName = payload.nickName
     state.profileAuthInfo.email = payload.email
+  },
+  [types.PROFILE_PATIENT_ASSOCIATED] (state, payload) {
+    state.patientAssociated = payload
   }
 }
 
