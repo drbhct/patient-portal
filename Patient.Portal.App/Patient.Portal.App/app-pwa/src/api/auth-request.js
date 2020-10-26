@@ -1,10 +1,12 @@
 import axios from 'axios'
-import Vue from 'vue'
+// import Vue from 'vue'
 
-const user = Vue.$cookies.get('user')
+// const user = Vue.$cookies.get('user')
+const user = localStorage.getItem('config')
+console.log('request user>', user)
 let token = ''
 if (user) {
-  token = user.token
+  token = user
 }
 const apiUrl = 'https://peak-api-dev.azurewebsites.net'
 
@@ -66,9 +68,18 @@ export default {
       * @param {Object} payload  request object for login
       * @param {String} payload.username email is use for the username field
       * @param {String} payload.password
+      * @param {String} apiToken
       */
-    async validateUser (payload) {
-      return await securedJsonRequest.post('/patientportal/validateuser', payload)
+    async validateUser (payload, apiToken) {
+      // NOTE: Need to create another instance due to token still not available until refresh
+      const manualReq = axios.create({
+        baseURL: apiUrl,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'bearer ' + apiToken
+        }
+      })
+      return await manualReq.post('/patientportal/validateuser', payload)
     },
     /**
       * @param {Object} payload  request object for updating user info
@@ -112,6 +123,21 @@ export default {
       */
     async updateUserPwd (payload) {
       return await securedJsonRequest.post('/patientportal/updateuserpwd', payload)
+    },
+    /**
+      * @param {String} payload
+      * @param {String} apiToken
+      */
+    async getUserWithToken (payload, apiToken) {
+      // NOTE: Need to create another instance due to token still not available until refresh
+      const manualReq = axios.create({
+        baseURL: apiUrl,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'bearer ' + apiToken
+        }
+      })
+      return await manualReq.get('/patientportal/getUser/' + payload)
     },
     /**
       * @param {String} payload

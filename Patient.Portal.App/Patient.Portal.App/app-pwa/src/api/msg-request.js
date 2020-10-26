@@ -1,10 +1,11 @@
 import axios from 'axios'
-import Vue from 'vue'
+// import Vue from 'vue'
 
-const user = Vue.$cookies.get('user')
+// const user = Vue.$cookies.get('user')
+const user = localStorage.getItem('config')
 let token = ''
 if (user) {
-  token = user.token
+  token = user
 }
 const apiUrl = 'https://peak-api-dev.azurewebsites.net'
 

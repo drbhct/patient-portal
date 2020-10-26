@@ -156,12 +156,11 @@ export default {
       this.setIsLoading(true)
 
       const apiRes = await api.auth.request.apiLogin()
-      this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      // this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
+      localStorage.setItem('config', apiRes.data.token)
+      await new Promise(resolve => setTimeout(resolve, 1500))
 
-      const response = await api.auth.request.validateUser(this.loginForm)
-      const user = await api.auth.request.getUser(this.loginForm.userName)
-      console.log('user', user.data)
+      const response = await api.auth.request.validateUser(this.loginForm, apiRes.data.token)
       this.setIsLoading(false)
 
       if (!response.data) {
@@ -188,10 +187,6 @@ export default {
       this.setProfileAuthInfo(response.data)
       this.$router.push('/')
     }
-  },
-  async mounted () {
-    const apiRes = await api.auth.request.apiLogin()
-    this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
   }
 }
 </script>
