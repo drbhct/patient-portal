@@ -7,11 +7,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><span>Wednesday 5/6/2020 @ 10:00 AM</span></td>
-        </tr>
-        <tr>
-          <td><span>Tuesday 5/12/2020 @ 10:30 AM</span></td>
+        <tr v-for="item in applist" :key="item.index">
+          <td>{{ date(item) }}</td>
         </tr>
       </tbody>
     </table>
@@ -19,10 +16,39 @@
 </template>
 
 <script>
+import api from '../../api/http-common.js'
+import { mapGetters } from 'vuex'
+import moment from 'moment'
+
 export default {
-  mounted () {
+  data () {
+    return {
+      applist: null,
+      dt: null
+    }
+  },
+  computed: {
+    ...mapGetters(['getProfilePatientAssociated']),
+    currentPatientAssociated () {
+      if (this.getProfilePatientAssociated.length === 0) {
+        return null
+      }
+      return this.getProfilePatientAssociated[0]
+    }
+  },
+  methods: {
+    date: function (date) {
+      return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')
+    }
+  },
+  async mounted () {
+    const res = await api.patient.request.getpatientfutureappts({
+      facilityId: this.currentPatientAssociated.facilityID,
+      patientId: this.currentPatientAssociated.patientID
+    })
+    this.applist = res.data
     // eslint-disable-next-line no-undef
-    $('#tblDemo').DataTable()
+    setTimeout(function () { $('#tblDemo').DataTable() }, 300)
   }
 }
 </script>
