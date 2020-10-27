@@ -3,7 +3,7 @@
     <h3>Login Information</h3>
     <div class="form-group row">
       <label class="col-lg-2 control-label text-lg-left pt-4" for="inputDefault">User Name:</label>
-      <label class="col-lg-2 control-label text-lg-left pt-4" for="inputDefault">rizza@phirecomm.net</label>
+      <label class="col-lg-2 control-label text-lg-left pt-4" for="inputDefault">{{this.username}}</label>
     </div>
     <div class="form-group row">
       <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
@@ -30,6 +30,27 @@
     </div>
   </form>
 </template>
+<script>
+import { mapGetters, mapActions } from 'vuex'
+export default {
+  data () {
+    return {
+      username: ''
+    }
+  },
+  computed: {
+    ...mapGetters(['getProfileAuthInfo'])
+  },
+  methods: {
+    ...mapActions(['setProfileMyInfo'])
+  },
+  mounted () {
+    if (this.getProfileAuthInfo.id) {
+      this.username = this.getProfileAuthInfo.email
+    }
+  }
+}
+</script>
 <style scoped>
   .dash-divider {
     width: 100%;

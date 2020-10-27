@@ -90,7 +90,6 @@ export default {
     },
     showMobileMenu () {
       switch (this.$route.fullPath.toLowerCase()) {
-        case '/':
         case '/account/create':
         case '/account/landing':
         case '/account/login':
