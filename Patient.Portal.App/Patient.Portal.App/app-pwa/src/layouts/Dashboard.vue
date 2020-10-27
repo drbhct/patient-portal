@@ -46,6 +46,7 @@ import DashAppointments from '@/components/dashboard/dash-appointments.vue'
 import DashWelcome from '@/components/dashboard/dash-welcome.vue'
 import DashMenu from '@/components/dashboard/dash-menu.vue'
 import { mapGetters, mapActions } from 'vuex'
+// eslint-disable-next-line no-unused-vars
 import api from '../api/http-common.js'
 export default {
   name: 'Dashboard',

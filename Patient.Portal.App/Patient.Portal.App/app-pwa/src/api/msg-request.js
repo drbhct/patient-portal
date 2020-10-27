@@ -2,20 +2,27 @@ import axios from 'axios'
 // import Vue from 'vue'
 
 // const user = Vue.$cookies.get('user')
-const user = localStorage.getItem('config')
-let token = ''
-if (user) {
-  token = user
-}
 const apiUrl = 'https://peak-api-dev.azurewebsites.net'
 
 const securedJsonRequest = axios.create({
   baseURL: apiUrl,
   headers: {
-    'Content-Type': 'application/json',
-    Authorization: 'bearer ' + token
+    'Content-Type': 'application/json'
   }
 })
+
+securedJsonRequest.interceptors.request.use(
+  config => {
+    const token = localStorage.getItem('config')
+    if (token) {
+      config.headers.common.Authorization = 'bearer ' + token
+    }
+    return config
+  },
+  error => {
+    return Promise.reject(error)
+  }
+)
 
 securedJsonRequest.interceptors.response.use(
   response => response,
