@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.2'
+      return '0.0.3'
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {
@@ -110,7 +110,7 @@ export default {
     }
   },
   mounted () {
-    console.info('Vue App v' + this.version + ' <major>/<minor>/<patch>')
+    console.info('Vue App v' + this.version)
   }
 }
 </script>
