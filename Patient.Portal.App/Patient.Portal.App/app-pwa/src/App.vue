@@ -105,6 +105,7 @@ export default {
   methods: {
     logout () {
       this.$cookies.remove('user')
+      localStorage.removeItem('config')
       this.$router.push('/account/login')
     }
   },
