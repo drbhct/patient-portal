@@ -1,95 +1,116 @@
 <template>
-  <section class="body">
-    <!-- start: header -->
-    <header class="header" v-show="currentRouteName!=='login'">
-      <div class="logo-container">
-        <a href="../2.3.0" class="logo">
-          <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
-        </a>
-        <div
-          class="d-md-none toggle-sidebar-left"
-          data-toggle-class="sidebar-left-opened"
-          data-target="html"
-          data-fire-event="sidebar-left-opened"
-          v-show="currentRouteName!=='dashboard'"
-        >
-          <i class="fas fa-bars" aria-label="Toggle sidebar"></i>
-        </div>
-      </div>
-
-      <!-- start: search & user box -->
-      <div class="header-right">
-        <span class="separator"></span>
-
-        <div id="userbox" class="userbox">
-          <a href="#" data-toggle="dropdown">
-            <figure class="profile-picture">
-              <img
-                src="img/!logged-user.jpg"
-                alt="Joseph Doe"
-                class="rounded-circle"
-                data-lock-picture="img/!logged-user.jpg"
-              />
-            </figure>
-            <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@okler.com">
-              <span class="name">John Doe Junior</span>
-              <span class="role">administrator</span>
-            </div>
-
-            <i class="fa custom-caret"></i>
+  <div>
+    <loading :active.sync="getIsLoading" :can-cancel="false"></loading>
+    <section class="body">
+      <!-- start: header -->
+      <header class="header">
+        <div class="logo-container">
+          <a href="../2.3.0" class="logo">
+            <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
           </a>
-
-          <div class="dropdown-menu">
-            <ul class="list-unstyled mb-2">
-              <li class="divider"></li>
-              <li>
-                <a role="menuitem" tabindex="-1" href="pages-user-profile.html">
-                  <i class="fas fa-user"></i> My Profile
-                </a>
-              </li>
-              <li>
-                <a role="menuitem" tabindex="-1" href="#" data-lock-screen="true">
-                  <i class="fas fa-lock"></i> Lock Screen
-                </a>
-              </li>
-              <li>
-                <a role="menuitem" tabindex="-1" href="pages-signin.html">
-                  <i class="fas fa-power-off"></i> Logout
-                </a>
-              </li>
-            </ul>
+          <div class="d-md-none toggle-sidebar-left"
+               data-toggle-class="sidebar-left-opened"
+               data-target="html"
+               data-fire-event="sidebar-left-opened"
+               v-show="showMobileMenu">
+            <i class="fas fa-bars" aria-label="Toggle sidebar"></i>
           </div>
         </div>
 
-        <span class="separator"></span>
-        <ul class="notifications">
-          <li>
-            <a href="#" class="notification-icon" data-toggle="dropdown">
-              <i class="fas fa-question"></i>
-            </a>
-          </li>
-        </ul>
-        <span class="separator"></span>
+        <div class="header-right" v-show="showMobileMenu">
+          <nav class="header-nav2">
+            <ul class="nav">
+              <li>
+                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout">
+                  <i class="fas fa-sign-out-alt fa-2x"></i>
+                </a>
+              </li>
+              <li>
+                <a href="#" class="nav-link">
+                  <i class="fas fa-question-circle fa-2x"></i>
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <div class="logged-info d-none d-sm-block">
+            <span v-if="getProfileAuthInfo">Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
+          </div>
+        </div>
+      </header>
+      <!-- end: header -->
+      <router-view></router-view>
+      <a class="scroll-to-top hidden-mobile visible" href="#">
+        <i class="fas fa-chevron-up"></i>
+      </a>
+    </section>
+    <section class="main-footer">
+      <div class="footer-section text-center">
+        <div>
+          <a class="footer-link" href="#">Contact</a> <span class="font-weight-bold">|</span>
+          <a class="footer-link" href="#">Support</a> <span class="font-weight-bold">|</span>
+          <a class="footer-link" href="#">Terms</a> <span class="font-weight-bold">|</span>
+          <a class="footer-link" href="#">Privacy</a>
+        </div>
+        <span class="m-footer__copyright">
+          Copyright {{ new Date().getFullYear() }} &copy; Phunkey Inc. All rights reserved.
+        </span>
       </div>
-      <!-- end: search & user box -->
-    </header>
-    <!-- end: header -->
-    <router-view></router-view>
-    <a class="scroll-to-top hidden-mobile visible" href="#">
-      <i class="fas fa-chevron-up"></i>
-    </a>
-  </section>
+    </section>
+  </div>
 </template>
 <script>
+import Loading from 'vue-loading-overlay'
+import 'vue-loading-overlay/dist/vue-loading.css'
+import { mapGetters } from 'vuex'
 export default {
+  components: {
+    Loading
+  },
   computed: {
+    version () {
+      return '0.0.4' // 15350 Profile com info update
+    },
+    ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {
       let route = this.$route.name
       if (route) {
         route = route.toLowerCase()
       }
       return route
+    },
+    showHeader () {
+      switch (this.currentRouteName) {
+        case 'landing':
+        case 'account':
+        case 'createaccount':
+          return false
+        default:
+          return true
+      }
+    },
+    showMobileMenu () {
+      switch (this.$route.fullPath.toLowerCase()) {
+        case '/account/create':
+        case '/account/landing':
+        case '/account/login':
+        case '/account/requestpin':
+        case '/account/forgotpassword':
+        case '/account/forgotusername':
+          return false
+        default:
+          return true
+      }
     }
+  },
+  methods: {
+    logout () {
+      this.$cookies.remove('user')
+      localStorage.removeItem('config')
+      this.$router.push('/account/login')
+    }
+  },
+  mounted () {
+    console.info('Vue App v' + this.version)
   }
 }
 </script>

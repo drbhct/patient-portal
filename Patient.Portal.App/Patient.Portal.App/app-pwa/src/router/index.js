@@ -11,38 +11,126 @@ const routes = [
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../layouts/MainLayout.vue'),
+    component: () => import('../layouts/MainLayout.vue'),
+    meta: {
+      requiresAuth: true
+    },
     children: [
       {
         path: 'messages',
         name: 'Messages',
-        // route level code-splitting
-        // this generates a separate chunk (about.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
-        component: () => import(/* webpackChunkName: "about" */ '../views/Messages.vue')
+        meta: {
+          requiresAuth: true
+        },
+        component: () => import('../views/Messages.vue')
+      },
+      {
+        meta: {
+          requiresAuth: true
+        },
+        path: 'appointments',
+        name: 'Appointments',
+        component: () => import('../views/Appointments.vue')
+      },
+      {
+        meta: {
+          requiresAuth: true
+        },
+        path: 'billing',
+        name: 'Billing',
+        component: () => import('../views/Billing.vue')
+      },
+      {
+        meta: {
+          requiresAuth: true
+        },
+        path: 'documents',
+        name: 'Documents',
+        component: () => import('../views/Documents.vue')
+      },
+      {
+        meta: {
+          requiresAuth: true
+        },
+        path: 'profile',
+        name: 'Profile',
+        component: () => import('../views/Profile.vue')
+      },
+      {
+        path: 'tasks',
+        name: 'Tasks',
+        component: () => import('../views/Tasks.vue')
       }
     ]
   },
   {
     path: '/',
     name: 'Dashboard',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../layouts/Dashboard.vue')
+    meta: {
+      requiresAuth: true
+    },
+    component: () => import('../layouts/Dashboard.vue')
   },
   {
-    path: '/login',
-    name: 'Login',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../layouts/Login.vue')
+    path: '/account',
+    name: 'Account',
+    component: () => import('../layouts/Account.vue'),
+    children: [
+      {
+        path: 'login',
+        name: 'Landing',
+        component: () => import('../views/account/Landing.vue')
+      },
+      {
+        path: 'create',
+        name: 'CreateAccount',
+        component: () => import('../views/account/Create.vue')
+      },
+      {
+        path: 'requestpin',
+        name: 'RequestPin',
+        component: () => import('../views/account/RequestPin.vue')
+      },
+      {
+        path: 'forgotusername',
+        name: 'ForgotUserName',
+        component: () => import('../views/account/ForgotUserName.vue')
+      },
+      {
+        path: 'forgotpassword',
+        name: 'ForgotPassword',
+        component: () => import('../views/account/ForgotPassword.vue')
+      }
+    ]
+  },
+  {
+    path: '*',
+    name: 'PageNotFound',
+    component: () => import('../layouts/PageNotFound.vue')
   }
 ]
 
 const router = new VueRouter({
+  mode: 'history',
   routes
+})
+
+router.beforeResolve((to, from, next) => {
+  if (to.matched.some(route => route.meta.requiresAuth)) {
+    let isAuth = false
+    // const user = Vue.$cookies.get('user')
+    const user = localStorage.getItem('config')
+    if (user) {
+      isAuth = true
+    }
+    if (isAuth) {
+      next()
+    } else {
+      next({ path: '/account/login' })
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

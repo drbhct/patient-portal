@@ -1,0 +1,56 @@
+<template>
+  <div class="mx-1">
+      <h3>Statements</h3>
+      <br>
+      <div>
+          <table class="table table-responsive-md mb-5">
+              <thead>
+                  <tr>
+                      <th>Statement</th>
+                      <th>Balance</th>
+                      <th>Due Date</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                      <td><a href="javascript:void(0)">November 2019</a></td>
+                      <td>$44.23</td>
+                      <td>2/12/2020</td>
+                  </tr>
+                  <tr>
+                      <td><a href="javascript:void(0)">December 2019</a></td>
+                      <td>$88.46</td>
+                      <td>1/12/2020</td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <div>
+          <h4>Balance due: $ {{ this.getBillingBalanceDue }}</h4>
+          <div class="col-lg-5">
+              <button class="btn-primary btn-lg btn-block" @click="setBillingCurrentPage('MakePayment')">MAKE PAYMENT</button>
+          </div>
+          <h5>* Balance due may not reflect recent payments</h5>
+      </div>
+  </div>
+</template>
+
+<script>
+import { mapActions, mapGetters } from 'vuex'
+export default {
+  methods: {
+    ...mapActions(['setBillingCurrentPage', 'setBillingBalanceDue'])
+  },
+  computed: {
+    ...mapGetters(['getBillingBalanceDue'])
+  },
+  mounted () {
+    const balanceDue = 88.46 // TODO: this should be coming from the api
+    this.setBillingBalanceDue(balanceDue)
+  }
+}
+</script>
+
+<style>
+
+</style>

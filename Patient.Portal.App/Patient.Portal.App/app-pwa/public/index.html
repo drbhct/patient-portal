@@ -16,14 +16,14 @@
   <!-- Web Fonts  -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,600,800,900|Shadows+Into+Light"
     rel="stylesheet" type="text/css">
-
+  <base href="/" />
   <!-- Vendor CSS -->
   <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.css" />
   <link rel="stylesheet" href="vendor/animate/animate.css">
 
   <link rel="stylesheet" href="vendor/font-awesome/css/all.min.css" />
-  <!-- <link rel="stylesheet" href="vendor/magnific-popup/magnific-popup.css" />
-  <link rel="stylesheet" href="vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css" /> -->
+  <!-- <link rel="stylesheet" href="vendor/magnific-popup/magnific-popup.css" /> -->
+  <link rel="stylesheet" href="vendor/bootstrap-datepicker/css/bootstrap-datepicker3.css" />
 
   <!-- Specific Page Vendor CSS -->
   <!-- <link rel="stylesheet" href="vendor/jquery-ui/jquery-ui.css" />
@@ -43,16 +43,20 @@
   <!-- Head Libs -->
   <script src="vendor/modernizr/modernizr.js"></script>
   <!-- Vendor -->
-  <script src="vendor/jquery/jquery.js"></script>
+  <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/jquery-browser-mobile/jquery.browser.mobile.js"></script>
   <script src="vendor/popper/umd/popper.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
   <script src="vendor/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
   <script src="vendor/common/common.js"></script>
   <script src="vendor/nanoscroller/nanoscroller.js"></script>
+
+  <!-- Demo purposes only make this lazy loaded for performance! -->
+  <link rel="stylesheet" href="vendor/datatables/media/css/jquery.dataTables.min.css" />
+  <script src="vendor/datatables/media/js/jquery.dataTables.min.js"></script>
+
   <!-- <script src="vendor/magnific-popup/jquery.magnific-popup.js"></script>
   <script src="vendor/jquery-placeholder/jquery.placeholder.js"></script> -->
-  <script type='text/javascript' src='https://embedmaps.com/google-maps-authorization/script.js?id=7b2c77cbf9bfb08c72ee26f7371edac3dc603c96'></script>
   <!-- Theme Base, Components and Settings -->
   <script src="js/theme.js"></script>
 
