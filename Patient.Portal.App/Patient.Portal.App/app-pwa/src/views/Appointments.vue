@@ -1,9 +1,9 @@
 <template>
   <div class="form">
-    <div class="col-12">
+    <!-- <div class="col-12">
       <button type="button" class="mb-1 mt-1 mr-1 btn btn-lg btn-new">MAKE NEW APPOINTMENT</button>
     </div>
-    <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
+    <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" /> -->
     <div class="col-12">
       <list></list>
     </div>

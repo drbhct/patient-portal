@@ -14,11 +14,12 @@ body {
 }
 
 .dash-task-btn {
-  width: 150px;
+  width: 200px;
 }
 
 .dash-task-col-title {
   display: block;
+  font-weight: 600;
 }
 
 .dash-task-col-action {
@@ -52,6 +53,10 @@ body {
 
 .list-text-aligned-right {
   text-align: right !important;
+}
+
+.font-weight-600 {
+  font-weight: 600;
 }
 
 /* Header Dark */

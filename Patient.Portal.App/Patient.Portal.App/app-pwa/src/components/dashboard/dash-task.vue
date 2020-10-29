@@ -11,17 +11,17 @@
         <table class="w-100">
           <tbody>
             <tr>
-              <td class="dash-task-col-title">1. Pay Statement #3564</td>
+              <td class="dash-task-col-title">1) Pay Statement #3564</td>
               <td class="dash-task-col-action">
                 <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn">PAY $520</button>
                 <p class="p-dash-stat">Statement due: 02/02/2020</p>
               </td>
             </tr>
             <tr>
-              <td class="dash-task-col-title">2. Patient Complaint Form #3564</td>
+              <td class="dash-task-col-title">2) Health History</td>
               <td class="dash-task-col-action">
                 <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn">
-                  GO TO FORM
+                  GO TO HEALTH HISTORY
                 </button>
               </td>
             </tr>
@@ -31,9 +31,45 @@
     </div>
   </form>
 </template>
+<script>
+import api from '../../api/http-common.js'
+import { mapGetters } from 'vuex'
+import moment from 'moment'
+
+export default {
+  data () {
+    return {
+      taskslist: null,
+      dt: null
+    }
+  },
+  computed: {
+    ...mapGetters(['getProfilePatientAssociated']),
+    currentPatientAssociated () {
+      if (this.getProfilePatientAssociated.length === 0) {
+        return null
+      }
+      return this.getProfilePatientAssociated[0]
+    }
+  },
+  methods: {
+    date: function (date) {
+      return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')
+    }
+  },
+  async mounted () {
+    const res = await api.patient.request.gettasks({
+      facilityId: this.currentPatientAssociated.facilityID,
+      patientId: this.currentPatientAssociated.patientID
+    })
+    this.taskslist = res.data
+  }
+}
+</script>
 <style scoped>
   .dash-divider {
-    width: 400px;
+    min-width: 300px;
+    max-width: 400px;
     height: 4px;
     margin-bottom: 10px;
   }

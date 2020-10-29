@@ -6,9 +6,9 @@
           <h3 v-if="getProfileAuthInfo">{{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</h3>
         </div>
 
-        <div class="d-block d-sm-none btn-div-new">
+        <!-- <div class="d-block d-sm-none btn-div-new">
           <button type="button" class="mb-1 mt-1 mr-1 btn btn-lg btn-new">MAKE NEW APPOINTMENT</button>
-        </div>
+        </div> -->
 
         <!-- start: page DASHBOARD MENU-->
           <dash-menu></dash-menu>
@@ -27,9 +27,9 @@
           <div class="d-block d-sm-none">
             <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
           </div>
-          <div class="col-12 d-none d-sm-block">
+          <!-- <div class="col-12 d-none d-sm-block">
             <button type="button" class="mb-1 mt-1 mr-1 btn btn-new">MAKE NEW APPOINTMENT</button>
-          </div>
+          </div> -->
 
           <div class="col-12 col-md-12 col-lg-6 col-xl-6">
             <dash-welcome></dash-welcome>
@@ -79,7 +79,8 @@ export default {
 }
 
 .dash-divider {
-  width: 400px;
+  min-width: 300px;
+  max-width: 400px;
   height: 4px;
   margin-bottom: 10px;
 }
@@ -92,6 +93,93 @@ export default {
 
   .dash-divider {
     max-width: 345px;
+  }
+
+  .list-text-aligned {
+    text-align: left !important;
+  }
+
+  .card {
+    background: transparent !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    width: 100px !important;
+    height: 100px !important;
+    padding: 0 5px 0 5px !important;
+    margin-left: -5px !important;
+  }
+
+  .card-header {
+    padding-top: 70px !important;
+  }
+
+  .card-body {
+    padding: 0 !important;
+  }
+
+  /* Header Dark */
+  html.dark .header,
+  html.header-dark .header {
+    background: #0c529c !important;
+    border-bottom-color: #0c529c !important;
+    border-top-color: #0c529c !important;
+  }
+
+  html.dark .header .logo-container,
+  html.header-dark .header .logo-container {
+    background: #0c529c;
+    border-bottom-color: #0c529c;
+    border-top-color: #0c529c;
+  }
+
+  html.dark .header .header-right,
+  html.header-dark .header .header-right {
+    background: #0c529c; /*modified by Rizza Herrero*/
+    font-size: 10px; /* added by Rizza Herrero */
+  }
+
+  .header .logo-container {
+    height: 60px;
+    left: 0;
+    position: static;
+    right: 0;
+    top: 0;
+    z-index: 99;
+  }
+
+  .header .header-right {
+    background: #fff;
+    float: right !important;
+    height: 0 !important;
+    margin-top: 0 !important;
+    width: unset !important;
+  }
+
+  .btn-div-new {
+    padding-bottom: 10px !important;
+  }
+
+  .btn.btn-lg {
+    font-size: 1rem;
+    padding: 1rem 4rem;
+    font-weight: 600;
+  }
+
+  .btn-new {
+    background-color: #ffc266;
+    border-color: black;
+  }
+}
+/* IPAD */
+@media only screen and (max-width: 768px) {
+  .container {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .dash-divider {
+    max-width: 400px;
   }
 
   .list-text-aligned {
