@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.3'
+      return '0.0.4' // 15350 Profile com info update
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {
@@ -105,6 +105,7 @@ export default {
   methods: {
     logout () {
       this.$cookies.remove('user')
+      localStorage.removeItem('config')
       this.$router.push('/account/login')
     }
   },

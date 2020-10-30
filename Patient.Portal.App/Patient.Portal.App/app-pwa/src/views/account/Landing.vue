@@ -158,7 +158,6 @@ export default {
       const apiRes = await api.auth.request.apiLogin()
       // this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
       localStorage.setItem('config', apiRes.data.token)
-      await new Promise(resolve => setTimeout(resolve, 2000))
 
       const response = await api.auth.request.validateUser(this.loginForm, apiRes.data.token)
       this.setIsLoading(false)
