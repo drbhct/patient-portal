@@ -6,9 +6,9 @@
           <h3 v-if="getProfileAuthInfo">{{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</h3>
         </div>
 
-        <div class="d-block d-sm-none btn-div-new">
+        <!-- <div class="d-block d-sm-none btn-div-new">
           <button type="button" class="mb-1 mt-1 mr-1 btn btn-lg btn-new">MAKE NEW APPOINTMENT</button>
-        </div>
+        </div> -->
 
         <!-- start: page DASHBOARD MENU-->
           <dash-menu></dash-menu>
@@ -27,9 +27,9 @@
           <div class="d-block d-sm-none">
             <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
           </div>
-          <div class="col-12 d-none d-sm-block">
+          <!-- <div class="col-12 d-none d-sm-block">
             <button type="button" class="mb-1 mt-1 mr-1 btn btn-new">MAKE NEW APPOINTMENT</button>
-          </div>
+          </div> -->
 
           <div class="col-12 col-md-12 col-lg-6 col-xl-6">
             <dash-welcome></dash-welcome>
@@ -79,7 +79,7 @@ export default {
 }
 
 .dash-divider {
-  width: 400px;
+  width: 70%;
   height: 4px;
   margin-bottom: 10px;
 }
@@ -91,7 +91,7 @@ export default {
   }
 
   .dash-divider {
-    max-width: 345px;
+    width: 100%;
   }
 
   .list-text-aligned {
@@ -170,10 +170,16 @@ export default {
     border-color: black;
   }
 }
+/* IPAD */
+@media only screen and (max-width: 768px) {
+  .dash-divider {
+    width: 100%;
+  }
+}
 /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
 @media only screen and (max-device-width: 320px) {
   .dash-divider {
-    width: 290px;
+    width: 100%;
   }
   .btn.btn-lg {
     font-size: 1rem;
@@ -184,14 +190,14 @@ export default {
   /* ----------- iPhone Plus ----------- */
   @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) {
     .dash-divider {
-      width: 390px;
+      width: 100%;
     }
   }
 
   /* Landscape IPHONE X */
   @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
     .dash-divider {
-      width: 300px;
+      width: 100%;
     }
   }
 </style>

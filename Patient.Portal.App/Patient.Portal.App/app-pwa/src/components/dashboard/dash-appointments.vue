@@ -1,11 +1,45 @@
 <template>
     <div class="row">
-      <div class="col col-lg-6 col-xl-6">
+      <div class="col col-xl-8 col-xl-8">
         <p class="dash-appt-title">Upcoming appointments</p>
         <ul class="list-unstyled list-text-aligned-right">
-          <li>Wednesday 5/6/2020 @ 10:00 am</li>
-          <li>Tuesday 5/12/2020@ 9:30 am</li>
+          <li v-for="item in applist" :key="item.index">{{ date(item) }}</li>
         </ul>
       </div>
     </div>
 </template>
+<script>
+import api from '../../api/http-common.js'
+import { mapGetters } from 'vuex'
+import moment from 'moment'
+
+export default {
+  data () {
+    return {
+      applist: null,
+      dt: null
+    }
+  },
+  computed: {
+    ...mapGetters(['getProfilePatientAssociated']),
+    currentPatientAssociated () {
+      if (this.getProfilePatientAssociated.length === 0) {
+        return null
+      }
+      return this.getProfilePatientAssociated[0]
+    }
+  },
+  methods: {
+    date: function (date) {
+      return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')
+    }
+  },
+  async mounted () {
+    const res = await api.patient.request.getpatientfutureappts({
+      facilityId: this.currentPatientAssociated.facilityID,
+      patientId: this.currentPatientAssociated.patientID
+    })
+    this.applist = res.data
+  }
+}
+</script>

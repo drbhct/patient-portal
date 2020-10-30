@@ -58,12 +58,20 @@ securedJsonRequest.interceptors.response.use(
 export default {
   request: {
     /**
-     * @param {Object} Payload
+     * @param {Object} Payload request for patient future appointments
      * @param {String} payload.facilityid
      * @param {String} payload.patientid
      */
     async getpatientfutureappts (payload) {
       return await securedJsonRequest.post('/patientportal/getpatientfutureappts/', payload)
+    },
+    /**
+    * @param {Object} Payload request for patient tasks
+    * @param {String} payload.facilityid
+    * @param {String} payload.patientid
+    */
+    async gettasks (payload) {
+      return await securedJsonRequest.post('/patientportal/gettasks/', payload)
     }
   }
 }

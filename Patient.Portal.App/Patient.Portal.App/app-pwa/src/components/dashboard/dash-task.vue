@@ -10,18 +10,17 @@
       <div class="col-12 col-lg-8 col-xl-8">
         <table class="w-100">
           <tbody>
-            <tr>
-              <td class="dash-task-col-title">1. Pay Statement #3564</td>
-              <td class="dash-task-col-action">
+            <tr v-for="(item, index) in taskslist" :key="item.taskID">
+              <td v-if="item.taskType === 'STMT'" class="dash-task-col-title">{{(index + 1)}}) Pay Statement #3564</td>
+              <td v-if="item.taskType === 'STMT'" class="dash-task-col-action">
                 <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn">PAY $520</button>
                 <p class="p-dash-stat">Statement due: 02/02/2020</p>
               </td>
-            </tr>
-            <tr>
-              <td class="dash-task-col-title">2. Patient Complaint Form #3564</td>
-              <td class="dash-task-col-action">
+
+              <td v-if="item.taskType === 'NPH'" class="dash-task-col-title">{{(index + 1)}}) Health History</td>
+              <td v-if="item.taskType === 'NPH'" class="dash-task-col-action">
                 <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn">
-                  GO TO FORM
+                  GO TO HEALTH HISTORY
                 </button>
               </td>
             </tr>
@@ -31,56 +30,97 @@
     </div>
   </form>
 </template>
+<script>
+import api from '../../api/http-common.js'
+import { mapGetters } from 'vuex'
+import moment from 'moment'
+
+export default {
+  data () {
+    return {
+      taskslist: null,
+      dt: null
+    }
+  },
+  computed: {
+    ...mapGetters(['getProfilePatientAssociated']),
+    currentPatientAssociated () {
+      if (this.getProfilePatientAssociated.length === 0) {
+        return null
+      }
+      return this.getProfilePatientAssociated[0]
+    }
+  },
+  methods: {
+    date: function (date) {
+      return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')
+    }
+  },
+  async mounted () {
+    const res = await api.patient.request.gettasks({
+      facilityId: this.currentPatientAssociated.facilityID,
+      patientId: this.currentPatientAssociated.patientID
+    })
+    this.taskslist = res.data
+  }
+}
+</script>
 <style scoped>
   .dash-divider {
-    width: 400px;
     height: 4px;
     margin-bottom: 10px;
+    width: 70%;
   }
+  /* IPAD */
+@media only screen and (max-width: 768px) {
+  .dash-divider {
+    width: 100%;
+  }
+}
   /* ----------- iPhone 6, 7, 8 ----------- */
   @media only screen and (max-device-width: 375px) and (orientation: portrait) {
     .dash-divider {
-      width: 360px;
+      width: 100%;
     }
   }
   @media only screen and (max-device-width: 667px) and (orientation: landscape) {
     .dash-divider {
-      width: 650px;
+      width: 100%;
     }
   }
   /* ----------- iPhone Plus ----------- */
   @media only screen and (max-device-width: 414px) and (orientation: portrait) {
     .dash-divider {
-      width: 390px;
+      width: 100%;
     }
   }
   @media only screen and (device-width: 736px) and (orientation: landscape) {
     .dash-divider {
-      width: 720px;
+      width: 100%;
     }
   }
 
   /*IPHONE X */
   @media only screen and (max-device-width: 375px) and (orientation: portrait) {
     .dash-divider {
-      width: 360px;
+      width: 100%;
     }
   }
   @media only screen and (device-width: 812px) and (orientation: landscape) {
     .dash-divider {
-      width: 670px;
+      width: 100%;
     }
   }
   /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
   @media only screen and (max-device-width: 320px) and (orientation: portrait) {
     .dash-divider {
-      width: 300px;
+      width: 100%;
     }
   }
 
   @media only screen and (max-device-width: 568px) and (orientation: landscape) {
     .dash-divider {
-      width: 550px !important;
+      width: 100% !important;
     }
   }
 </style>

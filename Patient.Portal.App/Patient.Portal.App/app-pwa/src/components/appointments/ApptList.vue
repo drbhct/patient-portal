@@ -3,7 +3,7 @@
     <table id="tblDemo" class="table tbl-bordered table-striped pt-4 w-100">
       <thead>
         <tr class="text-center">
-          <td class="header-text">Appointment</td>
+          <td class="header-text">Appointments</td>
         </tr>
       </thead>
       <tbody>
@@ -48,7 +48,7 @@ export default {
     })
     this.applist = res.data
     // eslint-disable-next-line no-undef
-    setTimeout(function () { $('#tblDemo').DataTable() }, 300)
+    setTimeout(function () { $('#tblDemo').DataTable({ bFilter: false, bInfo: false }) }, 300)
   }
 }
 </script>
