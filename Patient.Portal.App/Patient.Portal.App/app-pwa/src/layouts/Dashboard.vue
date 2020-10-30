@@ -79,8 +79,7 @@ export default {
 }
 
 .dash-divider {
-  min-width: 300px;
-  max-width: 400px;
+  width: 70%;
   height: 4px;
   margin-bottom: 10px;
 }
@@ -92,7 +91,7 @@ export default {
   }
 
   .dash-divider {
-    max-width: 345px;
+    width: 100%;
   }
 
   .list-text-aligned {
@@ -173,95 +172,14 @@ export default {
 }
 /* IPAD */
 @media only screen and (max-width: 768px) {
-  .container {
-    padding-right: 0 !important;
-    padding-left: 0 !important;
-  }
-
   .dash-divider {
-    max-width: 400px;
-  }
-
-  .list-text-aligned {
-    text-align: left !important;
-  }
-
-  .card {
-    background: transparent !important;
-    -webkit-box-shadow: none !important;
-    box-shadow: none !important;
-    border: none !important;
-    width: 100px !important;
-    height: 100px !important;
-    padding: 0 5px 0 5px !important;
-    margin-left: -5px !important;
-  }
-
-  .card-header {
-    padding-top: 70px !important;
-  }
-
-  .card-body {
-    padding: 0 !important;
-  }
-
-  /* Header Dark */
-  html.dark .header,
-  html.header-dark .header {
-    background: #0c529c !important;
-    border-bottom-color: #0c529c !important;
-    border-top-color: #0c529c !important;
-  }
-
-  html.dark .header .logo-container,
-  html.header-dark .header .logo-container {
-    background: #0c529c;
-    border-bottom-color: #0c529c;
-    border-top-color: #0c529c;
-  }
-
-  html.dark .header .header-right,
-  html.header-dark .header .header-right {
-    background: #0c529c; /*modified by Rizza Herrero*/
-    font-size: 10px; /* added by Rizza Herrero */
-  }
-
-  .header .logo-container {
-    height: 60px;
-    left: 0;
-    position: static;
-    right: 0;
-    top: 0;
-    z-index: 99;
-  }
-
-  .header .header-right {
-    background: #fff;
-    float: right !important;
-    height: 0 !important;
-    margin-top: 0 !important;
-    width: unset !important;
-  }
-
-  .btn-div-new {
-    padding-bottom: 10px !important;
-  }
-
-  .btn.btn-lg {
-    font-size: 1rem;
-    padding: 1rem 4rem;
-    font-weight: 600;
-  }
-
-  .btn-new {
-    background-color: #ffc266;
-    border-color: black;
+    width: 100%;
   }
 }
 /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
 @media only screen and (max-device-width: 320px) {
   .dash-divider {
-    width: 290px;
+    width: 100%;
   }
   .btn.btn-lg {
     font-size: 1rem;
@@ -272,14 +190,14 @@ export default {
   /* ----------- iPhone Plus ----------- */
   @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) {
     .dash-divider {
-      width: 390px;
+      width: 100%;
     }
   }
 
   /* Landscape IPHONE X */
   @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
     .dash-divider {
-      width: 300px;
+      width: 100%;
     }
   }
 </style>
