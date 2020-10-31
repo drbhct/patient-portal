@@ -31,3 +31,7 @@ export const setProfileMyInfo = (store, payload) => {
 export const setProfilePatientAssociated = (store, payload) => {
   store.commit(types.PROFILE_PATIENT_ASSOCIATED, payload)
 }
+
+export const setCurrentMsgInfo = (store, payload) => {
+  store.commit(types.CURRENT_MSG_INFO, payload)
+}
