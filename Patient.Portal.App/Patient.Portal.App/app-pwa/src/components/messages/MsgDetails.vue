@@ -17,13 +17,28 @@
 </template>
 
 <script>
+import api from '../../api/http-common.js'
 import { mapActions, mapGetters } from 'vuex'
 export default {
   methods: {
     ...mapActions(['setMsgCurrentPage'])
   },
   computed: {
-    ...mapGetters(['getMsgInfo'])
+    ...mapGetters(['getMsgInfo', 'getProfilePatientAssociated']),
+    currentPatientAssociated () {
+      if (this.getProfilePatientAssociated.length === 0) {
+        return null
+      }
+      return this.getProfilePatientAssociated[0]
+    }
+  },
+  mounted () {
+    if (!this.getMsgInfo.read) {
+      api.msg.request.setMessageAsRead({
+        facilityId: this.currentPatientAssociated.facilityID,
+        id: this.getMsgInfo.id
+      })
+    }
   }
 }
 </script>
