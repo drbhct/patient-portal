@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.4' // 15350 Profile com info update
+      return '0.0.5' // 15358 Message list, 15336 Message details
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {

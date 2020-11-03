@@ -3,6 +3,7 @@ export const getIsLoading = state => state.config.isLoading
 
 // messages module
 export const getMsgCurrentPage = state => state.messages.currentMsgPageView
+export const getMsgInfo = state => state.messages.currentMsgInfo
 
 // billing module
 export const getBillingCurrentPage = state => state.billing.currentBillingPageView

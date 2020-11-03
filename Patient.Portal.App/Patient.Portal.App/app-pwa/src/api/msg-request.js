@@ -63,6 +63,23 @@ securedJsonRequest.interceptors.response.use(
 
 export default {
   request: {
-    // Place api request below ....
+    /**
+     * Api access to get message  list for the user patient
+      * @param {Object} payload  request object to get user patient message list
+      * @param {String} payload.facilityId
+      * @param {String} payload.patientId
+      */
+    async getMessageList (payload) {
+      return await securedJsonRequest.post('/patientportal/GetMessageList', payload)
+    },
+    /**
+     * Api access to set the msg status as read
+      * @param {Object} payload  request object to get user patient message list
+      * @param {String} payload.facilityId
+      * @param {String} payload.id message id
+      */
+    async setMessageAsRead (payload) {
+      return await securedJsonRequest.post('/patientportal/UpdateMessageRead', payload)
+    }
   }
 }

@@ -57,7 +57,7 @@ export default {
     DashMenu
   },
   computed: {
-    ...mapGetters(['getProfileAuthInfo', 'getProfileAuthInfo'])
+    ...mapGetters(['getProfileAuthInfo'])
   },
   methods: {
     ...mapActions(['setProfilePatientAssociated'])

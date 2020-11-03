@@ -3,6 +3,7 @@ export const IS_LOADING = 'IS_LOADING'
 
 // messages module
 export const CURRENT_MSG_PAGE_VIEW = 'CURRENT_MSG_PAGE_VIEW'
+export const CURRENT_MSG_INFO = 'CURRENT_MSG_INFO'
 
 // billing module
 export const CURRENT_BILLING_PAGE_VIEW = 'CURRENT_BILLING_PAGE_VIEW'
