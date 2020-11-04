@@ -34,6 +34,9 @@
         <li v-bind:class="{ is_valid: contains_special_character }">
           Contains Special Character
         </li>
+        <li v-bind:class="{ is_valid: matchConfirm }" v-if="form.confirmPassword">
+          Confirm Password Match
+        </li>
       </ul>
     </div>
     <div class="form-group row">
@@ -97,7 +100,7 @@
     </div>
     <div class="form-group row">
       <div class="col-lg-6">
-        <button class="btn btn-primary" type="submit">UPDATE PASSWORD</button>
+        <button class="btn btn-primary" type="submit" :disabled="!valid_password || !matchConfirm">UPDATE PASSWORD</button>
       </div>
     </div>
   </form>
@@ -124,7 +127,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getProfileAuthInfo'])
+    ...mapGetters(['getProfileAuthInfo']),
+    matchConfirm () {
+      return this.form.password === this.form.confirmPassword
+    }
   },
   methods: {
     ...mapActions(['setProfileMyInfo']),
