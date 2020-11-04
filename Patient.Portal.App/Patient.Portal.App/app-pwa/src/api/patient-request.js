@@ -72,6 +72,14 @@ export default {
     */
     async gettasks (payload) {
       return await securedJsonRequest.post('/patientportal/gettasks/', payload)
+    },
+    /**
+    * @param {Object} Payload request for patient document list
+    * @param {String} payload.facilityid
+    * @param {String} payload.patientid
+    */
+    async getattachmentlist (payload) {
+      return await securedJsonRequest.post('/patientportal/getattachmentlist/', payload)
     }
   }
 }
