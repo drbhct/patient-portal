@@ -173,6 +173,15 @@ export default {
       return await securedJsonRequest.post('/patientportal/getpatientcommoptions', payload)
     },
     /**
+     * Get patient info
+      * @param {Object} Payload request object for acquiring patient info
+      * @param {Number} payload.facilityId
+      * @param {Number} payload.patientId
+      */
+    async getPatient (payload) {
+      return await securedJsonRequest.post('/patientportal/GetPatient', payload)
+    },
+    /**
       * API access to update user associated patient communication options
       * Reminder of the only acceptable combinations:
       * SendSMS, SendSMS + SendEmail, SendEmail, CallMobilePhone, CallMobilePhone + SendEmail, CallHomePhone, CallHomePhone + SendEmail
