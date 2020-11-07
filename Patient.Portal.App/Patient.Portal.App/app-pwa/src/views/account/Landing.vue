@@ -183,7 +183,7 @@ export default {
         icon: 'success'
       })
 
-      this.setProfileAuthInfo(response.data)
+      await this.setProfileAuthInfo(response.data)
       this.$router.push('/')
     }
   }

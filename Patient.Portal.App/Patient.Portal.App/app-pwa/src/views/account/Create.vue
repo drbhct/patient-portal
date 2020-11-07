@@ -11,7 +11,6 @@
               </header>
               <div class="card-body">
                 <form @submit.prevent="submitForm">
-                  <!-- to error: add class "has-danger" -->
                   <div class="form-group">
                     <label for="exampleInputEmail1">Email</label>
                     <input
@@ -168,13 +167,16 @@ export default {
           nickName: patientInfo.nickName,
           mobilePhone: patientInfo.cellPhone
         })
-        await api.auth.request.insertUserPatient({
-          patientPortalUserID: insertUserRes.data,
-          facilityId: this.linkInfo.facilityID,
-          patientId: this.linkInfo.patientID,
-          firstName: patientInfo.firstName,
-          lastName: patientInfo.lastName
-        })
+
+        if (this.linkInfo) {
+          await api.auth.request.insertUserPatient({
+            patientPortalUserID: insertUserRes.data,
+            facilityId: this.linkInfo.facilityID,
+            patientId: this.linkInfo.patientID,
+            firstName: patientInfo.firstName,
+            lastName: patientInfo.lastName
+          })
+        }
 
         const response = await api.auth.request.validateUserNoToken({
           username: this.form.email,
