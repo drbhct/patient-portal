@@ -182,7 +182,7 @@ export default {
           username: this.form.email,
           password: this.form.password
         })
-        this.setProfileAuthInfo(response.data)
+        await this.setProfileAuthInfo(response.data)
         this.$router.push('/')
       }
     }
