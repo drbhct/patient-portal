@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.5' // 15358 Message list, 15336 Message details
+      return '0.0.6' // #15318 Landing Page - Create Account
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {

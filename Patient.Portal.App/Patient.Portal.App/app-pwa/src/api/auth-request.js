@@ -95,6 +95,14 @@ export default {
       return await manualReq.post('/patientportal/validateuser', payload)
     },
     /**
+      * @param {Object} payload  request object for login
+      * @param {String} payload.username email is use for the username field
+      * @param {String} payload.password
+      */
+    async validateUserNoToken (payload) {
+      return await securedJsonRequest.post('/patientportal/validateuser', payload)
+    },
+    /**
       * @param {Object} payload  request object for updating user info
       * @param {String} payload.id
       * @param {String} payload.firstName
@@ -173,6 +181,15 @@ export default {
       return await securedJsonRequest.post('/patientportal/getpatientcommoptions', payload)
     },
     /**
+     * Get patient info
+      * @param {Object} Payload request object for acquiring patient info
+      * @param {Number} payload.facilityId
+      * @param {Number} payload.patientId
+      */
+    async getPatient (payload) {
+      return await securedJsonRequest.post('/patientportal/GetPatient', payload)
+    },
+    /**
       * API access to update user associated patient communication options
       * Reminder of the only acceptable combinations:
       * SendSMS, SendSMS + SendEmail, SendEmail, CallMobilePhone, CallMobilePhone + SendEmail, CallHomePhone, CallHomePhone + SendEmail
@@ -186,6 +203,57 @@ export default {
       */
     async updatePatientCommOptions (payload) {
       return await securedJsonRequest.post('/patientportal/updatepatientcommoptions', payload)
+    },
+    /**
+      * @param {String} payload link key to get patient info when associating it to a user
+    */
+    async getLink (payload) {
+      return await securedJsonRequest.get('/patientportal/GetLink/' + payload)
+    },
+    /**
+     * verify if email is already in use
+      * @param {String} payload email to verify
+    */
+    async isUserExists (payload) {
+      return await securedJsonRequest.get('/patientportal/userexists/' + payload)
+    },
+    /**
+     * Create new patient portal user
+      * @param {Object} Payload request object for acquiring patient info
+      * @param {String} payload.email
+      * @param {String} payload.pwd
+      * @param {String} payload.firstName
+      * @param {String} payload.lastName
+      * @param {String} payload.nickName
+      * @param {String} payload.mobilePhone
+      */
+    async insertUser (payload) {
+      return await securedJsonRequest.post('/patientportal/InsertUser', payload)
+    },
+    /**
+     * Associate patient to portal user account
+      * @param {Object} Payload request object for associating user to patient info
+      * @param {String} payload.patientPortalUserID
+      * @param {String} payload.facilityId
+      * @param {String} payload.patientId
+      * @param {String} payload.firstName
+      * @param {String} payload.lastName
+      */
+    async insertUserPatient (payload) {
+      return await securedJsonRequest.post('/patientportal/InsertUserPatient', payload)
+    },
+    /**
+     * Update patient info
+      * @param {Object} Payload request object for updating patient info
+      * @param {String} payload.patientPortalUserID
+      * @param {String} payload.facilityId
+      * @param {String} payload.patientId
+      * @param {String} payload.firstName
+      * @param {String} payload.lastName
+      */
+    async updatePatient (payload) {
+      return await securedJsonRequest.post('/patientportal/updatePatient', payload)
     }
+
   }
 }

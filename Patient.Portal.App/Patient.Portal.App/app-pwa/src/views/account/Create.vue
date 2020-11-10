@@ -11,16 +11,13 @@
               </header>
               <div class="card-body">
                 <form @submit.prevent="submitForm">
-                  <!-- to error: add class "has-danger" -->
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Username</label>
+                    <label for="exampleInputEmail1">Email</label>
                     <input
-                      v-model="form.userName"
-                      type="text"
+                      v-model="form.email"
+                      type="email"
                       class="form-control form-control"
-                      placeholder="User Name"
-                      maxlength="50"
-                      minlength="8"
+                      placeholder="Email"
                       required
                     />
                   </div>
@@ -90,11 +87,13 @@
 </template>
 
 <script>
+import api from '../../api/http-common.js'
+import { mapActions } from 'vuex'
 export default {
   data () {
     return {
       form: {
-        userName: '',
+        email: '',
         password: '',
         confirmPassword: ''
       },
@@ -105,10 +104,17 @@ export default {
       contains_number: false,
       contains_uppercase: false,
       contains_special_character: false,
-      valid_password: false
+      valid_password: false,
+      linkInfo: null
+    }
+  },
+  computed: {
+    key () {
+      return this.$route.query.key
     }
   },
   methods: {
+    ...mapActions(['setIsLoading', 'setProfileAuthInfo']),
     checkPassword () {
       this.password_length = this.form.password.length
       const format = /[ !@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/
@@ -134,9 +140,59 @@ export default {
         this.valid_password = false
       }
     },
-    submitForm () {
-      alert('In progress')
+    async submitForm () {
+      const exist = await api.auth.request.isUserExists(this.form.email)
+      console.log('exist', exist.data)
+      if (exist.data) {
+        this.$swal({
+          position: 'top',
+          title: 'Email is already in used.',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+      } else {
+        const getPatientResp = await api.auth.request.getPatient({
+          facilityId: this.linkInfo.facilityID,
+          patientId: this.linkInfo.patientID
+        })
+        const patientInfo = getPatientResp.data
+        console.log('patient>', getPatientResp.data)
+        const insertUserRes = await api.auth.request.insertUser({
+          email: this.form.email,
+          pwd: this.form.password,
+          firstName: patientInfo.firstName,
+          lastName: patientInfo.lastName,
+          nickName: patientInfo.nickName,
+          mobilePhone: patientInfo.cellPhone
+        })
+
+        if (this.linkInfo) {
+          await api.auth.request.insertUserPatient({
+            patientPortalUserID: insertUserRes.data,
+            facilityId: this.linkInfo.facilityID,
+            patientId: this.linkInfo.patientID,
+            firstName: patientInfo.firstName,
+            lastName: patientInfo.lastName
+          })
+        }
+
+        const response = await api.auth.request.validateUserNoToken({
+          username: this.form.email,
+          password: this.form.password
+        })
+        await this.setProfileAuthInfo(response.data)
+        this.$router.push('/')
+      }
     }
+  },
+  async mounted () {
+    const apiRes = await api.auth.request.apiLogin()
+    // NOTE: Temporary will be move to cookies soon!
+    localStorage.setItem('config', apiRes.data.token)
+    const resp = await api.auth.request.getLink(this.key)
+    this.linkInfo = resp.data
   }
 }
 </script>
