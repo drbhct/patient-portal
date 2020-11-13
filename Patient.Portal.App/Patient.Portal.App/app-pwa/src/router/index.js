@@ -104,6 +104,11 @@ const routes = [
     ]
   },
   {
+    path: '/task',
+    name: 'task',
+    component: () => import('../layouts/Task.vue')
+  },
+  {
     path: '*',
     name: 'PageNotFound',
     component: () => import('../layouts/PageNotFound.vue')
@@ -120,8 +125,12 @@ router.beforeResolve((to, from, next) => {
     let isAuth = false
     // const user = Vue.$cookies.get('user')
     const user = localStorage.getItem('config')
+    const profile = JSON.parse(localStorage.getItem('vuex'))
+    const hasProfile = profile.profile.profileAuthInfo !== null
     if (user) {
-      isAuth = true
+      if (hasProfile) {
+        isAuth = true
+      }
     }
     if (isAuth) {
       next()

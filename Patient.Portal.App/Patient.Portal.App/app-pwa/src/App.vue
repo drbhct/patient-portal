@@ -21,19 +21,19 @@
           <nav class="header-nav2">
             <ul class="nav">
               <li>
-                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout">
+                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-show="getProfileAuthInfo">
                   <i class="fas fa-sign-out-alt fa-2x"></i>
                 </a>
               </li>
               <li>
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link" v-show="getProfileAuthInfo">
                   <i class="fas fa-question-circle fa-2x"></i>
                 </a>
               </li>
             </ul>
           </nav>
           <div class="logged-info d-none d-sm-block">
-            <span v-if="getProfileAuthInfo">Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
+            <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div>
         </div>
       </header>
@@ -61,7 +61,7 @@
 <script>
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
     Loading
@@ -83,6 +83,7 @@ export default {
         case 'landing':
         case 'account':
         case 'createaccount':
+        case 'task':
           return false
         default:
           return true
@@ -103,9 +104,11 @@ export default {
     }
   },
   methods: {
-    logout () {
+    ...mapActions(['logoutApp']),
+    async logout () {
       this.$cookies.remove('user')
       localStorage.removeItem('config')
+      await this.logoutApp()
       this.$router.push('/account/login')
     }
   },

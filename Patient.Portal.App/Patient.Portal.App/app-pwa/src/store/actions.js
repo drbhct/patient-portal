@@ -1,5 +1,9 @@
 import * as types from './mutation-types.js'
 
+export const logoutApp = async (store) => {
+  await store.commit(types.PROFILE_AUTH_INFO, null)
+  await store.commit(types.PROFILE_PATIENT_ASSOCIATED, null)
+}
 export const setIsLoading = (store, payload) => {
   store.commit(types.IS_LOADING, payload)
 }

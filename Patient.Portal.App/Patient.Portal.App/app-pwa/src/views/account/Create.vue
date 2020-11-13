@@ -188,16 +188,18 @@ export default {
     }
   },
   async mounted () {
-    const apiRes = await api.auth.request.apiLogin()
-    // NOTE: Temporary will be move to cookies soon!
-    localStorage.setItem('config', apiRes.data.token)
+    // const apiRes = await api.auth.request.apiLogin()
+    // // NOTE: Temporary will be move to cookies soon!
+    // localStorage.setItem('config', apiRes.data.token)
     const resp = await api.auth.request.getLink(this.key)
     this.linkInfo = resp.data
+
+    // Need to wait for api for checking if patietn is already associated with a user account
   }
 }
 </script>
 
-<style>
+<style scoped>
 ul {
   padding-left: 20px;
   display: flex;
