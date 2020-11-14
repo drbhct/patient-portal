@@ -188,9 +188,7 @@ export default {
     }
   },
   async mounted () {
-    // const apiRes = await api.auth.request.apiLogin()
-    // // NOTE: Temporary will be move to cookies soon!
-    // localStorage.setItem('config', apiRes.data.token)
+    // NOTE: Temporary will be move to cookies soon!
     const resp = await api.auth.request.getLink(this.key)
     this.linkInfo = resp.data
   }
