@@ -19,6 +19,7 @@
                       class="form-control form-control"
                       placeholder="Email"
                       required
+                      autocomplete="username"
                     />
                   </div>
                   <div class="form-group mb-4">
@@ -40,6 +41,7 @@
                         maxlength="50"
                         minlength="8"
                         required
+                        autocomplete="new-password"
                       />
                     </div>
                     <ul>
@@ -72,6 +74,7 @@
                         maxlength="50"
                         minlength="8"
                         required
+                        autocomplete="new-password"
                       />
                     </div>
                   </div>
@@ -90,6 +93,12 @@
 import api from '../../api/http-common.js'
 import { mapActions } from 'vuex'
 export default {
+  props: {
+    linkInfo: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       form: {
@@ -104,8 +113,7 @@ export default {
       contains_number: false,
       contains_uppercase: false,
       contains_special_character: false,
-      valid_password: false,
-      linkInfo: null
+      valid_password: false
     }
   },
   computed: {
@@ -142,7 +150,6 @@ export default {
     },
     async submitForm () {
       const exist = await api.auth.request.isUserExists(this.form.email)
-      console.log('exist', exist.data)
       if (exist.data) {
         this.$swal({
           position: 'top',
@@ -152,45 +159,41 @@ export default {
           timer: 2000,
           icon: 'error'
         })
-      } else {
-        const getPatientResp = await api.auth.request.getPatient({
-          facilityId: this.linkInfo.facilityID,
-          patientId: this.linkInfo.patientID
-        })
-        const patientInfo = getPatientResp.data
-        console.log('patient>', getPatientResp.data)
-        const insertUserRes = await api.auth.request.insertUser({
-          email: this.form.email,
-          pwd: this.form.password,
-          firstName: patientInfo.firstName,
-          lastName: patientInfo.lastName,
-          nickName: patientInfo.nickName,
-          mobilePhone: patientInfo.cellPhone
-        })
-
-        if (this.linkInfo) {
-          await api.auth.request.insertUserPatient({
-            patientPortalUserID: insertUserRes.data,
-            facilityId: this.linkInfo.facilityID,
-            patientId: this.linkInfo.patientID,
-            firstName: patientInfo.firstName,
-            lastName: patientInfo.lastName
-          })
-        }
-
-        const response = await api.auth.request.validateUserNoToken({
-          username: this.form.email,
-          password: this.form.password
-        })
-        await this.setProfileAuthInfo(response.data)
-        this.$router.push('/')
+        return
       }
+
+      const getPatientResp = await api.auth.request.getPatient({
+        facilityId: this.linkInfo.facilityID,
+        patientId: this.linkInfo.patientID
+      })
+      const patientInfo = getPatientResp.data
+      console.log('patient>', getPatientResp.data)
+      const insertUserRes = await api.auth.request.insertUser({
+        email: this.form.email,
+        pwd: this.form.password,
+        firstName: patientInfo.firstName,
+        lastName: patientInfo.lastName,
+        nickName: patientInfo.nickName,
+        mobilePhone: patientInfo.cellPhone
+      })
+
+      if (this.linkInfo) {
+        await api.auth.request.insertUserPatient({
+          patientPortalUserID: insertUserRes.data,
+          facilityId: this.linkInfo.facilityID,
+          patientId: this.linkInfo.patientID,
+          firstName: patientInfo.firstName,
+          lastName: patientInfo.lastName
+        })
+      }
+
+      const response = await api.auth.request.validateUserNoToken({
+        username: this.form.email,
+        password: this.form.password
+      })
+      await this.setProfileAuthInfo(response.data)
+      this.$router.push('/')
     }
-  },
-  async mounted () {
-    // NOTE: Temporary will be move to cookies soon!
-    const resp = await api.auth.request.getLink(this.key)
-    this.linkInfo = resp.data
   }
 }
 </script>

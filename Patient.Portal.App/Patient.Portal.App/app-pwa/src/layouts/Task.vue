@@ -5,7 +5,7 @@
             <h2 v-if="!initialize">Initializing App ...</h2>
             <h2 v-if="initialize && (hasAccount || keyExpired)">{{ message }}</h2>
         </div>
-        <component v-bind:is="module" v-if="initialize"></component>
+        <component v-bind:is="module" v-if="initialize" :link-info="linkInfo"></component>
     </div>
   </div>
 </template>
