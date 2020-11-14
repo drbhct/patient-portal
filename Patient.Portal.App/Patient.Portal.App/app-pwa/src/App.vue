@@ -114,7 +114,7 @@ export default {
     }
   },
   mounted () {
-    console.info('Vue App v' + this.version)
+    console.info('%c Patient Portal v' + this.version, 'background:green')
   }
 }
 </script>

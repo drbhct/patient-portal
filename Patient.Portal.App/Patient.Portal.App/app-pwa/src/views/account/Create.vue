@@ -149,6 +149,45 @@ export default {
       }
     },
     async submitForm () {
+      if (!this.valid_password) {
+        let error = ''
+        if (!this.contains_eight_characters) {
+          error = 'Password should have a minimum length of 8 characters.'
+        }
+        if (!this.contains_number) {
+          error = 'Password should contain at least 1 number.'
+        }
+        if (!this.contains_uppercase) {
+          error = 'Password should contain at least 1 upper case.'
+        }
+        if (!this.contains_special_character) {
+          error = 'Password should contain at least 1 special character.'
+        }
+        this.$swal({
+          position: 'top',
+          title: 'Password error',
+          text: error,
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+        return
+      }
+
+      if (this.form.password !== this.form.confirmPassword) {
+        this.$swal({
+          position: 'top',
+          title: 'Password error',
+          text: 'Confirm password doest not match.',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+        return
+      }
+
       const exist = await api.auth.request.isUserExists(this.form.email)
       if (exist.data) {
         this.$swal({
@@ -167,7 +206,6 @@ export default {
         patientId: this.linkInfo.patientID
       })
       const patientInfo = getPatientResp.data
-      console.log('patient>', getPatientResp.data)
       const insertUserRes = await api.auth.request.insertUser({
         email: this.form.email,
         pwd: this.form.password,
