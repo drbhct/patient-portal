@@ -131,7 +131,7 @@ export default {
   methods: {
     ...mapActions(['logoutApp']),
     closeSidebar () {
-      console.log('closing sidebar')
+      // console.log('closing sidebar')
       document.getElementsByTagName('html')[0].classList.remove('sidebar-left-opened')
     },
     async logout () {
