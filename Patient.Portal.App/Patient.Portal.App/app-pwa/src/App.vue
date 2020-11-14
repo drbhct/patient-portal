@@ -21,18 +21,18 @@
           <nav class="header-nav2">
             <ul class="nav">
               <li>
-                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-show="getProfileAuthInfo">
+                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-if="getProfileAuthInfo">
                   <i class="fas fa-sign-out-alt fa-2x"></i>
                 </a>
               </li>
               <li>
-                <a href="#" class="nav-link" v-show="getProfileAuthInfo">
+                <a href="#" class="nav-link" v-if="getProfileAuthInfo">
                   <i class="fas fa-question-circle fa-2x"></i>
                 </a>
               </li>
             </ul>
           </nav>
-          <div class="logged-info d-none d-sm-block">
+          <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
             <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div>
         </div>
@@ -90,13 +90,14 @@ export default {
       }
     },
     showMobileMenu () {
-      switch (this.$route.fullPath.toLowerCase()) {
+      switch (this.$route.path.toLowerCase()) {
         case '/account/create':
         case '/account/landing':
         case '/account/login':
         case '/account/requestpin':
         case '/account/forgotpassword':
         case '/account/forgotusername':
+        case '/task':
           return false
         default:
           return true
