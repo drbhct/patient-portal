@@ -75,6 +75,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'vuex'
 export default {
   computed: {
     currentRouteName () {
@@ -128,13 +129,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['logoutApp']),
     closeSidebar () {
       console.log('closing sidebar')
       document.getElementsByTagName('html')[0].classList.remove('sidebar-left-opened')
     },
-    logout () {
+    async logout () {
       this.$cookies.remove('user')
       localStorage.removeItem('config')
+      await this.logoutApp()
       this.$router.push('/account/login')
     }
   }

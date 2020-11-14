@@ -69,7 +69,7 @@ export default {
     * @param {String} payload.patientid
     */
     async gettask (payload) {
-      return await securedJsonRequest.post('/patientportal/gettasks/', payload)
+      return await securedJsonRequest.post('/patientportal/gettasks', payload)
     },
     /**
      * Method to check if patient has existing user account
@@ -78,7 +78,105 @@ export default {
     * @param {String} payload.patientid
     */
     async patientLookup (payload) {
-      return await securedJsonRequest.post('/patientportal/patientlookup/', payload)
+      return await securedJsonRequest.post('/patientportal/patientlookup', payload)
+    },
+    /**
+     * Method to get patient info
+    * @param {Object} Payload request object for acquiring patient info
+    * @param {String} payload.facilityid
+    * @param {String} payload.patientid
+    */
+    async getPatient (payload) {
+      return await securedJsonRequest.post('/patientportal/getpatient', payload)
+    },
+    /**
+     * Method to get patient incomeplete case history
+    * @param {Object} Payload request object for acquiring patient incomplete case history
+    * @param {String} payload.facilityid
+    * @param {String} payload.patientid
+    */
+    async findIncompleteCaseHistory (payload) {
+      return await securedJsonRequest.post('/patientportal/findincompletecasehistory', payload)
+    },
+    /**
+     * Method to add case history problem
+    * @param {Object} Payload request object for adding case history problem
+    * @param {String} payload.facilityId
+    * @param {String} payload.caseHistoryId
+    * @param {String} payload.ordinal
+    * @param {String} payload.region
+    * @param {String} payload.name
+    */
+    async insertCaseHistoryProblem (payload) {
+      return await securedJsonRequest.post('/patientportal/insertcasehistoryproblem', payload)
+    },
+    /**
+     * Method to remove case history problem
+    * @param {Object} Payload request object for removing case history problem
+    * @param {String} payload.facilityId
+    * @param {String} payload.caseHistoryId
+    * @param {String} payload.ordinal
+    */
+    async deleteCaseHistoryProblem (payload) {
+      return await securedJsonRequest.post('/patientportal/deletecasehistoryproblem', payload)
+    },
+    /**
+     * Method to update case history problem
+    * @param {Object} Payload request object for updating case history problem
+    * @param {String} payload.facilityId
+    * @param {String} payload.caseHistoryId
+    * @param {String} payload.ordinal
+    * @param {String} payload.fieldName
+    * @param {String} payload.value
+    */
+    async updateCaseHistoryProblemValue (payload) {
+      return await securedJsonRequest.post('/patientportal/updatecasehistoryproblemvalue', payload)
+    },
+    /**
+     * Method to get case history conditions
+    * @param {Object} Payload request object for adding case history problem
+    * @param {String} payload.facilityId
+    * @param {String} payload.id
+    */
+    async getCaseHistoryConditions (payload) {
+      return await securedJsonRequest.post('/patientportal/getcasehistoryconditions', payload)
+    },
+    /**
+     * Method to update case history conditions
+    * @param {Object} Payload request object for updating case history problem
+    * @param {String} payload.facilityId
+    * @param {String} payload.caseHistoryId
+    * @param {String} payload.conditions
+    */
+    async updateCaseHistoryConditions (payload) {
+      return await securedJsonRequest.post('/patientportal/updatecasehistoryconditions', payload)
+    },
+    /**
+     * Method to clear case history conditions
+    * @param {Object} Payload request object for clearing case history problem
+    * @param {String} payload.facilityId
+    * @param {String} payload.id
+    */
+    async clearCaseHistoryConditions (payload) {
+      return await securedJsonRequest.post('/patientportal/clearcasehistoryconditions', payload)
+    },
+    /**
+     *
+    * @param {Object} Payload request object
+    * @param {String} payload.facilityId
+    * @param {String} payload.id
+    */
+    async getCaseHistoryFamilyHealthHistory (payload) {
+      return await securedJsonRequest.post('/patientportal/getcasehistoryfamilyhealthhistory', payload)
+    },
+    /**
+     *
+    * @param {Object} Payload request object
+    * @param {String} payload.facilityId
+    * @param {String} payload.id
+    */
+    async updateCaseHistoryFamilyHealthHistory (payload) {
+      return await securedJsonRequest.post('/patientportal/UpdateCaseHistoryFamilyHealthHistory', payload)
     }
   }
 }

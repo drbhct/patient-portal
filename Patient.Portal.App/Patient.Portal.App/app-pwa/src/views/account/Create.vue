@@ -193,8 +193,6 @@ export default {
     // localStorage.setItem('config', apiRes.data.token)
     const resp = await api.auth.request.getLink(this.key)
     this.linkInfo = resp.data
-
-    // Need to wait for api for checking if patietn is already associated with a user account
   }
 }
 </script>
