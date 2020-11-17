@@ -44,14 +44,14 @@
               </div>
             </section>
           </div>
-          <div class="col-xl-8 mb-5">
+          <!-- Disabled on initial app rollout -->
+          <!-- <div class="col-xl-8 mb-5">
             <section class="card card-featured mb-4">
               <div class="card-body">
                 <form>
                   <span>
                     <h3>CREATE ACCOUNT</h3>
                   </span>
-                  <!-- to error: add class "has-danger" -->
                   <div class="form-group mb-3">
                     <input
                       type="email"
@@ -66,7 +66,7 @@
                 </form>
               </div>
             </section>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="col-lg-5 mb-5 mt-5 d-none d-sm-block">

@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // const user = Vue.$cookies.get('user')
 const user = localStorage.getItem('config')
-console.log('request user>', user)
+// console.log('request user>', user)
 let token = ''
 if (user) {
   token = user

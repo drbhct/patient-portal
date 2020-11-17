@@ -1,26 +1,29 @@
 <template>
   <div class="row mx-1 justify-content-md-center">
     <div v-if="isLoading">
-      <h3>Loading messages ...</h3>
+      <h3>Fetching messages ...</h3>
     </div>
-    <table class="table table-responsive-md mb-5" v-if="!isLoading">
-      <thead>
-        <tr>
-          <th>Subject</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="msg in messages" :key="'msg' + msg.id">
-          <td>
-            <a href="javascript:void(0)" @click="viewMsg(msg)">{{
-              msg.subject
-            }}</a>
-          </td>
-          <td>{{ formatData(msg.date) }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <div v-if="!isLoading">
+      <table class="table table-responsive-md mb-5" v-if="messages.length>0">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="msg in messages" :key="'msg' + msg.id">
+            <td>
+              <a href="javascript:void(0)" @click="viewMsg(msg)">{{
+                msg.subject
+              }}</a>
+            </td>
+            <td>{{ formatData(msg.date) }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3 v-else>Message list empty..</h3>
+    </div>
   </div>
 </template>
 
@@ -35,9 +38,7 @@ export default {
       isLoading: false
     }
   },
-  components: {
-
-  },
+  components: {},
   methods: {
     ...mapActions(['setMsgCurrentPage', 'setCurrentMsgInfo']),
     formatData (dayVal) {
