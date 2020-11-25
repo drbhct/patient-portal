@@ -10,7 +10,7 @@
       </thead>
       <tbody>
         <tr v-for="item in doclist" :key="item.fileID">
-          <td><a href="menu/documents" @click="onclick(item.url)">{{ item.description }}</a></td>
+          <td><a :href="item.url" target="_blank">{{ item.description }}</a></td>
           <td><span>{{ date(item.fileDate) }}</span></td>
         </tr>
       </tbody>
@@ -19,11 +19,15 @@
 </template>
 
 <script>
+import Loading from 'vue-loading-overlay'
 import api from '../../api/http-common.js'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 
 export default {
+  components: {
+    Loading
+  },
   data () {
     return {
       doclist: null,
@@ -31,7 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getProfilePatientAssociated']),
+    ...mapGetters(['getProfilePatientAssociated', 'getIsLoading']),
     currentPatientAssociated () {
       if (this.getProfilePatientAssociated.length === 0) {
         return null

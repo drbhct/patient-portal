@@ -3,7 +3,7 @@
     <div v-if="isLoading">
       <h3>Fetching messages ...</h3>
     </div>
-    <div v-if="!isLoading">
+    <div v-if="!isLoading" class="col-md-12">
       <table class="table table-responsive-md mb-5" v-if="messages.length>0">
         <thead>
           <tr>
