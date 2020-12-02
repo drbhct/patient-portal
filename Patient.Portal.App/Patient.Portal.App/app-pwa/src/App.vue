@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.6' // #15318 Landing Page - Create Account
+      return '0.0.7' // #15318 Landing Page - Create Account, added signin options while creating account
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {

@@ -78,7 +78,12 @@
                       />
                     </div>
                   </div>
-                  <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">Create Account</button>
+                  <div class="form-group">
+                    <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">Create Account</button>
+                  </div>
+                  <div class="form-group">
+                    <h5>Existing account? <a href="/account/login">Login instead</a></h5>
+                  </div>
                 </form>
               </div>
             </section>
