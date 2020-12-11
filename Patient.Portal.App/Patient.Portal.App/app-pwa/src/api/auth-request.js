@@ -254,6 +254,5 @@ export default {
     async updatePatient (payload) {
       return await securedJsonRequest.post('/patientportal/updatePatient', payload)
     }
-
   }
 }
