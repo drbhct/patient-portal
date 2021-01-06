@@ -45,6 +45,7 @@
 <script>
 import api from '../../api/http-common.js'
 import { mapGetters, mapActions } from 'vuex'
+import moment from 'moment'
 export default {
   data () {
     return {
@@ -163,12 +164,14 @@ export default {
       }
     },
     async captureCardAlias (expDate) {
+      const expireDate = moment(expDate).format('MMYY')
+
       const data = {
         facilityId: this.currentPatientAssociated.facilityID,
         patientId: this.currentPatientAssociated.patientID,
         nameOnCard: this.form.nameOnAccount,
         acctNum: this.form.accountNo.replace(/ /g, ''),
-        expDate: expDate,
+        expDate: expireDate,
         cardCode: this.cvv
       }
 
