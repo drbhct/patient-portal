@@ -11,10 +11,11 @@
 </template>
 <script>
 import api from '../api/http-common.js'
-import CreateAccount from '../views/account/Create.vue'
 export default {
   components: {
-    CreateAccount
+    // Lazy Loading components
+    CreateAccount: () => import('../views/account/Create.vue'),
+    PatientInfo: () => import('../components/task/PatientInfo.vue')
   },
   data () {
     return {
@@ -45,6 +46,11 @@ export default {
     // NOTE: Temporary will be move to cookies soon!
     localStorage.setItem('config', apiRes.data.token)
 
+    if (!this.key) {
+      this.module = 'PatientInfo'
+      this.initialize = true
+      return
+    }
     const resp = await api.auth.request.getLink(this.key)
     this.linkInfo = resp.data
     if (!this.linkInfo) {
