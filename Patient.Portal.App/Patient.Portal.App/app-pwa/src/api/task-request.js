@@ -172,7 +172,7 @@ export default {
     /**
      *
     * @param {Object} Payload request object
-    * @param {String} payload.facilityId
+    * @param {String} payload.facilityid
     * @param {String} payload.id
     */
     async updateCaseHistoryFamilyHealthHistory (payload) {

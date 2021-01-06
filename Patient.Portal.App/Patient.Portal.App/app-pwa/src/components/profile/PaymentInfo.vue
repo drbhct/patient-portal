@@ -1,61 +1,55 @@
 ﻿<template>
-  <form class="form-horizontal m-lg-4">
-    <div class="form-group row">
+  <div class="mx-1">
+    <div class="row">
       <div class="col-12 col-lg-6 col-xl-6">
-        <h3>Payment Information</h3>
+        <h3 v-if="getProfilePaymentCurrentPage === 'PaymentCardList'">Payment Information</h3>
+        <a v-if="getProfilePaymentCurrentPage === 'PaymentForm'" href="javascript:void(0)" @click="setProfilePaymentCurrentPage('PaymentCardList')">
+          <i class="fas fa-angle-left"></i>
+          Back to Payment Information
+        </a>
       </div>
       <div class="col-6 col-lg-6 col-xl-6 d-none d-lg-block d-xl-block">
-        <div class="float-right">
-          <button class="btn btn-primary btn-w-160">ADD NEW</button>
+        <div class="float-right" v-if="getProfilePaymentCurrentPage === 'PaymentCardList'">
+          <button class="btn btn-primary btn-w-160" @click="setProfilePaymentCurrentPage('PaymentForm')">ADD NEW</button>
         </div>
       </div>
     </div>
-    <div class="form-group row pt-lg-4 pt-md-4">
-      <div class="col-12 col-lg-6 col-xl-6">
-        <h4> Card on File</h4>
-      </div>
+    <br>
+    <div>
+      <component v-bind:is="getProfilePaymentCurrentPage"></component>
     </div>
-    <div class="form-group row">
-      <div class="col-12 col-lg-6 col-xl-6">
-        <p>
-          Name on Card: Rizza Herrero <br />
-          Last 4: xxxx-xxxx-xxxx-1234 <br />
-          Expires: 02/02/2022
-        </p>
-      </div>
+    <br />
+    <div class="col-12 col-lg-6 col-xl-6 d-lg-none" v-if="getProfilePaymentCurrentPage === 'PaymentCardList'">
+      <button class="btn btn-primary btn-w-100p" @click="setProfilePaymentCurrentPage('PaymentForm')">ADD NEW</button>
     </div>
-    <div class="form-group row">
-      <div class="col-12 col-lg-6 col-xl-6">
-        <button class="btn btn-primary btn-w-160">UPDATE</button>
-      </div>
-    </div>
-    <div class="form-group row d-lg-none">
-      <div class="col-12 col-lg-6 col-xl-6">
-        <button class="btn btn-primary btn-w-160">ADD NEW</button>
-      </div>
-    </div>
-  </form>
+  </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
+import PaymentForm from './PaymentForm.vue'
+import PaymentCardList from './PaymentCardList.vue'
+
 export default {
   components: {
-  },
-  data () {
-    return {
-    }
+    PaymentForm,
+    PaymentCardList
   },
   computed: {
-
+    ...mapGetters(['getProfilePaymentCurrentPage'])
   },
   methods: {
+    ...mapActions(['setProfilePaymentCurrentPage'])
   }
 }
 </script>
 <style scoped>
-  h4 {
-    font-weight: 600 !important;
-  }
-  .btn-w-160 {
-    width: 160px !important;
-  }
+h4 {
+  font-weight: 600 !important;
+}
+.btn-w-160 {
+  width: 160px !important;
+}
+.btn-w-100p {
+  width: 100% !important;
+}
 </style>

@@ -2,7 +2,7 @@
   <div class="mx-1">
     <a href="javascript:void(0)" @click="setBillingCurrentPage('Default')">
       <i class="fas fa-angle-left"></i>
-      Back to BIlling Statement
+      Back to Billing Statement
     </a>
     <div class="col-lg-12">
       <h2>Statement 123456</h2>
