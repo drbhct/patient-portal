@@ -1,5 +1,9 @@
 import * as types from './mutation-types.js'
 
+export const logoutApp = async (store) => {
+  await store.commit(types.PROFILE_AUTH_INFO, null)
+  await store.commit(types.PROFILE_PATIENT_ASSOCIATED, null)
+}
 export const setIsLoading = (store, payload) => {
   store.commit(types.IS_LOADING, payload)
 }
@@ -20,8 +24,12 @@ export const setProfileCurrentPage = (store, payload) => {
   store.commit(types.CURRENT_PROFILE_PAGE_VIEW, payload)
 }
 
-export const setProfileAuthInfo = (store, payload) => {
-  store.commit(types.PROFILE_AUTH_INFO, payload)
+export const setProfilePaymentCurrentPage = (store, payload) => {
+  store.commit(types.CURRENT_PROFILE_PAYMENT_VIEW, payload)
+}
+
+export const setProfileAuthInfo = async (store, payload) => {
+  await store.commit(types.PROFILE_AUTH_INFO, payload)
 }
 
 export const setProfileMyInfo = (store, payload) => {

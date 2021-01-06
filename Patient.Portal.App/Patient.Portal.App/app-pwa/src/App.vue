@@ -21,19 +21,19 @@
           <nav class="header-nav2">
             <ul class="nav">
               <li>
-                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout">
+                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-if="getProfileAuthInfo">
                   <i class="fas fa-sign-out-alt fa-2x"></i>
                 </a>
               </li>
               <li>
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link" v-if="getProfileAuthInfo">
                   <i class="fas fa-question-circle fa-2x"></i>
                 </a>
               </li>
             </ul>
           </nav>
-          <div class="logged-info d-none d-sm-block">
-            <span v-if="getProfileAuthInfo">Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
+          <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
+            <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div>
         </div>
       </header>
@@ -61,14 +61,14 @@
 <script>
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
     Loading
   },
   computed: {
     version () {
-      return '0.0.5' // 15358 Message list, 15336 Message details
+      return '0.0.7' // #15318 Landing Page - Create Account, added signin options while creating account
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {
@@ -83,19 +83,21 @@ export default {
         case 'landing':
         case 'account':
         case 'createaccount':
+        case 'task':
           return false
         default:
           return true
       }
     },
     showMobileMenu () {
-      switch (this.$route.fullPath.toLowerCase()) {
+      switch (this.$route.path.toLowerCase()) {
         case '/account/create':
         case '/account/landing':
         case '/account/login':
         case '/account/requestpin':
         case '/account/forgotpassword':
         case '/account/forgotusername':
+        case '/task':
           return false
         default:
           return true
@@ -103,14 +105,16 @@ export default {
     }
   },
   methods: {
-    logout () {
+    ...mapActions(['logoutApp']),
+    async logout () {
       this.$cookies.remove('user')
       localStorage.removeItem('config')
+      await this.logoutApp()
       this.$router.push('/account/login')
     }
   },
   mounted () {
-    console.info('Vue App v' + this.version)
+    console.info('%c Patient Portal v' + this.version, 'background:green')
   }
 }
 </script>

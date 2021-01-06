@@ -11,17 +11,15 @@
               </header>
               <div class="card-body">
                 <form @submit.prevent="submitForm">
-                  <!-- to error: add class "has-danger" -->
                   <div class="form-group">
-                    <label for="exampleInputEmail1">Username</label>
+                    <label for="exampleInputEmail1">Email</label>
                     <input
-                      v-model="form.userName"
-                      type="text"
+                      v-model="form.email"
+                      type="email"
                       class="form-control form-control"
-                      placeholder="User Name"
-                      maxlength="50"
-                      minlength="8"
+                      placeholder="Email"
                       required
+                      autocomplete="username"
                     />
                   </div>
                   <div class="form-group mb-4">
@@ -43,6 +41,7 @@
                         maxlength="50"
                         minlength="8"
                         required
+                        autocomplete="new-password"
                       />
                     </div>
                     <ul>
@@ -75,10 +74,16 @@
                         maxlength="50"
                         minlength="8"
                         required
+                        autocomplete="new-password"
                       />
                     </div>
                   </div>
-                  <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">Create Account</button>
+                  <div class="form-group">
+                    <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">Create Account</button>
+                  </div>
+                  <div class="form-group">
+                    <h5>Existing account? <a href="/account/login">Login instead</a></h5>
+                  </div>
                 </form>
               </div>
             </section>
@@ -90,11 +95,19 @@
 </template>
 
 <script>
+import api from '../../api/http-common.js'
+import { mapActions } from 'vuex'
 export default {
+  props: {
+    linkInfo: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       form: {
-        userName: '',
+        email: '',
         password: '',
         confirmPassword: ''
       },
@@ -108,7 +121,13 @@ export default {
       valid_password: false
     }
   },
+  computed: {
+    key () {
+      return this.$route.query.key
+    }
+  },
   methods: {
+    ...mapActions(['setIsLoading', 'setProfileAuthInfo']),
     checkPassword () {
       this.password_length = this.form.password.length
       const format = /[ !@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/
@@ -134,14 +153,95 @@ export default {
         this.valid_password = false
       }
     },
-    submitForm () {
-      alert('In progress')
+    async submitForm () {
+      if (!this.valid_password) {
+        let error = ''
+        if (!this.contains_eight_characters) {
+          error = 'Password should have a minimum length of 8 characters.'
+        }
+        if (!this.contains_number) {
+          error = 'Password should contain at least 1 number.'
+        }
+        if (!this.contains_uppercase) {
+          error = 'Password should contain at least 1 upper case.'
+        }
+        if (!this.contains_special_character) {
+          error = 'Password should contain at least 1 special character.'
+        }
+        this.$swal({
+          position: 'top',
+          title: 'Password error',
+          text: error,
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+        return
+      }
+
+      if (this.form.password !== this.form.confirmPassword) {
+        this.$swal({
+          position: 'top',
+          title: 'Password error',
+          text: 'Confirm password doest not match.',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+        return
+      }
+
+      const exist = await api.auth.request.isUserExists(this.form.email)
+      if (exist.data) {
+        this.$swal({
+          position: 'top',
+          title: 'Email is already in used.',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+        return
+      }
+
+      const getPatientResp = await api.auth.request.getPatient({
+        facilityId: this.linkInfo.facilityID,
+        patientId: this.linkInfo.patientID
+      })
+      const patientInfo = getPatientResp.data
+      const insertUserRes = await api.auth.request.insertUser({
+        email: this.form.email,
+        pwd: this.form.password,
+        firstName: patientInfo.firstName,
+        lastName: patientInfo.lastName,
+        nickName: patientInfo.nickName,
+        mobilePhone: patientInfo.cellPhone
+      })
+
+      if (this.linkInfo) {
+        await api.auth.request.insertUserPatient({
+          patientPortalUserID: insertUserRes.data,
+          facilityId: this.linkInfo.facilityID,
+          patientId: this.linkInfo.patientID,
+          firstName: patientInfo.firstName,
+          lastName: patientInfo.lastName
+        })
+      }
+
+      const response = await api.auth.request.validateUserNoToken({
+        username: this.form.email,
+        password: this.form.password
+      })
+      await this.setProfileAuthInfo(response.data)
+      this.$router.push('/')
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 ul {
   padding-left: 20px;
   display: flex;

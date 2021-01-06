@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // const user = Vue.$cookies.get('user')
 const user = localStorage.getItem('config')
-console.log('request user>', user)
+// console.log('request user>', user)
 let token = ''
 if (user) {
   token = user
@@ -63,7 +63,7 @@ export default {
      * @param {String} payload.patientid
      */
     async getpatientfutureappts (payload) {
-      return await securedJsonRequest.post('/patientportal/getpatientfutureappts/', payload)
+      return await securedJsonRequest.post('/patientportal/getpatientfutureappts', payload)
     },
     /**
     * @param {Object} Payload request for patient tasks
@@ -72,6 +72,54 @@ export default {
     */
     async gettasks (payload) {
       return await securedJsonRequest.post('/patientportal/gettasks/', payload)
+    },
+    /**
+    * @param {Object} Payload request for patient document list
+    * @param {String} payload.facilityid
+    * @param {String} payload.patientid
+    */
+    async getattachmentlist (payload) {
+      return await securedJsonRequest.post('/patientportal/getattachmentlist', payload)
+    },
+    /**
+    * @param {Object} Payload
+    * @param {String} payload.facilityid
+    * @param {String} payload.id
+    */
+    async getpaymentprofilelist (payload) {
+      return await securedJsonRequest.post('/patientportal/getpaymentprofilelist', payload)
+    },
+    /**
+    * @param {Object} payload  request object for saving user profile payment
+    * @param {String} payload.facilityId
+    * @param {String} payload.patientId
+    * @param {String} payload.nameOnAccount
+    * @param {Boolean} payload.accountNo
+    * @param {Date} payload.expDate
+    * @param {String} payload.routeNo
+    * @param {String} payload.address1
+    * @param {String} payload.address2
+    * @param {String} payload.city
+    * @param {String} payload.state
+    * @param {String} payload.zip
+    * @param {String} payload.merchantPaymentMethodID
+    * @param {String} payload.paymentMethodID
+    * @param {String} payload.paymentMethod
+    */
+    async insertpaymentprofile (payload) {
+      return await securedJsonRequest.post('/patientportal/insertpaymentprofile', payload)
+    },
+    /**
+    * @param {Object} payload  request object for capture card alias
+    * @param {String} payload.facilityId
+    * @param {String} payload.patientId
+    * @param {String} payload.nameOnCard
+    * @param {String} payload.acctNum
+    * @param {Date} payload.expDate
+    * @param {String} payload.cardCode
+    */
+    async capturecardalias (payload) {
+      return await securedJsonRequest.post('/patientportal/capturecardalias', payload)
     }
   }
 }

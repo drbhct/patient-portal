@@ -19,9 +19,9 @@
 
       <div class="container d-lg-flex d-md-flex pt-4">
         <div class="col-12 col-md-6 col-lg-6 col-xl-6">
-          <dash-task></dash-task>
+          <dash-task v-if="getProfilePatientAssociated.length>0"></dash-task>
           <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
-          <dash-appointments></dash-appointments>
+          <dash-appointments v-if="getProfilePatientAssociated.length>0"></dash-appointments>
         </div>
         <div class="col-12 col-md-6 col-lg-6 col-xl-6 offset-lg-2 offset-xl-2">
           <div class="d-block d-sm-none">
@@ -57,7 +57,7 @@ export default {
     DashMenu
   },
   computed: {
-    ...mapGetters(['getProfileAuthInfo'])
+    ...mapGetters(['getProfileAuthInfo', 'getProfilePatientAssociated'])
   },
   methods: {
     ...mapActions(['setProfilePatientAssociated'])
