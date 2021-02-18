@@ -15,7 +15,8 @@ export default {
   components: {
     // Lazy Loading components
     CreateAccount: () => import('../views/account/Create.vue'),
-    PatientInfo: () => import('../components/task/PatientInfo.vue')
+    PatientInfo: () => import('../components/task/PatientInfo.vue'),
+    NphComplaintLocation: () => import('../components/task/NphComplaintLocation.vue')
   },
   data () {
     return {
@@ -47,7 +48,9 @@ export default {
     localStorage.setItem('config', apiRes.data.token)
 
     if (!this.key) {
-      this.module = 'PatientInfo'
+      // For testing at the moment
+      // this.module = 'PatientInfo'
+      this.module = 'NphComplaintLocation'
       this.initialize = true
       return
     }
