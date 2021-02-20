@@ -16,7 +16,8 @@ export default {
     // Lazy Loading components
     CreateAccount: () => import('../views/account/Create.vue'),
     PatientInfo: () => import('../components/task/PatientInfo.vue'),
-    NphComplaintLocation: () => import('../components/task/NphComplaintLocation.vue')
+    NphComplaintLocation: () => import('../components/task/NphComplaintLocation.vue'),
+    NphComplaintQuestions: () => import('../components/task/NphComplaintQuestions.vue')
   },
   data () {
     return {
@@ -50,7 +51,7 @@ export default {
     if (!this.key) {
       // For testing at the moment
       // this.module = 'PatientInfo'
-      this.module = 'NphComplaintLocation'
+      this.module = 'NphComplaintQuestions'
       this.initialize = true
       return
     }
