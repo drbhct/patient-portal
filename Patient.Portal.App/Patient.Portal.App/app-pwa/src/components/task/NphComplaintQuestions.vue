@@ -92,6 +92,81 @@
                   ></multiselect>
                 </div>
               </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >How would you best describe the sensation of your pain?</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painQuality"
+                    :options="painQualitySelection"
+                    :multiple="true"
+                  ></multiselect>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >Over the past/weeks/months this complaint is</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painQualityImprovement"
+                    :options="painQualityImprovementSelection"
+                    :multiple="true"
+                  ></multiselect>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >What aggravates your pain or makes it feel worse? </label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painFactor"
+                    :options="painFactorSelection"
+                    :multiple="true"
+                  ></multiselect>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >What relieves the pain?</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painFactorImprovement"
+                    :options="painFactorImprovementSelection"
+                    :multiple="true"
+                  ></multiselect>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >How much does your problem interfere with work? </label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painInterference"
+                    :options="painInterferenceSelection"
+                    :multiple="false"
+                  ></multiselect>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >Have you seen anyone for your pain?</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painInterferenceHelp"
+                    :options="painInterferenceHelpSelection"
+                    :multiple="true"
+                  ></multiselect>
+                </div>
+              </div>
+
             </div>
           </div>
           <footer class="card-footer"></footer>
@@ -120,7 +195,13 @@ export default {
         dateOccured: null,
         expPain: '',
         paintIntensity: 0,
-        radiatesQuestionsAndAnswer: []
+        radiatesQuestionsAndAnswer: [],
+        painQuality: [],
+        painQualityImprovement: '',
+        painFactor: [],
+        painFactorImprovement: [],
+        painInterference: '',
+        painInterferenceHelp: []
       },
       complaint: 'Head',
       disabledDates: {
@@ -335,6 +416,43 @@ export default {
         'Constant pain (100% of the day)',
         'No pain'
       ]
+    },
+    painQualitySelection: function () {
+      return [
+        'Inflexible', 'Stiffness', 'Spasms',
+        'Cramps', 'Sharp', 'Stabbing',
+        'Aching', 'Pins & Needles',
+        'Pounding', 'Shooting', 'Burning',
+        'Dull', 'Tingling/Numb', 'Throbbing',
+        'Crawling', 'Stinging'
+      ]
+    },
+    painQualityImprovementSelection: function () {
+      return ['Improving', 'Getting worse', 'About the same']
+    },
+    painFactorSelection: function () {
+      return [
+        'Carrying', 'Crawling', 'Coughing',
+        'Driving', 'Exercising', 'Getting In/Out of Car',
+        'Getting out of bed', 'Lifting', 'Looking side/side',
+        'Looking up/down', 'Pulling', 'Pushing', 'Repetitive Movement',
+        'Sneezing', 'Straining at BM', 'Standing', 'Sitting',
+        'Stooping', 'Stress', 'Walking', 'Other'
+      ]
+    },
+    painFactorImprovementSelection: function () {
+      return ['Resting', 'Shower', 'Medication', 'Heat', 'Ice', 'Stretching', 'Chiropractic', 'Massage', 'Sitting']
+    },
+    painInterferenceSelection: function () {
+      return [
+        'Can do unlimited work', 'Can do usual work but no extra',
+        'Can do 50% of usual work', 'Can do 25% of usual work',
+        'Cannot work'
+      ]
+    },
+    painInterferenceHelpSelection: function () {
+      return ['Chiropractor', 'ER Doctor', 'Massage Therapist', 'Neurologist',
+        'Orthopedist', 'Physical Therapist', 'Primary Care Doctor', 'Other']
     }
   },
   methods: {
