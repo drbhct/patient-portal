@@ -1,0 +1,588 @@
+<template>
+  <section role="main">
+    <form action="" class="mt-5 mr-2 ml-2 justify-content-md-center">
+      <div class="col">
+        <section class="card">
+          <header class="card-header"><h2 class="card-title"></h2></header>
+          <div class="card-body">
+            <div class="form-vertical">
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >Please choose the area that best describes where your Head
+                  pain occurs</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.describe"
+                    :options="complaintLocations"
+                    :group-select="true"
+                    :multiple="true"
+                    @select="selectChange"
+                    @remove="selectRemove"
+                    :max="4"
+                  ></multiselect>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >Please indicate the date your symptoms first occurred</label
+                >
+                <div class="col-lg-6">
+                  <div class="input-group mb-3">
+                    <datepicker
+                      v-model="form.dateOccured"
+                      :input-class="'form-control'"
+                      :format="'MMMM dd, yyyy'"
+                      :disabled-dates="disabledDates"
+                    ></datepicker>
+                    <div class="input-group-append">
+                      <button class="btn btn-outline-secondary" type="button">
+                        Not Sure
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >How often do you experience this Head pain?</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.expPain"
+                    :options="expPains"
+                  ></multiselect>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2">
+                  Using the slide, rate the intensity of your primary problem
+                  pain now 0 = None 1 = Minimal 2 = Very Mild 3 = Mild 4 = Mild
+                  to Moderate 5 = Moderate 6 = Moderate to Severe 7 = Mildly
+                  Severe, Restricts Some Activity 8 = Severe, Limits Most
+                  Activity 9 = Very Severe 10 = Excruciating
+                </label>
+                <div class="col-lg-6 pt-2">
+                  <vue-slider
+                    v-model="form.paintIntensity"
+                    :max="10"
+                    :tooltip="'always'"
+                  ></vue-slider>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >If your pain radiates or travels, please indicate
+                  where</label
+                >
+                <div class="col-lg-6"></div>
+              </div>
+              <div
+                class="form-group row"
+                v-for="radiatesQuestion in form.radiatesQuestionsAndAnswer"
+                :key="'rad' + radiatesQuestion.question"
+              >
+                <label class="col-lg-4 control-label text-lg-right pt-2">{{
+                  radiatesQuestion.question
+                }}</label>
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="radiatesQuestion.answer"
+                    :options="radiatesSelections"
+                  ></multiselect>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >How would you best describe the sensation of your pain?</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painQuality"
+                    :options="painQualitySelection"
+                    :multiple="true"
+                  ></multiselect>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >Over the past/weeks/months this complaint is</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painQualityImprovement"
+                    :options="painQualityImprovementSelection"
+                    :multiple="true"
+                  ></multiselect>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >What aggravates your pain or makes it feel worse? </label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painFactor"
+                    :options="painFactorSelection"
+                    :multiple="true"
+                  ></multiselect>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >What relieves the pain?</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painFactorImprovement"
+                    :options="painFactorImprovementSelection"
+                    :multiple="true"
+                  ></multiselect>
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >How much does your problem interfere with work? </label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painInterference"
+                    :options="painInterferenceSelection"
+                    :multiple="false"
+                  ></multiselect>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >Have you seen anyone for your pain?</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="form.painInterferenceHelp"
+                    :options="painInterferenceHelpSelection"
+                    :multiple="true"
+                  ></multiselect>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <footer class="card-footer"></footer>
+        </section>
+      </div>
+    </form>
+  </section>
+</template>
+
+<script>
+import Multiselect from 'vue-multiselect'
+import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
+import Datepicker from 'vuejs-datepicker'
+import VueSlider from 'vue-slider-component'
+import 'vue-slider-component/theme/default.css'
+export default {
+  components: {
+    Multiselect,
+    Datepicker,
+    VueSlider
+  },
+  data () {
+    return {
+      form: {
+        describe: '',
+        dateOccured: null,
+        expPain: '',
+        paintIntensity: 0,
+        radiatesQuestionsAndAnswer: [],
+        painQuality: [],
+        painQualityImprovement: '',
+        painFactor: [],
+        painFactorImprovement: [],
+        painInterference: '',
+        painInterferenceHelp: []
+      },
+      complaint: 'Head',
+      disabledDates: {
+        from: new Date()
+      }
+    }
+  },
+  computed: {
+    complaintLocations: function () {
+      switch (this.complaint) {
+        case 'Ankle':
+          return [
+            'Left Ankle',
+            'Left Front',
+            'Left Outside',
+            'Right Ankle',
+            'Right Front',
+            'Right Outside',
+            'Front of Both',
+            'Outside of Both',
+            'Both',
+            'Other'
+          ]
+        case 'Arm':
+          return [
+            'Left Arm',
+            'Left Upper',
+            'Left Lower',
+            'Right Arm',
+            'Right Upper',
+            'Right Lower',
+            'Upper of Both',
+            'Lower of Both',
+            'Both',
+            'Other'
+          ]
+        case 'Elbow':
+          return [
+            'Left Elbow',
+            'Left Inside',
+            'Left Outside',
+            'Right Elbow',
+            'Right Inside',
+            'Right Outside',
+            'Inside of Both',
+            'Outside of Both',
+            'Both',
+            'Other'
+          ]
+        case 'Foot':
+          return [
+            'Left Foot',
+            'Left Top',
+            'Left Bottom',
+            'Right Foot',
+            'Right Top',
+            'Right Bottom',
+            'Top of Both',
+            'Bottom of Both',
+            'Both',
+            'Other'
+          ]
+        case 'Hand':
+          return [
+            'Left Hand',
+            'Left Palm',
+            'Left Back',
+            'Right Hand',
+            'Right Palm',
+            'Right Back',
+            'Palms of Both',
+            'Back of Both',
+            'Both',
+            'Other'
+          ]
+        case 'Hip':
+          return [
+            'Left Hip',
+            'Left Front',
+            'Left Outside',
+            'Right Hip',
+            'Right Front',
+            'Right Outside',
+            'Back of Hip',
+            'Front of Hip',
+            'Both',
+            'Other'
+          ]
+        case 'Head':
+          return [
+            'Left Side',
+            'Right Side',
+            'Left Temple',
+            'Right Temple',
+            'Back Of Head',
+            'All Over',
+            'Other'
+          ]
+        case 'Jaw':
+          return [
+            'Left Side',
+            'Right Side',
+            'Left TMJ',
+            'Right TMJ',
+            'Lower Jaw',
+            'Entire Jaw',
+            'Other'
+          ]
+        case 'Knee':
+          return [
+            'Left Knee',
+            'Left Front',
+            'Left Outside',
+            'Right Knee',
+            'Right Front',
+            'Right Outside',
+            'Front of Both',
+            'Outside of Both',
+            'Both',
+            'Other'
+          ]
+        case 'Leg':
+          return [
+            'Left Leg',
+            'Left Front',
+            'Left Outside',
+            'Right Leg',
+            'Right Front',
+            'Right Outside',
+            'Front of Both',
+            'Outside of Both',
+            'Both',
+            'Other'
+          ]
+        case 'Lower Back':
+          return [
+            'Left Lower Side',
+            'Left Lower Spine',
+            'Left Lower Back',
+            'Right Lower Side',
+            'Right Lower Spine',
+            'Right Lower Back',
+            'Spine',
+            'Entire Lower Back',
+            'Other'
+          ]
+        case 'Mid Back':
+          return [
+            'Left Side',
+            'Left Mid Spine',
+            'Left Back',
+            'Right Side',
+            'Right Mid Spine',
+            'Right Back',
+            'Mid Spine',
+            'Entire Mid Back',
+            'Other'
+          ]
+        case 'Neck':
+          return [
+            'Left Side',
+            'Left Upper',
+            'Left Lower',
+            'Right Side',
+            'Right Upper',
+            'Right Lower',
+            'Upper Portion',
+            'Lower Portion',
+            'Entire Neck',
+            'Other'
+          ]
+        case 'Shoulder':
+          return ['Left Shoulder', 'Right Shoulder', 'Both Shoulders']
+        case 'Upper Back':
+          return [
+            'Left Side',
+            'Left Upper',
+            'Left Lower',
+            'Right Side',
+            'Right Upper',
+            'Right Lower',
+            'Upper Portion',
+            'Lower Portion',
+            'Middle Portion',
+            'Entire Back',
+            'Other'
+          ]
+        case 'Wrist':
+          return [
+            'Left Wrist',
+            'Left Inside',
+            'Left Outside',
+            'Right Wrist',
+            'Right Inside',
+            'Right Outside',
+            'Inside of Both',
+            'Outside of Both',
+            'Both'
+          ]
+        default:
+          return []
+      }
+    },
+    radiatesSelections: function () {
+      return ['Left', 'Right', 'Both']
+    },
+    expPains: function () {
+      return [
+        'Occasional pain (25% of the day)',
+        'Intermittent pain (50% of the day)',
+        'Frequent pain (75% of the day)',
+        'Constant pain (100% of the day)',
+        'No pain'
+      ]
+    },
+    painQualitySelection: function () {
+      return [
+        'Inflexible', 'Stiffness', 'Spasms',
+        'Cramps', 'Sharp', 'Stabbing',
+        'Aching', 'Pins & Needles',
+        'Pounding', 'Shooting', 'Burning',
+        'Dull', 'Tingling/Numb', 'Throbbing',
+        'Crawling', 'Stinging'
+      ]
+    },
+    painQualityImprovementSelection: function () {
+      return ['Improving', 'Getting worse', 'About the same']
+    },
+    painFactorSelection: function () {
+      return [
+        'Carrying', 'Crawling', 'Coughing',
+        'Driving', 'Exercising', 'Getting In/Out of Car',
+        'Getting out of bed', 'Lifting', 'Looking side/side',
+        'Looking up/down', 'Pulling', 'Pushing', 'Repetitive Movement',
+        'Sneezing', 'Straining at BM', 'Standing', 'Sitting',
+        'Stooping', 'Stress', 'Walking', 'Other'
+      ]
+    },
+    painFactorImprovementSelection: function () {
+      return ['Resting', 'Shower', 'Medication', 'Heat', 'Ice', 'Stretching', 'Chiropractic', 'Massage', 'Sitting']
+    },
+    painInterferenceSelection: function () {
+      return [
+        'Can do unlimited work', 'Can do usual work but no extra',
+        'Can do 50% of usual work', 'Can do 25% of usual work',
+        'Cannot work'
+      ]
+    },
+    painInterferenceHelpSelection: function () {
+      return ['Chiropractor', 'ER Doctor', 'Massage Therapist', 'Neurologist',
+        'Orthopedist', 'Physical Therapist', 'Primary Care Doctor', 'Other']
+    }
+  },
+  methods: {
+    selectChange (selected) {},
+    selectRemove (removed) {}
+  },
+  mounted () {
+    // Create Radiatest question and answer
+    switch (this.complaint) {
+      case 'Ankle':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Lower Leg', answer: '' },
+          { question: 'Foot', answer: '' }
+        ]
+        break
+      case 'Elbow':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Upper Arm', answer: '' },
+          { question: 'Forearm', answer: '' },
+          { question: 'Wrist', answer: '' },
+          { question: 'Hand', answer: '' }
+        ]
+        break
+      case 'Foot':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Ankle', answer: '' },
+          { question: 'Leg', answer: '' }
+        ]
+        break
+      case 'Hand':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Wrist', answer: '' },
+          { question: 'Forearm', answer: '' },
+          { question: 'Elbow', answer: '' }
+        ]
+        break
+      case 'Head':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Temple', answer: '' },
+          { question: 'Eyes', answer: '' },
+          { question: 'Jaw', answer: '' },
+          { question: 'Forehead', answer: '' },
+          { question: 'Back of head', answer: '' },
+          { question: 'Top of head', answer: '' }
+        ]
+        break
+      case 'Hip':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Lower Back', answer: '' },
+          { question: 'Buttock', answer: '' },
+          { question: 'Thigh', answer: '' },
+          { question: 'Groin', answer: '' },
+          { question: 'Knee', answer: '' }
+        ]
+        break
+      case 'Jaw':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Temple', answer: '' },
+          { question: 'Face', answer: '' },
+          { question: 'Neck', answer: '' }
+        ]
+        break
+      case 'Knee':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Thigh', answer: '' },
+          { question: 'Lower Leg', answer: '' }
+        ]
+        break
+      case 'Lower Back':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Mid back', answer: '' },
+          { question: 'Buttock', answer: '' },
+          { question: 'Hip', answer: '' },
+          { question: 'Groin', answer: '' },
+          { question: 'Thigh', answer: '' },
+          { question: 'Knee', answer: '' },
+          { question: 'Lower Leg', answer: '' },
+          { question: 'Ankle', answer: '' },
+          { question: 'Foot', answer: '' }
+        ]
+        break
+      case 'Mid Back':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Upper back', answer: '' },
+          { question: 'Ribs', answer: '' },
+          { question: 'Chest', answer: '' },
+          { question: 'Lower back', answer: '' }
+        ]
+        break
+      case 'Neck':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Head', answer: '' },
+          { question: 'Traps', answer: '' },
+          { question: 'Shoulder', answer: '' },
+          { question: 'Upper arm', answer: '' },
+          { question: 'Elbow', answer: '' },
+          { question: 'Forearm', answer: '' },
+          { question: 'Wrist', answer: '' },
+          { question: 'Hand', answer: '' }
+        ]
+        break
+      case 'Shoulder':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Traps', answer: '' },
+          { question: 'Neck', answer: '' },
+          { question: 'Upper arm', answer: '' },
+          { question: 'Elbow', answer: '' },
+          { question: 'Forearm', answer: '' },
+          { question: 'Wrist', answer: '' },
+          { question: 'Hand', answer: '' }
+        ]
+        break
+      case 'Upper Back':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Neck', answer: '' },
+          { question: 'Shoulder', answer: '' },
+          { question: 'Chest', answer: '' },
+          { question: 'Mid back', answer: '' }
+        ]
+        break
+      case 'Wrist':
+        this.form.radiatesQuestionsAndAnswer = [
+          { question: 'Elbow', answer: '' },
+          { question: 'Forearm', answer: '' },
+          { question: 'Hand', answer: '' }
+        ]
+        return ['Elbow', 'Forearm', 'Hand']
+      // default:
+      //   return []
+    }
+  }
+}
+</script>

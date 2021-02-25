@@ -12,7 +12,7 @@
       </div>
       <div class="row padding-bottom-10">
         <div class="col-12 col-lg-6 col-xl-6">
-          <button class="btn btn-primary btn-w-160">REMOVE</button>
+          <button class="btn btn-primary btn-w-160" v-on:click="remove">REMOVE</button>
         </div>
       </div>
     </div>
@@ -72,6 +72,43 @@ export default {
     },
     generateCardNumberMask () {
       return this.getCardType === 'amex' ? this.amexCardMask : this.otherCardMask
+    },
+    remove () {
+      this.$swal({
+        position: 'top-center',
+        title: 'Are you sure you want to remove this card?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonClass: 'btn-danger',
+        confirmButtonText: 'Yes, delete it!',
+        closeOnConfirm: false,
+        icon: 'warning'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.removeCC()
+        }
+      })
+    },
+    async removeCC () {
+      const res = await api.patient.request.deletepaymentprofile({
+        facilityid: this.currentPatientAssociated.facilityID,
+        id: this.currentPatientAssociated.patientID,
+        user: 'Patient Portal'
+      })
+      if (res.data) {
+        this.$swal('Success', 'Credit Card details has been successfully removed.', 'success')
+      } else {
+        this.$swal({
+          position: 'top-center',
+          title: 'Failed adding credit card details',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+      }
+
+      this.$swal('Success', 'Credit Card details has been successfully removed.', 'success')
     }
   },
   async mounted () {

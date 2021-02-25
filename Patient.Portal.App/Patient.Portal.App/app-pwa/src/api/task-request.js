@@ -177,6 +177,37 @@ export default {
     */
     async updateCaseHistoryFamilyHealthHistory (payload) {
       return await securedJsonRequest.post('/patientportal/UpdateCaseHistoryFamilyHealthHistory', payload)
+    },
+    async getUsStates (payload) {
+      return await securedJsonRequest.get('/common/getusstates')
+    },
+    /**
+     *
+    * @param {Object} Payload request object
+    * @param {String} payload.facilityId
+    * @param {String} payload.patientId
+    * @param {String} payload.lastName
+    * @param {String} payload.firstName
+    * @param {String} payload.mi
+    * @param {String} payload.nickName
+    * @param {String} payload.suffix
+    * @param {String} payload.address
+    * @param {String} payload.address2
+    * @param {String} payload.state
+    * @param {String} payload.zip
+    * @param {String} payload.homePhone
+    * @param {String} payload.cellPhone
+    * @param {String} payload.email
+    * @param {String} payload.dob
+    * @param {String} payload.sex
+    * @param {String} payload.employStatId
+    * @param {String} payload.emerContact
+    * @param {String} payload.emerRelation
+    * @param {String} payload.emerPhone
+    */
+    async updatePatient (payload) {
+      return await securedJsonRequest.post('/patientportal/updatepatient', payload)
     }
+
   }
 }
