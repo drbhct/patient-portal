@@ -17,7 +17,8 @@ export default {
     CreateAccount: () => import('../views/account/Create.vue'),
     PatientInfo: () => import('../components/task/PatientInfo.vue'),
     NphComplaintLocation: () => import('../components/task/NphComplaintLocation.vue'),
-    NphComplaintQuestions: () => import('../components/task/NphComplaintQuestions.vue')
+    NphComplaintQuestions: () => import('../components/task/NphComplaintQuestions.vue'),
+    NphAutoAccident: () => import('../components/task/NphAutoAccident.vue')
   },
   data () {
     return {
@@ -51,7 +52,7 @@ export default {
     if (!this.key) {
       // For testing at the moment
       // this.module = 'PatientInfo'
-      this.module = 'NphComplaintQuestions'
+      this.module = 'NphAutoAccident'
       this.initialize = true
       return
     }
