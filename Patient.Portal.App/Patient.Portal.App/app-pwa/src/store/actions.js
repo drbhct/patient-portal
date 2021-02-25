@@ -43,3 +43,7 @@ export const setProfilePatientAssociated = (store, payload) => {
 export const setCurrentMsgInfo = (store, payload) => {
   store.commit(types.CURRENT_MSG_INFO, payload)
 }
+
+export const setTaskCurrentTaskType = (store, payload) => {
+  store.commit(types.TASK_CURRENT_TASK_TYPE, payload)
+}

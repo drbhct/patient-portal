@@ -11,6 +11,7 @@
 </template>
 <script>
 import api from '../api/http-common.js'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     // Lazy Loading components
@@ -30,6 +31,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getTaskCurrentTaskType']),
     key () {
       return this.$route.query.key
     },
@@ -55,6 +57,8 @@ export default {
       this.initialize = true
       return
     }
+
+    // NOTE: This is via task key>account>task type
     const resp = await api.auth.request.getLink(this.key)
     this.linkInfo = resp.data
     if (!this.linkInfo) {
