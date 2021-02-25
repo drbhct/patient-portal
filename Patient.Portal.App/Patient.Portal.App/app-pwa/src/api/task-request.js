@@ -92,11 +92,21 @@ export default {
     /**
      * Method to get patient incomeplete case history
     * @param {Object} Payload request object for acquiring patient incomplete case history
-    * @param {String} payload.facilityid
-    * @param {String} payload.patientid
+    * @param {String} payload.facilityId
+    * @param {String} payload.patientId
     */
     async findIncompleteCaseHistory (payload) {
       return await securedJsonRequest.post('/patientportal/findincompletecasehistory', payload)
+    },
+    /**
+     * Method insert patient case history
+    * @param {Object} Payload request object for acquiring patient incomplete case history
+    * @param {String} payload.facilityId
+    * @param {String} payload.patientId
+    * @param {String} payload.aa boolean value if nph is auto accident or not
+    */
+    async insertCaseHistory (payload) {
+      return await securedJsonRequest.post('/patientportal/insertCaseHistory', payload)
     },
     /**
      * Method to add case history problem

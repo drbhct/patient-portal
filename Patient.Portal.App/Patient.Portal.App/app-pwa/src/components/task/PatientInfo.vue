@@ -281,6 +281,36 @@
                   />
                 </div>
               </div>
+
+              <div class="form-group row">
+              <label class="col-lg-3 control-label text-lg-right pt-2">Is today's visit due to an auto accident?</label>
+              <div class="col-lg-6">
+                <div class="form-check">
+                  <input
+                    type="radio"
+                    class="form-check-input"
+                    name="question"
+                    :checked="isAutoAccident"
+                    @click="toggle(true)"
+                  />
+                  <label class="form-check-label"
+                    >Yes</label
+                  >
+                </div>
+                <div class="form-check">
+                    <input
+                    type="radio"
+                    class="form-check-input"
+                    name="question"
+                    :checked="!isAutoAccident"
+                    @click="toggle(false)"
+                  />
+                  <label class="form-check-label"
+                    >No</label
+                  >
+                </div>
+              </div>
+            </div>
             </div>
           </div>
           <footer class="card-footer">
@@ -303,13 +333,14 @@
 // import moment from 'moment'
 import api from '../../api/http-common.js'
 import Datepicker from 'vuejs-datepicker'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
     Datepicker
   },
   data () {
     return {
+      portalId: null,
       form: {
         firstName: '',
         lastName: '',
@@ -331,6 +362,7 @@ export default {
         emerRelation: '',
         emerPhone: ''
       },
+      isAutoAccident: false,
       usStates: [],
       relationList: [
         'SPOUSE',
@@ -378,8 +410,30 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setTaskCurrentTaskType']),
+    toggle (val) {
+      this.isAutoAccident = val
+    },
     async savePatientInfo () {
       await api.task.request.updatePatient(this.form)
+      let portalResult = await api.task.request.findIncompleteCaseHistory({
+        facilityId: this.currentPatientAssociated.facilityID,
+        patientId: this.currentPatientAssociated.patientID
+      })
+      if (!portalResult.data) {
+        portalResult = await api.task.request.insertCaseHistory({
+          facilityId: this.currentPatientAssociated.facilityID,
+          patientId: this.currentPatientAssociated.patientID,
+          aa: this.isAutoAccident
+        })
+      }
+      this.portalId = portalResult.data
+
+      if (this.isAutoAccident) {
+        this.setTaskCurrentTaskType('NphAutoAccident')
+      } else {
+        this.setTaskCurrentTaskType('NphComplaintLocation')
+      }
     },
     async getPatientInfo (patientId) {
       const patientInfo = await api.task.request.getPatient({

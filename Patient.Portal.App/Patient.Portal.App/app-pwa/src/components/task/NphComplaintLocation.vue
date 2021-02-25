@@ -1,6 +1,6 @@
 <template>
   <section role="main">
-    <form class="mt-5 mr-2 ml-2 justify-content-md-center">
+    <form class="mt-5 mr-2 ml-2 justify-content-md-center" @submit.prevent="next">
       <div class="col">
         <section class="card">
           <header class="card-header">
@@ -51,7 +51,16 @@
               </div>
             </div>
           </div>
-          <div class="card-footer"></div>
+          <footer class="card-footer">
+            <div class="row justify-content-end">
+              <div class="col-sm-9">
+                <button class="btn btn-primary mr-2" type="submit">
+                  Submit
+                </button>
+                <button type="reset" class="btn btn-default">Reset</button>
+              </div>
+            </div>
+          </footer>
         </section>
       </div>
     </form>
@@ -61,6 +70,8 @@
 <script>
 import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
+import api from '../../api/http-common.js'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     Multiselect
@@ -73,10 +84,18 @@ export default {
         complaint2: '',
         complaint3: '',
         complaint4: ''
-      }
+      },
+      portalId: 0
     }
   },
   computed: {
+    ...mapGetters(['getProfilePatientAssociated']),
+    currentPatientAssociated () {
+      if (this.getProfilePatientAssociated.length === 0) {
+        return null
+      }
+      return this.getProfilePatientAssociated[0]
+    },
     regionsLocation () {
       return [
         'Head',
@@ -132,6 +151,13 @@ export default {
       if (this.form.complaint4 === removed) {
         this.form.complaint4 = ''
       }
+    },
+    async next () {
+      const result = await api.task.request.findIncompleteCaseHistory({
+        facilityId: this.currentPatientAssociated.facilityID,
+        patientId: this.currentPatientAssociated.patientID
+      })
+      this.portalId = result.data
     }
   }
 }
