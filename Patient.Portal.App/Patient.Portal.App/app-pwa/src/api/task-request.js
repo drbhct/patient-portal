@@ -109,6 +109,15 @@ export default {
       return await securedJsonRequest.post('/patientportal/insertCaseHistory', payload)
     },
     /**
+     *
+    * @param {Object} Payload request object
+    * @param {String} payload.facilityid
+    * @param {String} payload.caseHistoryId
+    */
+    async getCaseHistoryProblems (payload) {
+      return await securedJsonRequest.post('/patientportal/GetCaseHistoryProblems', payload)
+    },
+    /**
      * Method to add case history problem
     * @param {Object} Payload request object for adding case history problem
     * @param {String} payload.facilityId
@@ -124,8 +133,7 @@ export default {
      * Method to remove case history problem
     * @param {Object} Payload request object for removing case history problem
     * @param {String} payload.facilityId
-    * @param {String} payload.caseHistoryId
-    * @param {String} payload.ordinal
+    * @param {String} payload.caseHistoryProblemID
     */
     async deleteCaseHistoryProblem (payload) {
       return await securedJsonRequest.post('/patientportal/deletecasehistoryproblem', payload)

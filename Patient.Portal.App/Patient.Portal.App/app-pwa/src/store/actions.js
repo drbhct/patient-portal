@@ -47,3 +47,11 @@ export const setCurrentMsgInfo = (store, payload) => {
 export const setTaskCurrentTaskType = (store, payload) => {
   store.commit(types.TASK_CURRENT_TASK_TYPE, payload)
 }
+
+export const setTaskCurrentCaseHistoryId = async (store, payload) => {
+  await store.commit(types.TASK_CURRENT_CASE_HISTORY_ID, payload)
+}
+
+export const setTaskCurrentCaseHistoryProblems = async (store, payload) => {
+  await store.commit(types.TASK_CURRENT_CASE_HISTORY_PROBLEMS, payload)
+}

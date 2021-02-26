@@ -1,6 +1,6 @@
 <template>
   <section role="main">
-    <form action="" class="mt-5 mr-2 ml-2 justify-content-md-center">
+    <form action="" class="mt-5 mr-2 ml-2 justify-content-md-center" v-if="currentProblem">
       <div class="col">
         <section class="card">
           <header class="card-header"><h2 class="card-title"></h2></header>
@@ -182,6 +182,7 @@ import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import Datepicker from 'vuejs-datepicker'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     Multiselect,
@@ -206,10 +207,25 @@ export default {
       complaint: 'Head',
       disabledDates: {
         from: new Date()
-      }
+      },
+      currentProblemIndex: 0
     }
   },
   computed: {
+    ...mapGetters(['getTaskCurrentCaseHistoryProblems', 'getProfilePatientAssociated']),
+    currentPatientAssociated () {
+      if (this.getProfilePatientAssociated.length === 0) {
+        return null
+      }
+      return this.getProfilePatientAssociated[0]
+    },
+    currentProblem: function () {
+      if (this.getTaskCurrentCaseHistoryProblems.length === 0) {
+        return null
+      }
+
+      return this.getTaskCurrentCaseHistoryProblems[this.currentProblemIndex]
+    },
     complaintLocations: function () {
       switch (this.complaint) {
         case 'Ankle':

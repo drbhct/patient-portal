@@ -341,6 +341,7 @@ export default {
   data () {
     return {
       portalId: null,
+      caseHistoryId: null,
       form: {
         firstName: '',
         lastName: '',
@@ -410,24 +411,25 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType']),
+    ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryId']),
     toggle (val) {
       this.isAutoAccident = val
     },
     async savePatientInfo () {
       await api.task.request.updatePatient(this.form)
-      let portalResult = await api.task.request.findIncompleteCaseHistory({
+      let result = await api.task.request.findIncompleteCaseHistory({
         facilityId: this.currentPatientAssociated.facilityID,
         patientId: this.currentPatientAssociated.patientID
       })
-      if (!portalResult.data) {
-        portalResult = await api.task.request.insertCaseHistory({
+      if (!result.data) {
+        result = await api.task.request.insertCaseHistory({
           facilityId: this.currentPatientAssociated.facilityID,
           patientId: this.currentPatientAssociated.patientID,
           aa: this.isAutoAccident
         })
       }
-      this.portalId = portalResult.data
+      // this.caseHistoryId = result.data
+      await this.setTaskCurrentCaseHistoryId(result.data)
 
       if (this.isAutoAccident) {
         this.setTaskCurrentTaskType('NphAutoAccident')

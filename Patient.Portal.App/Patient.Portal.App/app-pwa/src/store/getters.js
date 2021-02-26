@@ -17,3 +17,5 @@ export const getProfilePatientAssociated = state => state.profile.patientAssocia
 
 // task
 export const getTaskCurrentTaskType = state => state.task.currentTaskType
+export const getTaskCurrentCaseHistoryId = state => state.task.currentCaseHistoryId
+export const getTaskCurrentCaseHistoryProblems = state => state.task.currentCaseHistoryProblems
