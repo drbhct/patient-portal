@@ -231,7 +231,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setTaskCurrentCaseHistoryProblems', 'setTaskCurrentTaskType']),
+    ...mapActions(['setTaskCurrentCaseHistoryProblems', 'setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryOats']),
     selectChange (selected) {
       if (!this.form.complaint1) {
         this.form.complaint1 = selected
@@ -267,24 +267,31 @@ export default {
       }
     },
     async next () {
-      this.problems.forEach(async (el) => {
-        const result = await api.task.request.insertCaseHistoryProblem({
-          facilityId: this.currentPatientAssociated.facilityID,
-          caseHistoryId: this.getTaskCurrentCaseHistoryId,
-          ordinal: el.ordinal,
-          region: el.region,
-          name: ''
+      const promMultipleInsert = new Promise((resolve, reject) => {
+        this.problems.forEach(async (el, index, arr) => {
+          await api.task.request.insertCaseHistoryProblem({
+            facilityId: this.currentPatientAssociated.facilityID,
+            caseHistoryId: this.getTaskCurrentCaseHistoryId,
+            ordinal: el.ordinal,
+            region: el.region,
+            name: ''
+          })
+          if (index === arr.length - 1) {
+            resolve()
+          }
         })
-
-        console.log('result>', result.data)
       })
+
+      await promMultipleInsert
 
       const problems = await api.task.request.getCaseHistoryProblems({
         facilityId: this.currentPatientAssociated.facilityID,
         caseHistoryId: this.getTaskCurrentCaseHistoryId
       })
 
+      const oats = await api.task.request.getCaseHistoryOats({ facilityId: this.currentPatientAssociated.facilityID, caseHistoryId: this.getTaskCurrentCaseHistoryId })
       await this.setTaskCurrentCaseHistoryProblems(problems.data)
+      await this.setTaskCurrentCaseHistoryOats(oats.data)
       await this.setTaskCurrentTaskType('NphComplaintQuestions')
     }
   },

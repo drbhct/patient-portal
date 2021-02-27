@@ -225,6 +225,26 @@ export default {
     */
     async updatePatient (payload) {
       return await securedJsonRequest.post('/patientportal/updatepatient', payload)
+    },
+    /**
+     *
+    * @param {Object} Payload request object
+    * @param {String} payload.facilityid
+    * @param {String} payload.caseHistoryId
+    */
+    async getCaseHistoryOats (payload) {
+      return await securedJsonRequest.post('/patientportal/GetCaseHistoryOats', payload)
+    },
+    /**
+     *
+    * @param {Object} Payload request object
+    * @param {Number} payload.facilityid
+    * @param {Number} payload.caseHistoryId
+    * @param {Number} payload.oadId
+    * @param {Number} payload.caseHistoryProblemId
+    */
+    async getCaseHistoryOatQuestions (payload) {
+      return await securedJsonRequest.post('/patientportal/GetCaseHistoryOatQuestions', payload)
     }
 
   }

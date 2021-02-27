@@ -1,14 +1,14 @@
 <template>
   <section role="main">
-    <form action="" class="mt-5 mr-2 ml-2 justify-content-md-center" v-if="currentProblem">
+    <form action="" class="mt-5 mr-2 ml-2 justify-content-md-center" v-if="currentProblem" @submit.prevent="submit">
       <div class="col">
         <section class="card">
           <header class="card-header"><h2 class="card-title"></h2></header>
           <div class="card-body">
             <div class="form-vertical">
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
-                  >Please choose the area that best describes where your Head
+                <label class="col-lg-4 control-label text-lg-right pt-2" id="firstQuestion"
+                  >Please choose the area that best describes where your <strong style="color:red">{{ currentProblem.region }}</strong>
                   pain occurs</label
                 >
                 <div class="col-lg-6">
@@ -169,7 +169,16 @@
 
             </div>
           </div>
-          <footer class="card-footer"></footer>
+          <footer class="card-footer">
+            <div class="row justify-content-end">
+              <div class="col-sm-9">
+                <button class="btn btn-primary mr-2" type="submit">
+                  Submit
+                </button>
+                <button class="btn btn-default">Reset</button>
+              </div>
+            </div>
+          </footer>
         </section>
       </div>
     </form>
@@ -177,6 +186,7 @@
 </template>
 
 <script>
+import api from '../../api/http-common.js'
 import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import Datepicker from 'vuejs-datepicker'
@@ -208,11 +218,12 @@ export default {
       disabledDates: {
         from: new Date()
       },
-      currentProblemIndex: 0
+      currentProblemIndex: 0,
+      oatQuestions: []
     }
   },
   computed: {
-    ...mapGetters(['getTaskCurrentCaseHistoryProblems', 'getProfilePatientAssociated']),
+    ...mapGetters(['getTaskCurrentCaseHistoryProblems', 'getProfilePatientAssociated', 'getTaskCurrentCaseHistoryOats', 'getTaskCurrentCaseHistoryId']),
     currentPatientAssociated () {
       if (this.getProfilePatientAssociated.length === 0) {
         return null
@@ -225,6 +236,10 @@ export default {
       }
 
       return this.getTaskCurrentCaseHistoryProblems[this.currentProblemIndex]
+    },
+    currentOat: function () {
+      const oat = this.getTaskCurrentCaseHistoryOats.find(el => el.caseHistoryProblemID === this.currentProblem.id)
+      return oat
     },
     complaintLocations: function () {
       switch (this.complaint) {
@@ -473,9 +488,17 @@ export default {
   },
   methods: {
     selectChange (selected) {},
-    selectRemove (removed) {}
+    selectRemove (removed) {},
+    submit () {
+      if (this.currentProblemIndex !== this.getTaskCurrentCaseHistoryProblems.length - 1) {
+        this.currentProblemIndex += 1
+
+        const el = document.getElementById('firstQuestion')
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
   },
-  mounted () {
+  async mounted () {
     // Create Radiatest question and answer
     switch (this.complaint) {
       case 'Ankle':
@@ -599,6 +622,16 @@ export default {
       // default:
       //   return []
     }
+
+    // Get oat questions
+    const response = await api.task.request.getCaseHistoryOatQuestions({
+      facilityId: this.currentPatientAssociated.facilityID,
+      caseHistoryId: this.getTaskCurrentCaseHistoryId,
+      oatId: this.currentOat.oatID,
+      caseHistoryProblemId: this.currentOat.caseHistoryProblemID
+    })
+
+    this.oatQuestions = response.data
   }
 }
 </script>

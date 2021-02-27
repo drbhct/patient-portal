@@ -55,3 +55,7 @@ export const setTaskCurrentCaseHistoryId = async (store, payload) => {
 export const setTaskCurrentCaseHistoryProblems = async (store, payload) => {
   await store.commit(types.TASK_CURRENT_CASE_HISTORY_PROBLEMS, payload)
 }
+
+export const setTaskCurrentCaseHistoryOats = async (store, payload) => {
+  await store.commit(types.TASK_CURRENT_CASE_HISTORY_OATS, payload)
+}
