@@ -167,6 +167,20 @@
                 </div>
               </div>
 
+              <div class="form-group row" v-for="oatQ in oatQuestions" :key="oatQ.id">
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  >{{ oatQ.description }}</label
+                >
+                <div class="col-lg-6">
+                  <multiselect
+                    v-model="oatQ.selectedAnswer"
+                    :options="oatQ.answerList"
+                    :label="'description'"
+                    :multiple="false"
+                  ></multiselect>
+                </div>
+              </div>
+
             </div>
           </div>
           <footer class="card-footer">
@@ -219,7 +233,8 @@ export default {
         from: new Date()
       },
       currentProblemIndex: 0,
-      oatQuestions: []
+      oatQuestions: [],
+      oatAnswerList: []
     }
   },
   computed: {
@@ -631,7 +646,22 @@ export default {
       caseHistoryProblemId: this.currentOat.caseHistoryProblemID
     })
 
-    this.oatQuestions = response.data
+    const oatQuestions = response.data
+
+    const respAnswerList = await api.task.request.getOatAnswerList({
+      facilityId: this.currentPatientAssociated.facilityID,
+      oatId: this.currentOat.oatID
+    })
+
+    this.oatAnswerList = respAnswerList.data
+
+    // Reconstruct oat data
+    oatQuestions.forEach(el => {
+      const answerList = this.oatAnswerList.filter(ansEl => ansEl.oatQuestionID === el.id)
+      el.answerList = answerList
+      el.selectedAnswer = ''
+    })
+    this.oatQuestions = oatQuestions
   }
 }
 </script>
