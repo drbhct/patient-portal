@@ -142,8 +142,7 @@ export default {
      * Method to update case history problem
     * @param {Object} Payload request object for updating case history problem
     * @param {String} payload.facilityId
-    * @param {String} payload.caseHistoryId
-    * @param {String} payload.ordinal
+    * @param {String} payload.caseHistoryProblemId
     * @param {String} payload.fieldName
     * @param {String} payload.value
     */

@@ -17,10 +17,19 @@
                     :options="complaintLocations"
                     :group-select="true"
                     :multiple="true"
-                    @select="selectChange"
+                    @select="describeSelectChange"
                     @remove="selectRemove"
-                    :max="4"
+                    :max="form.describeSelectLimit"
                   ></multiselect>
+                </div>
+              </div>
+              <div class="form-group row" v-if="showSpecifyDescribe">
+                <label class="col-lg-4 control-label text-lg-right pt-2" id="firstQuestion"
+                  >Please specify best describes where your <strong style="color:red">{{ currentProblem.region }}</strong>
+                  pain occurs</label
+                >
+                <div class="col-lg-6">
+                  <input type="text" v-model="form.describeOther" class="form-control">
                 </div>
               </div>
               <div class="form-group row">
@@ -45,7 +54,7 @@
               </div>
               <div class="form-group row">
                 <label class="col-lg-4 control-label text-lg-right pt-2"
-                  >How often do you experience this Head pain?</label
+                  >How often do you experience this <strong style="color:red">{{ currentProblem.region }}</strong> pain?</label
                 >
                 <div class="col-lg-6">
                   <multiselect
@@ -62,7 +71,7 @@
                   Severe, Restricts Some Activity 8 = Severe, Limits Most
                   Activity 9 = Very Severe 10 = Excruciating
                 </label>
-                <div class="col-lg-6 pt-2">
+                <div class="col-lg-6 pt-2" style="padding-top: 40px !important;">
                   <vue-slider
                     v-model="form.paintIntensity"
                     :max="10"
@@ -187,7 +196,7 @@
             <div class="row justify-content-end">
               <div class="col-sm-9">
                 <button class="btn btn-primary mr-2" type="submit">
-                  Submit
+                  {{ buttonText }}
                 </button>
                 <button class="btn btn-default">Reset</button>
               </div>
@@ -216,7 +225,9 @@ export default {
   data () {
     return {
       form: {
-        describe: '',
+        describe: [],
+        describeOther: '',
+        describeSelectLimit: 4,
         dateOccured: null,
         expPain: '',
         paintIntensity: 0,
@@ -228,17 +239,28 @@ export default {
         painInterference: '',
         painInterferenceHelp: []
       },
-      complaint: 'Head',
+      complaint: '',
       disabledDates: {
         from: new Date()
       },
       currentProblemIndex: 0,
       oatQuestions: [],
-      oatAnswerList: []
+      oatAnswerList: [],
+      apiSubmitForm: {
+        namePayload: []
+      },
+      currentOat: null
     }
   },
   computed: {
     ...mapGetters(['getTaskCurrentCaseHistoryProblems', 'getProfilePatientAssociated', 'getTaskCurrentCaseHistoryOats', 'getTaskCurrentCaseHistoryId']),
+    buttonText: function () {
+      if (this.currentProblemIndex !== this.getTaskCurrentCaseHistoryProblems.length - 1) {
+        return 'Next'
+      } else {
+        return 'Submit'
+      }
+    },
     currentPatientAssociated () {
       if (this.getProfilePatientAssociated.length === 0) {
         return null
@@ -252,9 +274,17 @@ export default {
 
       return this.getTaskCurrentCaseHistoryProblems[this.currentProblemIndex]
     },
-    currentOat: function () {
-      const oat = this.getTaskCurrentCaseHistoryOats.find(el => el.caseHistoryProblemID === this.currentProblem.id)
-      return oat
+    // currentOat: function () {
+    //   const oat = this.getTaskCurrentCaseHistoryOats.find(el => el.caseHistoryProblemID === this.currentProblem.id)
+    //   return oat
+    // },
+    showSpecifyDescribe: function () {
+      const isOther = this.form.describe.find(el => el === 'Other')
+      if (isOther) {
+        return true
+      } else {
+        return false
+      }
     },
     complaintLocations: function () {
       switch (this.complaint) {
@@ -504,164 +534,193 @@ export default {
   methods: {
     selectChange (selected) {},
     selectRemove (removed) {},
-    submit () {
+    describeSelectChange (selected) {
+      if (selected === 'Other') {
+        this.form.describeSelectLimit = 1
+      } else {
+        this.form.describeSelectLimit = 4
+      }
+    },
+    async submit () {
+      // Process Saving
+      const namePayload = []
+      this.form.describe.forEach(el => {
+        namePayload.push({
+          facilityId: this.currentPatientAssociated.facilityID,
+          caseHistoryProblemId: this.currentProblem.id,
+          fieldName: 'Name',
+          value: el
+        })
+      })
+      this.form.describe = []
+      this.apiSubmitForm.namePayload = namePayload
+
       if (this.currentProblemIndex !== this.getTaskCurrentCaseHistoryProblems.length - 1) {
         this.currentProblemIndex += 1
+        this.complaint = this.currentProblem.region
 
+        await this.initializeData()
         const el = document.getElementById('firstQuestion')
         el.scrollIntoView({ behavior: 'smooth' })
       }
+    },
+    async initializeData () {
+      this.complaint = this.currentProblem.region
+
+      // Create Radiatest question and answer
+      switch (this.complaint) {
+        case 'Ankle':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Lower Leg', answer: '' },
+            { question: 'Foot', answer: '' }
+          ]
+          break
+        case 'Elbow':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Upper Arm', answer: '' },
+            { question: 'Forearm', answer: '' },
+            { question: 'Wrist', answer: '' },
+            { question: 'Hand', answer: '' }
+          ]
+          break
+        case 'Foot':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Ankle', answer: '' },
+            { question: 'Leg', answer: '' }
+          ]
+          break
+        case 'Hand':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Wrist', answer: '' },
+            { question: 'Forearm', answer: '' },
+            { question: 'Elbow', answer: '' }
+          ]
+          break
+        case 'Head':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Temple', answer: '' },
+            { question: 'Eyes', answer: '' },
+            { question: 'Jaw', answer: '' },
+            { question: 'Forehead', answer: '' },
+            { question: 'Back of head', answer: '' },
+            { question: 'Top of head', answer: '' }
+          ]
+          break
+        case 'Hip':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Lower Back', answer: '' },
+            { question: 'Buttock', answer: '' },
+            { question: 'Thigh', answer: '' },
+            { question: 'Groin', answer: '' },
+            { question: 'Knee', answer: '' }
+          ]
+          break
+        case 'Jaw':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Temple', answer: '' },
+            { question: 'Face', answer: '' },
+            { question: 'Neck', answer: '' }
+          ]
+          break
+        case 'Knee':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Thigh', answer: '' },
+            { question: 'Lower Leg', answer: '' }
+          ]
+          break
+        case 'Lower Back':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Mid back', answer: '' },
+            { question: 'Buttock', answer: '' },
+            { question: 'Hip', answer: '' },
+            { question: 'Groin', answer: '' },
+            { question: 'Thigh', answer: '' },
+            { question: 'Knee', answer: '' },
+            { question: 'Lower Leg', answer: '' },
+            { question: 'Ankle', answer: '' },
+            { question: 'Foot', answer: '' }
+          ]
+          break
+        case 'Mid Back':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Upper back', answer: '' },
+            { question: 'Ribs', answer: '' },
+            { question: 'Chest', answer: '' },
+            { question: 'Lower back', answer: '' }
+          ]
+          break
+        case 'Neck':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Head', answer: '' },
+            { question: 'Traps', answer: '' },
+            { question: 'Shoulder', answer: '' },
+            { question: 'Upper arm', answer: '' },
+            { question: 'Elbow', answer: '' },
+            { question: 'Forearm', answer: '' },
+            { question: 'Wrist', answer: '' },
+            { question: 'Hand', answer: '' }
+          ]
+          break
+        case 'Shoulder':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Traps', answer: '' },
+            { question: 'Neck', answer: '' },
+            { question: 'Upper arm', answer: '' },
+            { question: 'Elbow', answer: '' },
+            { question: 'Forearm', answer: '' },
+            { question: 'Wrist', answer: '' },
+            { question: 'Hand', answer: '' }
+          ]
+          break
+        case 'Upper Back':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Neck', answer: '' },
+            { question: 'Shoulder', answer: '' },
+            { question: 'Chest', answer: '' },
+            { question: 'Mid back', answer: '' }
+          ]
+          break
+        case 'Wrist':
+          this.form.radiatesQuestionsAndAnswer = [
+            { question: 'Elbow', answer: '' },
+            { question: 'Forearm', answer: '' },
+            { question: 'Hand', answer: '' }
+          ]
+          return ['Elbow', 'Forearm', 'Hand']
+      // default:
+      //   return []
+      }
+
+      this.currentOat = this.getTaskCurrentCaseHistoryOats.find(el => el.caseHistoryProblemID === this.currentProblem.id)
+
+      // Get oat questions
+      const response = await api.task.request.getCaseHistoryOatQuestions({
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryId: this.getTaskCurrentCaseHistoryId,
+        oatId: this.currentOat.oatID,
+        caseHistoryProblemId: this.currentOat.caseHistoryProblemID
+      })
+
+      const oatQuestions = response.data
+
+      const respAnswerList = await api.task.request.getOatAnswerList({
+        facilityId: this.currentPatientAssociated.facilityID,
+        oatId: this.currentOat.oatID
+      })
+
+      this.oatAnswerList = respAnswerList.data
+
+      // Reconstruct oat data
+      oatQuestions.forEach(el => {
+        const answerList = this.oatAnswerList.filter(ansEl => ansEl.oatQuestionID === el.id)
+        el.answerList = answerList
+        el.selectedAnswer = ''
+      })
+      this.oatQuestions = oatQuestions
     }
   },
   async mounted () {
-    // Create Radiatest question and answer
-    switch (this.complaint) {
-      case 'Ankle':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Lower Leg', answer: '' },
-          { question: 'Foot', answer: '' }
-        ]
-        break
-      case 'Elbow':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Upper Arm', answer: '' },
-          { question: 'Forearm', answer: '' },
-          { question: 'Wrist', answer: '' },
-          { question: 'Hand', answer: '' }
-        ]
-        break
-      case 'Foot':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Ankle', answer: '' },
-          { question: 'Leg', answer: '' }
-        ]
-        break
-      case 'Hand':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Wrist', answer: '' },
-          { question: 'Forearm', answer: '' },
-          { question: 'Elbow', answer: '' }
-        ]
-        break
-      case 'Head':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Temple', answer: '' },
-          { question: 'Eyes', answer: '' },
-          { question: 'Jaw', answer: '' },
-          { question: 'Forehead', answer: '' },
-          { question: 'Back of head', answer: '' },
-          { question: 'Top of head', answer: '' }
-        ]
-        break
-      case 'Hip':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Lower Back', answer: '' },
-          { question: 'Buttock', answer: '' },
-          { question: 'Thigh', answer: '' },
-          { question: 'Groin', answer: '' },
-          { question: 'Knee', answer: '' }
-        ]
-        break
-      case 'Jaw':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Temple', answer: '' },
-          { question: 'Face', answer: '' },
-          { question: 'Neck', answer: '' }
-        ]
-        break
-      case 'Knee':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Thigh', answer: '' },
-          { question: 'Lower Leg', answer: '' }
-        ]
-        break
-      case 'Lower Back':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Mid back', answer: '' },
-          { question: 'Buttock', answer: '' },
-          { question: 'Hip', answer: '' },
-          { question: 'Groin', answer: '' },
-          { question: 'Thigh', answer: '' },
-          { question: 'Knee', answer: '' },
-          { question: 'Lower Leg', answer: '' },
-          { question: 'Ankle', answer: '' },
-          { question: 'Foot', answer: '' }
-        ]
-        break
-      case 'Mid Back':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Upper back', answer: '' },
-          { question: 'Ribs', answer: '' },
-          { question: 'Chest', answer: '' },
-          { question: 'Lower back', answer: '' }
-        ]
-        break
-      case 'Neck':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Head', answer: '' },
-          { question: 'Traps', answer: '' },
-          { question: 'Shoulder', answer: '' },
-          { question: 'Upper arm', answer: '' },
-          { question: 'Elbow', answer: '' },
-          { question: 'Forearm', answer: '' },
-          { question: 'Wrist', answer: '' },
-          { question: 'Hand', answer: '' }
-        ]
-        break
-      case 'Shoulder':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Traps', answer: '' },
-          { question: 'Neck', answer: '' },
-          { question: 'Upper arm', answer: '' },
-          { question: 'Elbow', answer: '' },
-          { question: 'Forearm', answer: '' },
-          { question: 'Wrist', answer: '' },
-          { question: 'Hand', answer: '' }
-        ]
-        break
-      case 'Upper Back':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Neck', answer: '' },
-          { question: 'Shoulder', answer: '' },
-          { question: 'Chest', answer: '' },
-          { question: 'Mid back', answer: '' }
-        ]
-        break
-      case 'Wrist':
-        this.form.radiatesQuestionsAndAnswer = [
-          { question: 'Elbow', answer: '' },
-          { question: 'Forearm', answer: '' },
-          { question: 'Hand', answer: '' }
-        ]
-        return ['Elbow', 'Forearm', 'Hand']
-      // default:
-      //   return []
-    }
-
-    // Get oat questions
-    const response = await api.task.request.getCaseHistoryOatQuestions({
-      facilityId: this.currentPatientAssociated.facilityID,
-      caseHistoryId: this.getTaskCurrentCaseHistoryId,
-      oatId: this.currentOat.oatID,
-      caseHistoryProblemId: this.currentOat.caseHistoryProblemID
-    })
-
-    const oatQuestions = response.data
-
-    const respAnswerList = await api.task.request.getOatAnswerList({
-      facilityId: this.currentPatientAssociated.facilityID,
-      oatId: this.currentOat.oatID
-    })
-
-    this.oatAnswerList = respAnswerList.data
-
-    // Reconstruct oat data
-    oatQuestions.forEach(el => {
-      const answerList = this.oatAnswerList.filter(ansEl => ansEl.oatQuestionID === el.id)
-      el.answerList = answerList
-      el.selectedAnswer = ''
-    })
-    this.oatQuestions = oatQuestions
+    await this.initializeData()
   }
 }
 </script>
