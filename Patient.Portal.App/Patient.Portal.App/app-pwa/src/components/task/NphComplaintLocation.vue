@@ -290,8 +290,8 @@ export default {
       })
 
       const oats = await api.task.request.getCaseHistoryOats({ facilityId: this.currentPatientAssociated.facilityID, caseHistoryId: this.getTaskCurrentCaseHistoryId })
-      await this.setTaskCurrentCaseHistoryProblems(problems.data)
       await this.setTaskCurrentCaseHistoryOats(oats.data)
+      await this.setTaskCurrentCaseHistoryProblems(problems.data)
       await this.setTaskCurrentTaskType('NphComplaintQuestions')
     }
   },
