@@ -51,8 +51,8 @@ export default {
 
     if (!this.key) {
       // For testing at the moment
-      // this.module = 'PatientInfo'
-      this.module = 'NphAutoAccident'
+      this.module = 'PatientInfo'
+      // this.module = 'NphAutoAccident'
       this.initialize = true
       return
     }

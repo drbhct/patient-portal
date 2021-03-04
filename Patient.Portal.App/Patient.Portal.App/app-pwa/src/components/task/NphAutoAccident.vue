@@ -498,6 +498,16 @@
               </div>
             </div>
           </div>
+          <footer class="card-footer">
+            <div class="row justify-content-end">
+              <div class="col-sm-9">
+                <button class="btn btn-primary mr-2" @click="save">
+                  Submit
+                </button>
+                <button type="reset" class="btn btn-default">Reset</button>
+              </div>
+            </div>
+          </footer>
         </section>
       </div>
     </form>
@@ -680,6 +690,15 @@ export default {
       console.log(value)
       const obj = 'aaImpactLocCar' + value
       delete this.form[obj]
+    },
+    async setAAValue (code, value) {
+      const param = {
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryId: this.currentPatientAssociated.caseHistoryID,
+        code: code,
+        value: value
+      }
+      await api.task.request.updateCaseHistoryAaValue(param)
     }
   },
   async mounted () {
