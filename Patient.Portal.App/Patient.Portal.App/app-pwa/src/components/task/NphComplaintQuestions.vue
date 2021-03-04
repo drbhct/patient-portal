@@ -8,7 +8,8 @@
     >
       <div class="col">
         <section class="card">
-          <header class="card-header"><h2 class="card-title"></h2></header>
+          <header class="card-header"><h2 class="card-title">
+            Problem {{ currentProblemIndex + 1 }} of {{ getTaskCurrentCaseHistoryProblems.length }}</h2></header>
           <div class="card-body">
             <div class="form-vertical">
               <div class="form-group row">
@@ -246,10 +247,10 @@
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
+                <button class="btn btn-default mr-2">Previous</button>
                 <button class="btn btn-primary mr-2" type="submit">
                   {{ buttonText }}
                 </button>
-                <button class="btn btn-default">Reset</button>
               </div>
             </div>
           </footer>
