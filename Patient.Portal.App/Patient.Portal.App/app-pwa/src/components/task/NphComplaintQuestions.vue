@@ -12,10 +12,10 @@
             Problem {{ currentProblemIndex + 1 }} of {{ getTaskCurrentCaseHistoryProblems.length }}</h2></header>
           <div class="card-body">
             <div class="form-vertical">
-              <div class="form-group row">
+              <div class="form-group row" >
                 <label
                   class="col-lg-4 control-label text-lg-right pt-2"
-                  id="firstQuestion"
+                  id="refDescribe"
                   ><strong style="color: red; margin-right: 5px">*</strong
                   >Please choose the area that best describes where your
                   <strong style="color: red">{{
@@ -80,8 +80,8 @@
                   <span class="help-block">Leave field empty if not sure</span>
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
+              <div class="form-group row" >
+                <label class="col-lg-4 control-label text-lg-right pt-2" id="refExpPain"
                   ><strong style="color: red; margin-right: 5px">*</strong>How
                   often do you experience this
                   <strong style="color: red">{{
@@ -137,7 +137,7 @@
                   ></multiselect>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" id="refPainSensation">
                 <label class="col-lg-4 control-label text-lg-right pt-2"
                   ><strong style="color: red; margin-right: 5px">*</strong>How
                   would you best describe the sensation of your pain?</label
@@ -227,7 +227,7 @@
               </div>
               <div
                 class="form-group row"
-                v-for="oatQ in oatQuestions"
+                v-for="oatQ in form.oatQuestions"
                 :key="oatQ.id"
               >
                 <label class="col-lg-4 control-label text-lg-right pt-2"><strong style="color: red; margin-right: 5px">*</strong>{{
@@ -290,17 +290,18 @@ export default {
         painFactor: [],
         painFactorImprovement: [],
         painInterference: '',
-        painInterferenceHelp: []
+        painInterferenceHelp: [],
+        oatQuestions: []
       },
       complaint: '',
       disabledDates: {
         from: new Date()
       },
       currentProblemIndex: 0,
-      oatQuestions: [],
       oatAnswerList: [],
       apiSubmitForm: {
-        namePayload: []
+        caseProblems: [],
+        oatQuestionAndAnswerPayload: []
       },
       currentOat: null
     }
@@ -647,7 +648,63 @@ export default {
         this.form.describeSelectLimit = 4
       }
     },
+    validateForm () {
+      if (this.form.describe.length === 0) {
+        return {
+          result: false,
+          msg: `Please choose the area that best describes where your ${this.currentProblem.region} pain occurs`,
+          reference: 'refDescribe'
+        }
+      }
+      if (this.form.expPain.length === 0) {
+        return {
+          result: false,
+          msg: `Please answer how often do you experience this ${this.currentProblem.region} pain?`,
+          reference: 'refExpPain'
+        }
+      }
+      if (this.form.expPain.length === 0) {
+        return {
+          result: false,
+          msg: `Please answer how often do you experience this ${this.currentProblem.region} pain?`,
+          reference: 'refExpPain'
+        }
+      }
+      if (this.form.painQuality.length === 0) {
+        return {
+          result: false,
+          msg: 'Please answer how would you best describe the sensation of your pain?',
+          reference: 'refPainSensation'
+        }
+      }
+      return {
+        result: false,
+        msg: 'Demo error',
+        reference: ''
+      }
+    },
     async submit () {
+      // Validation
+      const isValid = this.validateForm()
+      if (!isValid.result) {
+        this.$swal({
+          text: isValid.msg,
+          position: 'top-center',
+          title: 'Error',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+
+        setTimeout(() => {
+          const el = document.getElementById(isValid.reference)
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }, 3000)
+
+        return
+      }
+
       // Name Payload
       this.form.describe.forEach((el) => {
         this.apiSubmitForm.caseProblems.push({
@@ -763,6 +820,22 @@ export default {
           value: this.form.painInterferenceHelp.join()
         })
       }
+
+      // oats payload
+      const oatQuestionAndAnswer = []
+      this.form.oatQuestions.forEach(el => {
+        oatQuestionAndAnswer.push({
+          oatId: el.oatID,
+          Question: el.description,
+          Answer: el.selectedAnswer.description
+        })
+      })
+
+      this.apiSubmitForm.oatQuestionAndAnswerPayload.push({
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryProblemId: this.currentProblem.id,
+        questionList: oatQuestionAndAnswer
+      })
 
       if (
         this.currentProblemIndex !==
@@ -932,7 +1005,7 @@ export default {
         el.answerList = answerList
         el.selectedAnswer = ''
       })
-      this.oatQuestions = oatQuestions
+      this.form.oatQuestions = oatQuestions
     }
   },
   async mounted () {
