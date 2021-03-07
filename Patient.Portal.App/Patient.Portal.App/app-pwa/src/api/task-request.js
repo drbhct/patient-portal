@@ -253,6 +253,16 @@ export default {
     */
     async getOatAnswerList (payload) {
       return await securedJsonRequest.post('/patientportal/GetOatAnswerList', payload)
+    },
+    /**
+     *
+    * @param {Object} Payload request object
+    * @param {String} payload.facilityid
+    * @param {Number} payload.caseHistoryProblemId
+    * @param {Object} payload.questionList
+    */
+    async updateCaseHistoryProblemOats (payload) {
+      return await securedJsonRequest.post('/patientportal/UpdateCaseHistoryProblemOats', payload)
     }
 
   }

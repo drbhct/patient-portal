@@ -10,8 +10,14 @@
         <section class="card">
           <header class="card-header"><h2 class="card-title">
             Problem {{ currentProblemIndex + 1 }} of {{ getTaskCurrentCaseHistoryProblems.length }}</h2></header>
-          <div class="card-body">
+          <div class="card-body" id="cardBody">
             <div class="form-vertical">
+              <div class="row">
+                <div class="col-lg-12">
+                  <h5>Field(s) with <strong style="color: red">*</strong> are required.
+                  </h5>
+                </div>
+              </div>
               <div class="form-group row" >
                 <label
                   class="col-lg-4 control-label text-lg-right pt-2"
@@ -151,7 +157,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
+                <label class="col-lg-4 control-label text-lg-right pt-2" id="refExpPainImprovement"
                   ><strong style="color: red; margin-right: 5px">*</strong>Over
                   the past/weeks/months this complaint is</label
                 >
@@ -230,7 +236,7 @@
                 v-for="oatQ in form.oatQuestions"
                 :key="oatQ.id"
               >
-                <label class="col-lg-4 control-label text-lg-right pt-2"><strong style="color: red; margin-right: 5px">*</strong>{{
+                <label class="col-lg-4 control-label text-lg-right pt-2"><strong style="color: red; margin-right: 5px" :id="oatQ.description">*</strong>{{
                   oatQ.description
                 }}</label>
                 <div class="col-lg-6">
@@ -656,14 +662,7 @@ export default {
           reference: 'refDescribe'
         }
       }
-      if (this.form.expPain.length === 0) {
-        return {
-          result: false,
-          msg: `Please answer how often do you experience this ${this.currentProblem.region} pain?`,
-          reference: 'refExpPain'
-        }
-      }
-      if (this.form.expPain.length === 0) {
+      if (!this.form.expPain) {
         return {
           result: false,
           msg: `Please answer how often do you experience this ${this.currentProblem.region} pain?`,
@@ -677,9 +676,26 @@ export default {
           reference: 'refPainSensation'
         }
       }
+      if (!this.form.painQualityImprovement) {
+        return {
+          result: false,
+          msg: 'Please answer over the past/weeks/months this complaint is?',
+          reference: 'refExpPainImprovement'
+        }
+      }
+
+      const noAnswerOat = this.form.oatQuestions.find(el => !el.selectedAnswer)
+      if (noAnswerOat) {
+        return {
+          result: false,
+          msg: `Please answer ${noAnswerOat.description} regarding your ${this.currentProblem.region}.`,
+          reference: noAnswerOat.description
+        }
+      }
+
       return {
-        result: false,
-        msg: 'Demo error',
+        result: true,
+        msg: 'Validation complete',
         reference: ''
       }
     },
@@ -837,6 +853,26 @@ export default {
         questionList: oatQuestionAndAnswer
       })
 
+      const promMultipleInsert = new Promise((resolve, reject) => {
+        this.apiSubmitForm.caseProblems.forEach(async (el, index, arr) => {
+          await api.task.request.updateCaseHistoryProblemValue(el)
+          if (index === arr.length - 1) {
+            resolve()
+          }
+        })
+      })
+
+      const oatsInsert = new Promise((resolve, reject) => {
+        this.apiSubmitForm.oatQuestionAndAnswerPayload.forEach(async (el, index, arr) => {
+          await api.task.request.updateCaseHistoryProblemOats(el)
+          if (index === arr.length - 1) {
+            resolve()
+          }
+        })
+      })
+
+      Promise.all([promMultipleInsert, oatsInsert])
+
       if (
         this.currentProblemIndex !==
         this.getTaskCurrentCaseHistoryProblems.length - 1
@@ -845,11 +881,28 @@ export default {
         this.complaint = this.currentProblem.region
 
         await this.initializeData()
-        const el = document.getElementById('firstQuestion')
+        const el = document.getElementById('cardBody')
         el.scrollIntoView({ behavior: 'smooth' })
       }
     },
     async initializeData () {
+      // Force clear form fields
+      this.form = {
+        describe: [],
+        describeOther: '',
+        describeSelectLimit: 4,
+        dateOccured: null,
+        expPain: '',
+        paintIntensity: 0,
+        radiatesQuestionsAndAnswer: [],
+        painQuality: [],
+        painQualityImprovement: '',
+        painFactor: [],
+        painFactorImprovement: [],
+        painInterference: '',
+        painInterferenceHelp: [],
+        oatQuestions: []
+      }
       this.complaint = this.currentProblem.region
 
       // Create Radiatest question and answer
@@ -971,9 +1024,7 @@ export default {
             { question: 'Forearm', answer: '' },
             { question: 'Hand', answer: '' }
           ]
-          return ['Elbow', 'Forearm', 'Hand']
-        // default:
-        //   return []
+          break
       }
 
       this.currentOat = this.getTaskCurrentCaseHistoryOats.find(
