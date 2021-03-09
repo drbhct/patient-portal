@@ -316,10 +316,10 @@
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
+                <button type="reset" class="btn btn-default mr-2" @click="previous" v-if="getTaskPreviousTaskType && getTaskPreviousTaskType !== getTaskCurrentTaskType">Back</button>
                 <button class="btn btn-primary mr-2" type="submit">
-                  Submit
+                  Next
                 </button>
-                <button type="reset" class="btn btn-default">Reset</button>
               </div>
             </div>
           </footer>
@@ -402,7 +402,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getProfilePatientAssociated']),
+    ...mapGetters(['getProfilePatientAssociated', 'getTaskPreviousTaskType', 'getTaskCurrentTaskType']),
     currentPatientAssociated () {
       if (this.getProfilePatientAssociated.length === 0) {
         return null
@@ -414,6 +414,9 @@ export default {
     ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryId']),
     toggle (val) {
       this.isAutoAccident = val
+    },
+    async previous () {
+      this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
     },
     async savePatientInfo () {
       await api.task.request.updatePatient(this.form)

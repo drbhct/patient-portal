@@ -85,10 +85,11 @@
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
+                <button type="reset" class="btn btn-default mr-2" @click="previous" v-if="getTaskPreviousTaskType">Back</button>
                 <button class="btn btn-primary mr-2" type="submit">
-                  Submit
+                  Next
                 </button>
-                <button type="reset" class="btn btn-default">Reset</button>
+
               </div>
             </div>
           </footer>
@@ -201,7 +202,8 @@ export default {
   computed: {
     ...mapGetters([
       'getProfilePatientAssociated',
-      'getTaskCurrentCaseHistoryId'
+      'getTaskCurrentCaseHistoryId',
+      'getTaskPreviousTaskType'
     ]),
     currentPatientAssociated () {
       if (this.getProfilePatientAssociated.length === 0) {
@@ -293,6 +295,9 @@ export default {
       await this.setTaskCurrentCaseHistoryOats(oats.data)
       await this.setTaskCurrentCaseHistoryProblems(problems.data)
       await this.setTaskCurrentTaskType('NphComplaintQuestions')
+    },
+    async previous () {
+      this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
     }
   },
   async mounted () {

@@ -20,7 +20,8 @@ export default {
     NphComplaintLocation: () => import('../components/task/NphComplaintLocation.vue'),
     NphComplaintQuestions: () => import('../components/task/NphComplaintQuestions.vue'),
     NphAutoAccident: () => import('../components/task/NphAutoAccident.vue'),
-    NphQuestion: () => import('../components/task/NphQuestion.vue')
+    NphQuestion: () => import('../components/task/NphQuestion.vue'),
+    NphPersonalHistory: () => import('../components/task/NphPersonalHistory.vue')
   },
   data () {
     return {

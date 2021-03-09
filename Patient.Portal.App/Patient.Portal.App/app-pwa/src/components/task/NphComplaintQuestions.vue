@@ -253,9 +253,9 @@
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
-                <button class="btn btn-default mr-2">Previous</button>
+                <button class="btn btn-default mr-2" @click="previous" v-if="getTaskPreviousTaskType" type="reset">Back</button>
                 <button class="btn btn-primary mr-2" type="submit">
-                  {{ buttonText }}
+                  Next
                 </button>
               </div>
             </div>
@@ -274,7 +274,7 @@ import Datepicker from 'vuejs-datepicker'
 import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 import moment from 'moment'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
     Multiselect,
@@ -317,7 +317,8 @@ export default {
       'getTaskCurrentCaseHistoryProblems',
       'getProfilePatientAssociated',
       'getTaskCurrentCaseHistoryOats',
-      'getTaskCurrentCaseHistoryId'
+      'getTaskCurrentCaseHistoryId',
+      'getTaskPreviousTaskType'
     ]),
     buttonText: function () {
       if (
@@ -645,6 +646,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setTaskCurrentTaskType']),
     selectChange (selected) {},
     selectRemove (removed) {},
     describeSelectChange (selected) {
@@ -885,6 +887,18 @@ export default {
         el.scrollIntoView({ behavior: 'smooth' })
       }
     },
+    async previous () {
+      if (this.currentProblemIndex === 0) {
+        this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
+      } else {
+        this.currentProblemIndex -= 1
+        this.complaint = this.currentProblem.region
+
+        await this.initializeData()
+        const el = document.getElementById('cardBody')
+        el.scrollIntoView({ behavior: 'smooth' })
+      }
+    },
     async initializeData () {
       // Force clear form fields
       this.form = {
@@ -1046,14 +1060,30 @@ export default {
         oatId: this.currentOat.oatID
       })
 
-      this.oatAnswerList = respAnswerList.data
-
+      // note: Cross cutting concerns for hand region selected
+      const isDifficulty = respAnswerList.data.find(el => el.description === 'DIFFICULTY')
+      if (isDifficulty) {
+        this.oatAnswerList = [
+          { description: 'Extreme difficulty' },
+          { description: 'Quite a bit of difficulty' },
+          { description: 'Moderate difficulty' },
+          { description: 'A little bit of difficulty' },
+          { description: 'No difficulty' }
+        ]
+      } else {
+        this.oatAnswerList = respAnswerList.data
+      }
       // Reconstruct oat data
       oatQuestions.forEach((el) => {
-        const answerList = this.oatAnswerList.filter(
-          (ansEl) => ansEl.oatQuestionID === el.id
-        )
-        el.answerList = answerList
+        if (!isDifficulty) {
+          const answerList = this.oatAnswerList.filter(
+            (ansEl) => ansEl.oatQuestionID === el.id
+          )
+          el.answerList = answerList
+        } else {
+          el.answerList = this.oatAnswerList
+        }
+
         el.selectedAnswer = ''
       })
       this.form.oatQuestions = oatQuestions

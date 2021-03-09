@@ -1,6 +1,7 @@
 import * as types from '../mutation-types'
 
 const state = {
+  previousTaskType: '',
   currentTaskType: '',
   currentCaseHistoryId: 0,
   currentCaseHistoryProblems: [],
@@ -9,6 +10,7 @@ const state = {
 
 const mutations = {
   [types.TASK_CURRENT_TASK_TYPE] (state, payload) {
+    state.previousTaskType = state.currentTaskType
     state.currentTaskType = payload
   },
   [types.TASK_CURRENT_CASE_HISTORY_ID] (state, payload) {
