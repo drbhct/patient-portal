@@ -226,44 +226,25 @@ export default {
       return await securedJsonRequest.post('/patientportal/updatepatient', payload)
     },
     /**
-     *
-    * @param {Object} Payload request object
-    * @param {String} payload.facilityid
+     * Method to update case history conditions
+    * @param {Object} Payload request object for updating case history problem
+    * @param {String} payload.facilityId
     * @param {String} payload.caseHistoryId
+    * @param {String} payload.code
+    * @param {String} payload.value
     */
-    async getCaseHistoryOats (payload) {
-      return await securedJsonRequest.post('/patientportal/GetCaseHistoryOats', payload)
+    async updateCaseHistoryAaValue (payload) {
+      return await securedJsonRequest.post('/patientportal/updatecasehistoryaavalue', payload)
     },
     /**
-     *
-    * @param {Object} Payload request object
-    * @param {Number} payload.facilityid
-    * @param {Number} payload.caseHistoryId
-    * @param {Number} payload.oadId
-    * @param {Number} payload.caseHistoryProblemId
-    */
-    async getCaseHistoryOatQuestions (payload) {
-      return await securedJsonRequest.post('/patientportal/GetCaseHistoryOatQuestions', payload)
-    },
-    /**
-     *
-    * @param {Object} Payload request object
-    * @param {String} payload.facilityid
-    * @param {String} payload.oatId
+    * Method to update case history conditions
+    * @param {Object} Payload request object for updating case history problem
+    * @param {String} payload.facilityId
+    * @param {String} payload.caseHistoryId
+    * @param {Object} payload.values
     */
     async getOatAnswerList (payload) {
       return await securedJsonRequest.post('/patientportal/GetOatAnswerList', payload)
-    },
-    /**
-     *
-    * @param {Object} Payload request object
-    * @param {String} payload.facilityid
-    * @param {Number} payload.caseHistoryProblemId
-    * @param {Object} payload.questionList
-    */
-    async updateCaseHistoryProblemOats (payload) {
-      return await securedJsonRequest.post('/patientportal/UpdateCaseHistoryProblemOats', payload)
     }
-
   }
 }

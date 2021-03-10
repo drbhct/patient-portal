@@ -59,7 +59,7 @@ export default {
     if (!this.key) {
       // For testing at the moment
       // this.module = 'PatientInfo'
-      // this.module = 'NphQuestion'
+      // this.module = 'NphAutoAccident'
       this.setTaskCurrentTaskType('PatientInfo')
       this.initialize = true
       return
