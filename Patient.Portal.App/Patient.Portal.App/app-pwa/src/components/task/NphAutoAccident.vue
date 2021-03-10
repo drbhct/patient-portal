@@ -197,6 +197,25 @@
                          v-model="aaVehicleType" />
                 </div>
               </div>
+              <div class="form-group row" v-if="form.numVehicles > 1">
+                <label class="col-lg-4 control-label text-lg-right pt-2">
+                  What type was the other vehicle?
+                </label>
+                <div class="col-lg-6">
+                  <multiselect v-model="form.aaVehicleTypeOther"
+                               :options="accidentVehicleType"></multiselect>
+                </div>
+              </div>
+              <div class="form-group row" v-if="form.aaVehicleTypeOther === 'Other'">
+                <label class="col-lg-4 control-label text-lg-right pt-2">
+                  Please specify
+                </label>
+                <div class="col-lg-6">
+                  <input type="text"
+                         class="form-control"
+                         v-model="aaVehicleTypeOther" />
+                </div>
+              </div>
               <div class="form-group row">
                 <label class="col-lg-4 control-label text-lg-right pt-2">
                   At the time of the impact were you:
@@ -290,7 +309,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaSeatbeltType"
-                               :options="accidentSeatbeltType"></multiselect>
+                               :options="accidentSeatbeltType"
+                               @select="setCodeValue2($event, 'SeatbeltType')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaSeatbeltType === 'Other'">
@@ -319,7 +339,8 @@
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaVehicleDamage"
                                :options="accidentVehicleDamage"
-                               :multiple="true"></multiselect>
+                               :multiple="true"
+                                ></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -348,7 +369,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaHeadPosition"
-                               :options="accidentHeadPosition"></multiselect>
+                               :options="accidentHeadPosition"
+                                @select="setCodeValue2($event, 'HeadPosition')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -357,7 +379,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaTorso"
-                               :options="accidentTorso"></multiselect>
+                               :options="accidentTorso"
+                               @select="setCodeValue2($event, 'TorsoPosition')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -366,7 +389,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaHandPosition"
-                               :options="accidentHandPosition"></multiselect>
+                               :options="accidentHandPosition"
+                               @select="setCodeValue2($event, 'HandPosition')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -403,7 +427,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaHospital"
-                               :options="accidentYesNo"></multiselect>
+                               :options="accidentYesNo"
+                               @select="setCodeValue2($event, 'Hospital')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
@@ -420,7 +445,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaHospitalTranspo"
-                               :options="accidentHospitalTranspo"></multiselect>
+                               :options="accidentHospitalTranspo"
+                               @select="setCodeValue2($event, 'HospitalTransport')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -429,7 +455,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaHospitalized"
-                               :options="accidentYesNo"></multiselect>
+                               :options="accidentYesNo"
+                               @select="setCodeValue2($event, 'HospitalOvernight')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -438,7 +465,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaPainMed"
-                               :options="accidentYesNo"></multiselect>
+                               :options="accidentYesNo"
+                                @select="setCodeValue2($event, 'HospitalPainMeds')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -447,7 +475,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaMuscleRelaxers"
-                               :options="accidentYesNo"></multiselect>
+                               :options="accidentYesNo"
+                                @select="setCodeValue2($event, 'HospitalMuscleRelaxers')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -456,7 +485,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaStitches"
-                               :options="accidentYesNo"></multiselect>
+                               :options="accidentYesNo"
+                               @select="setCodeValue2($event, 'HospitalStitches')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -475,7 +505,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaXray"
-                               :options="accidentYesNo"></multiselect>
+                               :options="accidentYesNo"
+                               @select="setCodeValue2($event, 'HospitalXrays')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -484,7 +515,8 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaMRI"
-                               :options="accidentYesNo"></multiselect>
+                               :options="accidentYesNo"
+                               @select="setCodeValue2($event, 'HospitalMRI')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -493,11 +525,23 @@
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaOtherImages"
-                               :options="accidentYesNo"></multiselect>
+                               :options="accidentYesNo"
+                               @select="setCodeValue2($event, 'HospitalImaging')"></multiselect>
                 </div>
               </div>
             </div>
           </div>
+          <footer class="card-footer">
+            <div class="row justify-content-end">
+              <div class="col-sm-9">
+                <button class="btn btn-primary mr-2" @click="save">
+                  Submit
+                </button>
+                <input type="button" class="btn btn-primary mr-2" @click="save" />
+                <button type="reset" class="btn btn-default">Reset</button>
+              </div>
+            </div>
+          </footer>
         </section>
       </div>
     </form>
@@ -511,6 +555,7 @@ import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import 'vue2-timepicker/dist/VueTimepicker.css'
 import Datepicker from 'vuejs-datepicker'
 import TimePicker from 'vue2-timepicker'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     Multiselect,
@@ -533,6 +578,7 @@ export default {
         aaLocationVehicle: '',
         aaAwareness: '',
         aaVehicleType: '',
+        aaVehicleTypeOther: '',
         aaVehicleState: '',
         aaVehicleSpeed: 0,
         aaOtherVehicleSpeed: 0,
@@ -540,12 +586,15 @@ export default {
         aaAirbags: '',
         aaHeadrestType: '',
         aaHeadrestPosition: '',
+        aaSeatbeltType: '',
+        aaSeatbeltEffect: '',
         aaVehicleDamage: [],
         aaVehicleDents: [],
         aaVehicleDoors: [],
         aaHeadPosition: '',
         aaTorso: '',
         aaHandPosition: '',
+        aaImpactLocations: [],
         aaHospital: '',
         aaHospitalName: '',
         aaHospitalTranspo: '',
@@ -558,12 +607,14 @@ export default {
         aaMRI: '',
         aaOtherImages: ''
       },
+      accidentInfo: [],
       aaConditions: '',
       aaDescription: '',
       aaImpact: '',
       aaLocationVehicle: '',
       aaAwareness: '',
       aaVehicleType: '',
+      aaVehicleTypeOther: '',
       aaVehicleState: '',
       aaSeatbeltType: '',
       disabledDates: {
@@ -579,6 +630,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'getTaskCurrentCaseHistoryId'
+    ]),
     accidentConditions: function () {
       return ['Icy', 'Wet', 'Dry', 'Slick', 'Other']
     },
@@ -677,9 +731,194 @@ export default {
       this.usStates = result.data
     },
     removePart (value) {
-      console.log(value)
       const obj = 'aaImpactLocCar' + value
       delete this.form[obj]
+    },
+    save () {
+      if (this.form.dateAccident !== '') {
+        this.setCodeValue(this.form.dateAccident, 'AccidentDate')
+      }
+      if (this.form.timeAcccident !== null) {
+        this.setCodeValue(this.form.timeAcccident, 'AccidentTime')
+      }
+      if (this.form.estimatedDamage !== null) {
+        this.setCodeValue(this.form.estimatedDamage, 'AccidentDamageCost')
+      }
+      if (this.form.numVehicles !== null) {
+        this.setCodeValue(this.form.numVehicles, 'NumVehicles')
+      }
+      if (this.form.streetAddress !== null) {
+        this.setCodeValue(this.form.streetAddress, 'Street')
+      }
+      if (this.form.city !== '') {
+        this.setCodeValue(this.form.city, 'City')
+      }
+      if (this.form.state !== '') {
+        this.setCodeValue(this.form.state, 'State')
+      }
+      if (this.form.aaConditions !== '') {
+        if (this.form.aaConditions === 'Other') {
+          this.setCodeValue(this.aaConditions, 'WeatherCondition')
+        } else {
+          this.setCodeValue(this.form.aaConditions, 'WeatherCondition')
+        }
+      }
+      if (this.form.aaDescription !== '') {
+        if (this.form.aaDescription === 'Other') {
+          this.setCodeValue(this.aaDescription, 'GeneralDescription')
+        } else {
+          this.setCodeValue(this.form.aaDescription, 'GeneralDescription')
+        }
+      }
+      if (this.form.aaImpact !== '') {
+        if (this.form.aaImpact === 'Other') {
+          this.setCodeValue(this.aaImpact, 'AfterImpact')
+        } else {
+          this.setCodeValue(this.form.aaImpact, 'AfterImpact')
+        }
+      }
+      if (this.form.aaLocationVehicle !== '') {
+        if (this.form.aaLocationVehicle === 'Other') {
+          this.setCodeValue(this.aaLocationVehicle, 'PatientLocation')
+        } else {
+          this.setCodeValue(this.form.aaLocationVehicle, 'PatientLocation')
+        }
+      }
+      if (this.form.aaAwareness !== '') {
+        if (this.form.aaAwareness === 'Other') {
+          this.setCodeValue(this.aaAwareness, 'PatientAwareness')
+        } else {
+          this.setCodeValue(this.form.aaAwareness, 'PatientAwareness')
+        }
+      }
+      if (this.form.aaVehicleType !== '') {
+        if (this.form.aaVehicleType === 'Other') {
+          this.setCodeValue(this.aaVehicleType, 'PatientVehicleType')
+        } else {
+          this.setCodeValue(this.form.aaVehicleType, 'PatientVehicleType')
+        }
+      }
+      if (this.form.aaVehicleTypeOther !== '') {
+        if (this.form.aaVehicleTypeOther === 'Other') {
+          this.setCodeValue(this.aaVehicleTypeOther, 'OtherVehicleType')
+        } else {
+          this.setCodeValue(this.form.aaVehicleTypeOther, 'OtherVehicleType')
+        }
+      }
+      if (this.form.aaVehicleState !== '') {
+        if (this.form.aaVehicleState === 'Other') {
+          this.setCodeValue(this.aaVehicleState, 'PatientVehicleVelocity')
+        } else {
+          this.setCodeValue(this.form.aaVehicleState, 'PatientVehicleVelocity')
+        }
+      }
+      if (this.form.aaVehicleSpeed !== '') {
+        this.setCodeValue(this.form.PatientVehicleSpeed, 'PatientVehicleVelocity')
+      }
+      if (this.form.aaOtherVehicleSpeed !== '') {
+        this.setCodeValue(this.form.aaOtherVehicleSpeed, 'OtherVehicleSpeed')
+      }
+      if (this.form.aaConsciousness !== '') {
+        this.setCodeValue(this.form.aaConsciousness, 'Consciousness')
+      }
+      if (this.form.aaAirbags !== '') {
+        this.setCodeValue(this.form.aaAirbags, 'Airbags')
+      }
+      if (this.form.aaHeadrestType !== '') {
+        this.setCodeValue(this.form.aaHeadrestType, 'HeadrestType')
+      }
+      if (this.form.aaHeadrestPosition !== '') {
+        this.setCodeValue(this.form.aaHeadrestPosition, 'HeadrestPosition')
+      }
+      if (this.form.aaSeatbeltType !== '') {
+        if (this.form.aaVehicleState === 'Other') {
+          this.setCodeValue(this.aaSeatbeltType, 'SeatbeltType')
+        } else {
+          this.setCodeValue(this.form.aaSeatbeltType, 'SeatbeltType')
+        }
+      }
+      if (this.form.aaSeatbeltEffect !== '') {
+        this.setCodeValue(this.form.aaSeatbeltEffect, 'SeatbeltResult')
+      }
+      if (this.form.aaVehicleDamage.length > 0) {
+        this.setCodeValue(this.form.aaVehicleDamage.join(), 'VehicleDamage')
+      }
+      if (this.form.aaVehicleDents.length > 0) {
+        this.setCodeValue(this.form.aaVehicleDents.join(), 'VehicleDents')
+      }
+      if (this.form.aaVehicleDoors.length > 0) {
+        this.setCodeValue(this.form.aaVehicleDoors.join(), 'VehicleDoors')
+      }
+      if (this.form.aaHeadPosition !== '') {
+        this.setCodeValue(this.form.aaHeadPosition, 'HeadPosition')
+      }
+      if (this.form.aaTorso !== '') {
+        this.setCodeValue(this.form.aaTorso, 'TorsoPosition')
+      }
+      if (this.form.aaHandPosition !== '') {
+        this.setCodeValue(this.form.aaHandPosition, 'HandPosition')
+      }
+      if (this.form.aaHospital !== '') {
+        this.setCodeValue(this.form.aaHospital, 'Hospital')
+      }
+      if (this.form.aaHospitalName !== '') {
+        this.setCodeValue(this.form.aaHospital, 'HospitalName')
+      }
+      if (this.form.aaHospitalTranspo !== '') {
+        this.setCodeValue(this.form.aaHospitalTranspo, 'HospitalTransport')
+      }
+      if (this.form.aaHospitalized !== '') {
+        this.setCodeValue(this.form.aaHospitalized, 'HospitalOvernight')
+      }
+      if (this.form.aaPainMed !== '') {
+        this.setCodeValue(this.form.aaPainMed, 'HospitalPainMeds')
+      }
+      if (this.form.aaMuscleRelaxers !== '') {
+        this.setCodeValue(this.form.aaMuscleRelaxers, 'HospitalMuscleRelaxers')
+      }
+      if (this.form.aaStitches !== '') {
+        this.setCodeValue(this.form.aaStitches, 'HospitalStitches')
+      }
+      if (this.form.aaMedEquip.length > 0) {
+        this.setCodeValue(this.form.aaMedEquip.join(), 'HospitalMedicalEquipment')
+      }
+      if (this.form.aaXray !== '') {
+        this.setCodeValue(this.form.aaXray, 'HospitalXrays')
+      }
+      if (this.form.aaMRI !== '') {
+        this.setCodeValue(this.form.aaMRI, 'HospitalMRI')
+      }
+      if (this.form.aaOtherImages !== '') {
+        this.setCodeValue(this.form.aaOtherImages, 'HospitalImaging')
+      }
+      if (this.form.aaImpactLocations.length > 0) {
+        var me = this
+        this.setCodeValue(this.form.aaImpactLocations.join(), 'BodyPartsImpacted')
+        this.form.aaImpactLocations.forEach(function (item) {
+          var aaImpactLoc = 'aaImpactLocCar' + item
+          me.setCodeValue(me.form[aaImpactLoc].join(), 'Impact_' + item)
+        })
+      }
+      if (this.accidentInfo.length > 0) {
+        this.setAAValues()
+      }
+    },
+    setCodeValue (value, code) {
+      const found = this.accidentInfo.some(el => el.code === code)
+      if (!found) {
+        this.accidentInfo.push({ code: code, value: value })
+      } else {
+        var index = this.accidentInfo.findIndex(el => el.code === code)
+        this.accidentInfo[index].value = value
+      }
+    },
+    async setAAValues () {
+      const param = {
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryId: this.getTaskCurrentCaseHistoryId,
+        values: this.accidentInfo
+      }
+      await api.task.request.updateCaseHistoryAaValues(param)
     }
   },
   async mounted () {
