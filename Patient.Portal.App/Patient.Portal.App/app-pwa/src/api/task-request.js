@@ -243,8 +243,8 @@ export default {
     * @param {String} payload.caseHistoryId
     * @param {Object} payload.values
     */
-    async UpdateCaseHistoryAaValues (payload) {
-      return await securedJsonRequest.post('/patientportal/updatecasehistoryaavalues', payload)
+    async getOatAnswerList (payload) {
+      return await securedJsonRequest.post('/patientportal/GetOatAnswerList', payload)
     }
   }
 }

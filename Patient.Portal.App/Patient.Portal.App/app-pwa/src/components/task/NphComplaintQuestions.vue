@@ -8,13 +8,20 @@
     >
       <div class="col">
         <section class="card">
-          <header class="card-header"><h2 class="card-title"></h2></header>
-          <div class="card-body">
+          <header class="card-header"><h2 class="card-title">
+            Problem {{ currentProblemIndex + 1 }} of {{ getTaskCurrentCaseHistoryProblems.length }}</h2></header>
+          <div class="card-body" id="cardBody">
             <div class="form-vertical">
-              <div class="form-group row">
+              <div class="row">
+                <div class="col-lg-12">
+                  <h5>Field(s) with <strong style="color: red">*</strong> are required.
+                  </h5>
+                </div>
+              </div>
+              <div class="form-group row" >
                 <label
                   class="col-lg-4 control-label text-lg-right pt-2"
-                  id="firstQuestion"
+                  id="refDescribe"
                   ><strong style="color: red; margin-right: 5px">*</strong
                   >Please choose the area that best describes where your
                   <strong style="color: red">{{
@@ -79,8 +86,8 @@
                   <span class="help-block">Leave field empty if not sure</span>
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
+              <div class="form-group row" >
+                <label class="col-lg-4 control-label text-lg-right pt-2" id="refExpPain"
                   ><strong style="color: red; margin-right: 5px">*</strong>How
                   often do you experience this
                   <strong style="color: red">{{
@@ -136,7 +143,7 @@
                   ></multiselect>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" id="refPainSensation">
                 <label class="col-lg-4 control-label text-lg-right pt-2"
                   ><strong style="color: red; margin-right: 5px">*</strong>How
                   would you best describe the sensation of your pain?</label
@@ -150,7 +157,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
+                <label class="col-lg-4 control-label text-lg-right pt-2" id="refExpPainImprovement"
                   ><strong style="color: red; margin-right: 5px">*</strong>Over
                   the past/weeks/months this complaint is</label
                 >
@@ -226,10 +233,10 @@
               </div>
               <div
                 class="form-group row"
-                v-for="oatQ in oatQuestions"
+                v-for="oatQ in form.oatQuestions"
                 :key="oatQ.id"
               >
-                <label class="col-lg-4 control-label text-lg-right pt-2"><strong style="color: red; margin-right: 5px">*</strong>{{
+                <label class="col-lg-4 control-label text-lg-right pt-2"><strong style="color: red; margin-right: 5px" :id="oatQ.description">*</strong>{{
                   oatQ.description
                 }}</label>
                 <div class="col-lg-6">
@@ -246,10 +253,10 @@
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
+                <button class="btn btn-default mr-2">Previous</button>
                 <button class="btn btn-primary mr-2" type="submit">
                   {{ buttonText }}
                 </button>
-                <button class="btn btn-default">Reset</button>
               </div>
             </div>
           </footer>
@@ -289,17 +296,18 @@ export default {
         painFactor: [],
         painFactorImprovement: [],
         painInterference: '',
-        painInterferenceHelp: []
+        painInterferenceHelp: [],
+        oatQuestions: []
       },
       complaint: '',
       disabledDates: {
         from: new Date()
       },
       currentProblemIndex: 0,
-      oatQuestions: [],
       oatAnswerList: [],
       apiSubmitForm: {
-        namePayload: []
+        caseProblems: [],
+        oatQuestionAndAnswerPayload: []
       },
       currentOat: null
     }
@@ -646,7 +654,73 @@ export default {
         this.form.describeSelectLimit = 4
       }
     },
+    validateForm () {
+      if (this.form.describe.length === 0) {
+        return {
+          result: false,
+          msg: `Please choose the area that best describes where your ${this.currentProblem.region} pain occurs`,
+          reference: 'refDescribe'
+        }
+      }
+      if (!this.form.expPain) {
+        return {
+          result: false,
+          msg: `Please answer how often do you experience this ${this.currentProblem.region} pain?`,
+          reference: 'refExpPain'
+        }
+      }
+      if (this.form.painQuality.length === 0) {
+        return {
+          result: false,
+          msg: 'Please answer how would you best describe the sensation of your pain?',
+          reference: 'refPainSensation'
+        }
+      }
+      if (!this.form.painQualityImprovement) {
+        return {
+          result: false,
+          msg: 'Please answer over the past/weeks/months this complaint is?',
+          reference: 'refExpPainImprovement'
+        }
+      }
+
+      const noAnswerOat = this.form.oatQuestions.find(el => !el.selectedAnswer)
+      if (noAnswerOat) {
+        return {
+          result: false,
+          msg: `Please answer ${noAnswerOat.description} regarding your ${this.currentProblem.region}.`,
+          reference: noAnswerOat.description
+        }
+      }
+
+      return {
+        result: true,
+        msg: 'Validation complete',
+        reference: ''
+      }
+    },
     async submit () {
+      // Validation
+      const isValid = this.validateForm()
+      if (!isValid.result) {
+        this.$swal({
+          text: isValid.msg,
+          position: 'top-center',
+          title: 'Error',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+
+        setTimeout(() => {
+          const el = document.getElementById(isValid.reference)
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }, 3000)
+
+        return
+      }
+
       // Name Payload
       this.form.describe.forEach((el) => {
         this.apiSubmitForm.caseProblems.push({
@@ -763,6 +837,42 @@ export default {
         })
       }
 
+      // oats payload
+      const oatQuestionAndAnswer = []
+      this.form.oatQuestions.forEach(el => {
+        oatQuestionAndAnswer.push({
+          oatId: el.oatID,
+          Question: el.description,
+          Answer: el.selectedAnswer.description
+        })
+      })
+
+      this.apiSubmitForm.oatQuestionAndAnswerPayload.push({
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryProblemId: this.currentProblem.id,
+        questionList: oatQuestionAndAnswer
+      })
+
+      const promMultipleInsert = new Promise((resolve, reject) => {
+        this.apiSubmitForm.caseProblems.forEach(async (el, index, arr) => {
+          await api.task.request.updateCaseHistoryProblemValue(el)
+          if (index === arr.length - 1) {
+            resolve()
+          }
+        })
+      })
+
+      const oatsInsert = new Promise((resolve, reject) => {
+        this.apiSubmitForm.oatQuestionAndAnswerPayload.forEach(async (el, index, arr) => {
+          await api.task.request.updateCaseHistoryProblemOats(el)
+          if (index === arr.length - 1) {
+            resolve()
+          }
+        })
+      })
+
+      Promise.all([promMultipleInsert, oatsInsert])
+
       if (
         this.currentProblemIndex !==
         this.getTaskCurrentCaseHistoryProblems.length - 1
@@ -771,11 +881,28 @@ export default {
         this.complaint = this.currentProblem.region
 
         await this.initializeData()
-        const el = document.getElementById('firstQuestion')
+        const el = document.getElementById('cardBody')
         el.scrollIntoView({ behavior: 'smooth' })
       }
     },
     async initializeData () {
+      // Force clear form fields
+      this.form = {
+        describe: [],
+        describeOther: '',
+        describeSelectLimit: 4,
+        dateOccured: null,
+        expPain: '',
+        paintIntensity: 0,
+        radiatesQuestionsAndAnswer: [],
+        painQuality: [],
+        painQualityImprovement: '',
+        painFactor: [],
+        painFactorImprovement: [],
+        painInterference: '',
+        painInterferenceHelp: [],
+        oatQuestions: []
+      }
       this.complaint = this.currentProblem.region
 
       // Create Radiatest question and answer
@@ -897,9 +1024,7 @@ export default {
             { question: 'Forearm', answer: '' },
             { question: 'Hand', answer: '' }
           ]
-          return ['Elbow', 'Forearm', 'Hand']
-        // default:
-        //   return []
+          break
       }
 
       this.currentOat = this.getTaskCurrentCaseHistoryOats.find(
@@ -931,7 +1056,7 @@ export default {
         el.answerList = answerList
         el.selectedAnswer = ''
       })
-      this.oatQuestions = oatQuestions
+      this.form.oatQuestions = oatQuestions
     }
   },
   async mounted () {
