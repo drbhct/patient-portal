@@ -5,12 +5,13 @@
             <h2 v-if="!initialize">Initializing App ...</h2>
             <h2 v-if="initialize && (hasAccount || keyExpired)">{{ message }}</h2>
         </div>
-        <component v-bind:is="module" v-if="initialize" :link-info="linkInfo"></component>
+        <component v-bind:is="getTaskCurrentTaskType" v-if="initialize" :link-info="linkInfo"></component>
     </div>
   </div>
 </template>
 <script>
 import api from '../api/http-common.js'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
     // Lazy Loading components
@@ -18,7 +19,8 @@ export default {
     PatientInfo: () => import('../components/task/PatientInfo.vue'),
     NphComplaintLocation: () => import('../components/task/NphComplaintLocation.vue'),
     NphComplaintQuestions: () => import('../components/task/NphComplaintQuestions.vue'),
-    NphAutoAccident: () => import('../components/task/NphAutoAccident.vue')
+    NphAutoAccident: () => import('../components/task/NphAutoAccident.vue'),
+    NphQuestion: () => import('../components/task/NphQuestion.vue')
   },
   data () {
     return {
@@ -31,6 +33,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getTaskCurrentTaskType']),
     key () {
       return this.$route.query.key
     },
@@ -44,6 +47,9 @@ export default {
       return ''
     }
   },
+  methods: {
+    ...mapActions(['setTaskCurrentTaskType'])
+  },
   async mounted () {
     const apiRes = await api.auth.request.apiLogin()
     // NOTE: Temporary will be move to cookies soon!
@@ -51,11 +57,14 @@ export default {
 
     if (!this.key) {
       // For testing at the moment
-      this.module = 'PatientInfo'
-      // this.module = 'NphAutoAccident'
+      // this.module = 'PatientInfo'
+      // this.module = 'NphQuestion'
+      this.setTaskCurrentTaskType('PatientInfo')
       this.initialize = true
       return
     }
+
+    // NOTE: This is via task key>account>task type
     const resp = await api.auth.request.getLink(this.key)
     this.linkInfo = resp.data
     if (!this.linkInfo) {
@@ -85,7 +94,8 @@ export default {
       this.task = taskRes.data.find(el => el.taskID === this.linkInfo.taskID)
       switch (this.task.taskType) {
         case 'NPH':
-          this.module = 'CreateAccount'
+          // this.module = 'CreateAccount'
+          this.setTaskCurrentTaskType('CreateAccount')
           break
       }
     }

@@ -92,11 +92,30 @@ export default {
     /**
      * Method to get patient incomeplete case history
     * @param {Object} Payload request object for acquiring patient incomplete case history
-    * @param {String} payload.facilityid
-    * @param {String} payload.patientid
+    * @param {String} payload.facilityId
+    * @param {String} payload.patientId
     */
     async findIncompleteCaseHistory (payload) {
       return await securedJsonRequest.post('/patientportal/findincompletecasehistory', payload)
+    },
+    /**
+     * Method insert patient case history
+    * @param {Object} Payload request object for acquiring patient incomplete case history
+    * @param {String} payload.facilityId
+    * @param {String} payload.patientId
+    * @param {String} payload.aa boolean value if nph is auto accident or not
+    */
+    async insertCaseHistory (payload) {
+      return await securedJsonRequest.post('/patientportal/insertCaseHistory', payload)
+    },
+    /**
+     *
+    * @param {Object} Payload request object
+    * @param {String} payload.facilityid
+    * @param {String} payload.caseHistoryId
+    */
+    async getCaseHistoryProblems (payload) {
+      return await securedJsonRequest.post('/patientportal/GetCaseHistoryProblems', payload)
     },
     /**
      * Method to add case history problem
@@ -114,8 +133,7 @@ export default {
      * Method to remove case history problem
     * @param {Object} Payload request object for removing case history problem
     * @param {String} payload.facilityId
-    * @param {String} payload.caseHistoryId
-    * @param {String} payload.ordinal
+    * @param {String} payload.caseHistoryProblemID
     */
     async deleteCaseHistoryProblem (payload) {
       return await securedJsonRequest.post('/patientportal/deletecasehistoryproblem', payload)
@@ -124,8 +142,7 @@ export default {
      * Method to update case history problem
     * @param {Object} Payload request object for updating case history problem
     * @param {String} payload.facilityId
-    * @param {String} payload.caseHistoryId
-    * @param {String} payload.ordinal
+    * @param {String} payload.caseHistoryProblemId
     * @param {String} payload.fieldName
     * @param {String} payload.value
     */
@@ -207,17 +224,6 @@ export default {
     */
     async updatePatient (payload) {
       return await securedJsonRequest.post('/patientportal/updatepatient', payload)
-    },
-    /**
-     * Method to update case history conditions
-    * @param {Object} Payload request object for updating case history problem
-    * @param {String} payload.facilityId
-    * @param {String} payload.caseHistoryId
-    * @param {String} payload.code
-    * @param {String} payload.value
-    */
-    async updateCaseHistoryAaValue (payload) {
-      return await securedJsonRequest.post('/patientportal/updatecasehistoryaavalue', payload)
     }
   }
 }

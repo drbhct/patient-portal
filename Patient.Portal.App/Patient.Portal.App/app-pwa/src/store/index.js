@@ -9,6 +9,8 @@ import messages from './modules/messages.js'
 import billing from './modules/billing.js'
 import profile from './modules/profile.js'
 import config from './modules/config.js'
+import task from './modules/task.js'
+
 Vue.use(Vuex)
 
 const vuexLocalStorage = new VuexPersist({
@@ -27,7 +29,8 @@ export default new Vuex.Store({
     messages,
     billing,
     profile,
-    config
+    config,
+    task
   },
   plugins: [vuexLocalStorage],
   strict: true
