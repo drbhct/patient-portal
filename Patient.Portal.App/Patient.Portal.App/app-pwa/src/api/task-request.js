@@ -224,6 +224,27 @@ export default {
     */
     async updatePatient (payload) {
       return await securedJsonRequest.post('/patientportal/updatepatient', payload)
+    },
+    /**
+     * Method to update case history conditions
+    * @param {Object} Payload request object for updating case history problem
+    * @param {String} payload.facilityId
+    * @param {String} payload.caseHistoryId
+    * @param {String} payload.code
+    * @param {String} payload.value
+    */
+    async updateCaseHistoryAaValue (payload) {
+      return await securedJsonRequest.post('/patientportal/updatecasehistoryaavalue', payload)
+    },
+    /**
+    * Method to update case history conditions
+    * @param {Object} Payload request object for updating case history problem
+    * @param {String} payload.facilityId
+    * @param {String} payload.caseHistoryId
+    * @param {Object} payload.values
+    */
+    async UpdateCaseHistoryAaValues (payload) {
+      return await securedJsonRequest.post('/patientportal/updatecasehistoryaavalues', payload)
     }
   }
 }
