@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="form-horizontal">
     <div class="header-t-text d-block">
       My Task List

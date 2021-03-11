@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <form class="form-horizontal m-lg-4" @submit.prevent="updateLogInfo" ref="pwdForm">
     <h3>Login Information</h3>
     <div class="form-group row">

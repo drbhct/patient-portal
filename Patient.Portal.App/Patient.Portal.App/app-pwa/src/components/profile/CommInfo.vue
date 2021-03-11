@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <form class="form-horizontal m-lg-4" @submit.prevent="updatePatientCommOption">
     <h3>Communication Preferences</h3>
     <div class="form-group row pt-lg-4 pt-md-4 pt-2">

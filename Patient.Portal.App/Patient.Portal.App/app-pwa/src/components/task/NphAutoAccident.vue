@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <section role="main">
     <form action="" class="mt-5 mr-2 ml-2 justify-content-md-center">
       <div class="col">

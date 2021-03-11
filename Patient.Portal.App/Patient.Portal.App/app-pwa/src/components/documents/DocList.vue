@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="form">
     <loading :active.sync="getIsLoading" :can-cancel="false"></loading>
     <table class="table mb-5 tbl-bordered table-striped">
