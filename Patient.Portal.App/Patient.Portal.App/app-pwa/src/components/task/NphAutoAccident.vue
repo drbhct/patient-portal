@@ -310,7 +310,7 @@
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaSeatbeltType"
                                :options="accidentSeatbeltType"
-                               @select="setCodeValue2($event, 'SeatbeltType')"></multiselect>
+                               @select="setCodeValue($event, 'SeatbeltType')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaSeatbeltType === 'Other'">
@@ -370,7 +370,7 @@
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaHeadPosition"
                                :options="accidentHeadPosition"
-                                @select="setCodeValue2($event, 'HeadPosition')"></multiselect>
+                                @select="setCodeValue($event, 'HeadPosition')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -380,7 +380,7 @@
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaTorso"
                                :options="accidentTorso"
-                               @select="setCodeValue2($event, 'TorsoPosition')"></multiselect>
+                               @select="setCodeValue($event, 'TorsoPosition')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -390,7 +390,7 @@
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaHandPosition"
                                :options="accidentHandPosition"
-                               @select="setCodeValue2($event, 'HandPosition')"></multiselect>
+                               @select="setCodeValue($event, 'HandPosition')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
@@ -428,7 +428,7 @@
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaHospital"
                                :options="accidentYesNo"
-                               @select="setCodeValue2($event, 'Hospital')"></multiselect>
+                               @select="setCodeValue($event, 'Hospital')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
@@ -439,57 +439,57 @@
                   <input type="text" class="form-control" v-model="form.aaHospitalName">
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" v-if="form.aaHospital === 'Yes'">
                 <label class="col-lg-4 control-label text-lg-right pt-2">
                   How did you get to the Hospital?
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaHospitalTranspo"
                                :options="accidentHospitalTranspo"
-                               @select="setCodeValue2($event, 'HospitalTransport')"></multiselect>
+                               @select="setCodeValue($event, 'HospitalTransport')"></multiselect>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" v-if="form.aaHospital === 'Yes'">
                 <label class="col-lg-4 control-label text-lg-right pt-2">
                   Were you hospitalized overnight?
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaHospitalized"
                                :options="accidentYesNo"
-                               @select="setCodeValue2($event, 'HospitalOvernight')"></multiselect>
+                               @select="setCodeValue($event, 'HospitalOvernight')"></multiselect>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" v-if="form.aaHospital === 'Yes'">
                 <label class="col-lg-4 control-label text-lg-right pt-2">
                   At the Hospital, did you receive pain medication?
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaPainMed"
                                :options="accidentYesNo"
-                                @select="setCodeValue2($event, 'HospitalPainMeds')"></multiselect>
+                                @select="setCodeValue($event, 'HospitalPainMeds')"></multiselect>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" v-if="form.aaHospital === 'Yes'">
                 <label class="col-lg-4 control-label text-lg-right pt-2">
                   At the Hospital, did you receive muscle relaxers?
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaMuscleRelaxers"
                                :options="accidentYesNo"
-                                @select="setCodeValue2($event, 'HospitalMuscleRelaxers')"></multiselect>
+                                @select="setCodeValue($event, 'HospitalMuscleRelaxers')"></multiselect>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" v-if="form.aaHospital === 'Yes'">
                 <label class="col-lg-4 control-label text-lg-right pt-2">
                   At the hospital, did you receive stitches?
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaStitches"
                                :options="accidentYesNo"
-                               @select="setCodeValue2($event, 'HospitalStitches')"></multiselect>
+                               @select="setCodeValue($event, 'HospitalStitches')"></multiselect>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" v-if="form.aaHospital === 'Yes'">
                 <label class="col-lg-4 control-label text-lg-right pt-2">
                   Please select the items you received at the Hospital
                 </label>
@@ -499,34 +499,34 @@
                                :multiple="true"></multiselect>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" v-if="form.aaHospital === 'Yes'">
                 <label class="col-lg-4 control-label text-lg-right pt-2">
                   At the Hospital, were Xray's taken?
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaXray"
                                :options="accidentYesNo"
-                               @select="setCodeValue2($event, 'HospitalXrays')"></multiselect>
+                               @select="setCodeValue($event, 'HospitalXrays')"></multiselect>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" v-if="form.aaHospital === 'Yes'">
                 <label class="col-lg-4 control-label text-lg-right pt-2">
                   At the Hospital, was an MRI taken?
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaMRI"
                                :options="accidentYesNo"
-                               @select="setCodeValue2($event, 'HospitalMRI')"></multiselect>
+                               @select="setCodeValue($event, 'HospitalMRI')"></multiselect>
                 </div>
               </div>
-              <div class="form-group row">
+              <div class="form-group row" v-if="form.aaHospital === 'Yes'">
                 <label class="col-lg-4 control-label text-lg-right pt-2">
                   At the Hospital, were any other type of images taken?
                 </label>
                 <div class="col-lg-6">
                   <multiselect v-model="form.aaOtherImages"
                                :options="accidentYesNo"
-                               @select="setCodeValue2($event, 'HospitalImaging')"></multiselect>
+                               @select="setCodeValue($event, 'HospitalImaging')"></multiselect>
                 </div>
               </div>
             </div>
@@ -537,7 +537,7 @@
                 <button class="btn btn-primary mr-2" @click="save">
                   Submit
                 </button>
-                <input type="button" class="btn btn-primary mr-2" @click="save" />
+                <!--<input type="button" class="btn btn-primary mr-2" @click="save" />-->
                 <button type="reset" class="btn btn-default">Reset</button>
               </div>
             </div>
@@ -555,7 +555,7 @@ import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import 'vue2-timepicker/dist/VueTimepicker.css'
 import Datepicker from 'vuejs-datepicker'
 import TimePicker from 'vue2-timepicker'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   components: {
     Multiselect,
@@ -631,8 +631,10 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getProfilePatientAssociated',
       'getTaskCurrentCaseHistoryId'
     ]),
+    ...mapActions(['setTaskCurrentTaskType']),
     accidentConditions: function () {
       return ['Icy', 'Wet', 'Dry', 'Slick', 'Other']
     },
@@ -709,8 +711,8 @@ export default {
         'Both hands on the seat in front of you']
     },
     accidentImpactLocations: function () {
-      return ['Head', 'Face', 'Neck', 'Chest', 'Right shoulder', 'Right hip',
-        'Right knee', 'Right foot', 'Left shoulder', 'Left hip', 'Left knee', 'Left foot']
+      return ['Head', 'Face', 'Neck', 'Chest', 'Right Shoulder', 'Right hip',
+        'Right Knee', 'Right Foot', 'Left Shoulder', 'Left Hip', 'Left Knee', 'Left Foot']
     },
     accidentLocationParts: function () {
       return ['Steering wheel', 'Dashboard', 'Windshield', 'Side window', 'Side door', 'Seat', 'Ceiling', 'Car frame', 'Another passenger']
@@ -723,6 +725,12 @@ export default {
     },
     accidentMedEquip: function () {
       return ['Cervical collar', 'Back brace', 'Crutches', 'Wheelchair']
+    },
+    currentPatientAssociated () {
+      if (this.getProfilePatientAssociated.length === 0) {
+        return null
+      }
+      return this.getProfilePatientAssociated[0]
     }
   },
   methods: {
@@ -813,10 +821,12 @@ export default {
         }
       }
       if (this.form.aaVehicleSpeed !== '') {
-        this.setCodeValue(this.form.PatientVehicleSpeed, 'PatientVehicleVelocity')
+        this.setCodeValue(this.form.aaVehicleSpeed, 'PatientVehicleSpeed')
       }
-      if (this.form.aaOtherVehicleSpeed !== '') {
-        this.setCodeValue(this.form.aaOtherVehicleSpeed, 'OtherVehicleSpeed')
+      if (this.form.numVehicles > 1) {
+        if (this.form.aaOtherVehicleSpeed !== '') {
+          this.setCodeValue(this.form.aaOtherVehicleSpeed, 'OtherVehicleSpeed')
+        }
       }
       if (this.form.aaConsciousness !== '') {
         this.setCodeValue(this.form.aaConsciousness, 'Consciousness')
@@ -861,42 +871,44 @@ export default {
       if (this.form.aaHospital !== '') {
         this.setCodeValue(this.form.aaHospital, 'Hospital')
       }
-      if (this.form.aaHospitalName !== '') {
-        this.setCodeValue(this.form.aaHospital, 'HospitalName')
-      }
-      if (this.form.aaHospitalTranspo !== '') {
-        this.setCodeValue(this.form.aaHospitalTranspo, 'HospitalTransport')
-      }
-      if (this.form.aaHospitalized !== '') {
-        this.setCodeValue(this.form.aaHospitalized, 'HospitalOvernight')
-      }
-      if (this.form.aaPainMed !== '') {
-        this.setCodeValue(this.form.aaPainMed, 'HospitalPainMeds')
-      }
-      if (this.form.aaMuscleRelaxers !== '') {
-        this.setCodeValue(this.form.aaMuscleRelaxers, 'HospitalMuscleRelaxers')
-      }
-      if (this.form.aaStitches !== '') {
-        this.setCodeValue(this.form.aaStitches, 'HospitalStitches')
-      }
-      if (this.form.aaMedEquip.length > 0) {
-        this.setCodeValue(this.form.aaMedEquip.join(), 'HospitalMedicalEquipment')
-      }
-      if (this.form.aaXray !== '') {
-        this.setCodeValue(this.form.aaXray, 'HospitalXrays')
-      }
-      if (this.form.aaMRI !== '') {
-        this.setCodeValue(this.form.aaMRI, 'HospitalMRI')
-      }
-      if (this.form.aaOtherImages !== '') {
-        this.setCodeValue(this.form.aaOtherImages, 'HospitalImaging')
+      if (this.form.aaHospital === 'Yes') {
+        if (this.form.aaHospitalName !== '') {
+          this.setCodeValue(this.form.aaHospital, 'HospitalName')
+        }
+        if (this.form.aaHospitalTranspo !== '') {
+          this.setCodeValue(this.form.aaHospitalTranspo, 'HospitalTransport')
+        }
+        if (this.form.aaHospitalized !== '') {
+          this.setCodeValue(this.form.aaHospitalized, 'HospitalOvernight')
+        }
+        if (this.form.aaPainMed !== '') {
+          this.setCodeValue(this.form.aaPainMed, 'HospitalPainMeds')
+        }
+        if (this.form.aaMuscleRelaxers !== '') {
+          this.setCodeValue(this.form.aaMuscleRelaxers, 'HospitalMuscleRelaxers')
+        }
+        if (this.form.aaStitches !== '') {
+          this.setCodeValue(this.form.aaStitches, 'HospitalStitches')
+        }
+        if (this.form.aaMedEquip.length > 0) {
+          this.setCodeValue(this.form.aaMedEquip.join(), 'HospitalMedicalEquipment')
+        }
+        if (this.form.aaXray !== '') {
+          this.setCodeValue(this.form.aaXray, 'HospitalXrays')
+        }
+        if (this.form.aaMRI !== '') {
+          this.setCodeValue(this.form.aaMRI, 'HospitalMRI')
+        }
+        if (this.form.aaOtherImages !== '') {
+          this.setCodeValue(this.form.aaOtherImages, 'HospitalImaging')
+        }
       }
       if (this.form.aaImpactLocations.length > 0) {
         var me = this
         this.setCodeValue(this.form.aaImpactLocations.join(), 'BodyPartsImpacted')
         this.form.aaImpactLocations.forEach(function (item) {
           var aaImpactLoc = 'aaImpactLocCar' + item
-          me.setCodeValue(me.form[aaImpactLoc].join(), 'Impact_' + item)
+          me.setCodeValue(me.form[aaImpactLoc].join(), 'Impact_' + item.replace(/ /g, '_'))
         })
       }
       if (this.accidentInfo.length > 0) {
@@ -919,6 +931,7 @@ export default {
         values: this.accidentInfo
       }
       await api.task.request.updateCaseHistoryAaValues(param)
+      await this.setTaskCurrentTaskType('NphComplaintLocation')
     }
   },
   async mounted () {
