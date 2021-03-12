@@ -60,7 +60,7 @@ export default {
       // For testing at the moment
       // this.module = 'PatientInfo'
       // this.module = 'NphAutoAccident'
-      this.setTaskCurrentTaskType('PatientInfo')
+      this.setTaskCurrentTaskType('NphPersonalHistory')
       this.initialize = true
       return
     }

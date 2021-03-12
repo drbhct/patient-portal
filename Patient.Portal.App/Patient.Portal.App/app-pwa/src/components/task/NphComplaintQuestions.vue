@@ -8,17 +8,23 @@
     >
       <div class="col">
         <section class="card">
-          <header class="card-header"><h2 class="card-title">
-            Problem {{ currentProblemIndex + 1 }} of {{ getTaskCurrentCaseHistoryProblems.length }}</h2></header>
+          <header class="card-header">
+            <h2 class="card-title">
+              Problem {{ currentProblemIndex + 1 }} of
+              {{ getTaskCurrentCaseHistoryProblems.length }}
+            </h2>
+          </header>
           <div class="card-body" id="cardBody">
             <div class="form-vertical">
               <div class="row">
                 <div class="col-lg-12">
-                  <h5>Field(s) with <strong style="color: red">*</strong> are required.
+                  <h5>
+                    Field(s) with <strong style="color: red">*</strong> are
+                    required.
                   </h5>
                 </div>
               </div>
-              <div class="form-group row" >
+              <div class="form-group row">
                 <label
                   class="col-lg-4 control-label text-lg-right pt-2"
                   id="refDescribe"
@@ -86,8 +92,10 @@
                   <span class="help-block">Leave field empty if not sure</span>
                 </div>
               </div>
-              <div class="form-group row" >
-                <label class="col-lg-4 control-label text-lg-right pt-2" id="refExpPain"
+              <div class="form-group row">
+                <label
+                  class="col-lg-4 control-label text-lg-right pt-2"
+                  id="refExpPain"
                   ><strong style="color: red; margin-right: 5px">*</strong>How
                   often do you experience this
                   <strong style="color: red">{{
@@ -123,8 +131,7 @@
               <div class="row">
                 <div class="col-lg-12 text-center">
                   <h4>
-                    If your pain radiates or travels, please indicate
-                  where
+                    If your pain radiates or travels, please indicate where
                   </h4>
                 </div>
               </div>
@@ -157,7 +164,9 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2" id="refExpPainImprovement"
+                <label
+                  class="col-lg-4 control-label text-lg-right pt-2"
+                  id="refExpPainImprovement"
                   ><strong style="color: red; margin-right: 5px">*</strong>Over
                   the past/weeks/months this complaint is</label
                 >
@@ -224,10 +233,12 @@
               <div class="row">
                 <div class="col-lg-12 text-center">
                   <h4>
-                    Regarding your <strong style="color: red">{{
-                    currentProblem.region
-                  }}</strong>. Please answer the following questions
-                    about how your pain is affecting your daily activities:
+                    Regarding your
+                    <strong style="color: red">{{
+                      currentProblem.region
+                    }}</strong
+                    >. Please answer the following questions about how your pain
+                    is affecting your daily activities:
                   </h4>
                 </div>
               </div>
@@ -236,9 +247,13 @@
                 v-for="oatQ in form.oatQuestions"
                 :key="oatQ.id"
               >
-                <label class="col-lg-4 control-label text-lg-right pt-2"><strong style="color: red; margin-right: 5px" :id="oatQ.description">*</strong>{{
-                  oatQ.description
-                }}</label>
+                <label class="col-lg-4 control-label text-lg-right pt-2"
+                  ><strong
+                    style="color: red; margin-right: 5px"
+                    :id="oatQ.description"
+                    >*</strong
+                  >{{ oatQ.description }}</label
+                >
                 <div class="col-lg-6">
                   <multiselect
                     v-model="oatQ.selectedAnswer"
@@ -253,10 +268,15 @@
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
-                <button class="btn btn-default mr-2" @click="previous" v-if="getTaskPreviousTaskType" type="reset">Back</button>
-                <button class="btn btn-primary mr-2" type="submit">
-                  Next
+                <button
+                  class="btn btn-default mr-2"
+                  @click="previous"
+                  v-if="getTaskPreviousTaskType"
+                  type="reset"
+                >
+                  Back
                 </button>
+                <button class="btn btn-primary mr-2" type="submit">Next</button>
               </div>
             </div>
           </footer>
@@ -674,7 +694,8 @@ export default {
       if (this.form.painQuality.length === 0) {
         return {
           result: false,
-          msg: 'Please answer how would you best describe the sensation of your pain?',
+          msg:
+            'Please answer how would you best describe the sensation of your pain?',
           reference: 'refPainSensation'
         }
       }
@@ -686,7 +707,9 @@ export default {
         }
       }
 
-      const noAnswerOat = this.form.oatQuestions.find(el => !el.selectedAnswer)
+      const noAnswerOat = this.form.oatQuestions.find(
+        (el) => !el.selectedAnswer
+      )
       if (noAnswerOat) {
         return {
           result: false,
@@ -841,7 +864,7 @@ export default {
 
       // oats payload
       const oatQuestionAndAnswer = []
-      this.form.oatQuestions.forEach(el => {
+      this.form.oatQuestions.forEach((el) => {
         oatQuestionAndAnswer.push({
           oatId: el.oatID,
           Question: el.description,
@@ -865,12 +888,14 @@ export default {
       })
 
       const oatsInsert = new Promise((resolve, reject) => {
-        this.apiSubmitForm.oatQuestionAndAnswerPayload.forEach(async (el, index, arr) => {
-          await api.task.request.updateCaseHistoryProblemOats(el)
-          if (index === arr.length - 1) {
-            resolve()
+        this.apiSubmitForm.oatQuestionAndAnswerPayload.forEach(
+          async (el, index, arr) => {
+            await api.task.request.updateCaseHistoryProblemOats(el)
+            if (index === arr.length - 1) {
+              resolve()
+            }
           }
-        })
+        )
       })
 
       Promise.all([promMultipleInsert, oatsInsert])
@@ -1061,7 +1086,9 @@ export default {
       })
 
       // note: Cross cutting concerns for hand region selected
-      const isDifficulty = respAnswerList.data.find(el => el.description === 'DIFFICULTY')
+      const isDifficulty = respAnswerList.data.find(
+        (el) => el.description === 'DIFFICULTY'
+      )
       if (isDifficulty) {
         this.oatAnswerList = [
           { description: 'Extreme difficulty' },
