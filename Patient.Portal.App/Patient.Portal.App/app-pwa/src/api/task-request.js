@@ -275,6 +275,42 @@ export default {
     */
     async updateCaseHistoryProblemOats (payload) {
       return await securedJsonRequest.post('/patientportal/UpdateCaseHistoryProblemOats', payload)
+    },
+    /**
+     *
+    * @param {Number} facilityId facilityid
+    */
+    async getEthnicityList (payload) {
+      return await securedJsonRequest.get('/patientportal/getEthnicityList/' + payload)
+    },
+    /**
+     *
+    * @param {Number} facilityId facilityid
+    */
+    async getRaceList (payload) {
+      return await securedJsonRequest.get('/patientportal/GetRaceList/' + payload)
+    },
+    /**
+     *
+    * @param {Number} facilityId facilityid
+    */
+    async getLanguageList (payload) {
+      return await securedJsonRequest.get('/patientportal/GetLanguageList/' + payload)
+    },
+    /**
+     *
+    * @param {Object} Payload request object
+    * @param {Number} payload.facilityid
+    * @param {Number} payload.caseHistoryId
+    * @param {String} payload.ethnicity
+    * @param {String} payload.races
+    * @param {String} payload.languages
+    * @param {String} payload.declineEthnicity
+    * @param {String} payload.declineRace
+    * @param {String} payload.declineLanguage
+    */
+    async updateCaseHistoryDemographic (payload) {
+      return await securedJsonRequest.post('/patientportal/UpdateCaseHistoryDemographic', payload)
     }
   }
 }
