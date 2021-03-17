@@ -300,7 +300,7 @@ export default {
     prev () {
 
     },
-    submit () {
+    async submit () {
       // info payloads
       const infoPayload = {
         facilityId: this.currentPatientAssociated.facilityID,
@@ -342,7 +342,7 @@ export default {
       }
       this.form.medicineInfoQuestion.forEach(el => {
         medicineInfoPayload.questions.push({
-          question: el.code,
+          description: el.code,
           answer: el.answer === 'Yes' ? `${el.answer},${el.year}` : el.answer
         })
       })
@@ -354,7 +354,7 @@ export default {
       }
       this.form.medicineInfo2Question.forEach(el => {
         medicineInfo2Payload.questions.push({
-          question: el.code,
+          description: el.code,
           answer: el.answer
         })
       })
@@ -374,6 +374,20 @@ export default {
         declineLanguage: this.form.language.description === 'Decline to Answer'
       }
       console.log('demographicsPayload>', demographicsPayload)
+
+      // info questions
+      await api.task.request.updateCaseHistoryQuestions(infoPayload)
+      // condition questions
+      await api.task.request.clearCaseHistoryConditions({
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryId: this.getTaskCurrentCaseHistoryId
+      })
+      await api.task.request.updateCaseHistoryConditions(caseConditionPayload)
+      // medicine questions
+      await api.task.request.updateCaseHistoryQuestions(medicineInfoPayload)
+      await api.task.request.updateCaseHistoryQuestions(medicineInfo2Payload)
+      // demographics questions
+      await api.task.request.updateCaseHistoryDemographic(demographicsPayload)
     }
   },
   async mounted () {

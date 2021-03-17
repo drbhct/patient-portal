@@ -910,7 +910,10 @@ export default {
         await this.initializeData()
         const el = document.getElementById('cardBody')
         el.scrollIntoView({ behavior: 'smooth' })
+        return
       }
+
+      this.setTaskCurrentTaskType('NphPersonalHistory')
     },
     async previous () {
       if (this.currentProblemIndex === 0) {

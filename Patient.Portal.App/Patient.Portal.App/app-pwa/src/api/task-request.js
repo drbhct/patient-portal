@@ -163,7 +163,7 @@ export default {
     * @param {Object} Payload request object for updating case history problem
     * @param {String} payload.facilityId
     * @param {String} payload.caseHistoryId
-    * @param {String} payload.conditions
+    * @param {Array.<{ description: String, present: Boolean, notPresent: Boolean, past: Boolean }} conditions
     */
     async updateCaseHistoryConditions (payload) {
       return await securedJsonRequest.post('/patientportal/updatecasehistoryconditions', payload)
@@ -172,7 +172,7 @@ export default {
      * Method to clear case history conditions
     * @param {Object} Payload request object for clearing case history problem
     * @param {String} payload.facilityId
-    * @param {String} payload.id
+    * @param {String} payload.caseHistoryId
     */
     async clearCaseHistoryConditions (payload) {
       return await securedJsonRequest.post('/patientportal/clearcasehistoryconditions', payload)
@@ -311,6 +311,16 @@ export default {
     */
     async updateCaseHistoryDemographic (payload) {
       return await securedJsonRequest.post('/patientportal/UpdateCaseHistoryDemographic', payload)
+    },
+    /**
+     *
+    * @param {Object} Payload request object
+    * @param {Number} payload.facilityid
+    * @param {Number} payload.caseHistoryId
+    * @param {Array.<{ description: String, answer: String }} questions
+    */
+    async updateCaseHistoryQuestions (payload) {
+      return await securedJsonRequest.post('/patientportal/UpdateCaseHistoryQuestions', payload)
     }
   }
 }
