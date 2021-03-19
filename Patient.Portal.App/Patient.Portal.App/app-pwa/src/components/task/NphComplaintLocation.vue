@@ -10,7 +10,7 @@
             <h2 class="card-title"></h2>
           </header>
           <div class="card-body">
-            <div class="form-horizontal">
+            <div class="form-horizontal" v-if="!isLoading">
               <div class="form-group row">
                 <label class="col-lg-3 control-label text-lg-right pt-2"
                   >Please select up to 4 regions that pertain to your
@@ -81,15 +81,19 @@
                 </div>
               </div>
             </div>
+            <div v-if="isLoading" >
+              <div class="col-12">
+                <content-placeholders :rounded="true" :centered="true">
+                  <content-placeholders-text :lines="5" />
+                </content-placeholders>
+              </div>
+            </div>
           </div>
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
                 <button type="reset" class="btn btn-default mr-2" @click="previous" v-if="getTaskPreviousTaskType">Back</button>
-                <button class="btn btn-primary mr-2" type="submit">
-                  Next
-                </button>
-
+                <btn-saving :is-saving="isSaving"/>
               </div>
             </div>
           </footer>
@@ -104,12 +108,16 @@ import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import api from '../../api/http-common.js'
 import { mapGetters, mapActions } from 'vuex'
+import btnSaving from '../button-saving.vue'
 export default {
   components: {
-    Multiselect
+    Multiselect,
+    btnSaving
   },
   data () {
     return {
+      isLoading: true,
+      isSaving: false,
       form: {
         regions: [],
         complaint1: '',
@@ -117,7 +125,8 @@ export default {
         complaint3: '',
         complaint4: ''
       },
-      problems: []
+      problems: [],
+      forDelete: null
     }
   },
   watch: {
@@ -270,6 +279,16 @@ export default {
       }
     },
     async next () {
+      this.isSaving = true
+      if (this.forDelete.length > 0) {
+        this.forDelete.forEach(async el => {
+          await api.task.request.deleteCaseHistoryProblem({
+            facilityId: this.currentPatientAssociated.facilityID,
+            caseHistoryProblemId: el.id
+          })
+        })
+      }
+
       const promMultipleInsert = new Promise((resolve, reject) => {
         this.problems.forEach(async (el, index, arr) => {
           await api.task.request.insertCaseHistoryProblem({
@@ -295,6 +314,7 @@ export default {
       const oats = await api.task.request.getCaseHistoryOats({ facilityId: this.currentPatientAssociated.facilityID, caseHistoryId: this.getTaskCurrentCaseHistoryId })
       await this.setTaskCurrentCaseHistoryOats(oats.data)
       await this.setTaskCurrentCaseHistoryProblems(problems.data)
+      this.isSaving = false
       await this.setTaskCurrentTaskType('NphComplaintQuestions')
     },
     async previous () {
@@ -313,9 +333,9 @@ export default {
       facilityId: this.currentPatientAssociated.facilityID,
       caseHistoryId: this.getTaskCurrentCaseHistoryId
     })
-    const problems = result.data
-    if (problems.length > 0) {
-      problems.forEach(async el => {
+    this.forDelete = result.data
+    if (this.forDelete.length > 0) {
+      this.forDelete.forEach(async el => {
         this.form.regions.push(el.region)
         switch (el.ordinal) {
           case 1:
@@ -331,12 +351,9 @@ export default {
             this.form.complaint4 = el.region
             break
         }
-        await api.task.request.deleteCaseHistoryProblem({
-          facilityId: this.currentPatientAssociated.facilityID,
-          caseHistoryProblemId: el.id
-        })
       })
     }
+    this.isLoading = false
   }
 }
 </script>

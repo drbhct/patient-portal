@@ -5,7 +5,7 @@
         <section class="card">
           <header class="card-header"></header>
           <div class="card-body">
-            <div class="form-horizontal">
+            <div class="form-horizontal" v-if="!isLoading">
               <div class="row">
                 <div class="col-lg-12 text-center">
                   <h4>Please answer these questions about yourself</h4>
@@ -151,6 +151,13 @@
               </div>
 
             </div>
+            <div v-else>
+              <div class="col-12">
+                <content-placeholders :rounded="true" :centered="true">
+                  <content-placeholders-text :lines="30" />
+                </content-placeholders>
+              </div>
+            </div>
           </div>
           <footer class="card-footer"></footer>
         </section>
@@ -158,9 +165,7 @@
             <div class="row justify-content-end">
               <div class="col-sm-9">
                 <button type="reset" class="btn btn-default mr-2" @click="prev" v-if="getTaskPreviousTaskType">Back</button>
-                <button class="btn btn-primary mr-2" type="submit">
-                  Next
-                </button>
+                <btn-saving :is-saving="isSaving"/>
               </div>
             </div>
           </footer>
@@ -175,12 +180,16 @@ import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import api from '../../api/http-common.js'
 import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
+import btnSaving from '../button-saving.vue'
 export default {
   components: {
-    Multiselect
+    Multiselect,
+    btnSaving
   },
   data () {
     return {
+      isLoading: false,
+      isSaving: false,
       form: {
         infoQuestion: [],
         conditionQandA: [
@@ -309,6 +318,7 @@ export default {
       this.setTaskCurrentTaskType(prevPage)
     },
     async submit () {
+      this.isSaving = true
       // info payloads
       const infoPayload = {
         facilityId: this.currentPatientAssociated.facilityID,
@@ -322,7 +332,7 @@ export default {
         })
       })
 
-      console.log('infoPayload>', infoPayload)
+      // console.log('infoPayload>', infoPayload)
 
       // case condition payloads
       const caseConditionPayload = {
@@ -340,7 +350,7 @@ export default {
           notPresent: false
         })
       })
-      console.log('caseConditionPayload>', caseConditionPayload)
+      // console.log('caseConditionPayload>', caseConditionPayload)
 
       // medicine info payloads
       const medicineInfoPayload = {
@@ -367,8 +377,8 @@ export default {
         })
       })
 
-      console.log('medicineInfoPayload>', medicineInfoPayload)
-      console.log('medicineInfo2Payload>', medicineInfo2Payload)
+      // console.log('medicineInfoPayload>', medicineInfoPayload)
+      // console.log('medicineInfo2Payload>', medicineInfo2Payload)
 
       // Demographics payload
       const demographicsPayload = {
@@ -381,7 +391,7 @@ export default {
         declineRace: this.form.race.description === 'Decline to Answer',
         declineLanguage: this.form.language.description === 'Decline to Answer'
       }
-      console.log('demographicsPayload>', demographicsPayload)
+      // console.log('demographicsPayload>', demographicsPayload)
 
       // info questions
       await api.task.request.updateCaseHistoryQuestions(infoPayload)
@@ -397,10 +407,12 @@ export default {
       // demographics questions
       await api.task.request.updateCaseHistoryDemographic(demographicsPayload)
 
+      this.isSaving = false
       this.setTaskCurrentTaskType('NphFamilyHistory')
     }
   },
   async mounted () {
+    this.isLoading = true
     const patientInfo = await api.task.request.getPatient({
       facilityId: this.currentPatientAssociated.facilityID,
       patientId: this.currentPatientAssociated.patientID
@@ -492,7 +504,7 @@ export default {
         if (ansArr.length > 1) {
           medInfo.year = ansArr[1]
         }
-        console.log('ansArr[0]>', ansArr[0])
+        // console.log('ansArr[0]>', ansArr[0])
         medInfo.answer = ansArr[0]
       }
 
@@ -507,7 +519,7 @@ export default {
       caseHistoryId: this.getTaskCurrentCaseHistoryId
     })
     demographicsData = demographicsData.data
-    console.log('demographicsData>', demographicsData)
+    // console.log('demographicsData>', demographicsData)
 
     if (demographicsData.languages) {
       const findLang = this.languageList.find(el => el.code === demographicsData.languages)
@@ -538,6 +550,8 @@ export default {
         }
       }
     })
+
+    this.isLoading = false
   }
 }
 </script>

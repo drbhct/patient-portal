@@ -8,7 +8,7 @@
         <section class="card">
           <header class="card"></header>
           <div class="card-body">
-            <div class="form-horizontal">
+            <div class="form-horizontal" v-if="!isLoading">
 
               <div class="form-group row" v-for="q in form.questions" :key="q.code">
                 <label
@@ -30,6 +30,13 @@
               </div>
 
             </div>
+            <div v-else>
+              <div class="col-12">
+                <content-placeholders :rounded="true" :centered="true">
+                  <content-placeholders-text :lines="5" />
+                </content-placeholders>
+              </div>
+            </div>
           </div>
           <footer class="card-footer">
             <div class="row justify-content-end">
@@ -42,7 +49,7 @@
                 >
                   Back
                 </button>
-                <button class="btn btn-primary mr-2" type="submit">Next</button>
+                <btn-saving :is-saving="isSaving"/>
               </div>
             </div>
           </footer>
@@ -57,12 +64,16 @@ import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import api from '../../api/http-common.js'
 import { mapGetters, mapActions } from 'vuex'
+import BtnSaving from '../button-saving.vue'
 export default {
   components: {
-    Multiselect
+    Multiselect,
+    BtnSaving
   },
   data () {
     return {
+      isSaving: false,
+      isLoading: false,
       form: {
         questions: [
           { code: 'SeenChiropractor', question: 'Have you ever seen a chiropractor before?', answer: '' },
@@ -93,6 +104,7 @@ export default {
   methods: {
     ...mapActions(['setTaskCurrentTaskType']),
     async submit () {
+      this.isSaving = true
       const payload = {
         facilityId: this.currentPatientAssociated.facilityID,
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
@@ -104,8 +116,9 @@ export default {
           answer: c.answer
         })
       })
-      console.log('payload>', payload)
+      // console.log('payload>', payload)
       await api.task.request.updateCaseHistoryQuestions(payload)
+      this.isSaving = false
     },
     prev () {
       const currentIndex = this.getTaskPreviousTaskType.findIndex(c => c === this.getTaskCurrentTaskType)
@@ -119,6 +132,7 @@ export default {
     }
   },
   async mounted () {
+    this.isLoading = true
     const caseHistoryQuestions = await api.task.request.getCaseHistoryQuestions({
       facilityId: this.currentPatientAssociated.facilityID,
       caseHistoryId: this.getTaskCurrentCaseHistoryId
@@ -133,6 +147,8 @@ export default {
         update.answer = c.answer
       }
     })
+
+    this.isLoading = false
   }
 }
 </script>

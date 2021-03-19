@@ -8,7 +8,7 @@
         <section class="card">
           <header class="card-header"></header>
           <div class="card-body">
-            <div class="form-horizontal">
+            <div class="form-horizontal" v-if="!isLoading">
               <div class="row">
                 <div class="col-lg-12 text-center">
                   <h4>Please answer these questions about yourself</h4>
@@ -53,6 +53,13 @@
                 </div>
               </div>
             </div>
+            <div v-else>
+              <div class="col-12">
+                <content-placeholders :rounded="true" :centered="true">
+                  <content-placeholders-text :lines="5" />
+                </content-placeholders>
+              </div>
+            </div>
           </div>
           <footer class="card-footer"></footer>
         </section>
@@ -67,7 +74,7 @@
               >
                 Back
               </button>
-              <button class="btn btn-primary mr-2" type="submit">Next</button>
+              <btn-saving :is-saving="isSaving"/>
             </div>
           </div>
         </footer>
@@ -81,12 +88,16 @@ import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import api from '../../api/http-common.js'
 import { mapGetters, mapActions } from 'vuex'
+import BtnSaving from '../button-saving.vue'
 export default {
   components: {
-    Multiselect
+    Multiselect,
+    BtnSaving
   },
   data () {
     return {
+      isLoading: false,
+      isSaving: false,
       form: {
         condition: [],
         familyCondition: []
@@ -183,6 +194,7 @@ export default {
       this.setTaskCurrentTaskType(prevPage)
     },
     async submit () {
+      this.isSaving = true
       // alert('payload!')
       const payload = []
       this.form.familyCondition.forEach((el, index) => {
@@ -223,11 +235,12 @@ export default {
       })
       await promMultipleDelete
       await promMultipleInsert
-
+      this.isSaving = false
       this.setTaskCurrentTaskType('NphThankyou')
     }
   },
   async mounted () {
+    this.isLoading = true
     const familyHistoryData = await api.task.request.getCaseHistoryFamilyHealthHistory(
       {
         facilityId: this.currentPatientAssociated.facilityID,
@@ -253,6 +266,8 @@ export default {
         stat: stat
       })
     })
+
+    this.isLoading = false
   }
 }
 </script>

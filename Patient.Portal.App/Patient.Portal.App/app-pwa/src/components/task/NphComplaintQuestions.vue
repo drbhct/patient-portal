@@ -15,7 +15,7 @@
             </h2>
           </header>
           <div class="card-body" id="cardBody" v-if="form">
-            <div class="form-vertical">
+            <div class="form-vertical" v-if="!isLoading">
               <div class="row">
                 <div class="col-lg-12">
                   <h5>
@@ -264,6 +264,13 @@
                 </div>
               </div>
             </div>
+            <div v-else>
+              <div class="col-12">
+                <content-placeholders :rounded="true" :centered="true">
+                  <content-placeholders-text :lines="30" />
+                </content-placeholders>
+              </div>
+            </div>
           </div>
           <footer class="card-footer">
             <div class="row justify-content-end">
@@ -276,7 +283,7 @@
                 >
                   Back
                 </button>
-                <button class="btn btn-primary mr-2" type="submit">Next</button>
+                <btn-saving :is-saving="isSaving"/>
               </div>
             </div>
           </footer>
@@ -295,14 +302,18 @@ import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
+import BtnSaving from '../button-saving.vue'
 export default {
   components: {
     Multiselect,
     Datepicker,
-    VueSlider
+    VueSlider,
+    BtnSaving
   },
   data () {
     return {
+      isSaving: false,
+      isLoading: false,
       form: {
         describe: [],
         describeOther: '',
@@ -329,7 +340,8 @@ export default {
         caseProblems: [],
         oatQuestionAndAnswerPayload: []
       },
-      currentOat: null
+      currentOat: null,
+      formHistory: []
     }
   },
   computed: {
@@ -727,6 +739,8 @@ export default {
       }
     },
     async submit () {
+      this.isSaving = true
+
       // Validation
       const isValid = this.validateForm()
       if (!isValid.result) {
@@ -744,7 +758,7 @@ export default {
           const el = document.getElementById(isValid.reference)
           el.scrollIntoView({ behavior: 'smooth', block: 'center' })
         }, 3000)
-
+        this.isSaving = false
         return
       }
 
@@ -757,7 +771,6 @@ export default {
           value: el
         })
       })
-      this.form.describe = []
 
       // Onset Payload
       let onSetVal = 'Not Sure'
@@ -902,10 +915,20 @@ export default {
 
       Promise.all([promMultipleInsert, oatsInsert])
 
+      this.isSaving = false
+      const isExist = this.formHistory.find(c => c.complaint === this.complaint)
+      if (!isExist) {
+        this.formHistory.push({
+          complaint: this.complaint,
+          form: this.form
+        })
+      }
+
       if (
         this.currentProblemIndex !==
         this.getTaskCurrentCaseHistoryProblems.length - 1
       ) {
+        this.form.describe = []
         this.currentProblemIndex += 1
         this.complaint = this.currentProblem.region
 
@@ -915,7 +938,8 @@ export default {
         return
       }
 
-      this.setTaskCurrentCaseHistoryComplaintFormVal(this.form)
+      this.setTaskCurrentCaseHistoryComplaintFormVal(this.formHistory)
+      // this.form.describe = []
       this.setTaskCurrentTaskType('NphPersonalHistory')
     },
     async previous () {
@@ -933,11 +957,16 @@ export default {
         this.complaint = this.currentProblem.region
 
         await this.initializeData()
+        const oldForm = this.formHistory.find(c => c.complaint === this.complaint)
+        if (oldForm) {
+          this.form = oldForm
+        }
         const el = document.getElementById('cardBody')
         el.scrollIntoView({ behavior: 'smooth' })
       }
     },
     async initializeData () {
+      this.isLoading = true
       // Force clear form fields
       this.form = {
         describe: [],
@@ -1127,6 +1156,8 @@ export default {
         el.selectedAnswer = ''
       })
       this.form.oatQuestions = oatQuestions
+
+      this.isLoading = false
     }
   },
   async mounted () {
@@ -1135,7 +1166,24 @@ export default {
   async beforeMount () {
     await this.initializeData()
     if (this.getTaskCurrentCaseHistoryFormValues) {
-      this.form = Object.assign({}, this.getTaskCurrentCaseHistoryFormValues)
+      // this.form = Object.assign({}, this.getTaskCurrentCaseHistoryFormValues)
+      // this.form = JSON.parse(JSON.stringify(this.getTaskCurrentCaseHistoryFormValues))
+      // this.form = {
+      //   describe: this.getTaskCurrentCaseHistoryFormValues.describe,
+      //   describeOther: this.getTaskCurrentCaseHistoryFormValues.describeOther,
+      //   describeSelectLimit: this.getTaskCurrentCaseHistoryFormValues.describeSelectLimit,
+      //   dateOccured: this.getTaskCurrentCaseHistoryFormValues.dateOccured,
+      //   expPain: this.getTaskCurrentCaseHistoryFormValues.expPain,
+      //   paintIntensity: this.getTaskCurrentCaseHistoryFormValues.paintIntensity,
+      //   radiatesQuestionsAndAnswer: this.getTaskCurrentCaseHistoryFormValues.radiatesQuestionsAndAnswer,
+      //   painQuality: this.getTaskCurrentCaseHistoryFormValues.painQuality,
+      //   painQualityImprovement: this.getTaskCurrentCaseHistoryFormValues.painQualityImprovement,
+      //   painFactor: this.getTaskCurrentCaseHistoryFormValues.painFactor,
+      //   painFactorImprovement: this.getTaskCurrentCaseHistoryFormValues.painFactorImprovement,
+      //   painInterference: this.getTaskCurrentCaseHistoryFormValues.painInterference,
+      //   painInterferenceHelp: this.getTaskCurrentCaseHistoryFormValues.painInterferenceHelp,
+      //   oatQuestions: this.getTaskCurrentCaseHistoryFormValues.oatQuestions
+      // }
     }
   }
 }
