@@ -203,7 +203,8 @@ export default {
     ...mapGetters([
       'getProfilePatientAssociated',
       'getTaskCurrentCaseHistoryId',
-      'getTaskPreviousTaskType'
+      'getTaskPreviousTaskType',
+      'getTaskCurrentTaskType'
     ]),
     currentPatientAssociated () {
       if (this.getProfilePatientAssociated.length === 0) {
@@ -297,7 +298,14 @@ export default {
       await this.setTaskCurrentTaskType('NphComplaintQuestions')
     },
     async previous () {
-      this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
+      const currentIndex = this.getTaskPreviousTaskType.findIndex(c => c === this.getTaskCurrentTaskType)
+      let prevPage = ''
+      if (currentIndex === -1) {
+        prevPage = this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
+      } else {
+        prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
+      }
+      this.setTaskCurrentTaskType(prevPage)
     }
   },
   async mounted () {

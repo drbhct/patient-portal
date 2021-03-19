@@ -22,7 +22,8 @@ export default {
     NphAutoAccident: () => import('../components/task/NphAutoAccident.vue'),
     NphQuestion: () => import('../components/task/NphQuestion.vue'),
     NphPersonalHistory: () => import('../components/task/NphPersonalHistory.vue'),
-    NphFamilyHistory: () => import('../components/task/NphFamilyHistory.vue')
+    NphFamilyHistory: () => import('../components/task/NphFamilyHistory.vue'),
+    NphThankyou: () => import('../components/task/NphThankyou.vue')
   },
   data () {
     return {
@@ -61,7 +62,7 @@ export default {
       // For testing at the moment
       // this.module = 'PatientInfo'
       // this.module = 'NphAutoAccident'
-      this.setTaskCurrentTaskType('NphFamilyHistory')
+      this.setTaskCurrentTaskType('PatientInfo')
       this.initialize = true
       return
     }

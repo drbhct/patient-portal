@@ -232,7 +232,8 @@ export default {
     ...mapGetters([
       'getProfilePatientAssociated',
       'getTaskCurrentCaseHistoryId',
-      'getTaskPreviousTaskType'
+      'getTaskPreviousTaskType',
+      'getTaskCurrentTaskType'
     ]),
     currentPatientAssociated () {
       if (this.getProfilePatientAssociated.length === 0) {
@@ -298,7 +299,14 @@ export default {
   methods: {
     ...mapActions(['setTaskCurrentTaskType']),
     prev () {
-
+      const currentIndex = this.getTaskPreviousTaskType.findIndex(c => c === this.getTaskCurrentTaskType)
+      let prevPage = ''
+      if (currentIndex === -1) {
+        prevPage = this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
+      } else {
+        prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
+      }
+      this.setTaskCurrentTaskType(prevPage)
     },
     async submit () {
       // info payloads
@@ -388,6 +396,8 @@ export default {
       await api.task.request.updateCaseHistoryQuestions(medicineInfo2Payload)
       // demographics questions
       await api.task.request.updateCaseHistoryDemographic(demographicsPayload)
+
+      this.setTaskCurrentTaskType('NphFamilyHistory')
     }
   },
   async mounted () {
@@ -464,6 +474,70 @@ export default {
       display: true
     })
     this.raceList = raceList
+
+    const caseHistoryQuestions = await api.task.request.getCaseHistoryQuestions({
+      facilityId: this.currentPatientAssociated.facilityID,
+      caseHistoryId: this.getTaskCurrentCaseHistoryId
+    })
+    const hasAnswerQuestions = caseHistoryQuestions.data.filter(el => el.answer !== '')
+    hasAnswerQuestions.forEach(el => {
+      const update = this.form.infoQuestion.find(infoEl => infoEl.code === el.description)
+      if (update) {
+        update.answer = el.answer
+      }
+
+      const medInfo = this.form.medicineInfoQuestion.find(medInfoEl => medInfoEl.code === el.description)
+      if (medInfo) {
+        const ansArr = el.answer.split(',')
+        if (ansArr.length > 1) {
+          medInfo.year = ansArr[1]
+        }
+        console.log('ansArr[0]>', ansArr[0])
+        medInfo.answer = ansArr[0]
+      }
+
+      const medInfo2 = this.form.medicineInfo2Question.find(medInfoEl => medInfoEl.code === el.description)
+      if (medInfo2) {
+        medInfo2.answer = el.answer
+      }
+    })
+
+    let demographicsData = await api.task.request.getCaseHistoryDemographic({
+      facilityId: this.currentPatientAssociated.facilityID,
+      caseHistoryId: this.getTaskCurrentCaseHistoryId
+    })
+    demographicsData = demographicsData.data
+    console.log('demographicsData>', demographicsData)
+
+    if (demographicsData.languages) {
+      const findLang = this.languageList.find(el => el.code === demographicsData.languages)
+      this.form.language = findLang
+    }
+    if (demographicsData.ethnicity) {
+      const findEthnicity = this.ethnicilityList.find(el => el.code === demographicsData.ethnicity)
+      this.form.ethnicity = findEthnicity
+    }
+    if (demographicsData.races) {
+      const findRace = this.raceList.find(el => el.code === demographicsData.races)
+      this.form.race = findRace
+    }
+
+    const conditionsData = await api.task.request.getCaseHistoryConditions({
+      facilityId: this.currentPatientAssociated.facilityID,
+      caseHistoryId: this.getTaskCurrentCaseHistoryId
+    })
+
+    conditionsData.data.forEach(el => {
+      const condQandA = this.form.conditionQandA.find(c => c.question === el.description)
+      if (condQandA) {
+        if (el.present) {
+          condQandA.answer.push('Present')
+        }
+        if (el.past) {
+          condQandA.answer.push('Past')
+        }
+      }
+    })
   }
 }
 </script>

@@ -1,16 +1,22 @@
 import * as types from '../mutation-types'
 
 const state = {
-  previousTaskType: '',
+  previousTaskType: [],
   currentTaskType: '',
   currentCaseHistoryId: 0,
   currentCaseHistoryProblems: [],
-  currentCaseHistoryOats: []
+  currentCaseHistoryOats: [],
+  currentCaseHistoryComplaintFormValues: null
 }
 
 const mutations = {
   [types.TASK_CURRENT_TASK_TYPE] (state, payload) {
-    state.previousTaskType = state.currentTaskType
+    if (state.currentTaskType) {
+      const exist = state.previousTaskType.find(c => c === state.currentTaskType)
+      if (!exist) {
+        state.previousTaskType.push(state.currentTaskType)
+      }
+    }
     state.currentTaskType = payload
   },
   [types.TASK_CURRENT_CASE_HISTORY_ID] (state, payload) {
@@ -21,6 +27,9 @@ const mutations = {
   },
   [types.TASK_CURRENT_CASE_HISTORY_OATS] (state, payload) {
     state.currentCaseHistoryOats = payload
+  },
+  [types.TASK_CURRENT_CASE_HISTORY_COMPLAINT_FORM_VAL] (state, payload) {
+    state.currentCaseHistoryComplaintFormValues = payload
   }
 }
 

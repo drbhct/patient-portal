@@ -14,7 +14,7 @@
               {{ getTaskCurrentCaseHistoryProblems.length }}
             </h2>
           </header>
-          <div class="card-body" id="cardBody">
+          <div class="card-body" id="cardBody" v-if="form">
             <div class="form-vertical">
               <div class="row">
                 <div class="col-lg-12">
@@ -338,7 +338,9 @@ export default {
       'getProfilePatientAssociated',
       'getTaskCurrentCaseHistoryOats',
       'getTaskCurrentCaseHistoryId',
-      'getTaskPreviousTaskType'
+      'getTaskPreviousTaskType',
+      'getTaskCurrentCaseHistoryFormValues',
+      'getTaskCurrentTaskType'
     ]),
     buttonText: function () {
       if (
@@ -666,7 +668,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType']),
+    ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryComplaintFormVal']),
     selectChange (selected) {},
     selectRemove (removed) {},
     describeSelectChange (selected) {
@@ -913,11 +915,19 @@ export default {
         return
       }
 
+      this.setTaskCurrentCaseHistoryComplaintFormVal(this.form)
       this.setTaskCurrentTaskType('NphPersonalHistory')
     },
     async previous () {
       if (this.currentProblemIndex === 0) {
-        this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
+        const currentIndex = this.getTaskPreviousTaskType.findIndex(c => c === this.getTaskCurrentTaskType)
+        let prevPage = ''
+        if (currentIndex === -1) {
+          prevPage = this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
+        } else {
+          prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
+        }
+        this.setTaskCurrentTaskType(prevPage)
       } else {
         this.currentProblemIndex -= 1
         this.complaint = this.currentProblem.region
@@ -1120,7 +1130,13 @@ export default {
     }
   },
   async mounted () {
+
+  },
+  async beforeMount () {
     await this.initializeData()
+    if (this.getTaskCurrentCaseHistoryFormValues) {
+      this.form = Object.assign({}, this.getTaskCurrentCaseHistoryFormValues)
+    }
   }
 }
 </script>

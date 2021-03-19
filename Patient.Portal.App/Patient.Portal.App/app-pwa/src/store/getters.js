@@ -21,3 +21,4 @@ export const getTaskPreviousTaskType = state => state.task.previousTaskType
 export const getTaskCurrentCaseHistoryId = state => state.task.currentCaseHistoryId
 export const getTaskCurrentCaseHistoryProblems = state => state.task.currentCaseHistoryProblems
 export const getTaskCurrentCaseHistoryOats = state => state.task.currentCaseHistoryOats
+export const getTaskCurrentCaseHistoryFormValues = state => state.task.currentCaseHistoryComplaintFormValues
