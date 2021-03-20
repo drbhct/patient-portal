@@ -211,7 +211,7 @@ export default {
         })
       })
 
-      console.log('payload >', payload)
+      // console.log('payload >', payload)
 
       const promMultipleInsert = new Promise((resolve, reject) => {
         payload.forEach(async (el, index, arr) => {

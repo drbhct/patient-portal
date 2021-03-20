@@ -118,7 +118,22 @@ export default {
       })
       // console.log('payload>', payload)
       await api.task.request.updateCaseHistoryQuestions(payload)
+      await api.task.request.updateCaseHistoryComplete({
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryId: this.getTaskCurrentCaseHistoryId
+      })
+
+      this.$swal({
+        text: 'New Patient History Complete.',
+        position: 'top-center',
+        title: 'Success',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 2000,
+        icon: 'success'
+      })
       this.isSaving = false
+      await this.$router.push({ path: '/' })
     },
     prev () {
       const currentIndex = this.getTaskPreviousTaskType.findIndex(c => c === this.getTaskCurrentTaskType)
@@ -139,10 +154,10 @@ export default {
     })
 
     const record = caseHistoryQuestions.data.filter(c => c.description === 'SeenChiropractor' || c.description === 'DoctorToKnow')
-    console.log('record', record)
+    // console.log('record', record)
     record.forEach(c => {
       const update = this.form.questions.find(x => x.code === c.description)
-      console.log('update', update)
+      // console.log('update', update)
       if (update) {
         update.answer = c.answer
       }

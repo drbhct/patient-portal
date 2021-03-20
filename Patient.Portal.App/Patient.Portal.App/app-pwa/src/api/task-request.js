@@ -355,6 +355,15 @@ export default {
     */
     async getCaseHistoryDemographic (payload) {
       return await securedJsonRequest.post('/patientportal/GetCaseHistoryDemographic', payload)
+    },
+    /**
+     *
+    * @param {Object} Payload request object
+    * @param {Number} payload.facilityid
+    * @param {Number} payload.caseHistoryId
+    */
+    async updateCaseHistoryComplete (payload) {
+      return await securedJsonRequest.post('/patientportal/UpdateCaseHistoryComplete', payload)
     }
   }
 }

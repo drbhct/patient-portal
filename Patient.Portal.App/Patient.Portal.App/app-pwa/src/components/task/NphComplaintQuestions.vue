@@ -39,7 +39,7 @@
                   <multiselect
                     v-model="form.describe"
                     :options="complaintLocations"
-                    :group-select="true"
+                    :group-select="false"
                     :multiple="true"
                     @select="describeSelectChange"
                     @remove="selectRemove"
@@ -913,7 +913,7 @@ export default {
         )
       })
 
-      Promise.all([promMultipleInsert, oatsInsert])
+      await Promise.all([promMultipleInsert, oatsInsert])
 
       this.isSaving = false
       const isExist = this.formHistory.find(c => c.complaint === this.complaint)
@@ -922,23 +922,29 @@ export default {
           complaint: this.complaint,
           form: this.form
         })
+      } else {
+        isExist.form = this.form
       }
-
+      this.setTaskCurrentCaseHistoryComplaintFormVal(JSON.parse(JSON.stringify(this.formHistory)))
       if (
         this.currentProblemIndex !==
         this.getTaskCurrentCaseHistoryProblems.length - 1
       ) {
-        this.form.describe = []
+        // this.form.describe = []
         this.currentProblemIndex += 1
-        this.complaint = this.currentProblem.region
+        this.complaint = JSON.parse(JSON.stringify(this.currentProblem.region))
 
         await this.initializeData()
+
+        const exist = this.formHistory.find(c => c.complaint === this.complaint)
+        if (exist) {
+          this.form = exist.form
+        }
         const el = document.getElementById('cardBody')
         el.scrollIntoView({ behavior: 'smooth' })
         return
       }
 
-      this.setTaskCurrentCaseHistoryComplaintFormVal(this.formHistory)
       // this.form.describe = []
       this.setTaskCurrentTaskType('NphPersonalHistory')
     },
@@ -954,12 +960,12 @@ export default {
         this.setTaskCurrentTaskType(prevPage)
       } else {
         this.currentProblemIndex -= 1
-        this.complaint = this.currentProblem.region
+        this.complaint = JSON.parse(JSON.stringify(this.currentProblem.region))
 
         await this.initializeData()
         const oldForm = this.formHistory.find(c => c.complaint === this.complaint)
         if (oldForm) {
-          this.form = oldForm
+          this.form = oldForm.form
         }
         const el = document.getElementById('cardBody')
         el.scrollIntoView({ behavior: 'smooth' })
@@ -1166,6 +1172,13 @@ export default {
   async beforeMount () {
     await this.initializeData()
     if (this.getTaskCurrentCaseHistoryFormValues) {
+      // this.formHistory = this.getTaskCurrentCaseHistoryFormValues
+      this.formHistory = JSON.parse(JSON.stringify(this.getTaskCurrentCaseHistoryFormValues))
+      // this.formHistory.text = ''
+      const isExist = this.formHistory.find(c => c.complaint === this.complaint)
+      if (isExist) {
+        this.form = JSON.parse(JSON.stringify(isExist.form))
+      }
       // this.form = Object.assign({}, this.getTaskCurrentCaseHistoryFormValues)
       // this.form = JSON.parse(JSON.stringify(this.getTaskCurrentCaseHistoryFormValues))
       // this.form = {

@@ -441,7 +441,8 @@ export default {
       this.isAutoAccident = val
     },
     async previous () {
-      this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
+      // this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
+      await this.$router.push({ path: '/' })
     },
     async savePatientInfo () {
       this.isSaving = true
