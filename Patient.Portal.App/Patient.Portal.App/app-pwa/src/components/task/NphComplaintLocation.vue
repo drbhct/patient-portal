@@ -279,6 +279,18 @@ export default {
       }
     },
     async next () {
+      if (this.form.regions.length === 0) {
+        this.$swal({
+          text: 'Please select a region that pertains to your visit.',
+          position: 'top-center',
+          title: 'Error',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+        return
+      }
       this.isSaving = true
       if (this.forDelete.length > 0) {
         this.forDelete.forEach(async el => {
