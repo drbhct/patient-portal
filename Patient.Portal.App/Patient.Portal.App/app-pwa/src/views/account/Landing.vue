@@ -151,7 +151,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setIsLoading', 'setProfileAuthInfo']),
+    ...mapActions(['setIsLoading', 'setProfileAuthInfo', 'setProfilePatientAssociated']),
     async login () {
       this.setIsLoading(true)
 

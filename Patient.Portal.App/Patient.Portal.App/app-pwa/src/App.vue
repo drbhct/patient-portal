@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.8' // Nph task
+      return '0.0.9' // Nph task
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {
