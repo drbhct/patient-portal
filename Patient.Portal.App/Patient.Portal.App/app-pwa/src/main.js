@@ -6,7 +6,22 @@ import store from './store'
 import VueCookies from 'vue-cookies'
 import VueSweetalert2 from 'vue-sweetalert2'
 import VueMask from 'v-mask'
+import VueContentPlaceholders from 'vue-content-placeholders'
+import * as Sentry from '@sentry/vue'
+import { Integrations } from '@sentry/tracing'
 
+Sentry.init({
+  Vue,
+  dsn: 'https://903308b1d24a48768a190cd33ddb2b42@o264517.ingest.sentry.io/5689328',
+  integrations: [new Integrations.BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0
+})
+
+Vue.use(VueContentPlaceholders)
 Vue.use(VueSweetalert2)
 Vue.use(VueMask)
 Vue.use(VueCookies)

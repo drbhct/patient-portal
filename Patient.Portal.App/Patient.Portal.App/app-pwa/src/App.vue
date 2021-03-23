@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.7' // #15318 Landing Page - Create Account, added signin options while creating account
+      return '0.0.8' // Nph task
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {

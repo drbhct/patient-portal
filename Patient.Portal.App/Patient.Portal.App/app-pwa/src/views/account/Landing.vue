@@ -184,6 +184,8 @@ export default {
       })
 
       await this.setProfileAuthInfo(response.data)
+      const patientAssosicated = await api.auth.request.getUserPatient(response.data.id)
+      this.setProfilePatientAssociated(patientAssosicated.data)
       this.$router.push('/')
     }
   }

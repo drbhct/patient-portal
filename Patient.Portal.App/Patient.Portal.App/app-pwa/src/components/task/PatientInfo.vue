@@ -10,7 +10,7 @@
             <h2 class="card-title">Please confirm your information</h2>
           </header>
           <div class="card-body">
-            <div class="form-horizontal">
+            <div class="form-horizontal" v-if="!isLoading">
               <div class="form-group row">
                 <label class="col-lg-3 control-label text-lg-right pt-2"
                   >First Name <span style="color: red">*</span></label
@@ -179,7 +179,11 @@
                   >Date of Birth <span style="color: red">*</span></label
                 >
                 <div class="col-lg-6">
-                  <datepicker v-model="form.dob" :input-class="'form-control'" :format="'MMMM dd, yyyy'"></datepicker>
+                  <datepicker
+                    v-model="form.dob"
+                    :input-class="'form-control'"
+                    :format="'MMMM dd, yyyy'"
+                  ></datepicker>
                 </div>
               </div>
 
@@ -281,15 +285,58 @@
                   />
                 </div>
               </div>
+
+              <div class="form-group row">
+                <label class="col-lg-3 control-label text-lg-right pt-2"
+                  >Is today's visit due to an auto accident?</label
+                >
+                <div class="col-lg-6">
+                  <div class="form-check">
+                    <input
+                      type="radio"
+                      class="form-check-input"
+                      name="question"
+                      :checked="isAutoAccident"
+                      @click="toggle(true)"
+                    />
+                    <label class="form-check-label">Yes</label>
+                  </div>
+                  <div class="form-check">
+                    <input
+                      type="radio"
+                      class="form-check-input"
+                      name="question"
+                      :checked="!isAutoAccident"
+                      @click="toggle(false)"
+                    />
+                    <label class="form-check-label">No</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="isLoading">
+              <div class="col-12">
+                <content-placeholders :rounded="true" :centered="true">
+                  <content-placeholders-text :lines="20" />
+                </content-placeholders>
+              </div>
             </div>
           </div>
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
-                <button class="btn btn-primary mr-2" type="submit">
-                  Submit
+                <button
+                  type="reset"
+                  class="btn btn-default mr-2"
+                  @click="previous"
+                  v-if="
+                    getTaskPreviousTaskType &&
+                    getTaskPreviousTaskType !== getTaskCurrentTaskType
+                  "
+                >
+                  Back
                 </button>
-                <button type="reset" class="btn btn-default">Reset</button>
+                <btn-saving :is-saving="isSaving"/>
               </div>
             </div>
           </footer>
@@ -303,13 +350,19 @@
 // import moment from 'moment'
 import api from '../../api/http-common.js'
 import Datepicker from 'vuejs-datepicker'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
+import btnSaving from '../button-saving.vue'
 export default {
   components: {
-    Datepicker
+    Datepicker,
+    btnSaving
   },
   data () {
     return {
+      isLoading: true,
+      isSaving: false,
+      portalId: null,
+      caseHistoryId: null,
       form: {
         firstName: '',
         lastName: '',
@@ -331,6 +384,7 @@ export default {
         emerRelation: '',
         emerPhone: ''
       },
+      isAutoAccident: false,
       usStates: [],
       relationList: [
         'SPOUSE',
@@ -369,7 +423,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getProfilePatientAssociated']),
+    ...mapGetters([
+      'getProfilePatientAssociated',
+      'getTaskPreviousTaskType',
+      'getTaskCurrentTaskType'
+    ]),
     currentPatientAssociated () {
       if (this.getProfilePatientAssociated.length === 0) {
         return null
@@ -377,9 +435,46 @@ export default {
       return this.getProfilePatientAssociated[0]
     }
   },
+  watch: {
+    currentPatientAssociated: async function (val) {
+      // if (val) {
+      //   await this.getUsStates()
+      //   await this.getPatientInfo()
+      //   this.isLoading = false
+      // }
+    }
+  },
   methods: {
+    ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryId']),
+    toggle (val) {
+      this.isAutoAccident = val
+    },
+    async previous () {
+      // this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
+      await this.$router.push({ path: '/' })
+    },
     async savePatientInfo () {
+      this.isSaving = true
       await api.task.request.updatePatient(this.form)
+      let result = await api.task.request.findIncompleteCaseHistory({
+        facilityId: this.currentPatientAssociated.facilityID,
+        patientId: this.currentPatientAssociated.patientID
+      })
+      if (!result.data) {
+        result = await api.task.request.insertCaseHistory({
+          facilityId: this.currentPatientAssociated.facilityID,
+          patientId: this.currentPatientAssociated.patientID,
+          aa: this.isAutoAccident
+        })
+      }
+      // this.caseHistoryId = result.data
+      await this.setTaskCurrentCaseHistoryId(result.data)
+      this.isSaving = false
+      if (this.isAutoAccident) {
+        this.setTaskCurrentTaskType('NphAutoAccident')
+      } else {
+        this.setTaskCurrentTaskType('NphComplaintLocation')
+      }
     },
     async getPatientInfo (patientId) {
       const patientInfo = await api.task.request.getPatient({
@@ -399,6 +494,7 @@ export default {
   async mounted () {
     await this.getUsStates()
     await this.getPatientInfo()
+    this.isLoading = false
   }
 }
 </script>

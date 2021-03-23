@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="row">
     <div class="header-d-text">
       Welcome<span class="d-sm-none"> to Your Patient Portal</span>

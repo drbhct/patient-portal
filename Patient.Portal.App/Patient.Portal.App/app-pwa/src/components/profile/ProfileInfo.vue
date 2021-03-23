@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <form class="form-horizontal m-lg-4" @submit.prevent="updateUser">
     <h3>My Information</h3>
     <div class="form-group row">

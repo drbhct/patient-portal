@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <form>
     <div class="row justify-content-center">
       <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">

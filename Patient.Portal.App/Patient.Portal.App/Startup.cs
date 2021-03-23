@@ -43,6 +43,7 @@ namespace Patient.Portal.App
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseSpaStaticFiles();
             app.UseAuthorization();

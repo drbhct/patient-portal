@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="form">
     <table id="tblDemo" class="table tbl-bordered table-striped pt-4 w-100">
       <thead>

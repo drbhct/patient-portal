@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="mx-1">
     <div class="row">
       <div class="col-12 col-lg-6 col-xl-6">

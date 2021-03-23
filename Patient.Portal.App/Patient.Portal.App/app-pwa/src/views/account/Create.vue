@@ -79,7 +79,8 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">Create Account</button>
+                    <btn-saving :is-saving="isSaving"/>
+                    <!-- <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">Create Account</button> -->
                   </div>
                   <div class="form-group">
                     <h5>Existing account? <a href="/account/login">Login instead</a></h5>
@@ -95,9 +96,13 @@
 </template>
 
 <script>
+import BtnSaving from '../../components/button-saving.vue'
 import api from '../../api/http-common.js'
 import { mapActions } from 'vuex'
 export default {
+  components: {
+    BtnSaving
+  },
   props: {
     linkInfo: {
       type: Object,
@@ -106,10 +111,14 @@ export default {
   },
   data () {
     return {
+      isSaving: false,
       form: {
         email: '',
         password: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        firstName: '',
+        lastName: '',
+        MobilePhone: ''
       },
       showPassword: false,
       showConfirmPassword: false,
@@ -127,7 +136,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setIsLoading', 'setProfileAuthInfo']),
+    ...mapActions(['setIsLoading', 'setProfileAuthInfo', 'setTaskCurrentTaskType', 'setProfilePatientAssociated']),
     checkPassword () {
       this.password_length = this.form.password.length
       const format = /[ !@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/
@@ -206,6 +215,8 @@ export default {
         return
       }
 
+      this.isSaving = true
+
       const getPatientResp = await api.auth.request.getPatient({
         facilityId: this.linkInfo.facilityID,
         patientId: this.linkInfo.patientID
@@ -232,10 +243,20 @@ export default {
 
       const response = await api.auth.request.validateUserNoToken({
         username: this.form.email,
-        password: this.form.password
+        password: this.form.password,
+        firstName: this.form.firstName,
+        lastName: this.form.lastName,
+        MobilePhone: this.form.mobilePhone
       })
       await this.setProfileAuthInfo(response.data)
-      this.$router.push('/')
+      const patientAssosicated = await api.auth.request.getUserPatient(insertUserRes.data)
+      this.setProfilePatientAssociated(patientAssosicated.data)
+
+      setTimeout(() => {
+        this.isSaving = false
+        this.setTaskCurrentTaskType('PatientInfo')
+      }, 2000)
+      // this.$router.push('/')
     }
   }
 }

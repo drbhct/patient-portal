@@ -43,3 +43,23 @@ export const setProfilePatientAssociated = (store, payload) => {
 export const setCurrentMsgInfo = (store, payload) => {
   store.commit(types.CURRENT_MSG_INFO, payload)
 }
+
+export const setTaskCurrentTaskType = (store, payload) => {
+  store.commit(types.TASK_CURRENT_TASK_TYPE, payload)
+}
+
+export const setTaskCurrentCaseHistoryId = async (store, payload) => {
+  await store.commit(types.TASK_CURRENT_CASE_HISTORY_ID, payload)
+}
+
+export const setTaskCurrentCaseHistoryProblems = async (store, payload) => {
+  await store.commit(types.TASK_CURRENT_CASE_HISTORY_PROBLEMS, payload)
+}
+
+export const setTaskCurrentCaseHistoryOats = async (store, payload) => {
+  await store.commit(types.TASK_CURRENT_CASE_HISTORY_OATS, payload)
+}
+
+export const setTaskCurrentCaseHistoryComplaintFormVal = async (store, payload) => {
+  await store.commit(types.TASK_CURRENT_CASE_HISTORY_COMPLAINT_FORM_VAL, payload)
+}

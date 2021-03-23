@@ -1,5 +1,5 @@
-﻿<template>
-  <form class="form-horizontal">
+<template>
+  <div class="form-horizontal">
     <div class="header-t-text d-block">
       My Task List
     </div>
@@ -19,7 +19,7 @@
 
               <td v-if="item.taskType === 'NPH'" class="dash-task-col-title">{{(index + 1)}}) Health History</td>
               <td v-if="item.taskType === 'NPH'" class="dash-task-col-action">
-                <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn">
+                <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn" @click="gotoTask(item)">
                   GO TO HEALTH HISTORY
                 </button>
               </td>
@@ -28,11 +28,11 @@
         </table>
       </div>
     </div>
-  </form>
+  </div>
 </template>
 <script>
 import api from '../../api/http-common.js'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 
 export default {
@@ -52,6 +52,11 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setTaskCurrentTaskType']),
+    async gotoTask (task) {
+      await this.setTaskCurrentTaskType(task.taskType)
+      await this.$router.push({ path: '/task' })
+    },
     date: function (date) {
       return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')
     }
