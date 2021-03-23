@@ -233,8 +233,13 @@ export default {
           }
         })
       })
-      await promMultipleDelete
-      await promMultipleInsert
+      if (this.familyHistoryData.length > 0) {
+        await promMultipleDelete
+      }
+      if (payload.length > 0) {
+        await promMultipleInsert
+      }
+
       this.isSaving = false
       this.setTaskCurrentTaskType('NphThankyou')
     }

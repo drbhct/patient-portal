@@ -435,6 +435,15 @@ export default {
       return this.getProfilePatientAssociated[0]
     }
   },
+  watch: {
+    currentPatientAssociated: async function (val) {
+      // if (val) {
+      //   await this.getUsStates()
+      //   await this.getPatientInfo()
+      //   this.isLoading = false
+      // }
+    }
+  },
   methods: {
     ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryId']),
     toggle (val) {

@@ -380,16 +380,34 @@ export default {
       // console.log('medicineInfoPayload>', medicineInfoPayload)
       // console.log('medicineInfo2Payload>', medicineInfo2Payload)
 
+      let ethnicity = ''
+      let race = ''
+      let lang = ''
+      let declineEthnicity = false
+      let declineRace = false
+      let declineLanguage = false
+      if (this.form.ethnicity) {
+        ethnicity = this.form.ethnicity.code
+        declineEthnicity = this.form.ethnicity.description === 'Decline to Answer'
+      }
+      if (this.form.race) {
+        race = this.form.race.code
+        declineRace = this.form.race.description === 'Decline to Answer'
+      }
+      if (this.form.language) {
+        lang = this.form.language.code
+        declineLanguage = this.form.language.description === 'Decline to Answer'
+      }
       // Demographics payload
       const demographicsPayload = {
         facilityId: this.currentPatientAssociated.facilityID,
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
-        ethnicity: this.form.ethnicity.code,
-        races: this.form.race.code,
-        languages: this.form.language.code,
-        declineEthnicity: this.form.ethnicity.description === 'Decline to Answer',
-        declineRace: this.form.race.description === 'Decline to Answer',
-        declineLanguage: this.form.language.description === 'Decline to Answer'
+        ethnicity: ethnicity,
+        races: race,
+        languages: lang,
+        declineEthnicity: declineEthnicity,
+        declineRace: declineRace,
+        declineLanguage: declineLanguage
       }
       // console.log('demographicsPayload>', demographicsPayload)
 
