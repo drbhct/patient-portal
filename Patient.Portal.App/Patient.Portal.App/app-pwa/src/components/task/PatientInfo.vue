@@ -139,7 +139,7 @@
                   <input
                     type="text"
                     class="form-control"
-                    v-model="form.zipCode"
+                    v-model="form.zip"
                   />
                 </div>
               </div>
@@ -373,7 +373,7 @@ export default {
         address2: '',
         city: '',
         state: '',
-        zipCode: '',
+        zip: '',
         homePhone: '',
         cellPhone: '',
         dob: '',
