@@ -87,14 +87,22 @@
 
               <div class="form-group row" v-for="medQandA in form.medicineInfo2Question" :key="medQandA.question">
                 <label class="col-lg-3 control-label text-lg-right pt-2">
-                  {{ medQandA.question }}
+                  {{ medQandA.question }} {{ medQandA.code }}
                 </label>
-                <div class="col-lg-6">
+                <div class="col-lg-6" >
                   <multiselect
                     v-model="medQandA.answer"
                     :options="yesNoSelection"
                     :multiple="false"
+                    v-if="medQandA.code !=='LastMenstrualPeriod'"
                   />
+                  <datepicker
+                    v-model="medQandA.answer"
+                    :input-class="'form-control'"
+                    :format="'MMMM dd, yyyy'"
+                    v-if="medQandA.code ==='LastMenstrualPeriod'"
+                  ></datepicker>
+                  <span class="help-block" v-if="medQandA.code ==='LastMenstrualPeriod'">Leave field empty if not sure</span>
                 </div>
               </div>
 
@@ -175,6 +183,7 @@
 </template>
 
 <script>
+import Datepicker from 'vuejs-datepicker'
 import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import api from '../../api/http-common.js'
@@ -184,7 +193,8 @@ import btnSaving from '../button-saving.vue'
 export default {
   components: {
     Multiselect,
-    btnSaving
+    btnSaving,
+    Datepicker
   },
   data () {
     return {
@@ -469,7 +479,10 @@ export default {
         { question: 'Birth Control', answer: '', year: '', code: 'BirthControl' }
       )
       this.form.medicineInfo2Question.push(
-        { question: 'Are you pregnant', answer: '', code: 'Pregnant' }
+        { question: 'Are you pregnant?', answer: '', code: 'Pregnant' }
+      )
+      this.form.medicineInfo2Question.push(
+        { question: 'Date of last menstrual period?', answer: '', code: 'LastMenstrualPeriod' }
       )
     }
 
@@ -570,6 +583,9 @@ export default {
     })
 
     this.isLoading = false
+
+    const el = document.getElementById('form-horizontal')
+    el.scrollIntoView({ behavior: 'smooth' })
   }
 }
 </script>
