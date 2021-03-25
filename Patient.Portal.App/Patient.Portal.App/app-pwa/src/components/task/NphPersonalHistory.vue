@@ -4,7 +4,7 @@
       <div class="col">
         <section class="card">
           <header class="card-header"></header>
-          <div class="card-body">
+          <div class="card-body" id="frmBody">
             <div class="form-horizontal" v-if="!isLoading">
               <div class="row">
                 <div class="col-lg-12 text-center">
@@ -87,7 +87,7 @@
 
               <div class="form-group row" v-for="medQandA in form.medicineInfo2Question" :key="medQandA.question">
                 <label class="col-lg-3 control-label text-lg-right pt-2">
-                  {{ medQandA.question }} {{ medQandA.code }}
+                  {{ medQandA.question }}
                 </label>
                 <div class="col-lg-6" >
                   <multiselect
@@ -597,7 +597,7 @@ export default {
 
     this.isLoading = false
 
-    const el = document.getElementsByClassName('form-horizontal')
+    const el = document.getElementById('frmBody')
     el.scrollIntoView({ behavior: 'smooth' })
   }
 }

@@ -1147,7 +1147,10 @@ export default {
           ]
           break
         case 'VAS':
-          this.oatAnswerList = ['10', '9', '8', '7', '6', '5', '4', '3', '2', '1', '0']
+          this.oatAnswerList = [
+            { description: '10' }, { description: '9' }, { description: '8' }, { description: '7' }, { description: '6' },
+            { description: '5' }, { description: '4' }, { description: '3' }, { description: '2' }, { description: '1' }, { description: '0' }
+          ]
           break
         default:
           this.oatAnswerList = respAnswerList.data
