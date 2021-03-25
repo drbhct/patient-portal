@@ -98,9 +98,11 @@
                   />
                   <datepicker
                     v-model="medQandA.answer"
-                    :input-class="'form-control'"
                     :format="'MMMM dd, yyyy'"
                     v-if="medQandA.code ==='LastMenstrualPeriod'"
+                    :clear-button="true"
+                    :bootstrap-styling="true"
+                    :disabled-dates="disabledDates"
                   ></datepicker>
                   <span class="help-block" v-if="medQandA.code ==='LastMenstrualPeriod'">Leave field empty if not sure</span>
                 </div>
@@ -198,6 +200,9 @@ export default {
   },
   data () {
     return {
+      disabledDates: {
+        from: new Date()
+      },
       isLoading: false,
       isSaving: false,
       form: {
@@ -381,6 +386,11 @@ export default {
         questions: []
       }
       this.form.medicineInfo2Question.forEach(el => {
+        if (el.code === 'LastMenstrualPeriod') {
+          if (el.answer) {
+            el.answer = moment(el.answer).format('YYYY-MM-DD')
+          }
+        }
         medicineInfo2Payload.questions.push({
           description: el.code,
           answer: el.answer
@@ -541,6 +551,9 @@ export default {
 
       const medInfo2 = this.form.medicineInfo2Question.find(medInfoEl => medInfoEl.code === el.description)
       if (medInfo2) {
+        if (medInfo2.description === 'LastMenstrualPeriod') {
+          el.answer = moment(el.answer)
+        }
         medInfo2.answer = el.answer
       }
     })
@@ -584,7 +597,7 @@ export default {
 
     this.isLoading = false
 
-    const el = document.getElementById('form-horizontal')
+    const el = document.getElementsByClassName('form-horizontal')
     el.scrollIntoView({ behavior: 'smooth' })
   }
 }

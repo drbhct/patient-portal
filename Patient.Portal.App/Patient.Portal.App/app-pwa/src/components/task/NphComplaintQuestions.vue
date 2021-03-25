@@ -85,7 +85,8 @@
                   </div> -->
                   <datepicker
                     v-model="form.dateOccured"
-                    :input-class="'form-control'"
+                    :bootstrap-styling="true"
+                    :clear-button="true"
                     :format="'MMMM dd, yyyy'"
                     :disabled-dates="disabledDates"
                   ></datepicker>
