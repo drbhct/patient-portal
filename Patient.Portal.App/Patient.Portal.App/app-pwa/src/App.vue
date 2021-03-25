@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.9' // Nph task
+      return '0.0.10' // USER STORY #17422 Patient Portal NPH
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
     currentRouteName () {

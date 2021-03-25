@@ -85,7 +85,8 @@
                   </div> -->
                   <datepicker
                     v-model="form.dateOccured"
-                    :input-class="'form-control'"
+                    :bootstrap-styling="true"
+                    :clear-button="true"
                     :format="'MMMM dd, yyyy'"
                     :disabled-dates="disabledDates"
                   ></datepicker>
@@ -1133,30 +1134,40 @@ export default {
         oatId: this.currentOat.oatID
       })
 
-      // note: Cross cutting concerns for hand region selected
-      const isDifficulty = respAnswerList.data.find(
-        (el) => el.description === 'DIFFICULTY'
-      )
-      if (isDifficulty) {
-        this.oatAnswerList = [
-          { description: 'Extreme difficulty' },
-          { description: 'Quite a bit of difficulty' },
-          { description: 'Moderate difficulty' },
-          { description: 'A little bit of difficulty' },
-          { description: 'No difficulty' }
-        ]
-      } else {
-        this.oatAnswerList = respAnswerList.data
+      // note: Cross cutting concerns for custom selection data
+      const check = respAnswerList.data[0]
+      switch (check.description) {
+        case 'DIFFICULTY':
+          this.oatAnswerList = [
+            { description: 'Extreme difficulty' },
+            { description: 'Quite a bit of difficulty' },
+            { description: 'Moderate difficulty' },
+            { description: 'A little bit of difficulty' },
+            { description: 'No difficulty' }
+          ]
+          break
+        case 'VAS':
+          this.oatAnswerList = ['10', '9', '8', '7', '6', '5', '4', '3', '2', '1', '0']
+          break
+        default:
+          this.oatAnswerList = respAnswerList.data
+          break
       }
+
       // Reconstruct oat data
       oatQuestions.forEach((el) => {
-        if (!isDifficulty) {
-          const answerList = this.oatAnswerList.filter(
-            (ansEl) => ansEl.oatQuestionID === el.id
-          )
-          el.answerList = answerList
-        } else {
-          el.answerList = this.oatAnswerList
+        switch (check.description) {
+          case 'DIFFICULTY':
+          case 'VAS':
+            el.answerList = this.oatAnswerList
+            break
+          default: {
+            const answerList = this.oatAnswerList.filter(
+              (ansEl) => ansEl.oatQuestionID === el.id
+            )
+            el.answerList = answerList
+            break
+          }
         }
 
         el.selectedAnswer = ''

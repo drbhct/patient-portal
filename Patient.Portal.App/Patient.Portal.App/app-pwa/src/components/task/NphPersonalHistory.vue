@@ -87,14 +87,24 @@
 
               <div class="form-group row" v-for="medQandA in form.medicineInfo2Question" :key="medQandA.question">
                 <label class="col-lg-3 control-label text-lg-right pt-2">
-                  {{ medQandA.question }}
+                  {{ medQandA.question }} {{ medQandA.code }}
                 </label>
-                <div class="col-lg-6">
+                <div class="col-lg-6" >
                   <multiselect
                     v-model="medQandA.answer"
                     :options="yesNoSelection"
                     :multiple="false"
+                    v-if="medQandA.code !=='LastMenstrualPeriod'"
                   />
+                  <datepicker
+                    v-model="medQandA.answer"
+                    :format="'MMMM dd, yyyy'"
+                    v-if="medQandA.code ==='LastMenstrualPeriod'"
+                    :clear-button="true"
+                    :bootstrap-styling="true"
+                    :disabled-dates="disabledDates"
+                  ></datepicker>
+                  <span class="help-block" v-if="medQandA.code ==='LastMenstrualPeriod'">Leave field empty if not sure</span>
                 </div>
               </div>
 
@@ -175,6 +185,7 @@
 </template>
 
 <script>
+import Datepicker from 'vuejs-datepicker'
 import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import api from '../../api/http-common.js'
@@ -184,10 +195,14 @@ import btnSaving from '../button-saving.vue'
 export default {
   components: {
     Multiselect,
-    btnSaving
+    btnSaving,
+    Datepicker
   },
   data () {
     return {
+      disabledDates: {
+        from: new Date()
+      },
       isLoading: false,
       isSaving: false,
       form: {
@@ -371,6 +386,11 @@ export default {
         questions: []
       }
       this.form.medicineInfo2Question.forEach(el => {
+        if (el.code === 'LastMenstrualPeriod') {
+          if (el.answer) {
+            el.answer = moment(el.answer).format('YYYY-MM-DD')
+          }
+        }
         medicineInfo2Payload.questions.push({
           description: el.code,
           answer: el.answer
@@ -469,7 +489,10 @@ export default {
         { question: 'Birth Control', answer: '', year: '', code: 'BirthControl' }
       )
       this.form.medicineInfo2Question.push(
-        { question: 'Are you pregnant', answer: '', code: 'Pregnant' }
+        { question: 'Are you pregnant?', answer: '', code: 'Pregnant' }
+      )
+      this.form.medicineInfo2Question.push(
+        { question: 'Date of last menstrual period?', answer: '', code: 'LastMenstrualPeriod' }
       )
     }
 
@@ -528,6 +551,9 @@ export default {
 
       const medInfo2 = this.form.medicineInfo2Question.find(medInfoEl => medInfoEl.code === el.description)
       if (medInfo2) {
+        if (medInfo2.description === 'LastMenstrualPeriod') {
+          el.answer = moment(el.answer)
+        }
         medInfo2.answer = el.answer
       }
     })
@@ -570,6 +596,9 @@ export default {
     })
 
     this.isLoading = false
+
+    const el = document.getElementsByClassName('form-horizontal')
+    el.scrollIntoView({ behavior: 'smooth' })
   }
 }
 </script>
