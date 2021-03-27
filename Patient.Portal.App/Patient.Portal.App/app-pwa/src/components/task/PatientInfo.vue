@@ -467,7 +467,7 @@ export default {
           aa: this.isAutoAccident
         })
       }
-      // this.caseHistoryId = result.data
+
       await this.setTaskCurrentCaseHistoryId(result.data)
       this.isSaving = false
       if (this.isAutoAccident) {
