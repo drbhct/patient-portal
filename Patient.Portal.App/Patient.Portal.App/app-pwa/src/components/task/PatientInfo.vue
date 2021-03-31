@@ -139,7 +139,7 @@
                   <input
                     type="text"
                     class="form-control"
-                    v-model="form.zipCode"
+                    v-model="form.zip"
                   />
                 </div>
               </div>

@@ -4,10 +4,16 @@
     <section class="body">
       <!-- start: header -->
       <header class="header">
-        <div class="logo-container">
-          <a href="../2.3.0" class="logo">
+        <div class="logo-container d-inline">
+          <!--<a href="../2.3.0" class="logo">
             <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
-          </a>
+          </a>-->
+          <div class="d-none d-sm-inline-block">
+            <span class="office-name">{{ currentPatientAssociated.officeName }}</span>
+          </div>
+          <div class="d-md-none d-inline">
+            <span class="office-name-m">{{ currentPatientAssociated.officeName }}</span>
+          </div>
           <div class="d-md-none toggle-sidebar-left"
                data-toggle-class="sidebar-left-opened"
                data-target="html"
@@ -70,13 +76,19 @@ export default {
     version () {
       return '0.0.9' // Nph task
     },
-    ...mapGetters(['getIsLoading', 'getProfileAuthInfo']),
+    ...mapGetters(['getIsLoading', 'getProfileAuthInfo', 'getProfilePatientAssociated']),
     currentRouteName () {
       let route = this.$route.name
       if (route) {
         route = route.toLowerCase()
       }
       return route
+    },
+    currentPatientAssociated () {
+      if (this.getProfilePatientAssociated.length === 0) {
+        return null
+      }
+      return this.getProfilePatientAssociated[0]
     },
     showHeader () {
       switch (this.currentRouteName) {
@@ -118,3 +130,21 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .office-name {
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 600;
+    margin: 10px 0 0 15px;
+    vertical-align: middle;
+    line-height: 1.8;
+  }
+  .office-name-m {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 10px 0 0 15px;
+    vertical-align: middle;
+    line-height: 2.2;
+  }
+</style>

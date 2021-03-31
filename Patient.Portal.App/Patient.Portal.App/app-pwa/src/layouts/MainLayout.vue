@@ -178,7 +178,7 @@ export default {
     color: #fff;
   }
   .bg-green {
-    background: #90ee90;
+    background: #93c47d;
     color: #fff;
   }
   .bg-purple {
@@ -207,7 +207,7 @@ export default {
   }
 
   a.bg-green:hover, a.bg-green:focus, button.bg-green:hover, button.bg-green:focus {
-    background: #4fe34f !important;
+    background: #669966 !important;
   }
 
   a.bg-purple:hover, a.bg-purple:focus, button.bg-purple:hover, button.bg-purple:focus {
