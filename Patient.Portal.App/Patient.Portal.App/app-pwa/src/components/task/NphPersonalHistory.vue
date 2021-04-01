@@ -1,6 +1,9 @@
 <template>
   <section role="main">
-    <form class="mt-5 mr-2 ml-2 justify-content-md-center" @submit.prevent="submit">
+    <form
+      class="mt-5 mr-2 ml-2 justify-content-md-center"
+      @submit.prevent="submit"
+    >
       <div class="col">
         <section class="card">
           <header class="card-header"></header>
@@ -8,14 +11,20 @@
             <div class="form-horizontal" v-if="!isLoading">
               <div class="row">
                 <div class="col-lg-12 text-center">
-                  <h4>Please answer these questions about yourself</h4>
+                  <h4 class="label f-weight-550">
+                    Please answer these questions about yourself
+                  </h4>
                 </div>
               </div>
-              <div class="form-group row" v-for="infoQandA in form.infoQuestion" :key="infoQandA.question">
-                <label class="col-lg-3 control-label text-lg-right pt-2">
-                  {{ infoQandA.question }}
-                </label>
-                <div class="col-lg-6">
+              <div
+                class="form-group row"
+                v-for="infoQandA in form.infoQuestion"
+                :key="infoQandA.question"
+              >
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">
+                    {{ infoQandA.question }}
+                  </label>
                   <multiselect
                     v-model="infoQandA.answer"
                     :options="infoQandA.selections"
@@ -27,24 +36,31 @@
               <hr />
 
               <div class="row">
-                <div class="col-lg-12 text-center">
-                  <h4>
-                    Please indicate the following condition(s) that apply to you
-                  </h4>
-                  <h4>
-                    Present = you have this now Past = if you have had in the
-                    past
-                  </h4>
+                <div class="col-lg-6 mx-auto">
+                  <div class="label f-weight-550 text-center">
+                    <h4>
+                      Please indicate the following condition(s) that apply to
+                      you
+                    </h4>
+                    <h4>
+                      Present = you have this now Past = if you have had in the
+                      past
+                    </h4>
+                  </div>
                 </div>
               </div>
 
               <div class="row">
-                <div class="col-lg-6" v-for="condition in form.conditionQandA" :key="condition.question">
+                <div
+                  class="col-lg-6"
+                  v-for="condition in form.conditionQandA"
+                  :key="condition.question"
+                >
                   <div class="form-group row mb-2">
-                    <label class="col-lg-3 control-label text-lg-right pt-2">
-                      {{ condition.question }}
-                    </label>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6 mx-auto">
+                      <label class="label f-weight-550">
+                        {{ condition.question }}
+                      </label>
                       <multiselect
                         v-model="condition.answer"
                         :options="conditionApplySelection"
@@ -55,75 +71,87 @@
                 </div>
               </div>
 
-              <hr>
+              <hr />
               <div class="row">
                 <div class="col-lg-12 text-center">
-                  <h4>
-                    Have you ever taken
-                  </h4>
+                  <h4 class="label f-weight-550">Have you ever taken</h4>
                 </div>
               </div>
 
-              <div class="form-group row" v-for="medQandA in form.medicineInfoQuestion" :key="medQandA.question">
-                <label class="col-lg-3 control-label text-lg-right pt-2">
-                  {{ medQandA.question }}
-                </label>
-                <div :class="{ 'col-lg-3': medQandA.answer === 'Yes', 'col-lg-6': medQandA.answer !== 'Yes' }">
-                  <multiselect
-                    v-model="medQandA.answer"
-                    :options="yesNoSelection"
-                    :multiple="false"
-                  />
-                </div>
-                <div class="col-lg-3" v-if="medQandA.answer === 'Yes'">
-                  <multiselect
-                    v-model="medQandA.year"
-                    :options="medicineYearSelection"
-                    :multiple="false"
-                    :placeholder="'Select year'"
-                  />
+              <div
+                class="form-group row"
+                v-for="medQandA in form.medicineInfoQuestion"
+                :key="medQandA.question"
+              >
+                <div class="col-lg-6 mx-auto">
+                  <div
+                  >
+                    <label class="label f-weight-550">
+                      {{ medQandA.question }}
+                    </label>
+                    <multiselect
+                      v-model="medQandA.answer"
+                      :options="yesNoSelection"
+                      :multiple="false"
+                    />
+                  </div>
+                  <div v-if="medQandA.answer === 'Yes'">
+                    <label class="label f-weight-550"> Select Year {{ medQandA.question }} taken</label>
+                    <multiselect
+                      v-model="medQandA.year"
+                      :options="medicineYearSelection"
+                      :multiple="false"
+                      :placeholder="'Select year'"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div class="form-group row" v-for="medQandA in form.medicineInfo2Question" :key="medQandA.question">
-                <label class="col-lg-3 control-label text-lg-right pt-2">
+              <div
+                class="form-group row"
+                v-for="medQandA in form.medicineInfo2Question"
+                :key="medQandA.question"
+              >
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">
                   {{ medQandA.question }}
                 </label>
-                <div class="col-lg-6" >
-                  <multiselect
+                <multiselect
                     v-model="medQandA.answer"
                     :options="yesNoSelection"
                     :multiple="false"
-                    v-if="medQandA.code !=='LastMenstrualPeriod'"
+                    v-if="medQandA.code !== 'LastMenstrualPeriod'"
                   />
                   <datepicker
                     v-model="medQandA.answer"
                     :format="'MMMM dd, yyyy'"
-                    v-if="medQandA.code ==='LastMenstrualPeriod'"
+                    v-if="medQandA.code === 'LastMenstrualPeriod'"
                     :clear-button="true"
                     :bootstrap-styling="true"
                     :disabled-dates="disabledDates"
                   ></datepicker>
-                  <span class="help-block" v-if="medQandA.code ==='LastMenstrualPeriod'">Leave field empty if not sure</span>
+                  <span
+                    class="help-block"
+                    v-if="medQandA.code === 'LastMenstrualPeriod'"
+                    >Leave field empty if not sure</span
+                  >
                 </div>
               </div>
 
-              <hr>
+              <hr />
 
               <div class="row">
-                <div class="col-lg-12 text-center">
-                  <h4>
-                    Demographics
-                  </h4>
+                <div class="col-lg-6 mx-auto">
+                  <h4 class="label f-weight-550">Demographics</h4>
                 </div>
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">
                   What languages do you speak?
                 </label>
-                <div class="col-lg-6">
-                  <multiselect
+                <multiselect
                     v-model="form.language"
                     :options="languageList"
                     :multiple="false"
@@ -133,11 +161,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">
                   Ethnicity
                 </label>
-                <div class="col-lg-6">
-                  <multiselect
+                <multiselect
                     v-model="form.ethnicity"
                     :options="ethnicilityList"
                     :multiple="false"
@@ -147,11 +175,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">
                   Which category describes your race?
                 </label>
-                <div class="col-lg-6">
-                  <multiselect
+                <multiselect
                     v-model="form.race"
                     :options="raceList"
                     :multiple="false"
@@ -159,7 +187,6 @@
                   />
                 </div>
               </div>
-
             </div>
             <div v-else>
               <div class="col-12">
@@ -172,13 +199,20 @@
           <footer class="card-footer"></footer>
         </section>
         <footer class="card-footer">
-            <div class="row justify-content-end">
-              <div class="col-sm-9">
-                <button type="reset" class="btn btn-default mr-2" @click="prev" v-if="getTaskPreviousTaskType">Back</button>
-                <btn-saving :is-saving="isSaving"/>
-              </div>
+          <div class="row justify-content-end">
+            <div class="col-sm-9">
+              <button
+                type="reset"
+                class="btn btn-default mr-2"
+                @click="prev"
+                v-if="getTaskPreviousTaskType"
+              >
+                Back
+              </button>
+              <btn-saving :is-saving="isSaving" />
             </div>
-          </footer>
+          </div>
+        </footer>
       </div>
     </form>
   </section>
@@ -192,6 +226,7 @@ import api from '../../api/http-common.js'
 import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 import btnSaving from '../button-saving.vue'
+
 export default {
   components: {
     Multiselect,
@@ -228,17 +263,56 @@ export default {
         medicineInfoQuestion: [
           { question: 'Insulin', answer: '', year: '', code: 'Insulin' },
           { question: 'Cortizone', answer: '', year: '', code: 'Cortisone' },
-          { question: 'Male/Female Hormones', answer: '', year: '', code: 'MaleFemaleHormones' },
-          { question: 'Blood Pressure', answer: '', year: '', code: 'BloodPressure' },
-          { question: 'Tranquilizer/Sedative', answer: '', year: '', code: 'TranquilizersSedatives' }
+          {
+            question: 'Male/Female Hormones',
+            answer: '',
+            year: '',
+            code: 'MaleFemaleHormones'
+          },
+          {
+            question: 'Blood Pressure',
+            answer: '',
+            year: '',
+            code: 'BloodPressure'
+          },
+          {
+            question: 'Tranquilizer/Sedative',
+            answer: '',
+            year: '',
+            code: 'TranquilizersSedatives'
+          }
         ],
         medicineInfo2Question: [
-          { question: 'Are you taking any medications?', answer: '', code: 'Medications' },
-          { question: 'Are you taking any nutritional supplement?', answer: '', code: 'NutritionalSupplements' },
-          { question: 'Have you had any surgeries?', answer: '', code: 'Surgeries' },
-          { question: 'Have you any hospitalization?', answer: '', code: 'Hospitalization' },
-          { question: 'Have you had any significant past trauma?', answer: '', code: 'SignificantPastTrauma' },
-          { question: 'Do you have a pacemaker', answer: '', code: 'Pacemaker' }
+          {
+            question: 'Are you taking any medications?',
+            answer: '',
+            code: 'Medications'
+          },
+          {
+            question: 'Are you taking any nutritional supplement?',
+            answer: '',
+            code: 'NutritionalSupplements'
+          },
+          {
+            question: 'Have you had any surgeries?',
+            answer: '',
+            code: 'Surgeries'
+          },
+          {
+            question: 'Have you any hospitalization?',
+            answer: '',
+            code: 'Hospitalization'
+          },
+          {
+            question: 'Have you had any significant past trauma?',
+            answer: '',
+            code: 'SignificantPastTrauma'
+          },
+          {
+            question: 'Do you have a pacemaker',
+            answer: '',
+            code: 'Pacemaker'
+          }
         ],
         language: null,
         ethnicity: null,
@@ -249,7 +323,6 @@ export default {
       ethnicilityList: [],
       raceList: [],
       languageList: []
-
     }
   },
   computed: {
@@ -323,10 +396,14 @@ export default {
   methods: {
     ...mapActions(['setTaskCurrentTaskType']),
     prev () {
-      const currentIndex = this.getTaskPreviousTaskType.findIndex(c => c === this.getTaskCurrentTaskType)
+      const currentIndex = this.getTaskPreviousTaskType.findIndex(
+        (c) => c === this.getTaskCurrentTaskType
+      )
       let prevPage = ''
       if (currentIndex === -1) {
-        prevPage = this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
+        prevPage = this.getTaskPreviousTaskType[
+          this.getTaskPreviousTaskType.length - 1
+        ]
       } else {
         prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
       }
@@ -340,7 +417,7 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         questions: []
       }
-      this.form.infoQuestion.forEach(el => {
+      this.form.infoQuestion.forEach((el) => {
         infoPayload.questions.push({
           description: el.code,
           answer: el.answer
@@ -355,9 +432,9 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         conditions: []
       }
-      this.form.conditionQandA.forEach(el => {
-        const isPresent = el.answer.find(c => c === 'Present') !== undefined
-        const isPast = el.answer.find(c => c === 'Past') !== undefined
+      this.form.conditionQandA.forEach((el) => {
+        const isPresent = el.answer.find((c) => c === 'Present') !== undefined
+        const isPast = el.answer.find((c) => c === 'Past') !== undefined
         caseConditionPayload.conditions.push({
           description: el.question,
           past: isPast,
@@ -373,7 +450,7 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         questions: []
       }
-      this.form.medicineInfoQuestion.forEach(el => {
+      this.form.medicineInfoQuestion.forEach((el) => {
         medicineInfoPayload.questions.push({
           description: el.code,
           answer: el.answer === 'Yes' ? `${el.answer},${el.year}` : el.answer
@@ -385,7 +462,7 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         questions: []
       }
-      this.form.medicineInfo2Question.forEach(el => {
+      this.form.medicineInfo2Question.forEach((el) => {
         if (el.code === 'LastMenstrualPeriod') {
           if (el.answer) {
             el.answer = moment(el.answer).format('YYYY-MM-DD')
@@ -408,7 +485,8 @@ export default {
       let declineLanguage = false
       if (this.form.ethnicity) {
         ethnicity = this.form.ethnicity.code
-        declineEthnicity = this.form.ethnicity.description === 'Decline to Answer'
+        declineEthnicity =
+          this.form.ethnicity.description === 'Decline to Answer'
       }
       if (this.form.race) {
         race = this.form.race.code
@@ -416,7 +494,8 @@ export default {
       }
       if (this.form.language) {
         lang = this.form.language.code
-        declineLanguage = this.form.language.description === 'Decline to Answer'
+        declineLanguage =
+          this.form.language.description === 'Decline to Answer'
       }
       // Demographics payload
       const demographicsPayload = {
@@ -460,16 +539,66 @@ export default {
 
     // Construct info questionaire
     this.form.infoQuestion = [
-      { question: 'Number of Children?', code: 'NumberOfChildren', answer: '', selections: this.numOfChildrenSelection },
-      { question: 'Exercise Frequency? ', code: 'ExerciseFrequency', answer: '', selections: this.excerciseSelection },
-      { question: 'Exercise Intensity Level? ', code: 'ExerciseIntensity', answer: '', selections: this.excerciseIntensitySelection },
-      { question: 'Sufficient Rest? ', code: 'SufficientRest', answer: '', selections: this.sufficientRestSelection },
-      { question: 'Hours of Sleep? ', code: 'HoursOfSleep', answer: '', selections: this.hourOfSleepSelection },
-      { question: 'Well balanced diet? ', code: 'WellBalancedDiet', answer: '', selections: this.wellBalancedDietSelection },
-      { question: 'Do you smoke? ', code: 'Smoke', answer: '', selections: this.smokeSelection },
-      { question: 'Do you drink caffeinated beverages? ', code: 'CaffeinatedDrinks', answer: '', selections: this.caffeinSelection },
-      { question: 'Do you drink alcoholic beverages? ', code: 'AlcoholicDrinks', answer: '', selections: this.alcoholSelection },
-      { question: 'Have you ever used street drugs? ', code: 'StreetDrugs', answer: '', selections: this.drugsSelection }
+      {
+        question: 'Number of Children?',
+        code: 'NumberOfChildren',
+        answer: '',
+        selections: this.numOfChildrenSelection
+      },
+      {
+        question: 'Exercise Frequency? ',
+        code: 'ExerciseFrequency',
+        answer: '',
+        selections: this.excerciseSelection
+      },
+      {
+        question: 'Exercise Intensity Level? ',
+        code: 'ExerciseIntensity',
+        answer: '',
+        selections: this.excerciseIntensitySelection
+      },
+      {
+        question: 'Sufficient Rest? ',
+        code: 'SufficientRest',
+        answer: '',
+        selections: this.sufficientRestSelection
+      },
+      {
+        question: 'Hours of Sleep? ',
+        code: 'HoursOfSleep',
+        answer: '',
+        selections: this.hourOfSleepSelection
+      },
+      {
+        question: 'Well balanced diet? ',
+        code: 'WellBalancedDiet',
+        answer: '',
+        selections: this.wellBalancedDietSelection
+      },
+      {
+        question: 'Do you smoke? ',
+        code: 'Smoke',
+        answer: '',
+        selections: this.smokeSelection
+      },
+      {
+        question: 'Do you drink caffeinated beverages? ',
+        code: 'CaffeinatedDrinks',
+        answer: '',
+        selections: this.caffeinSelection
+      },
+      {
+        question: 'Do you drink alcoholic beverages? ',
+        code: 'AlcoholicDrinks',
+        answer: '',
+        selections: this.alcoholSelection
+      },
+      {
+        question: 'Have you ever used street drugs? ',
+        code: 'StreetDrugs',
+        answer: '',
+        selections: this.drugsSelection
+      }
     ]
     // console.log('this.patientInfo', this.patientInfo)
     // console.log('this.patientInfo.dob', this.patientInfo.dob)
@@ -485,18 +614,27 @@ export default {
 
     // Construct medicine info questionaire form
     if (this.patientInfo.sex === 'F') {
-      this.form.medicineInfoQuestion.push(
-        { question: 'Birth Control', answer: '', year: '', code: 'BirthControl' }
-      )
-      this.form.medicineInfo2Question.push(
-        { question: 'Are you pregnant?', answer: '', code: 'Pregnant' }
-      )
-      this.form.medicineInfo2Question.push(
-        { question: 'Date of last menstrual period?', answer: '', code: 'LastMenstrualPeriod' }
-      )
+      this.form.medicineInfoQuestion.push({
+        question: 'Birth Control',
+        answer: '',
+        year: '',
+        code: 'BirthControl'
+      })
+      this.form.medicineInfo2Question.push({
+        question: 'Are you pregnant?',
+        answer: '',
+        code: 'Pregnant'
+      })
+      this.form.medicineInfo2Question.push({
+        question: 'Date of last menstrual period?',
+        answer: '',
+        code: 'LastMenstrualPeriod'
+      })
     }
 
-    let ethnicilityList = await api.task.request.getEthnicityList(this.currentPatientAssociated.facilityID)
+    let ethnicilityList = await api.task.request.getEthnicityList(
+      this.currentPatientAssociated.facilityID
+    )
     ethnicilityList = ethnicilityList.data
     ethnicilityList.push({
       code: 'Decline',
@@ -505,8 +643,10 @@ export default {
     })
     this.ethnicilityList = ethnicilityList
 
-    let languageList = await api.task.request.getLanguageList(this.currentPatientAssociated.facilityID)
-    languageList = languageList.data.filter(el => el.display)
+    let languageList = await api.task.request.getLanguageList(
+      this.currentPatientAssociated.facilityID
+    )
+    languageList = languageList.data.filter((el) => el.display)
     languageList.push({
       code: 'Other',
       description: 'Other',
@@ -519,7 +659,9 @@ export default {
     })
     this.languageList = languageList
 
-    let raceList = await api.task.request.getRaceList(this.currentPatientAssociated.facilityID)
+    let raceList = await api.task.request.getRaceList(
+      this.currentPatientAssociated.facilityID
+    )
     raceList = raceList.data
     raceList.push({
       code: 'Decline',
@@ -528,18 +670,26 @@ export default {
     })
     this.raceList = raceList
 
-    const caseHistoryQuestions = await api.task.request.getCaseHistoryQuestions({
-      facilityId: this.currentPatientAssociated.facilityID,
-      caseHistoryId: this.getTaskCurrentCaseHistoryId
-    })
-    const hasAnswerQuestions = caseHistoryQuestions.data.filter(el => el.answer !== '')
-    hasAnswerQuestions.forEach(el => {
-      const update = this.form.infoQuestion.find(infoEl => infoEl.code === el.description)
+    const caseHistoryQuestions = await api.task.request.getCaseHistoryQuestions(
+      {
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryId: this.getTaskCurrentCaseHistoryId
+      }
+    )
+    const hasAnswerQuestions = caseHistoryQuestions.data.filter(
+      (el) => el.answer !== ''
+    )
+    hasAnswerQuestions.forEach((el) => {
+      const update = this.form.infoQuestion.find(
+        (infoEl) => infoEl.code === el.description
+      )
       if (update) {
         update.answer = el.answer
       }
 
-      const medInfo = this.form.medicineInfoQuestion.find(medInfoEl => medInfoEl.code === el.description)
+      const medInfo = this.form.medicineInfoQuestion.find(
+        (medInfoEl) => medInfoEl.code === el.description
+      )
       if (medInfo) {
         const ansArr = el.answer.split(',')
         if (ansArr.length > 1) {
@@ -549,7 +699,9 @@ export default {
         medInfo.answer = ansArr[0]
       }
 
-      const medInfo2 = this.form.medicineInfo2Question.find(medInfoEl => medInfoEl.code === el.description)
+      const medInfo2 = this.form.medicineInfo2Question.find(
+        (medInfoEl) => medInfoEl.code === el.description
+      )
       if (medInfo2) {
         if (medInfo2.description === 'LastMenstrualPeriod') {
           el.answer = moment(el.answer)
@@ -566,15 +718,21 @@ export default {
     // console.log('demographicsData>', demographicsData)
 
     if (demographicsData.languages) {
-      const findLang = this.languageList.find(el => el.code === demographicsData.languages)
+      const findLang = this.languageList.find(
+        (el) => el.code === demographicsData.languages
+      )
       this.form.language = findLang
     }
     if (demographicsData.ethnicity) {
-      const findEthnicity = this.ethnicilityList.find(el => el.code === demographicsData.ethnicity)
+      const findEthnicity = this.ethnicilityList.find(
+        (el) => el.code === demographicsData.ethnicity
+      )
       this.form.ethnicity = findEthnicity
     }
     if (demographicsData.races) {
-      const findRace = this.raceList.find(el => el.code === demographicsData.races)
+      const findRace = this.raceList.find(
+        (el) => el.code === demographicsData.races
+      )
       this.form.race = findRace
     }
 
@@ -583,8 +741,10 @@ export default {
       caseHistoryId: this.getTaskCurrentCaseHistoryId
     })
 
-    conditionsData.data.forEach(el => {
-      const condQandA = this.form.conditionQandA.find(c => c.question === el.description)
+    conditionsData.data.forEach((el) => {
+      const condQandA = this.form.conditionQandA.find(
+        (c) => c.question === el.description
+      )
       if (condQandA) {
         if (el.present) {
           condQandA.answer.push('Present')

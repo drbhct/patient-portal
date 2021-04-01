@@ -15,7 +15,7 @@
             </h2>
           </header>
           <div class="card-body" id="cardBody" v-if="form">
-            <div class="form-vertical" v-if="!isLoading">
+            <div v-if="!isLoading">
               <div class="row">
                 <div class="col-lg-12">
                   <h5>
@@ -25,17 +25,15 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label
-                  class="col-lg-4 control-label text-lg-right pt-2"
-                  id="refDescribe"
-                  ><strong style="color: red; margin-right: 5px">*</strong
-                  >Please choose the area that best describes where your
-                  <strong style="color: red">{{
-                    currentProblem.region
-                  }}</strong>
-                  pain occurs</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550" id="refDescribe"
+                    ><strong style="color: red; margin-right: 5px">*</strong
+                    >Please choose the area that best describes where your
+                    <strong style="color: red">{{
+                      currentProblem.region
+                    }}</strong>
+                    pain occurs</label
+                  >
                   <multiselect
                     v-model="form.describe"
                     :options="complaintLocations"
@@ -48,16 +46,14 @@
                 </div>
               </div>
               <div class="form-group row" v-if="showSpecifyDescribe">
-                <label
-                  class="col-lg-4 control-label text-lg-right pt-2"
-                  id="firstQuestion"
-                  >Please specify best describes where your
-                  <strong style="color: red">{{
-                    currentProblem.region
-                  }}</strong>
-                  pain occurs</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550" id="firstQuestion"
+                    >Please specify best describes where your
+                    <strong style="color: red">{{
+                      currentProblem.region
+                    }}</strong>
+                    pain occurs</label
+                  >
                   <input
                     type="text"
                     v-model="form.describeOther"
@@ -65,24 +61,13 @@
                   />
                 </div>
               </div>
+
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
-                  >Please indicate the date your symptoms first occurred</label
-                >
-                <div class="col-lg-6">
-                  <!-- <div class="input-group mb-3">
-                    <datepicker
-                      v-model="form.dateOccured"
-                      :input-class="'form-control'"
-                      :format="'MMMM dd, yyyy'"
-                      :disabled-dates="disabledDates"
-                    ></datepicker>
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary" type="button">
-                        Not Sure
-                      </button>
-                    </div>
-                  </div> -->
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
+                    >Please indicate the date your symptoms first
+                    occurred</label
+                  >
                   <datepicker
                     v-model="form.dateOccured"
                     :bootstrap-styling="true"
@@ -93,18 +78,17 @@
                   <span class="help-block">Leave field empty if not sure</span>
                 </div>
               </div>
+
               <div class="form-group row">
-                <label
-                  class="col-lg-4 control-label text-lg-right pt-2"
-                  id="refExpPain"
-                  ><strong style="color: red; margin-right: 5px">*</strong>How
-                  often do you experience this
-                  <strong style="color: red">{{
-                    currentProblem.region
-                  }}</strong>
-                  pain?</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550" id="refExpPain"
+                    ><strong style="color: red; margin-right: 5px">*</strong>How
+                    often do you experience this
+                    <strong style="color: red">{{
+                      currentProblem.region
+                    }}</strong>
+                    pain?</label
+                  >
                   <multiselect
                     v-model="form.expPain"
                     :options="expPains"
@@ -112,26 +96,28 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  <strong style="color: red; margin-right: 5px">*</strong>
-                  Using the slide, rate the intensity of your primary problem
-                  pain now 0 = None 1 = Minimal 2 = Very Mild 3 = Mild 4 = Mild
-                  to Moderate 5 = Moderate 6 = Moderate to Severe 7 = Mildly
-                  Severe, Restricts Some Activity 8 = Severe, Limits Most
-                  Activity 9 = Very Severe 10 = Excruciating
-                </label>
-                <div class="col-lg-6 pt-2" style="padding-top: 40px !important">
-                  <vue-slider
-                    v-model="form.paintIntensity"
-                    :max="10"
-                    :tooltip="'always'"
-                  ></vue-slider>
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">
+                    <strong style="color: red; margin-right: 5px">*</strong>
+                    Using the slide, rate the intensity of your primary problem
+                    pain now 0 = None 1 = Minimal 2 = Very Mild 3 = Mild 4 =
+                    Mild to Moderate 5 = Moderate 6 = Moderate to Severe 7 =
+                    Mildly Severe, Restricts Some Activity 8 = Severe, Limits
+                    Most Activity 9 = Very Severe 10 = Excruciating
+                  </label>
+                  <div class="mt-4">
+                    <vue-slider
+                      v-model="form.paintIntensity"
+                      :max="10"
+                      :tooltip="'always'"
+                    ></vue-slider>
+                  </div>
                 </div>
               </div>
               <hr />
               <div class="row">
                 <div class="col-lg-12 text-center">
-                  <h4>
+                  <h4 class="label f-weight-550">
                     If your pain radiates or travels, please indicate where
                   </h4>
                 </div>
@@ -141,10 +127,10 @@
                 v-for="radiatesQuestion in form.radiatesQuestionsAndAnswer"
                 :key="'rad' + radiatesQuestion.question"
               >
-                <label class="col-lg-4 control-label text-lg-right pt-2">{{
-                  radiatesQuestion.question
-                }}</label>
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">{{
+                    radiatesQuestion.question
+                  }}</label>
                   <multiselect
                     v-model="radiatesQuestion.answer"
                     :options="radiatesSelections"
@@ -152,11 +138,11 @@
                 </div>
               </div>
               <div class="form-group row" id="refPainSensation">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
-                  ><strong style="color: red; margin-right: 5px">*</strong>How
-                  would you best describe the sensation of your pain?</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
+                    ><strong style="color: red; margin-right: 5px">*</strong>How
+                    would you best describe the sensation of your pain?</label
+                  >
                   <multiselect
                     v-model="form.painQuality"
                     :options="painQualitySelection"
@@ -165,13 +151,11 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label
-                  class="col-lg-4 control-label text-lg-right pt-2"
-                  id="refExpPainImprovement"
-                  ><strong style="color: red; margin-right: 5px">*</strong>Over
-                  the past/weeks/months this complaint is</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550" id="refExpPainImprovement"
+                    ><strong style="color: red; margin-right: 5px">*</strong
+                    >Over the past/weeks/months this complaint is</label
+                  >
                   <multiselect
                     v-model="form.painQualityImprovement"
                     :options="painQualityImprovementSelection"
@@ -181,10 +165,10 @@
               </div>
               <hr />
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
-                  >What aggravates your pain or makes it feel worse?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
+                    >What aggravates your pain or makes it feel worse?
+                  </label>
                   <multiselect
                     v-model="form.painFactor"
                     :options="painFactorSelection"
@@ -193,10 +177,10 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
-                  >What relieves the pain?</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
+                    >What relieves the pain?</label
+                  >
                   <multiselect
                     v-model="form.painFactorImprovement"
                     :options="painFactorImprovementSelection"
@@ -207,10 +191,10 @@
               <hr />
 
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
-                  >How much does your problem interfere with work?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
+                    >How much does your problem interfere with work?
+                  </label>
                   <multiselect
                     v-model="form.painInterference"
                     :options="painInterferenceSelection"
@@ -219,10 +203,10 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2"
-                  >Have you seen anyone for your pain?</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
+                    >Have you seen anyone for your pain?</label
+                  >
                   <multiselect
                     v-model="form.painInterferenceHelp"
                     :options="painInterferenceHelpSelection"
@@ -233,7 +217,7 @@
               <hr />
               <div class="row">
                 <div class="col-lg-12 text-center">
-                  <h4>
+                  <h4 class="label f-weight-550">
                     Regarding your
                     <strong style="color: red">{{
                       currentProblem.region
@@ -248,14 +232,14 @@
                 v-for="oatQ in form.oatQuestions"
                 :key="oatQ.id"
               >
-                <label class="col-lg-4 control-label text-lg-right pt-2"
-                  ><strong
-                    style="color: red; margin-right: 5px"
-                    :id="oatQ.description"
-                    >*</strong
-                  >{{ oatQ.description }}</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-5 mx-auto">
+                  <label class="label f-weight-550"
+                    ><strong
+                      style="color: red; margin-right: 5px"
+                      :id="oatQ.description"
+                      >*</strong
+                    >{{ oatQ.description }}</label
+                  >
                   <multiselect
                     v-model="oatQ.selectedAnswer"
                     :options="oatQ.answerList"
@@ -284,7 +268,7 @@
                 >
                   Back
                 </button>
-                <btn-saving :is-saving="isSaving"/>
+                <btn-saving :is-saving="isSaving" />
               </div>
             </div>
           </footer>
@@ -681,7 +665,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryComplaintFormVal']),
+    ...mapActions([
+      'setTaskCurrentTaskType',
+      'setTaskCurrentCaseHistoryComplaintFormVal'
+    ]),
     selectChange (selected) {},
     selectRemove (removed) {},
     describeSelectChange (selected) {
@@ -917,7 +904,9 @@ export default {
       await Promise.all([promMultipleInsert, oatsInsert])
 
       this.isSaving = false
-      const isExist = this.formHistory.find(c => c.complaint === this.complaint)
+      const isExist = this.formHistory.find(
+        (c) => c.complaint === this.complaint
+      )
       if (!isExist) {
         this.formHistory.push({
           complaint: this.complaint,
@@ -926,7 +915,9 @@ export default {
       } else {
         isExist.form = this.form
       }
-      this.setTaskCurrentCaseHistoryComplaintFormVal(JSON.parse(JSON.stringify(this.formHistory)))
+      this.setTaskCurrentCaseHistoryComplaintFormVal(
+        JSON.parse(JSON.stringify(this.formHistory))
+      )
       if (
         this.currentProblemIndex !==
         this.getTaskCurrentCaseHistoryProblems.length - 1
@@ -937,7 +928,9 @@ export default {
 
         await this.initializeData()
 
-        const exist = this.formHistory.find(c => c.complaint === this.complaint)
+        const exist = this.formHistory.find(
+          (c) => c.complaint === this.complaint
+        )
         if (exist) {
           this.form = exist.form
         }
@@ -951,10 +944,14 @@ export default {
     },
     async previous () {
       if (this.currentProblemIndex === 0) {
-        const currentIndex = this.getTaskPreviousTaskType.findIndex(c => c === this.getTaskCurrentTaskType)
+        const currentIndex = this.getTaskPreviousTaskType.findIndex(
+          (c) => c === this.getTaskCurrentTaskType
+        )
         let prevPage = ''
         if (currentIndex === -1) {
-          prevPage = this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
+          prevPage = this.getTaskPreviousTaskType[
+            this.getTaskPreviousTaskType.length - 1
+          ]
         } else {
           prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
         }
@@ -964,7 +961,9 @@ export default {
         this.complaint = JSON.parse(JSON.stringify(this.currentProblem.region))
 
         await this.initializeData()
-        const oldForm = this.formHistory.find(c => c.complaint === this.complaint)
+        const oldForm = this.formHistory.find(
+          (c) => c.complaint === this.complaint
+        )
         if (oldForm) {
           this.form = oldForm.form
         }
@@ -1148,8 +1147,17 @@ export default {
           break
         case 'VAS':
           this.oatAnswerList = [
-            { description: '10' }, { description: '9' }, { description: '8' }, { description: '7' }, { description: '6' },
-            { description: '5' }, { description: '4' }, { description: '3' }, { description: '2' }, { description: '1' }, { description: '0' }
+            { description: '10' },
+            { description: '9' },
+            { description: '8' },
+            { description: '7' },
+            { description: '6' },
+            { description: '5' },
+            { description: '4' },
+            { description: '3' },
+            { description: '2' },
+            { description: '1' },
+            { description: '0' }
           ]
           break
         default:
@@ -1180,16 +1188,18 @@ export default {
       this.isLoading = false
     }
   },
-  async mounted () {
-
-  },
+  async mounted () {},
   async beforeMount () {
     await this.initializeData()
     if (this.getTaskCurrentCaseHistoryFormValues) {
       // this.formHistory = this.getTaskCurrentCaseHistoryFormValues
-      this.formHistory = JSON.parse(JSON.stringify(this.getTaskCurrentCaseHistoryFormValues))
+      this.formHistory = JSON.parse(
+        JSON.stringify(this.getTaskCurrentCaseHistoryFormValues)
+      )
       // this.formHistory.text = ''
-      const isExist = this.formHistory.find(c => c.complaint === this.complaint)
+      const isExist = this.formHistory.find(
+        (c) => c.complaint === this.complaint
+      )
       if (isExist) {
         this.form = JSON.parse(JSON.stringify(isExist.form))
       }

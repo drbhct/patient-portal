@@ -10,27 +10,28 @@
             <h2 class="card-title">Please confirm your information</h2>
           </header>
           <div class="card-body">
-            <div class="form-horizontal" v-if="!isLoading">
+            <div v-if="!isLoading">
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >First Name <span style="color: red">*</span></label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.firstName"
                     required
                   />
                 </div>
+
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Last Name <span style="color: red">*</span></label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.lastName"
@@ -40,11 +41,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Middle Initial</label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.middleInitial"
@@ -53,11 +54,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Nick Name</label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.nickName"
@@ -66,11 +67,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Email <span style="color: red">*</span></label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="email"
                     class="form-control"
                     v-model="form.email"
@@ -80,11 +81,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Address 1</label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.address"
@@ -93,11 +94,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Address 2</label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.address2"
@@ -106,20 +107,20 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >City</label
                 >
-                <div class="col-lg-6">
-                  <input type="text" class="form-control" v-model="form.city" />
+                <input type="text" class="form-control" v-model="form.city" />
                 </div>
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >State</label
                 >
-                <div class="col-lg-6">
-                  <select v-model="form.state" class="form-control">
+                <select v-model="form.state" class="form-control">
                     <option
                       v-for="state in usStates"
                       :key="state.code"
@@ -129,14 +130,15 @@
                     </option>
                   </select>
                 </div>
+
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Zip Code</label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.zip"
@@ -145,11 +147,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Home Phone <span style="color: red">*</span></label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.homePhone"
@@ -160,11 +162,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                   <label class="label f-weight-550"
                   >Mobile Phone <span style="color: red">*</span></label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.cellPhone"
@@ -175,11 +177,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Date of Birth <span style="color: red">*</span></label
                 >
-                <div class="col-lg-6">
-                  <datepicker
+                <datepicker
                     v-model="form.dob"
                     :input-class="'form-control'"
                     :format="'MMMM dd, yyyy'"
@@ -188,11 +190,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Gender <span style="color: red">*</span></label
                 >
-                <div class="col-lg-6">
-                  <select class="form-control" v-model="form.sex">
+                <select class="form-control" v-model="form.sex">
                     <option
                       v-for="gender in genderList"
                       :value="gender.id"
@@ -205,11 +207,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Employment <span style="color: red">*</span></label
                 >
-                <div class="col-lg-6">
-                  <select
+                <select
                     class="form-control"
                     v-model="form.employStatID"
                     required
@@ -226,11 +228,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                   <label class="label f-weight-550"
                   >Marital Status <span style="color: red">*</span></label
                 >
-                <div class="col-lg-6">
-                  <select v-model="form.maritalStatID" class="form-control">
+                <select v-model="form.maritalStatID" class="form-control">
                     <option
                       v-for="marital in statusList"
                       :key="marital.value"
@@ -243,11 +245,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Emergency Contact</label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.emerContact"
@@ -256,11 +258,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Emergency Relation</label
                 >
-                <div class="col-lg-6">
-                  <select class="form-control" v-model="form.emerRelation">
+                <select class="form-control" v-model="form.emerRelation">
                     <option
                       v-for="relation in relationList"
                       :value="relation"
@@ -273,11 +275,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Emergency Phone</label
                 >
-                <div class="col-lg-6">
-                  <input
+                <input
                     type="text"
                     class="form-control"
                     v-model="form.emerPhone"
@@ -287,11 +289,11 @@
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
                   >Is today's visit due to an auto accident?</label
                 >
-                <div class="col-lg-6">
-                  <div class="form-check">
+                <div class="form-check">
                     <input
                       type="radio"
                       class="form-check-input"

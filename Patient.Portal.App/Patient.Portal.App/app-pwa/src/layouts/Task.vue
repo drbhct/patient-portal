@@ -12,6 +12,7 @@
 <script>
 import api from '../api/http-common.js'
 import { mapGetters, mapActions } from 'vuex'
+import '../assets/FormLayout.css'
 export default {
   components: {
     // Lazy Loading components

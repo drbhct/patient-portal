@@ -10,13 +10,13 @@
             <h2 class="card-title"></h2>
           </header>
           <div class="card-body">
-            <div class="form-horizontal" v-if="!isLoading">
+            <div v-if="!isLoading">
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
-                  >Please select up to 4 regions that pertain to your
-                  visit</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550"
+                    >Please select up to 4 regions that pertain to your
+                    visit</label
+                  >
                   <multiselect
                     v-model="form.regions"
                     :options="regionsLocation"
@@ -28,11 +28,10 @@
                   ></multiselect>
                 </div>
               </div>
+
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
-                  >Primary Complaint</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">Primary Complaint</label>
                   <input
                     type="text"
                     class="form-control"
@@ -41,11 +40,10 @@
                   />
                 </div>
               </div>
+
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
-                  >2nd Complaint</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">2nd Complaint</label>
                   <input
                     type="text"
                     class="form-control"
@@ -54,11 +52,10 @@
                   />
                 </div>
               </div>
+
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
-                  >3rd Complaint</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">3rd Complaint</label>
                   <input
                     type="text"
                     class="form-control"
@@ -67,11 +64,10 @@
                   />
                 </div>
               </div>
+
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2"
-                  >4th Complaint</label
-                >
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">4th Complaint</label>
                   <input
                     type="text"
                     class="form-control"
@@ -80,8 +76,9 @@
                   />
                 </div>
               </div>
+
             </div>
-            <div v-if="isLoading" >
+            <div v-if="isLoading">
               <div class="col-12">
                 <content-placeholders :rounded="true" :centered="true">
                   <content-placeholders-text :lines="5" />
@@ -92,8 +89,15 @@
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
-                <button type="reset" class="btn btn-default mr-2" @click="previous" v-if="getTaskPreviousTaskType">Back</button>
-                <btn-saving :is-saving="isSaving"/>
+                <button
+                  type="reset"
+                  class="btn btn-default mr-2"
+                  @click="previous"
+                  v-if="getTaskPreviousTaskType"
+                >
+                  Back
+                </button>
+                <btn-saving :is-saving="isSaving" />
               </div>
             </div>
           </footer>
@@ -243,7 +247,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setTaskCurrentCaseHistoryProblems', 'setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryOats']),
+    ...mapActions([
+      'setTaskCurrentCaseHistoryProblems',
+      'setTaskCurrentTaskType',
+      'setTaskCurrentCaseHistoryOats'
+    ]),
     selectChange (selected) {
       if (!this.form.complaint1) {
         this.form.complaint1 = selected
@@ -293,7 +301,7 @@ export default {
       }
       this.isSaving = true
       if (this.forDelete.length > 0) {
-        this.forDelete.forEach(async el => {
+        this.forDelete.forEach(async (el) => {
           await api.task.request.deleteCaseHistoryProblem({
             facilityId: this.currentPatientAssociated.facilityID,
             caseHistoryProblemId: el.id
@@ -323,17 +331,24 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId
       })
 
-      const oats = await api.task.request.getCaseHistoryOats({ facilityId: this.currentPatientAssociated.facilityID, caseHistoryId: this.getTaskCurrentCaseHistoryId })
+      const oats = await api.task.request.getCaseHistoryOats({
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryId: this.getTaskCurrentCaseHistoryId
+      })
       await this.setTaskCurrentCaseHistoryOats(oats.data)
       await this.setTaskCurrentCaseHistoryProblems(problems.data)
       this.isSaving = false
       await this.setTaskCurrentTaskType('NphComplaintQuestions')
     },
     async previous () {
-      const currentIndex = this.getTaskPreviousTaskType.findIndex(c => c === this.getTaskCurrentTaskType)
+      const currentIndex = this.getTaskPreviousTaskType.findIndex(
+        (c) => c === this.getTaskCurrentTaskType
+      )
       let prevPage = ''
       if (currentIndex === -1) {
-        prevPage = this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
+        prevPage = this.getTaskPreviousTaskType[
+          this.getTaskPreviousTaskType.length - 1
+        ]
       } else {
         prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
       }
@@ -347,7 +362,7 @@ export default {
     })
     this.forDelete = result.data
     if (this.forDelete.length > 0) {
-      this.forDelete.forEach(async el => {
+      this.forDelete.forEach(async (el) => {
         this.form.regions.push(el.region)
         switch (el.ordinal) {
           case 1:
