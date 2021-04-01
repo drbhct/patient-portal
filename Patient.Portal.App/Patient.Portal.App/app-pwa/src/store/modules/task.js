@@ -6,7 +6,9 @@ const state = {
   currentCaseHistoryId: 0,
   currentCaseHistoryProblems: [],
   currentCaseHistoryOats: [],
-  currentCaseHistoryComplaintFormValues: null
+  currentCaseHistoryComplaintFormValues: null,
+  currentCaseHistoryAutoAccident: [],
+  currentCaseHistoryAAFormValues: null
 }
 
 const mutations = {
@@ -30,6 +32,12 @@ const mutations = {
   },
   [types.TASK_CURRENT_CASE_HISTORY_COMPLAINT_FORM_VAL] (state, payload) {
     state.currentCaseHistoryComplaintFormValues = payload
+  },
+  [types.TASK_CURRENT_CASE_HISTORY_AUTO_ACCIDENT] (state, payload) {
+    state.currentCaseHistoryAutoAccident = payload
+  },
+  [types.TASK_CURRENT_CASE_HISTORY_AA_FORM_VALUES] (state, payload) {
+    state.currentCaseHistoryAAFormValues = payload
   }
 }
 

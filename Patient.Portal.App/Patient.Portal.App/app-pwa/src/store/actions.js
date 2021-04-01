@@ -63,3 +63,11 @@ export const setTaskCurrentCaseHistoryOats = async (store, payload) => {
 export const setTaskCurrentCaseHistoryComplaintFormVal = async (store, payload) => {
   await store.commit(types.TASK_CURRENT_CASE_HISTORY_COMPLAINT_FORM_VAL, payload)
 }
+
+export const setTaskCurrentCaseHistoryAutoAccident = async (store, payload) => {
+  await store.commit(types.TASK_CURRENT_CASE_HISTORY_AUTO_ACCIDENT, payload)
+}
+
+export const setTaskCurrentCaseHistoryAAFormValues = async (store, payload) => {
+  await store.commit(types.TASK_CURRENT_CASE_HISTORY_AA_FORM_VALUES, payload)
+}

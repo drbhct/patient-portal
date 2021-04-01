@@ -22,3 +22,5 @@ export const getTaskCurrentCaseHistoryId = state => state.task.currentCaseHistor
 export const getTaskCurrentCaseHistoryProblems = state => state.task.currentCaseHistoryProblems
 export const getTaskCurrentCaseHistoryOats = state => state.task.currentCaseHistoryOats
 export const getTaskCurrentCaseHistoryFormValues = state => state.task.currentCaseHistoryComplaintFormValues
+export const getTaskCurrentCaseHistoryAutoAccident = state => state.task.currentCaseHistoryAutoAccident
+export const getTaskCurrentCaseHistoryAAFormValues = state => state.task.currentCaseHistoryAAFormValues
