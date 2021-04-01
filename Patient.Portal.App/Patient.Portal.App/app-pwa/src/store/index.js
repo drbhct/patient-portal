@@ -19,6 +19,7 @@ const vuexLocalStorage = new VuexPersist({
   paths: [
     'profile.profileAuthInfo',
     'profile.patientAssociated',
+    'profile.currentPatient',
     'task.currentCaseHistoryComplaintFormValues'
   ]
 })
