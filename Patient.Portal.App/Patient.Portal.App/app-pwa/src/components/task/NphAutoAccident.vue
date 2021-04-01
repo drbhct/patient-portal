@@ -1,16 +1,16 @@
 <template>
   <section role="main">
     <form action="" class="mt-5 mr-2 ml-2 justify-content-md-center">
-      <div class="col">
+      <div class="col-6 mx-auto">
         <section class="card">
           <header class="card-header"><h2 class="card-title">Please tell us about your automobile accident</h2></header>
           <div class="card-body">
             <div class="form-vertical">
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Date of accident
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="col-form-label">
+                    Date of accident
+                  </label>
                   <datepicker v-model="form.dateAccident"
                               :input-class="'form-control'"
                               :format="'MMMM dd, yyyy'"

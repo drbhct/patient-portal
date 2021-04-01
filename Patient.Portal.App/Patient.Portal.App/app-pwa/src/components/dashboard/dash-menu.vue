@@ -2,100 +2,100 @@
   <form>
     <div class="row justify-content-center">
       <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-        <section class="card mb-4">
-          <div class="card-body bg-blue">
-            <div class="widget-summary widget-summary-sm">
-              <div class="justify-content-center text-center">
-                <div class="summary-icon">
-                  <router-link to="/menu/messages" class="bg-blue">
+        <router-link to="/menu/messages" class="bg-blue">
+          <section class="card mb-4">
+            <div class="card-body bg-blue">
+              <div class="widget-summary widget-summary-sm">
+                <div class="justify-content-center text-center">
+                  <div class="summary-icon">
                     <i class="far fa-comment" aria-hidden="true"></i>
-                  </router-link>
+                  </div>
+                  <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Messages</span>
                 </div>
-                <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Messages</span>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </router-link>
       </div>
       <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-        <section class="card mb-4">
-          <div class="card-body bg-green">
-            <div class="widget-summary widget-summary-sm">
-              <div class="justify-content-center text-center">
-                <div class="summary-icon">
-                  <router-link to="/menu/documents" class="bg-green">
+        <router-link to="/menu/documents" class="bg-green">
+          <section class="card mb-4">
+            <div class="card-body bg-green">
+              <div class="widget-summary widget-summary-sm">
+                <div class="justify-content-center text-center">
+                  <div class="summary-icon">
                     <i class="fas fa-file" aria-hidden="true"></i>
-                  </router-link>
+                  </div>
+                  <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Documents</span>
                 </div>
-                <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Documents</span>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </router-link>
       </div>
       <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-        <section class="card mb-4">
-          <div class="card-body bg-orange">
-            <div class="widget-summary widget-summary-sm">
-              <div class="justify-content-center text-center">
-                <div class="summary-icon">
-                  <router-link to="/menu/appointments" class="bg-orange">
+        <router-link to="/menu/appointments" class="bg-orange">
+          <section class="card mb-4">
+            <div class="card-body bg-orange">
+              <div class="widget-summary widget-summary-sm">
+                <div class="justify-content-center text-center">
+                  <div class="summary-icon">
                     <i class="far fa-calendar" aria-hidden="true"></i>
-                  </router-link>
-                </div>
-                <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Appointments</span>
+                  </div>
+                  <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Appointments</span>
                 </div>
               </div>
-          </div>
-        </section>
+            </div>
+          </section>
+        </router-link>
       </div>
       <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-        <section class="card mb-4">
-          <div class="card-body bg-dgreen">
-            <div class="widget-summary widget-summary-sm">
-              <div class="justify-content-center text-center">
-                <div class="summary-icon">
-                  <router-link to="/menu/billing" class="bg-dgreen">
+        <router-link to="/menu/billing" class="bg-dgreen">
+          <section class="card mb-4">
+            <div class="card-body bg-dgreen">
+              <div class="widget-summary widget-summary-sm">
+                <div class="justify-content-center text-center">
+                  <div class="summary-icon">
                     <i class="fas fa-dollar-sign" aria-hidden="true"></i>
-                  </router-link>
+                  </div>
+                  <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Billing</span>
                 </div>
-                <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Billing</span>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </router-link>
       </div>
       <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-        <section class="card mb-4">
-          <div class="card-body bg-purple">
-            <div class="widget-summary widget-summary-sm">
-              <div class="justify-content-center text-center">
-                <div class="summary-icon">
-                  <router-link to="/menu/profile" class="bg-purple">
+        <router-link to="/menu/profile" class="bg-purple">
+          <section class="card mb-4">
+            <div class="card-body bg-purple">
+              <div class="widget-summary widget-summary-sm">
+                <div class="justify-content-center text-center">
+                  <div class="summary-icon">
                     <i class="fas fa-user" aria-hidden="true"></i>
-                  </router-link>
+                  </div>
+                  <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Profile</span>
                 </div>
-                <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Profile</span>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </router-link>
       </div>
       <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
-        <section class="card mb-4">
-          <div class="card-body bg-red">
-            <div class="widget-summary widget-summary-sm">
-              <div class="justify-content-center text-center">
-                <div class="summary-icon">
-                  <router-link to="/menu/tasks" class="bg-red">
+        <router-link to="/menu/tasks" class="bg-red">
+          <section class="card mb-4">
+            <div class="card-body bg-red">
+              <div class="widget-summary widget-summary-sm">
+                <div class="justify-content-center text-center">
+                  <div class="summary-icon">
                     <i class="fas fa-tasks" aria-hidden="true"></i>
-                  </router-link>
+                  </div>
+                  <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Tasks</span>
                 </div>
-                <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Tasks</span>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        </router-link>
       </div>
     </div>
   </form>
@@ -116,7 +116,7 @@
   }
 
   .card-body.bg-green:hover, .card-body.bg-green:hover a {
-    background: #4fe34f !important;
+    background: #669966 !important;
   }
 
   .card-body.bg-purple:hover, .card-body.bg-purple:hover a {
@@ -175,7 +175,7 @@
   }
 
   .card-body.bg-green {
-    background: #90ee90;
+    background: #93c47d;
     color: #fff;
     border-bottom: 0 none;
     border-right: 0 none;
