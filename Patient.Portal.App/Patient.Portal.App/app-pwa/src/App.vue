@@ -85,8 +85,12 @@ export default {
       return route
     },
     patientOfficeName () {
-      if (this.getProfilePatientAssociated.length > 0) {
-        return this.getProfilePatientAssociated[0].officeName
+      if (this.getProfilePatientAssociated) {
+        if (this.getProfilePatientAssociated.length > 0) {
+          return this.getProfilePatientAssociated[0].officeName
+        } else {
+          return null
+        }
       } else {
         return null
       }
