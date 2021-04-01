@@ -4,15 +4,15 @@
     <section class="body">
       <!-- start: header -->
       <header class="header">
-        <div class="logo-container d-inline">
+        <div class="logo-container d-inline" v-if="getProfileAuthInfo">
           <!--<a href="../2.3.0" class="logo">
             <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
           </a>-->
           <div class="d-none d-sm-inline-block">
-            <span class="office-name">{{ currentPatientAssociated.officeName }}</span>
+            <span class="office-name">{{ patientOfficeName }}</span>
           </div>
           <div class="d-md-none d-inline">
-            <span class="office-name-m">{{ currentPatientAssociated.officeName }}</span>
+            <span class="office-name-m">{{ patientOfficeName }}</span>
           </div>
           <div class="d-md-none toggle-sidebar-left"
                data-toggle-class="sidebar-left-opened"
@@ -84,11 +84,12 @@ export default {
       }
       return route
     },
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
+    patientOfficeName () {
+      if (this.getProfilePatientAssociated.length > 0) {
+        return this.getProfilePatientAssociated[0].officeName
+      } else {
         return null
       }
-      return this.getProfilePatientAssociated[0]
     },
     showHeader () {
       switch (this.currentRouteName) {
