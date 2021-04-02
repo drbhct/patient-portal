@@ -217,14 +217,9 @@ export default {
       'getProfilePatientAssociated',
       'getTaskCurrentCaseHistoryId',
       'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType'
+      'getTaskCurrentTaskType',
+      'currentPatientAssociated'
     ]),
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
-    },
     regionsLocation () {
       return [
         'Head',
@@ -250,7 +245,8 @@ export default {
     ...mapActions([
       'setTaskCurrentCaseHistoryProblems',
       'setTaskCurrentTaskType',
-      'setTaskCurrentCaseHistoryOats'
+      'setTaskCurrentCaseHistoryOats',
+      'setTaskCurrentTaskTypeRemove'
     ]),
     selectChange (selected) {
       if (!this.form.complaint1) {
@@ -352,7 +348,12 @@ export default {
       } else {
         prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
       }
-      this.setTaskCurrentTaskType(prevPage)
+
+      this.setTaskCurrentTaskType({
+        back: true,
+        page: prevPage,
+        removePage: this.getTaskCurrentTaskType
+      })
     }
   },
   async mounted () {

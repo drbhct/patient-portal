@@ -330,14 +330,9 @@ export default {
       'getProfilePatientAssociated',
       'getTaskCurrentCaseHistoryId',
       'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType'
+      'getTaskCurrentTaskType',
+      'currentPatientAssociated'
     ]),
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
-    },
     numOfChildrenSelection: function () {
       return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     },
@@ -407,7 +402,11 @@ export default {
       } else {
         prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
       }
-      this.setTaskCurrentTaskType(prevPage)
+      this.setTaskCurrentTaskType({
+        back: true,
+        page: prevPage,
+        removePage: this.getTaskCurrentTaskType
+      })
     },
     async submit () {
       this.isSaving = true

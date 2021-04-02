@@ -19,7 +19,13 @@ const mutations = {
         state.previousTaskType.push(state.currentTaskType)
       }
     }
-    state.currentTaskType = payload
+
+    if (payload.back) {
+      state.previousTaskType = state.previousTaskType.filter(el => el !== payload.removePage)
+      state.currentTaskType = payload.page
+    } else {
+      state.currentTaskType = payload
+    }
   },
   [types.TASK_CURRENT_CASE_HISTORY_ID] (state, payload) {
     state.currentCaseHistoryId = payload

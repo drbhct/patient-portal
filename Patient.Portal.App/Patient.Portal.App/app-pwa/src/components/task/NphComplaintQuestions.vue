@@ -337,7 +337,8 @@ export default {
       'getTaskCurrentCaseHistoryId',
       'getTaskPreviousTaskType',
       'getTaskCurrentCaseHistoryFormValues',
-      'getTaskCurrentTaskType'
+      'getTaskCurrentTaskType',
+      'currentPatientAssociated'
     ]),
     buttonText: function () {
       if (
@@ -348,12 +349,6 @@ export default {
       } else {
         return 'Submit'
       }
-    },
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
     },
     currentProblem: function () {
       if (this.getTaskCurrentCaseHistoryProblems.length === 0) {
@@ -955,7 +950,11 @@ export default {
         } else {
           prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
         }
-        this.setTaskCurrentTaskType(prevPage)
+        this.setTaskCurrentTaskType({
+          back: true,
+          page: prevPage,
+          removePage: this.getTaskCurrentTaskType
+        })
       } else {
         this.currentProblemIndex -= 1
         this.complaint = JSON.parse(JSON.stringify(this.currentProblem.region))

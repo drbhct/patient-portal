@@ -643,7 +643,8 @@ export default {
       'getTaskCurrentCaseHistoryId',
       'getTaskPreviousTaskType',
       'getTaskCurrentCaseHistoryAutoAccident',
-      'getTaskCurrentCaseHistoryAAFormValues'
+      'getTaskCurrentCaseHistoryAAFormValues',
+      'getTaskCurrentTaskType'
     ]),
     accidentConditions: function () {
       return ['Icy', 'Wet', 'Dry', 'Slick', 'Other']
@@ -754,7 +755,23 @@ export default {
       delete this.form[obj]
     },
     async previous () {
-      this.setTaskCurrentTaskType('PatientInfo')
+      const currentIndex = this.getTaskPreviousTaskType.findIndex(
+        (c) => c === this.getTaskCurrentTaskType
+      )
+      let prevPage = ''
+      if (currentIndex === -1) {
+        prevPage = this.getTaskPreviousTaskType[
+          this.getTaskPreviousTaskType.length - 1
+        ]
+      } else {
+        prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
+      }
+      // await this.setTaskCurrentTaskTypeRemove('NphComplaintLocation')
+      this.setTaskCurrentTaskType({
+        back: true,
+        page: prevPage,
+        removePage: this.getTaskCurrentTaskType
+      })
     },
     save () {
       if (this.form.dateAccident !== '') {
