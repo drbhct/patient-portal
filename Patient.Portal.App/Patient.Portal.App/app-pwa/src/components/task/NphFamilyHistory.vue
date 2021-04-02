@@ -116,14 +116,9 @@ export default {
       'getProfilePatientAssociated',
       'getTaskCurrentCaseHistoryId',
       'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType'
+      'getTaskCurrentTaskType',
+      'currentPatientAssociated'
     ]),
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
-    },
     conditionSelection () {
       return [
         'Cancer',

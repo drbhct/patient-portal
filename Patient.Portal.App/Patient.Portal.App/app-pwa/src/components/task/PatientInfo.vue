@@ -428,23 +428,9 @@ export default {
     ...mapGetters([
       'getProfilePatientAssociated',
       'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType'
-    ]),
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
-    }
-  },
-  watch: {
-    currentPatientAssociated: async function (val) {
-      // if (val) {
-      //   await this.getUsStates()
-      //   await this.getPatientInfo()
-      //   this.isLoading = false
-      // }
-    }
+      'getTaskCurrentTaskType',
+      'currentPatientAssociated'
+    ])
   },
   methods: {
     ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryId']),
