@@ -644,7 +644,8 @@ export default {
       'getTaskPreviousTaskType',
       'getTaskCurrentCaseHistoryAutoAccident',
       'getTaskCurrentCaseHistoryAAFormValues',
-      'getTaskCurrentTaskType'
+      'getTaskCurrentTaskType',
+      'currentPatientAssociated'
     ]),
     accidentConditions: function () {
       return ['Icy', 'Wet', 'Dry', 'Slick', 'Other']
@@ -736,12 +737,6 @@ export default {
     },
     accidentMedEquip: function () {
       return ['Cervical collar', 'Back brace', 'Crutches', 'Wheelchair']
-    },
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
     }
   },
   methods: {

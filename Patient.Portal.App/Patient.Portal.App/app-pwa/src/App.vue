@@ -9,10 +9,10 @@
             <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
           </a>-->
           <div class="d-none d-sm-inline-block">
-            <span class="office-name">{{ patientOfficeName }}</span>
+            <span class="office-name">{{ currentPatientAssociated.officeName }}</span>
           </div>
-          <div class="d-md-none d-inline">
-            <span class="office-name-m">{{ patientOfficeName }}</span>
+          <div class="d-sm-none d-inline">
+            <span class="office-name-m">{{ currentPatientAssociated.officeName }}</span>
           </div>
           <div class="d-md-none toggle-sidebar-left"
                data-toggle-class="sidebar-left-opened"
@@ -23,9 +23,29 @@
           </div>
         </div>
 
-        <div class="header-right" v-show="showMobileMenu">
-          <nav class="header-nav2">
-            <ul class="nav">
+        <div class="header-right d-sm-block d-md-block d-lg-block">
+          <!-- <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
+            <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
+          </div> -->
+          <div id="userbox" class="userbox">
+            <a href="#" data-toggle="dropdown" aria-expanded="false">
+              <div class="profile-info">
+                <span class="name font-weight-600 text-white">{{ currentPatientAssociated.firstName }} {{ currentPatientAssociated.lastName }}</span>
+              </div>
+              <i class="fa custom-caret"></i>
+            </a>
+            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-8px, 35px, 0px);">
+              <ul class="list-unstyled mb-2">
+                <li class="divider"></li>
+                <li v-for="patient in getProfilePatientAssociated" :key="patient.id" v-on:click="selectPatient(patient)">
+                  <a class="font-weight-600 text-white" role="menuitem" tabindex="-1">{{patient.firstName}} {{patient.lastName}}</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <span class="separator"></span>
+          <div class="float-right">
+            <ul class="notifications">
               <li>
                 <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-if="getProfileAuthInfo">
                   <i class="fas fa-sign-out-alt fa-2x"></i>
@@ -37,9 +57,9 @@
                 </a>
               </li>
             </ul>
-          </nav>
-          <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
-            <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
+            <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
+              <span class="font-weight-600">Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
+            </div>
           </div>
         </div>
       </header>
@@ -76,24 +96,13 @@ export default {
     version () {
       return '0.0.11' // USER STORY #17422 Patient Portal NPH
     },
-    ...mapGetters(['getIsLoading', 'getProfileAuthInfo', 'getProfilePatientAssociated']),
+    ...mapGetters(['getIsLoading', 'getProfileAuthInfo', 'getProfilePatientAssociated', 'currentPatientAssociated']),
     currentRouteName () {
       let route = this.$route.name
       if (route) {
         route = route.toLowerCase()
       }
       return route
-    },
-    patientOfficeName () {
-      if (this.getProfilePatientAssociated) {
-        if (this.getProfilePatientAssociated.length > 0) {
-          return this.getProfilePatientAssociated[0].officeName
-        } else {
-          return null
-        }
-      } else {
-        return null
-      }
     },
     showHeader () {
       switch (this.currentRouteName) {
@@ -122,12 +131,20 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logoutApp']),
+    ...mapActions(['logoutApp', 'setProfileCurrentPatient', 'setIsLoading']),
     async logout () {
       this.$cookies.remove('user')
       localStorage.removeItem('config')
       await this.logoutApp()
       this.$router.push('/account/login')
+    },
+    async selectPatient (patient) {
+      const me = this
+      this.setIsLoading(true)
+      await this.setProfileCurrentPatient(patient)
+      setTimeout(function () { me.setIsLoading(false) }, 500)
+      // eslint-disable-next-line no-undef
+      // this.$router.push('/')
     }
   },
   mounted () {
@@ -151,5 +168,22 @@ export default {
     margin: 10px 0 0 15px;
     vertical-align: middle;
     line-height: 2.2;
+  }
+  .nav-link {
+    display: block;
+    padding: 0.5rem 0rem;
+  }
+  .notifications {
+    padding-right: 1.5rem;
+    margin-left: 5rem;
+  }
+  html.header-dark .header .separator {
+    background-image: linear-gradient(#F6F6F6 60%, #EDEDED);
+  }
+  .userbox {
+    margin:0;
+  }
+  .userbox.show .dropdown-menu {
+    padding: 30px 10px 0
   }
 </style>
