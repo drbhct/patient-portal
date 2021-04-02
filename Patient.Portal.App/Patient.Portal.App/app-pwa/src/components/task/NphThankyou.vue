@@ -152,7 +152,11 @@ export default {
       } else {
         prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
       }
-      this.setTaskCurrentTaskType(prevPage)
+      this.setTaskCurrentTaskType({
+        back: true,
+        page: prevPage,
+        removePage: this.getTaskCurrentTaskType
+      })
     }
   },
   async mounted () {

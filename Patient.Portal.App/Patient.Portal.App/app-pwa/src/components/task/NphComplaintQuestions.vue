@@ -950,7 +950,11 @@ export default {
         } else {
           prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
         }
-        this.setTaskCurrentTaskType(prevPage)
+        this.setTaskCurrentTaskType({
+          back: true,
+          page: prevPage,
+          removePage: this.getTaskCurrentTaskType
+        })
       } else {
         this.currentProblemIndex -= 1
         this.complaint = JSON.parse(JSON.stringify(this.currentProblem.region))
