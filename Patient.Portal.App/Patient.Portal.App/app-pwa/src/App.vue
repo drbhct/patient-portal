@@ -8,10 +8,10 @@
           <!--<a href="../2.3.0" class="logo">
             <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
           </a>-->
-          <div class="d-none d-sm-inline-block">
+          <div class="d-none d-sm-inline-block" v-if="currentPatientAssociated">
             <span class="office-name">{{ currentPatientAssociated.officeName }}</span>
           </div>
-          <div class="d-sm-none d-inline">
+          <div class="d-sm-none d-inline" v-if="currentPatientAssociated">
             <span class="office-name-m">{{ currentPatientAssociated.officeName }}</span>
           </div>
           <div class="d-md-none toggle-sidebar-left"
@@ -23,7 +23,7 @@
           </div>
         </div>
 
-        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="getProfileAuthInfo" >
+        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="currentPatientAssociated && currentRouteName!=='landing'" >
           <!-- <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
             <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div> -->
@@ -43,16 +43,16 @@
               </ul>
             </div>
           </div>
-          <span class="separator" v-if="getProfileAuthInfo"></span>
+          <span class="separator" v-if="currentPatientAssociated && currentRouteName!=='landing'"></span>
           <div class="float-right">
             <ul class="notifications">
               <li>
-                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-if="getProfileAuthInfo">
+                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-if="currentPatientAssociated && currentRouteName!=='landing'">
                   <i class="fas fa-sign-out-alt fa-2x"></i>
                 </a>
               </li>
               <li>
-                <a href="#" class="nav-link" v-if="getProfileAuthInfo">
+                <a href="#" class="nav-link" v-if="currentPatientAssociated && currentRouteName!=='landing'">
                   <i class="fas fa-question-circle fa-2x"></i>
                 </a>
               </li>
