@@ -3,7 +3,7 @@
     <section role="main" class="content-body">
       <header class="card-header text-center">
         <div class="d-none d-sm-block">
-          <h3 v-if="getProfileAuthInfo">{{ currentPatientAssociated.firstName }} {{ currentPatientAssociated.lastName }}</h3>
+          <h3 v-if="currentPatientAssociated">{{ currentPatientAssociated.firstName }} {{ currentPatientAssociated.lastName }}</h3>
         </div>
         <div class="pb-3 d-lg-none d-md-none d-sm-none">
           <select v-model="selectedPatient" @change="selectPatient()" class="form-control">
