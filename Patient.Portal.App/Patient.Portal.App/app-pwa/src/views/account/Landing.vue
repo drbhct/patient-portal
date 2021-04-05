@@ -166,7 +166,8 @@ export default {
         password: ''
       },
       patientList: [],
-      selectedPatient: null
+      selectedPatient: null,
+      profileAuthInfo: null
     }
   },
   methods: {
@@ -210,7 +211,8 @@ export default {
       //   icon: 'success'
       // })
 
-      await this.setProfileAuthInfo(response.data)
+      // await this.setProfileAuthInfo(response.data)
+      this.profileAuthInfo = response.data
       const patientAssosicated = await api.auth.request.getUserPatient(
         response.data.id
       )
@@ -222,6 +224,7 @@ export default {
           backdrop: 'static'
         })
       } else {
+        await this.setProfileAuthInfo(this.profileAuthInfo)
         this.setProfilePatientAssociated(patientAssosicated.data)
         await this.setProfileCurrentPatient(patientAssosicated.data[0])
         this.$router.push('/')
@@ -232,6 +235,7 @@ export default {
       await this.setProfileCurrentPatient(this.selectedPatient)
       // eslint-disable-next-line no-undef
       $('#patientSelection').modal('hide')
+      await this.setProfileAuthInfo(this.profileAuthInfo)
       this.$router.push('/')
     }
   }

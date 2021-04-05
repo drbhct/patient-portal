@@ -23,7 +23,7 @@
           </div>
         </div>
 
-        <div class="header-right d-sm-block d-md-block d-lg-block">
+        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="getProfileAuthInfo" >
           <!-- <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
             <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div> -->
@@ -43,7 +43,7 @@
               </ul>
             </div>
           </div>
-          <span class="separator"></span>
+          <span class="separator" v-if="getProfileAuthInfo"></span>
           <div class="float-right">
             <ul class="notifications">
               <li>
@@ -94,7 +94,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.11' // USER STORY #17422 Patient Portal NPH
+      return '0.0.12' // USER STORY #17422 Patient Portal NPH with updates on 17491
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo', 'getProfilePatientAssociated', 'currentPatientAssociated']),
     currentRouteName () {
