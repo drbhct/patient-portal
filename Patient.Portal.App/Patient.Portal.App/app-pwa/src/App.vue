@@ -8,10 +8,10 @@
           <!--<a href="../2.3.0" class="logo">
             <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
           </a>-->
-          <div class="d-none d-sm-inline-block">
+          <div class="d-none d-sm-inline-block" v-if="currentPatientAssociated">
             <span class="office-name">{{ currentPatientAssociated.officeName }}</span>
           </div>
-          <div class="d-sm-none d-inline">
+          <div class="d-sm-none d-inline" v-if="currentPatientAssociated">
             <span class="office-name-m">{{ currentPatientAssociated.officeName }}</span>
           </div>
           <div class="d-md-none toggle-sidebar-left"
