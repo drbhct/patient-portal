@@ -23,7 +23,7 @@
           </div>
         </div>
 
-        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="getProfileAuthInfo" >
+        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="currentPatientAssociated" >
           <!-- <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
             <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div> -->
@@ -43,11 +43,11 @@
               </ul>
             </div>
           </div>
-          <span class="separator" v-if="getProfileAuthInfo"></span>
+          <span class="separator" v-if="currentPatientAssociated"></span>
           <div class="float-right">
             <ul class="notifications">
               <li>
-                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-if="getProfileAuthInfo">
+                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-if="currentPatientAssociated">
                   <i class="fas fa-sign-out-alt fa-2x"></i>
                 </a>
               </li>
