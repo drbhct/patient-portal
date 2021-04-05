@@ -8,17 +8,19 @@
         <section class="card">
           <header class="card-header"></header>
           <div class="card-body">
-            <div class="form-horizontal" v-if="!isLoading">
+            <div v-if="!isLoading">
               <div class="row">
-                <div class="col-lg-12 text-center">
-                  <h4>Please answer these questions about yourself</h4>
+                <div class="col-lg-6 mx-auto text-center">
+                  <h4 class="label f-weight-550">
+                    Please answer these questions about yourself
+                  </h4>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-3 control-label text-lg-right pt-2">
-                  Select one condition for Immediate Family Health History
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">
+                    Select one condition for Immediate Family Health History
+                  </label>
                   <multiselect
                     v-model="form.condition"
                     :options="conditionSelection"
@@ -34,22 +36,26 @@
                 v-for="famCondition in form.familyCondition"
                 :key="famCondition.question"
               >
-                <label class="col-lg-3 control-label text-lg-right pt-2">
-                  {{ famCondition.question }}
-                </label>
-                <div class="col-lg-3">
-                  <multiselect
-                    v-model="famCondition.family"
-                    :options="familySelection"
-                    :multiple="false"
-                  />
-                </div>
-                <div class="col-lg-3">
-                  <multiselect
-                    v-model="famCondition.stat"
-                    :options="statusSelection"
-                    :multiple="false"
-                  />
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">
+                    {{ famCondition.question }}
+                  </label>
+                  <div class="row">
+                    <div class="col-lg-6">
+                    <multiselect
+                      v-model="famCondition.family"
+                      :options="familySelection"
+                      :multiple="false"
+                    />
+                  </div>
+                  <div class="col-lg-6">
+                    <multiselect
+                      v-model="famCondition.stat"
+                      :options="statusSelection"
+                      :multiple="false"
+                    />
+                  </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -74,7 +80,7 @@
               >
                 Back
               </button>
-              <btn-saving :is-saving="isSaving"/>
+              <btn-saving :is-saving="isSaving" />
             </div>
           </div>
         </footer>
@@ -110,14 +116,9 @@ export default {
       'getProfilePatientAssociated',
       'getTaskCurrentCaseHistoryId',
       'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType'
+      'getTaskCurrentTaskType',
+      'currentPatientAssociated'
     ]),
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
-    },
     conditionSelection () {
       return [
         'Cancer',
@@ -184,14 +185,22 @@ export default {
       )
     },
     prev () {
-      const currentIndex = this.getTaskPreviousTaskType.findIndex(c => c === this.getTaskCurrentTaskType)
+      const currentIndex = this.getTaskPreviousTaskType.findIndex(
+        (c) => c === this.getTaskCurrentTaskType
+      )
       let prevPage = ''
       if (currentIndex === -1) {
-        prevPage = this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
+        prevPage = this.getTaskPreviousTaskType[
+          this.getTaskPreviousTaskType.length - 1
+        ]
       } else {
         prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
       }
-      this.setTaskCurrentTaskType(prevPage)
+      this.setTaskCurrentTaskType({
+        back: true,
+        page: prevPage,
+        removePage: this.getTaskCurrentTaskType
+      })
     },
     async submit () {
       this.isSaving = true
@@ -255,7 +264,7 @@ export default {
     this.familyHistoryData = familyHistoryData.data
 
     // Construct data
-    this.familyHistoryData.forEach(el => {
+    this.familyHistoryData.forEach((el) => {
       this.form.condition.push(el.description)
       let stat = ''
       if (el.past) {

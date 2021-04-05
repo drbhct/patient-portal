@@ -14,6 +14,7 @@ export const getProfileCurrentPage = state => state.profile.currentProfilePageVi
 export const getProfilePaymentCurrentPage = state => state.profile.currentProfilePaymentView
 export const getProfileAuthInfo = state => state.profile.profileAuthInfo
 export const getProfilePatientAssociated = state => state.profile.patientAssociated
+export const currentPatientAssociated = state => state.profile.currentPatient
 
 // task
 export const getTaskCurrentTaskType = state => state.task.currentTaskType
@@ -22,3 +23,5 @@ export const getTaskCurrentCaseHistoryId = state => state.task.currentCaseHistor
 export const getTaskCurrentCaseHistoryProblems = state => state.task.currentCaseHistoryProblems
 export const getTaskCurrentCaseHistoryOats = state => state.task.currentCaseHistoryOats
 export const getTaskCurrentCaseHistoryFormValues = state => state.task.currentCaseHistoryComplaintFormValues
+export const getTaskCurrentCaseHistoryAutoAccident = state => state.task.currentCaseHistoryAutoAccident
+export const getTaskCurrentCaseHistoryAAFormValues = state => state.task.currentCaseHistoryAAFormValues

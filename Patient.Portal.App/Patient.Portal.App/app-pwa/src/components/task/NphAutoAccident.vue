@@ -1,16 +1,16 @@
 <template>
   <section role="main">
-    <form action="" class="mt-5 mr-2 ml-2 justify-content-md-center">
-      <div class="col">
+    <form @submit.prevent="save" class="mt-5 mr-2 ml-2 justify-content-md-center">
+      <div id="cardAABody" class="col-6 mx-auto">
         <section class="card">
           <header class="card-header"><h2 class="card-title">Please tell us about your automobile accident</h2></header>
           <div class="card-body">
             <div class="form-vertical">
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Date of accident
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label f-weight-550">
+                    Date of Accident
+                  </label>
                   <datepicker v-model="form.dateAccident"
                               :input-class="'form-control'"
                               :format="'MMMM dd, yyyy'"
@@ -18,22 +18,22 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">Time of accident</label>
-                <div class="col-lg-6">
-                  <time-picker v-model="TimeVal" format="hh:mm A" :input-class="'form-control'"></time-picker>
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">Time of accident</label>
+                  <time-picker v-model="form.timeAccident" format="hh:mm A" input-width="100%" :input-class="'form-control'"></time-picker>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">Estimated Damage</label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">Estimated Damage</label>
                   <input type="text" class="form-control" v-model="form.estimatedDamage">
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                 Number of vehicles involved
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Number of vehicles involved
+                  </label>
                   <select class="form-control m-input phunkey-input" id="vehicle" value="1" v-model="form.numVehicles">
                     <option :value="num" v-for="num in numList" :key="num">{{num}}</option>
                   </select>
@@ -47,26 +47,26 @@
           <div class="card-body">
             <div class="form-vertical">
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Street Address or Intersection
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Street Address or Intersection
+                  </label>
                   <input type="text" class="form-control" v-model="form.streetAddress">
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  City
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    City
+                  </label>
                   <input type="text" class="form-control" v-model="form.city">
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  State
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    State
+                  </label>
                   <select v-model="form.state" class="form-control">
                     <option v-for="state in usStates"
                             :key="state.code"
@@ -84,152 +84,152 @@
           <div class="card-body">
             <div class="form-vertical">
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  How would you describe the accident conditions?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    How would you describe the accident conditions?
+                  </label>
                   <multiselect v-model="form.aaConditions"
                                :options="accidentConditions"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaConditions === 'Other'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please specify
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-10 mx-auto">
+                  <label class="label font-weight-600">
+                    Please specify
+                  </label>
                   <input type="text"
                          class="form-control"
                          v-model="aaConditions" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  How would you describe what happened?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    How would you describe what happened?
+                  </label>
                   <multiselect v-model="form.aaDescription"
                                :options="accidentDescription"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaDescription === 'Other'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please specify
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-10 mx-auto">
+                  <label class="label font-weight-600">
+                    Please specify
+                  </label>
                   <input type="text"
                          class="form-control"
                          v-model="aaDescription" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  What happened to your vehicle immediately after impact?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    What happened to your vehicle immediately after impact?
+                  </label>
                   <multiselect v-model="form.aaImpact"
                                :options="accidentImpact"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaImpact === 'Other'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please specify
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-10 mx-auto">
+                  <label class="label font-weight-600">
+                    Please specify
+                  </label>
                   <input type="text"
                          class="form-control"
                          v-model="aaImpact" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Where were you sitting at the time of the accident?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Where were you sitting at the time of the accident?
+                  </label>
                   <multiselect v-model="form.aaLocationVehicle"
                                :options="accidentLocationVehicle"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaLocationVehicle === 'Other'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please specify
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-10 mx-auto">
+                  <label class="label font-weight-600">
+                    Please specify
+                  </label>
                   <input type="text"
                          class="form-control"
                          v-model="aaLocationVehicle" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Did you know the accident was coming?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Did you know the accident was coming?
+                  </label>
                   <multiselect v-model="form.aaAwareness"
                                :options="accidentAwareness"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaAwareness === 'Other'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please specify
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-10 mx-auto">
+                  <label class="label font-weight-600">
+                    Please specify
+                  </label>
                   <input type="text"
                          class="form-control"
                          v-model="aaAwareness" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  What type of vehicle were you in during the accident?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    What type of vehicle were you in during the accident?
+                  </label>
                   <multiselect v-model="form.aaVehicleType"
                                :options="accidentVehicleType"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaVehicleType === 'Other'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please specify
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-10 mx-auto">
+                  <label class="label font-weight-600">
+                    Please specify
+                  </label>
                   <input type="text"
                          class="form-control"
                          v-model="aaVehicleType" />
                 </div>
               </div>
               <div class="form-group row" v-if="form.numVehicles > 1">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  What type was the other vehicle?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    What type was the other vehicle?
+                  </label>
                   <multiselect v-model="form.aaVehicleTypeOther"
                                :options="accidentVehicleType"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaVehicleTypeOther === 'Other'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please specify
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-10 mx-auto">
+                  <label class="label font-weight-600">
+                    Please specify
+                  </label>
                   <input type="text"
                          class="form-control"
                          v-model="aaVehicleTypeOther" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  At the time of the impact were you:
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    At the time of the impact were you:
+                  </label>
                   <multiselect v-model="form.aaVehicleState"
                                :options="accidentVehicleState"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaVehicleState === 'Other'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please specify
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-10 mx-auto">
+                  <label class="label font-weight-600">
+                    Please specify
+                  </label>
                   <input type="text"
                          class="form-control"
                          v-model="aaVehicleState" />
@@ -243,19 +243,19 @@
           <div class="card-body">
             <div class="form-vertical">
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Your Vehicle
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Your Vehicle
+                  </label>
                   <multiselect v-model="form.aaVehicleSpeed"
                                :options="speedList"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.numVehicles > 1">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Other Vehicle
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Other Vehicle
+                  </label>
                   <multiselect v-model="form.aaOtherVehicleSpeed"
                                :options="speedList"></multiselect>
                 </div>
@@ -268,136 +268,135 @@
           <div class="card-body">
             <div class="form-vertical">
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Did you lose consciousness during the accident?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Did you lose consciousness during the accident?
+                  </label>
                   <multiselect v-model="form.aaConsciousness"
                                :options="accidentConsciousness"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Did the airbags deployed during the accident?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Did the airbags deployed during the accident?
+                  </label>
                   <multiselect v-model="form.aaAirbags"
                                :options="accidentAirbags"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  What type of headrests where in your vehicle?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    What type of headrests where in your vehicle?
+                  </label>
                   <multiselect v-model="form.aaHeadrestType"
                                :options="accidentHeadrestType"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Where was the headrest in relation to your body?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Where was the headrest in relation to your body?
+                  </label>
                   <multiselect v-model="form.aaHeadrestPosition"
                                :options="accidentHeadrestPosition"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  What type of seatbelt where you wearing?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    What type of seatbelt where you wearing?
+                  </label>
                   <multiselect v-model="form.aaSeatbeltType"
                                :options="accidentSeatbeltType"
                                @select="setCodeValue($event, 'SeatbeltType')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaSeatbeltType === 'Other'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please specify
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-10 mx-auto">
+                  <label class="label font-weight-600">
+                    Please specify
+                  </label>
                   <input type="text"
                          class="form-control"
                          v-model="aaSeatbeltType" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Did the accident cause you to slide out of your seatbelt?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Did the accident cause you to slide out of your seatbelt?
+                  </label>
                   <multiselect v-model="form.aaSeatbeltEffect"
                                :options="accidentSeatbeltEffect"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Select parts of your vehicle that were damaged:
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Select parts of your vehicle that were damaged:
+                  </label>
                   <multiselect v-model="form.aaVehicleDamage"
                                :options="accidentVehicleDamage"
-                               :multiple="true"
-                                ></multiselect>
+                               :multiple="true"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Select parts of your vehicle that were dented inward during the accident:
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Select parts of your vehicle that were dented inward during the accident:
+                  </label>
                   <multiselect v-model="form.aaVehicleDents"
                                :options="accidentVehicleDents"
                                :multiple="true"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Select all the doors that would no longer open as a result of the accident:
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Select all the doors that would no longer open as a result of the accident:
+                  </label>
                   <multiselect v-model="form.aaVehicleDoors"
                                :options="accidentVehicleDoors"
                                :multiple="true"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  How was your head positioned during the accident?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    How was your head positioned during the accident?
+                  </label>
                   <multiselect v-model="form.aaHeadPosition"
                                :options="accidentHeadPosition"
-                                @select="setCodeValue($event, 'HeadPosition')"></multiselect>
+                               @select="setCodeValue($event, 'HeadPosition')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  How was your torso positioned during the accident?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    How was your torso positioned during the accident?
+                  </label>
                   <multiselect v-model="form.aaTorso"
                                :options="accidentTorso"
                                @select="setCodeValue($event, 'TorsoPosition')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  How were your hands positioned during the accident?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    How were your hands positioned during the accident?
+                  </label>
                   <multiselect v-model="form.aaHandPosition"
                                :options="accidentHandPosition"
                                @select="setCodeValue($event, 'HandPosition')"></multiselect>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Select all the parts of your body that where impacted during the accident:
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Select all the parts of your body that where impacted during the accident:
+                  </label>
                   <multiselect v-model="form.aaImpactLocations"
                                :options="accidentImpactLocations"
                                :multiple="true"
@@ -405,10 +404,10 @@
                 </div>
               </div>
               <div class="form-group row" v-for="item in form.aaImpactLocations" :key="item">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Select everything your {{item}} hit during the accident:
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Select everything your {{item}} hit during the accident:
+                  </label>
                   <multiselect v-model="form['aaImpactLocCar' + item]"
                                :options="accidentLocationParts"
                                :multiple="true"></multiselect>
@@ -422,108 +421,108 @@
           <div class="card-body">
             <div class="form-vertical">
               <div class="form-group row">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Did you go to the Hospital after the accident?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Did you go to the Hospital after the accident?
+                  </label>
                   <multiselect v-model="form.aaHospital"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'Hospital')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please enter the name of the Hospital
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Please enter the name of the Hospital
+                  </label>
                   <input type="text" class="form-control" v-model="form.aaHospitalName">
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  How did you get to the Hospital?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    How did you get to the Hospital?
+                  </label>
                   <multiselect v-model="form.aaHospitalTranspo"
                                :options="accidentHospitalTranspo"
                                @select="setCodeValue($event, 'HospitalTransport')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Were you hospitalized overnight?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Were you hospitalized overnight?
+                  </label>
                   <multiselect v-model="form.aaHospitalized"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalOvernight')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  At the Hospital, did you receive pain medication?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    At the Hospital, did you receive pain medication?
+                  </label>
                   <multiselect v-model="form.aaPainMed"
                                :options="accidentYesNo"
-                                @select="setCodeValue($event, 'HospitalPainMeds')"></multiselect>
+                               @select="setCodeValue($event, 'HospitalPainMeds')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  At the Hospital, did you receive muscle relaxers?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    At the Hospital, did you receive muscle relaxers?
+                  </label>
                   <multiselect v-model="form.aaMuscleRelaxers"
                                :options="accidentYesNo"
-                                @select="setCodeValue($event, 'HospitalMuscleRelaxers')"></multiselect>
+                               @select="setCodeValue($event, 'HospitalMuscleRelaxers')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  At the hospital, did you receive stitches?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    At the hospital, did you receive stitches?
+                  </label>
                   <multiselect v-model="form.aaStitches"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalStitches')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  Please select the items you received at the Hospital
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    Please select the items you received at the Hospital
+                  </label>
                   <multiselect v-model="form.aaMedEquip"
                                :options="accidentMedEquip"
                                :multiple="true"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  At the Hospital, were Xray's taken?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    At the Hospital, were Xray's taken?
+                  </label>
                   <multiselect v-model="form.aaXray"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalXrays')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  At the Hospital, was an MRI taken?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    At the Hospital, was an MRI taken?
+                  </label>
                   <multiselect v-model="form.aaMRI"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalMRI')"></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-if="form.aaHospital === 'Yes'">
-                <label class="col-lg-4 control-label text-lg-right pt-2">
-                  At the Hospital, were any other type of images taken?
-                </label>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
+                  <label class="label font-weight-600">
+                    At the Hospital, were any other type of images taken?
+                  </label>
                   <multiselect v-model="form.aaOtherImages"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalImaging')"></multiselect>
@@ -533,12 +532,13 @@
           </div>
           <footer class="card-footer">
             <div class="row justify-content-end">
-              <div class="col-sm-9">
-                <button class="btn btn-primary mr-2" @click="save">
+              <div class="col-sm-12">
+                <!--<button class="btn btn-primary mr-2" @click="save">
                   Submit
-                </button>
+                </button>-->
                 <!--<input type="button" class="btn btn-primary mr-2" @click="save" />-->
-                <button type="reset" class="btn btn-default">Reset</button>
+                <button type="reset" class="btn btn-default mr-2" v-if="getTaskPreviousTaskType" @click="previous">Back</button>
+                <btn-saving :is-saving="isSaving" />
               </div>
             </div>
           </footer>
@@ -556,17 +556,25 @@ import 'vue2-timepicker/dist/VueTimepicker.css'
 import Datepicker from 'vuejs-datepicker'
 import TimePicker from 'vue2-timepicker'
 import { mapGetters, mapActions } from 'vuex'
+import btnSaving from '../button-saving.vue'
 export default {
   components: {
     Multiselect,
     Datepicker,
-    TimePicker
+    TimePicker,
+    btnSaving
   },
   data () {
     return {
+      isLoading: true,
+      isSaving: false,
       form: {
         dateAccident: '',
-        timeAcccident: null,
+        timeAccident: {
+          hh: '12',
+          mm: '00',
+          A: 'AM'
+        },
         estimatedDamage: 0,
         numVehicles: 0,
         streetAddress: '',
@@ -632,9 +640,13 @@ export default {
   computed: {
     ...mapGetters([
       'getProfilePatientAssociated',
-      'getTaskCurrentCaseHistoryId'
+      'getTaskCurrentCaseHistoryId',
+      'getTaskPreviousTaskType',
+      'getTaskCurrentCaseHistoryAutoAccident',
+      'getTaskCurrentCaseHistoryAAFormValues',
+      'getTaskCurrentTaskType',
+      'currentPatientAssociated'
     ]),
-    ...mapActions(['setTaskCurrentTaskType']),
     accidentConditions: function () {
       return ['Icy', 'Wet', 'Dry', 'Slick', 'Other']
     },
@@ -725,15 +737,10 @@ export default {
     },
     accidentMedEquip: function () {
       return ['Cervical collar', 'Back brace', 'Crutches', 'Wheelchair']
-    },
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
     }
   },
   methods: {
+    ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryAutoAccident', 'setTaskCurrentCaseHistoryAAFormValues']),
     async getUsStates () {
       const result = await api.task.request.getUsStates()
       this.usStates = result.data
@@ -742,20 +749,40 @@ export default {
       const obj = 'aaImpactLocCar' + value
       delete this.form[obj]
     },
+    async previous () {
+      const currentIndex = this.getTaskPreviousTaskType.findIndex(
+        (c) => c === this.getTaskCurrentTaskType
+      )
+      let prevPage = ''
+      if (currentIndex === -1) {
+        prevPage = this.getTaskPreviousTaskType[
+          this.getTaskPreviousTaskType.length - 1
+        ]
+      } else {
+        prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
+      }
+      // await this.setTaskCurrentTaskTypeRemove('NphComplaintLocation')
+      this.setTaskCurrentTaskType({
+        back: true,
+        page: prevPage,
+        removePage: this.getTaskCurrentTaskType
+      })
+    },
     save () {
       if (this.form.dateAccident !== '') {
         this.setCodeValue(this.form.dateAccident, 'AccidentDate')
       }
-      if (this.form.timeAcccident !== null) {
-        this.setCodeValue(this.form.timeAcccident, 'AccidentTime')
+      if (this.form.timeAccident !== null) {
+        const tmeVal = `${this.form.timeAccident.hh}:${this.form.timeAccident.mm} ${this.form.timeAccident.A}`
+        this.setCodeValue(tmeVal, 'AccidentTime')
       }
-      if (this.form.estimatedDamage !== null) {
+      if (this.form.estimatedDamage > 0) {
         this.setCodeValue(this.form.estimatedDamage, 'AccidentDamageCost')
       }
-      if (this.form.numVehicles !== null) {
+      if (this.form.numVehicles > 0) {
         this.setCodeValue(this.form.numVehicles, 'NumVehicles')
       }
-      if (this.form.streetAddress !== null) {
+      if (this.form.streetAddress !== '') {
         this.setCodeValue(this.form.streetAddress, 'Street')
       }
       if (this.form.city !== '') {
@@ -820,11 +847,11 @@ export default {
           this.setCodeValue(this.form.aaVehicleState, 'PatientVehicleVelocity')
         }
       }
-      if (this.form.aaVehicleSpeed !== '') {
+      if (this.form.aaVehicleSpeed > 0) {
         this.setCodeValue(this.form.aaVehicleSpeed, 'PatientVehicleSpeed')
       }
       if (this.form.numVehicles > 1) {
-        if (this.form.aaOtherVehicleSpeed !== '') {
+        if (this.form.aaOtherVehicleSpeed > 0) {
           this.setCodeValue(this.form.aaOtherVehicleSpeed, 'OtherVehicleSpeed')
         }
       }
@@ -911,8 +938,15 @@ export default {
           me.setCodeValue(me.form[aaImpactLoc].join(), 'Impact_' + item.replace(/ /g, '_'))
         })
       }
+
       if (this.accidentInfo.length > 0) {
+        this.setTaskCurrentCaseHistoryAAFormValues(JSON.parse(JSON.stringify(this.form)))
+        this.setTaskCurrentCaseHistoryAutoAccident(this.accidentInfo)
+
+        this.isSaving = true
         this.setAAValues()
+      } else {
+        this.setTaskCurrentTaskType('NphComplaintLocation')
       }
     },
     setCodeValue (value, code) {
@@ -930,12 +964,124 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         values: this.accidentInfo
       }
+
       await api.task.request.updateCaseHistoryAaValues(param)
-      await this.setTaskCurrentTaskType('NphComplaintLocation')
+      this.setTaskCurrentTaskType('NphComplaintLocation')
+    },
+    initializeData () {
+      console.log('initializeData.......')
+      this.form = {
+        dateAccident: '',
+        timeAccident: null,
+        estimatedDamage: 0,
+        numVehicles: 0,
+        streetAddress: '',
+        city: '',
+        state: '',
+        aaConditions: '',
+        aaDescription: '',
+        aaImpact: '',
+        aaLocationVehicle: '',
+        aaAwareness: '',
+        aaVehicleType: '',
+        aaVehicleTypeOther: '',
+        aaVehicleState: '',
+        aaVehicleSpeed: 0,
+        aaOtherVehicleSpeed: 0,
+        aaConsciousness: '',
+        aaAirbags: '',
+        aaHeadrestType: '',
+        aaHeadrestPosition: '',
+        aaSeatbeltType: '',
+        aaSeatbeltEffect: '',
+        aaVehicleDamage: [],
+        aaVehicleDents: [],
+        aaVehicleDoors: [],
+        aaHeadPosition: '',
+        aaTorso: '',
+        aaHandPosition: '',
+        aaImpactLocations: [],
+        aaHospital: '',
+        aaHospitalName: '',
+        aaHospitalTranspo: '',
+        aaHospitalized: '',
+        aaPainMed: '',
+        aaMuscleRelaxers: '',
+        aaStitches: '',
+        aaMedEquip: [],
+        aaXray: '',
+        aaMRI: '',
+        aaOtherImages: ''
+      }
+      this.accidentInfo = this.getTaskCurrentCaseHistoryAutoAccident
+      console.log('before...........')
+      if (this.getTaskCurrentCaseHistoryAAFormValues) {
+        console.log('pasok here!!!')
+        this.form = JSON.parse(
+          JSON.stringify(this.getTaskCurrentCaseHistoryAAFormValues))
+        console.log(this.form)
+        if (this.form.aaConditions === 'Other') {
+          const index = this.accidentInfo.findIndex(el => el.code === 'WeatherCondition')
+          if (index >= 0) {
+            this.aaConditions = this.accidentInfo[index].value
+          }
+        }
+        if (this.form.aaDescription === 'Other') {
+          const index = this.accidentInfo.findIndex(el => el.code === 'GeneralDescription')
+          if (index >= 0) {
+            this.aaDescription = this.accidentInfo[index].value
+          }
+        }
+        if (this.form.aaImpact === 'Other') {
+          const index = this.accidentInfo.findIndex(el => el.code === 'AfterImpact')
+          if (index >= 0) {
+            this.aaImpact = this.accidentInfo[index].value
+          }
+        }
+        if (this.form.aaLocationVehicle === 'Other') {
+          const index = this.accidentInfo.findIndex(el => el.code === 'PatientLocation')
+          if (index >= 0) {
+            this.aaLocationVehicle = this.accidentInfo[index].value
+          }
+        }
+        if (this.form.aaAwareness === 'Other') {
+          const index = this.accidentInfo.findIndex(el => el.code === 'PatientAwareness')
+          if (index >= 0) {
+            this.aaAwareness = this.accidentInfo[index].value
+          }
+        }
+        if (this.form.aaVehicleType === 'Other') {
+          const index = this.accidentInfo.findIndex(el => el.code === 'PatientVehicleType')
+          if (index >= 0) {
+            this.aaVehicleType = this.accidentInfo[index].value
+          }
+        }
+        if (this.form.aaVehicleTypeOther === 'Other') {
+          const index = this.accidentInfo.findIndex(el => el.code === 'OtherVehicleType')
+          if (index >= 0) {
+            this.aaVehicleTypeOther = this.accidentInfo[index].value
+          }
+        }
+        if (this.form.aaVehicleState === 'Other') {
+          const index = this.accidentInfo.findIndex(el => el.code === 'PatientVehicleVelocity')
+          if (index >= 0) {
+            this.aaVehicleState = this.accidentInfo[index].value
+          }
+        }
+        if (this.form.aaSeatbeltType === 'Other') {
+          const index = this.accidentInfo.findIndex(el => el.code === 'SeatbeltType')
+          if (index >= 0) {
+            this.aaSeatbeltType = this.accidentInfo[index].value
+          }
+        }
+      }
     }
   },
   async mounted () {
+    const el = document.getElementById('cardAABody')
+    el.scrollIntoView({ behavior: 'smooth' })
     await this.getUsStates()
+    await this.initializeData()
   }
 }
 </script>

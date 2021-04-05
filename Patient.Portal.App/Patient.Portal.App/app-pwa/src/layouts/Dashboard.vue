@@ -3,7 +3,16 @@
     <section role="main" class="content-body">
       <header class="card-header text-center">
         <div class="d-none d-sm-block">
-          <h3 v-if="getProfileAuthInfo">{{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</h3>
+          <h3 v-if="getProfileAuthInfo">{{ currentPatientAssociated.firstName }} {{ currentPatientAssociated.lastName }}</h3>
+        </div>
+        <div class="pb-3 d-lg-none d-md-none d-sm-none">
+          <select v-model="selectedPatient" @change="selectPatient()" class="form-control">
+            <option v-for="patient in getProfilePatientAssociated"
+                    :value="patient"
+                    :key="patient.id">
+              {{ patient.firstName }} {{ patient.lastName }}
+            </option>
+          </select>
         </div>
 
         <!-- <div class="d-block d-sm-none btn-div-new">
@@ -56,15 +65,28 @@ export default {
     DashWelcome,
     DashMenu
   },
+  data () {
+    return {
+      selectedPatient: null
+    }
+  },
   computed: {
-    ...mapGetters(['getProfileAuthInfo', 'getProfilePatientAssociated'])
+    ...mapGetters(['getProfileAuthInfo', 'getProfilePatientAssociated', 'currentPatientAssociated'])
   },
   methods: {
-    ...mapActions(['setProfilePatientAssociated'])
+    ...mapActions(['setProfilePatientAssociated', 'setProfileCurrentPatient', 'setIsLoading']),
+    async selectPatient () {
+      const me = this
+      this.setIsLoading(true)
+      console.log(this.selectedPatient)
+      await this.setProfileCurrentPatient(this.selectedPatient)
+      setTimeout(function () { me.setIsLoading(false) }, 500)
+    }
   },
   async mounted () {
     const patientAssosicated = await api.auth.request.getUserPatient(this.getProfileAuthInfo.id)
     this.setProfilePatientAssociated(patientAssosicated.data)
+    this.selectedPatient = this.currentPatientAssociated
   }
 }
 </script>

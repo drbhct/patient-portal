@@ -24,13 +24,7 @@ export default {
     ...mapActions(['setMsgCurrentPage'])
   },
   computed: {
-    ...mapGetters(['getMsgInfo', 'getProfilePatientAssociated']),
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
-    }
+    ...mapGetters(['getMsgInfo', 'getProfilePatientAssociated', 'currentPatientAssociated'])
   },
   mounted () {
     if (!this.getMsgInfo.read) {

@@ -28,13 +28,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getProfilePatientAssociated']),
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
-    }
+    ...mapGetters(['getProfilePatientAssociated', 'currentPatientAssociated'])
   },
   methods: {
     date: function (date) {

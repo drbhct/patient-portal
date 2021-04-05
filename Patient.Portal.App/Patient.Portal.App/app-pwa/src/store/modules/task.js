@@ -6,7 +6,9 @@ const state = {
   currentCaseHistoryId: 0,
   currentCaseHistoryProblems: [],
   currentCaseHistoryOats: [],
-  currentCaseHistoryComplaintFormValues: null
+  currentCaseHistoryComplaintFormValues: null,
+  currentCaseHistoryAutoAccident: [],
+  currentCaseHistoryAAFormValues: null
 }
 
 const mutations = {
@@ -17,7 +19,13 @@ const mutations = {
         state.previousTaskType.push(state.currentTaskType)
       }
     }
-    state.currentTaskType = payload
+
+    if (payload.back) {
+      state.previousTaskType = state.previousTaskType.filter(el => el !== payload.removePage)
+      state.currentTaskType = payload.page
+    } else {
+      state.currentTaskType = payload
+    }
   },
   [types.TASK_CURRENT_CASE_HISTORY_ID] (state, payload) {
     state.currentCaseHistoryId = payload
@@ -30,6 +38,12 @@ const mutations = {
   },
   [types.TASK_CURRENT_CASE_HISTORY_COMPLAINT_FORM_VAL] (state, payload) {
     state.currentCaseHistoryComplaintFormValues = payload
+  },
+  [types.TASK_CURRENT_CASE_HISTORY_AUTO_ACCIDENT] (state, payload) {
+    state.currentCaseHistoryAutoAccident = payload
+  },
+  [types.TASK_CURRENT_CASE_HISTORY_AA_FORM_VALUES] (state, payload) {
+    state.currentCaseHistoryAAFormValues = payload
   }
 }
 

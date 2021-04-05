@@ -8,13 +8,14 @@
         <section class="card">
           <header class="card"></header>
           <div class="card-body">
-            <div class="form-horizontal" v-if="!isLoading">
-
-              <div class="form-group row" v-for="q in form.questions" :key="q.code">
-                <label
-                  class="col-lg-3 control-label text-lg-right pt-2"
-                >{{ q.question }}</label>
-                <div class="col-lg-6">
+            <div class="" v-if="!isLoading">
+              <div
+                class="form-group row"
+                v-for="q in form.questions"
+                :key="q.code"
+              >
+                <div class="col-lg-6 mx-auto">
+                  <label class="label f-weight-550">{{ q.question }}</label>
                   <multiselect
                     v-model="q.answer"
                     :options="yesNoSelection"
@@ -25,10 +26,11 @@
 
               <div class="row">
                 <div class="col-lg-12 text-center">
-                  <h3>The doctor will ask you for details during your visit. </h3>
+                  <h3 class="label f-weight-550">
+                    The doctor will ask you for details during your visit.
+                  </h3>
                 </div>
               </div>
-
             </div>
             <div v-else>
               <div class="col-12">
@@ -49,7 +51,7 @@
                 >
                   Back
                 </button>
-                <btn-saving :is-saving="isSaving"/>
+                <btn-saving :is-saving="isSaving" />
               </div>
             </div>
           </footer>
@@ -76,8 +78,16 @@ export default {
       isLoading: false,
       form: {
         questions: [
-          { code: 'SeenChiropractor', question: 'Have you ever seen a chiropractor before?', answer: '' },
-          { code: 'DoctorToKnow', question: 'Is there anything else you want the doctor to know?', answer: '' }
+          {
+            code: 'SeenChiropractor',
+            question: 'Have you ever seen a chiropractor before?',
+            answer: ''
+          },
+          {
+            code: 'DoctorToKnow',
+            question: 'Is there anything else you want the doctor to know?',
+            answer: ''
+          }
         ],
         seenChiro: null,
         otherInquiry: null
@@ -89,14 +99,9 @@ export default {
       'getProfilePatientAssociated',
       'getTaskCurrentCaseHistoryId',
       'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType'
+      'getTaskCurrentTaskType',
+      'currentPatientAssociated'
     ]),
-    currentPatientAssociated () {
-      if (this.getProfilePatientAssociated.length === 0) {
-        return null
-      }
-      return this.getProfilePatientAssociated[0]
-    },
     yesNoSelection () {
       return ['Yes', 'No']
     }
@@ -110,7 +115,7 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         questions: []
       }
-      this.form.questions.forEach(c => {
+      this.form.questions.forEach((c) => {
         payload.questions.push({
           description: c.code,
           answer: c.answer
@@ -136,27 +141,40 @@ export default {
       await this.$router.push({ path: '/' })
     },
     prev () {
-      const currentIndex = this.getTaskPreviousTaskType.findIndex(c => c === this.getTaskCurrentTaskType)
+      const currentIndex = this.getTaskPreviousTaskType.findIndex(
+        (c) => c === this.getTaskCurrentTaskType
+      )
       let prevPage = ''
       if (currentIndex === -1) {
-        prevPage = this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
+        prevPage = this.getTaskPreviousTaskType[
+          this.getTaskPreviousTaskType.length - 1
+        ]
       } else {
         prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
       }
-      this.setTaskCurrentTaskType(prevPage)
+      this.setTaskCurrentTaskType({
+        back: true,
+        page: prevPage,
+        removePage: this.getTaskCurrentTaskType
+      })
     }
   },
   async mounted () {
     this.isLoading = true
-    const caseHistoryQuestions = await api.task.request.getCaseHistoryQuestions({
-      facilityId: this.currentPatientAssociated.facilityID,
-      caseHistoryId: this.getTaskCurrentCaseHistoryId
-    })
+    const caseHistoryQuestions = await api.task.request.getCaseHistoryQuestions(
+      {
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryId: this.getTaskCurrentCaseHistoryId
+      }
+    )
 
-    const record = caseHistoryQuestions.data.filter(c => c.description === 'SeenChiropractor' || c.description === 'DoctorToKnow')
+    const record = caseHistoryQuestions.data.filter(
+      (c) =>
+        c.description === 'SeenChiropractor' || c.description === 'DoctorToKnow'
+    )
     // console.log('record', record)
-    record.forEach(c => {
-      const update = this.form.questions.find(x => x.code === c.description)
+    record.forEach((c) => {
+      const update = this.form.questions.find((x) => x.code === c.description)
       // console.log('update', update)
       if (update) {
         update.answer = c.answer
