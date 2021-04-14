@@ -51,6 +51,7 @@ securedJsonRequest.interceptors.response.use(
         // Vue.$swal(error.response.statusText)
       }
       if (error.response.status === 401) {
+        localStorage.clear()
         // Unauthorized and logout the user or relogin
         window.location = '/account/login'
       }

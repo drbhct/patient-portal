@@ -4,14 +4,14 @@
     <section class="body">
       <!-- start: header -->
       <header class="header">
-        <div class="logo-container d-inline" v-if="getProfileAuthInfo">
-          <!--<a href="../2.3.0" class="logo">
+        <div class="logo-container d-inline" >
+          <a href="/" class="logo" v-if="!$auth.isAuthenticated()">
             <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
-          </a>-->
-          <div class="d-none d-sm-inline-block" v-if="currentPatientAssociated">
+          </a>
+          <div class="d-none d-sm-inline-block" v-if="$auth.isAuthenticated()">
             <span class="office-name">{{ currentPatientAssociated.officeName }}</span>
           </div>
-          <div class="d-sm-none d-inline" v-if="currentPatientAssociated">
+          <div class="d-sm-none d-inline" v-if="$auth.isAuthenticated()">
             <span class="office-name-m">{{ currentPatientAssociated.officeName }}</span>
           </div>
           <div class="d-md-none toggle-sidebar-left"
@@ -23,7 +23,7 @@
           </div>
         </div>
 
-        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="currentPatientAssociated && currentRouteName!=='landing'" >
+        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="$auth.isAuthenticated()" >
           <!-- <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
             <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div> -->
@@ -133,9 +133,7 @@ export default {
   methods: {
     ...mapActions(['logoutApp', 'setProfileCurrentPatient', 'setIsLoading']),
     async logout () {
-      this.$cookies.remove('user')
-      localStorage.removeItem('config')
-      await this.logoutApp()
+      this.$auth.logout()
       this.$router.push('/account/login')
     },
     async selectPatient (patient) {
@@ -143,8 +141,6 @@ export default {
       this.setIsLoading(true)
       await this.setProfileCurrentPatient(patient)
       setTimeout(function () { me.setIsLoading(false) }, 500)
-      // eslint-disable-next-line no-undef
-      // this.$router.push('/')
     }
   },
   mounted () {

@@ -178,19 +178,8 @@ export default {
       'setProfileCurrentPatient'
     ]),
     async login () {
-      this.setIsLoading(true)
-
-      const apiRes = await api.auth.request.apiLogin()
-      // this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
-      localStorage.setItem('config', apiRes.data.token)
-
-      const response = await api.auth.request.validateUser(
-        this.loginForm,
-        apiRes.data.token
-      )
-      this.setIsLoading(false)
-
-      if (!response.data) {
+      const userData = await this.$auth.login(this.loginForm.userName, this.loginForm.password)
+      if (!this.$auth.isAuthenticated()) {
         this.$swal({
           toast: true,
           position: 'top-end',
@@ -202,19 +191,10 @@ export default {
         })
         return
       }
-      // this.$swal({
-      //   position: 'top',
-      //   title: 'Authentication Success',
-      //   showConfirmButton: false,
-      //   timerProgressBar: true,
-      //   timer: 1000,
-      //   icon: 'success'
-      // })
 
-      // await this.setProfileAuthInfo(response.data)
-      this.profileAuthInfo = response.data
+      this.profileAuthInfo = userData
       const patientAssosicated = await api.auth.request.getUserPatient(
-        response.data.id
+        this.profileAuthInfo.id
       )
       if (patientAssosicated.data.length > 1) {
         this.patientList = patientAssosicated.data
@@ -229,6 +209,58 @@ export default {
         await this.setProfileCurrentPatient(patientAssosicated.data[0])
         this.$router.push('/')
       }
+
+      // this.setIsLoading(true)
+
+      // const apiRes = await api.auth.request.apiLogin()
+      // // this.$cookies.set('user', apiRes.data, 60 * 60 * 12)
+      // localStorage.setItem('config', apiRes.data.token)
+
+      // const response = await api.auth.request.validateUser(
+      //   this.loginForm,
+      //   apiRes.data.token
+      // )
+      // this.setIsLoading(false)
+
+      // if (!response.data) {
+      //   this.$swal({
+      //     toast: true,
+      //     position: 'top-end',
+      //     title: 'Authentication Failed',
+      //     showConfirmButton: false,
+      //     timerProgressBar: true,
+      //     timer: 2000,
+      //     icon: 'error'
+      //   })
+      //   return
+      // }
+      // // this.$swal({
+      // //   position: 'top',
+      // //   title: 'Authentication Success',
+      // //   showConfirmButton: false,
+      // //   timerProgressBar: true,
+      // //   timer: 1000,
+      // //   icon: 'success'
+      // // })
+
+      // // await this.setProfileAuthInfo(response.data)
+      // this.profileAuthInfo = response.data
+      // const patientAssosicated = await api.auth.request.getUserPatient(
+      //   response.data.id
+      // )
+      // if (patientAssosicated.data.length > 1) {
+      //   this.patientList = patientAssosicated.data
+      //   // eslint-disable-next-line no-undef
+      //   $('#patientSelection').modal({
+      //     show: true,
+      //     backdrop: 'static'
+      //   })
+      // } else {
+      //   await this.setProfileAuthInfo(this.profileAuthInfo)
+      //   this.setProfilePatientAssociated(patientAssosicated.data)
+      //   await this.setProfileCurrentPatient(patientAssosicated.data[0])
+      //   this.$router.push('/')
+      // }
     },
     async patientSelect () {
       this.setProfilePatientAssociated(this.patientList)
