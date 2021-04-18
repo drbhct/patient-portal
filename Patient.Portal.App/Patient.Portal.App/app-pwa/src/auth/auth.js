@@ -3,23 +3,19 @@ import auth from '../api/auth-request.js'
 export default {
   install (Vue, options) {
     Vue.prototype.$auth = myInstance
-  },
-
-  getToken () {
-    return localStorage.token
-  },
-
-  logout (cb) {
-    delete localStorage.token
-    if (cb) cb()
-    this.onChange(false)
-  },
-
-  loggedIn () {
-    return !!localStorage.token
-  },
-
-  onChange () {}
+    // console.log('instance installed')
+    // console.log('route', Vue.route)
+    // console.log('isAuthenticated', Vue.prototype.$auth.isAuthenticated())
+    // Vue.prototype.$isAuthenticated = () => {
+    //   const token = localStorage.getItem('config')
+    //   if (!token) {
+    //     return false
+    //   }
+    //   return true
+    // }
+    // Vue.prototype.$auth.logout()
+    // console.log('isAuthenticated', Vue.prototype.$auth.isAuthenticated())
+  }
 }
 
 var myInstance = {
@@ -44,9 +40,18 @@ var myInstance = {
   },
   isAuthenticated () {
     const token = localStorage.getItem('config')
+    const completeAuth = localStorage.getItem('completeAuth')
     if (!token) {
       return false
     }
+
+    if (!completeAuth) {
+      return false
+    }
+
     return true
+  },
+  completeAuth () {
+    localStorage.setItem('completeAuth', true)
   }
 }
