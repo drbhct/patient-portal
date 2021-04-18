@@ -4,15 +4,15 @@
     <section class="body">
       <!-- start: header -->
       <header class="header">
-        <div class="logo-container d-inline" v-if="getProfileAuthInfo">
-          <!--<a href="../2.3.0" class="logo">
+        <div class="logo-container d-inline" >
+          <a href="/" class="logo" v-if="!$auth.isAuthenticated()">
             <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
-          </a>-->
-          <div class="d-none d-sm-inline-block" v-if="currentPatientAssociated">
-            <span class="office-name">{{ currentPatientAssociated.officeName }}</span>
+          </a>
+          <div class="d-none d-sm-inline-block" v-if="$auth.isAuthenticated()">
+            <span class="office-name" v-if="currentPatientAssociated">{{ currentPatientAssociated.officeName }}</span>
           </div>
-          <div class="d-sm-none d-inline" v-if="currentPatientAssociated">
-            <span class="office-name-m">{{ currentPatientAssociated.officeName }}</span>
+          <div class="d-sm-none d-inline" v-if="$auth.isAuthenticated()">
+            <span class="office-name-m" v-if="currentPatientAssociated">{{ currentPatientAssociated.officeName }}</span>
           </div>
           <div class="d-md-none toggle-sidebar-left"
                data-toggle-class="sidebar-left-opened"
@@ -23,18 +23,18 @@
           </div>
         </div>
 
-        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="currentPatientAssociated && currentRouteName!=='landing'" >
+        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="$auth.isAuthenticated()" >
           <!-- <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
             <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div> -->
           <div id="userbox" class="userbox">
             <a href="#" data-toggle="dropdown" aria-expanded="false">
               <div class="profile-info">
-                <span class="name font-weight-600 text-white">{{ currentPatientAssociated.firstName }} {{ currentPatientAssociated.lastName }}</span>
+                <span class="name font-weight-600 text-white" v-if="currentPatientAssociated">{{ currentPatientAssociated.firstName }} {{ currentPatientAssociated.lastName }}</span>
               </div>
               <i class="fa custom-caret"></i>
             </a>
-            <div class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-8px, 35px, 0px);">
+            <div v-if="getProfilePatientAssociated.length>0" class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(-8px, 35px, 0px);">
               <ul class="list-unstyled mb-2">
                 <li class="divider"></li>
                 <li v-for="patient in getProfilePatientAssociated" :key="patient.id" v-on:click="selectPatient(patient)">
@@ -94,7 +94,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.12' // USER STORY #17422 Patient Portal NPH with updates on 17491
+      return '0.0.13' // USER STORY #17422 Patient Portal NPH with updates on 17491
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo', 'getProfilePatientAssociated', 'currentPatientAssociated']),
     currentRouteName () {
@@ -133,9 +133,7 @@ export default {
   methods: {
     ...mapActions(['logoutApp', 'setProfileCurrentPatient', 'setIsLoading']),
     async logout () {
-      this.$cookies.remove('user')
-      localStorage.removeItem('config')
-      await this.logoutApp()
+      this.$auth.logout()
       this.$router.push('/account/login')
     },
     async selectPatient (patient) {
@@ -143,12 +141,17 @@ export default {
       this.setIsLoading(true)
       await this.setProfileCurrentPatient(patient)
       setTimeout(function () { me.setIsLoading(false) }, 500)
-      // eslint-disable-next-line no-undef
-      // this.$router.push('/')
     }
   },
-  mounted () {
+  created () {
     console.info('%c Patient Portal v' + this.version, 'background:green')
+    // console.log('this.$auth', this.$auth.isAuthenticated())
+    // if (this.$auth.isAthenticated()) {
+    //   if (this.$route.path === '/account/login') {
+    //     this.$auth.logout()
+    //     console.log('isAut', this.$auth.isAthenticated())
+    //   }
+    // }
   }
 }
 </script>

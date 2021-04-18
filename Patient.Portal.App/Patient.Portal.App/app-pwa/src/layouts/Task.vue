@@ -5,7 +5,10 @@
             <h2 v-if="!initialize">Initializing App ...</h2>
             <h2 v-if="initialize && (hasAccount || keyExpired)">{{ message }}</h2>
         </div>
-        <component v-bind:is="getTaskCurrentTaskType" v-if="initialize" :link-info="linkInfo"></component>
+        <keep-alive>
+          <component v-bind:is="getTaskCurrentTaskType" v-if="initialize" :link-info="linkInfo"></component>
+        </keep-alive>
+
     </div>
   </div>
 </template>
@@ -96,6 +99,7 @@ export default {
         patientId: this.linkInfo.patientID
       })
       this.task = taskRes.data.find(el => el.taskID === this.linkInfo.taskID)
+      console.log('this.task.taskType', this.task.taskType)
       switch (this.task.taskType) {
         case 'NPH':
           // this.module = 'CreateAccount'

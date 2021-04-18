@@ -6,11 +6,17 @@
           <div class="col-xl-8 mb-3">
             <section class="card card-featured card-featured-primary mb-4 mt-4">
               <header class="card-header">
-
                 <h2 class="card-title">Account Setup</h2>
               </header>
               <div class="card-body">
                 <form @submit.prevent="submitForm">
+                  <div class="form-group">
+                    <div class="alert alert-info" role="alert">
+                      <p><i class="fas fa-info-circle mr-1"></i>Create account for patient <strong>{{ patientInfo.firstName }} {{ patientInfo.lastName }}</strong>.<br>
+                        Click <strong>Login instead</strong> if you wish to associate patient to existing user.
+                      </p>
+                    </div>
+                  </div>
                   <div class="form-group">
                     <label for="exampleInputEmail1">Email</label>
                     <input
@@ -26,16 +32,22 @@
                     <label>Password</label>
                     <div class="input-group mb-3">
                       <span class="input-group-prepend">
-                        <span class="input-group-text" @click="showPassword = !showPassword">
+                        <span
+                          class="input-group-text"
+                          @click="showPassword = !showPassword"
+                        >
                           <i
-                            :class="{'far fa-eye':!showPassword, 'far fa-eye-slash': showPassword}"
+                            :class="{
+                              'far fa-eye': !showPassword,
+                              'far fa-eye-slash': showPassword,
+                            }"
                           ></i>
                         </span>
                       </span>
                       <input
                         v-model="form.password"
                         @input="checkPassword"
-                        :type="showPassword? 'text': 'password'"
+                        :type="showPassword ? 'text' : 'password'"
                         class="form-control"
                         placeholder="Password"
                         maxlength="50"
@@ -45,12 +57,22 @@
                       />
                     </div>
                     <ul>
-                      <li v-bind:class="{ is_valid: contains_eight_characters }">8 Characters</li>
-                      <li v-bind:class="{ is_valid: contains_number }">Contains Number</li>
-                      <li v-bind:class="{ is_valid: contains_uppercase }">Contains Uppercase</li>
+                      <li
+                        v-bind:class="{ is_valid: contains_eight_characters }"
+                      >
+                        8 Characters
+                      </li>
+                      <li v-bind:class="{ is_valid: contains_number }">
+                        Contains Number
+                      </li>
+                      <li v-bind:class="{ is_valid: contains_uppercase }">
+                        Contains Uppercase
+                      </li>
                       <li
                         v-bind:class="{ is_valid: contains_special_character }"
-                      >Contains Special Character</li>
+                      >
+                        Contains Special Character
+                      </li>
                     </ul>
                   </div>
                   <div class="form-group mb-4">
@@ -62,13 +84,16 @@
                           @click="showConfirmPassword = !showConfirmPassword"
                         >
                           <i
-                            :class="{'far fa-eye':!showConfirmPassword, 'far fa-eye-slash': showConfirmPassword}"
+                            :class="{
+                              'far fa-eye': !showConfirmPassword,
+                              'far fa-eye-slash': showConfirmPassword,
+                            }"
                           ></i>
                         </span>
                       </span>
                       <input
                         v-model="form.confirmPassword"
-                        :type="showConfirmPassword? 'text': 'password'"
+                        :type="showConfirmPassword ? 'text' : 'password'"
                         class="form-control"
                         placeholder="Confirm Password"
                         maxlength="50"
@@ -79,11 +104,14 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <btn-saving :is-saving="isSaving"/>
+                    <btn-saving :is-saving="isSaving" />
                     <!-- <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">Create Account</button> -->
                   </div>
                   <div class="form-group">
-                    <h5>Existing account? <a href="/account/login">Login instead</a></h5>
+                    <h5>
+                      Existing account?
+                      <a href="javascript:void(0)" @click="gotoLogin">Login instead</a>
+                    </h5>
                   </div>
                 </form>
               </div>
@@ -127,7 +155,8 @@ export default {
       contains_number: false,
       contains_uppercase: false,
       contains_special_character: false,
-      valid_password: false
+      valid_password: false,
+      patientInfo: null
     }
   },
   computed: {
@@ -136,7 +165,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setIsLoading', 'setProfileAuthInfo', 'setTaskCurrentTaskType', 'setProfilePatientAssociated']),
+    ...mapActions([
+      'setIsLoading',
+      'setProfileAuthInfo',
+      'setTaskCurrentTaskType',
+      'setProfilePatientAssociated'
+    ]),
     checkPassword () {
       this.password_length = this.form.password.length
       const format = /[ !@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/
@@ -249,7 +283,9 @@ export default {
         MobilePhone: this.form.mobilePhone
       })
       await this.setProfileAuthInfo(response.data)
-      const patientAssosicated = await api.auth.request.getUserPatient(insertUserRes.data)
+      const patientAssosicated = await api.auth.request.getUserPatient(
+        insertUserRes.data
+      )
       this.setProfilePatientAssociated(patientAssosicated.data)
 
       setTimeout(() => {
@@ -257,7 +293,19 @@ export default {
         this.setTaskCurrentTaskType('PatientInfo')
       }, 2000)
       // this.$router.push('/')
+    },
+    async gotoLogin () {
+      this.$auth.logout()
+      this.$router.push({ path: '/account/login', query: { key: this.key } })
     }
+  },
+  async mounted () {
+    const getPatientResp = await api.auth.request.getPatient({
+      facilityId: this.linkInfo.facilityID,
+      patientId: this.linkInfo.patientID
+    })
+
+    this.patientInfo = getPatientResp.data
   }
 }
 </script>
