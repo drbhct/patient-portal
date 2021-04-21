@@ -51,11 +51,11 @@ export default {
       link.download = filename
       const blob = new Blob([file])
       const reader = new FileReader()
-      reader.onloadend = function () {
+      reader.readAsDataURL(blob)
+      reader.onload = function () {
         link.href = reader.result // data url
         link.click()
       }
-      reader.readAsDataURL(blob)
     }
   },
   async mounted () {
