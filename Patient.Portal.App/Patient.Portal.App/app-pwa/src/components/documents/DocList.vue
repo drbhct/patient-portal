@@ -11,7 +11,7 @@
       <tbody>
         <tr v-for="item in doclist" :key="item.fileID">
           <!--<td><a :href="onclick(item.fileID)" target="_blank">{{ item.description }}</a></td>-->
-          <td><a @click.prevent="onclick(item.fileID, item.originalFileName)" href="#">{{ item.description }}</a></td>
+          <td><a id="fileDL" @click.prevent="onclick(item.fileID, item.originalFileName)" href="">{{ item.description }}</a></td>
           <td><span>{{ date(item.fileDate) }}</span></td>
         </tr>
       </tbody>
@@ -47,12 +47,15 @@ export default {
         facilityId: this.currentPatientAssociated.facilityID,
         id: fileID
       })
-      const blob = new Blob([file])
       const link = document.createElement('a')
-      link.href = URL.createObjectURL(blob)
       link.download = filename
-      link.click()
-      URL.revokeObjectURL(link.href)
+      const blob = new Blob([file])
+      const reader = new FileReader()
+      reader.onloadend = function () {
+        link.href = reader.result // data url
+        link.click()
+      }
+      reader.readAsDataURL(blob)
     }
   },
   async mounted () {
