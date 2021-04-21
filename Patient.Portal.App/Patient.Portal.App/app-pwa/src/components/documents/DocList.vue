@@ -10,7 +10,8 @@
       </thead>
       <tbody>
         <tr v-for="item in doclist" :key="item.fileID">
-          <td><a :href="item.url" target="_blank">{{ item.description }}</a></td>
+          <!--<td><a :href="onclick(item.fileID)" target="_blank">{{ item.description }}</a></td>-->
+          <td><a @click.prevent="onclick(item.fileID, item.originalFileName)" href="#">{{ item.description }}</a></td>
           <td><span>{{ date(item.fileDate) }}</span></td>
         </tr>
       </tbody>
@@ -41,8 +42,17 @@ export default {
     date: function (date) {
       return moment(date).format('MM/DD/YYYY')
     },
-    onclick (url) {
-      window.open(url)
+    async onclick (fileID, filename) {
+      const file = await api.patient.request.downloadfile({
+        facilityId: this.currentPatientAssociated.facilityID,
+        id: fileID
+      })
+      const blob = new Blob([file])
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.download = filename
+      link.click()
+      URL.revokeObjectURL(link.href)
     }
   },
   async mounted () {

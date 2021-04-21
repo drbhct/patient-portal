@@ -142,6 +142,14 @@ export default {
     */
     async deletepaymentprofile (payload) {
       return await securedJsonRequest.post('/patientportal/deletepaymentprofile', payload)
+    },
+    /**
+    * @param {Object} payload  request object for capture card alias
+    * @param {String} payload.facilityId
+    * @param {String} payload.id
+    */
+    async downloadfile (payload) {
+      return await securedJsonRequest.post('/patientportal/downloadfile', payload)
     }
   }
 }

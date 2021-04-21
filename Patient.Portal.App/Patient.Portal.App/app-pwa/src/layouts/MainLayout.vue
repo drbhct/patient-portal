@@ -17,42 +17,42 @@
                 <div class="nano-content">
                   <nav id="menu" class="nav-main sidebar-padding" role="navigation">
                     <ul class="nav nav-main">
-                      <li v-if="currentRouteName !== 'messages'">
+                      <li v-if="currentRouteName !== 'messages'" data-toggle="tooltip" title="Messages" data-placement="right">
                         <router-link to="/menu/messages" class="nav-link bg-blue sidebar-w" v-on:click.native="closeSidebar">
                           <i class="far fa-comment" aria-hidden="true"></i>
                         </router-link>
                       </li>
-                      <li v-if="currentRouteName !== 'documents'">
+                      <li v-if="currentRouteName !== 'documents'" data-toggle="tooltip" title="Documents">
                         <router-link to="/menu/documents" class="nav-link bg-green sidebar-w" v-on:click.native="closeSidebar">
                           <i class="fas fa-file" aria-hidden="true"></i>
                         </router-link>
                       </li>
-                      <li v-if="currentRouteName !== 'appointments'">
+                      <li v-if="currentRouteName !== 'appointments'" data-toggle="tooltip" title="Appointments" data-placement="right">
                         <router-link to="/menu/appointments" class="nav-link bg-orange sidebar-w" v-on:click.native="closeSidebar">
                           <i class="far fa-calendar" aria-hidden="true"></i>
                         </router-link>
                       </li>
-                      <li v-if="currentRouteName !== 'billing'">
+                      <li v-if="currentRouteName !== 'billing'" data-toggle="tooltip" title="Billing" data-placement="right">
                         <router-link to="/menu/billing" class="nav-link bg-success sidebar-w" v-on:click.native="closeSidebar">
                           <i class="fas fa-dollar-sign" aria-hidden="true"></i>
                         </router-link>
                       </li>
-                      <li v-if="currentRouteName !== 'profile'">
+                      <li v-if="currentRouteName !== 'profile'" data-toggle="tooltip" title="Profile" data-placement="right">
                         <router-link to="/menu/profile" class="nav-link bg-purple sidebar-w" v-on:click.native="closeSidebar">
                           <i class="fas fa-user" aria-hidden="true"></i>
                         </router-link>
                       </li>
-                      <li v-if="currentRouteName !== 'tasks'">
+                      <li v-if="currentRouteName !== 'tasks'" data-toggle="tooltip" title="Tasks" data-placement="right">
                         <router-link to="/menu/tasks" class="nav-link bg-red sidebar-w" v-on:click.native="closeSidebar">
                           <i class="fas fa-tasks" aria-hidden="true"></i>
                         </router-link>
                       </li>
-                      <li>
+                      <li data-toggle="tooltip" title="Home" data-placement="right">
                         <router-link to="/" class="nav-link bg-gray sidebar-w" v-on:click.native="closeSidebar">
                           <i class="fas fa-home" aria-hidden="true"></i>
                         </router-link>
                       </li>
-                      <li>
+                      <li data-toggle="tooltip" title="Logout" data-placement="right">
                         <a href="javascript:void(0)" @click="logout" class="nav-link bg-dark sidebar-w" title="Logout">
                           <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
                         </a>
