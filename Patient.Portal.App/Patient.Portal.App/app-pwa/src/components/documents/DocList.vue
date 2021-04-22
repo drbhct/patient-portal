@@ -49,10 +49,17 @@ export default {
       })
       const link = document.createElement('a')
       link.download = filename
-      const blob = new Blob([file])
+      const blob = new Blob([file.data])
+      console.log('fileName', filename)
+      const f = new File([blob], filename, { type: 'image/jpg' })
+      console.log('f', f)
       const reader = new FileReader()
       reader.onloadend = function () {
+        // const arr = reader.result.split('base64,')
+        // console.log('arr[1]', arr[1])
         link.href = reader.result // data url
+        link.target = '_blank'
+        console.log('reader.result', reader.result)
         link.click()
       }
       reader.readAsDataURL(blob)
