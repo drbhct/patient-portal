@@ -5,9 +5,9 @@
       <!-- start: header -->
       <header class="header">
         <div class="logo-container d-inline" >
-          <a href="/" class="logo" v-if="!$auth.isAuthenticated()">
+          <!-- <a href="/" class="logo" v-if="!$auth.isAuthenticated()">
             <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
-          </a>
+          </a> -->
           <div class="d-none d-sm-inline-block" v-if="$auth.isAuthenticated()">
             <span class="office-name" v-if="currentPatientAssociated">{{ currentPatientAssociated.officeName }}</span>
           </div>
