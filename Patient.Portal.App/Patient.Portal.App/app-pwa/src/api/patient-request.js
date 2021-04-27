@@ -148,8 +148,8 @@ export default {
     * @param {String} payload.facilityId
     * @param {String} payload.id
     */
-    async downloadfile (payload) {
-      return await securedJsonRequest.post('/patientportal/downloadfile', payload)
+    async downloadfilebase64 (payload) {
+      return await securedJsonRequest.post('/patientportal/downloadfilebase64', payload)
     }
   }
 }

@@ -10,8 +10,8 @@
       </thead>
       <tbody>
         <tr v-for="item in doclist" :key="item.fileID">
-          <!--<td><a :href="onclick(item.fileID)" target="_blank">{{ item.description }}</a></td>-->
-          <td><a id="fileDL" @click.prevent="onclick(item.fileID, item.originalFileName)" href="">{{ item.description }}</a></td>
+          <!--<td><a :href="getfile(item.fileID)" target="_blank">{{ item.description }}</a></td>-->
+          <td><a @click.prevent="getfile(item.fileID)" href="">{{ item.description }}</a></td>
           <td><span>{{ date(item.fileDate) }}</span></td>
         </tr>
       </tbody>
@@ -42,27 +42,16 @@ export default {
     date: function (date) {
       return moment(date).format('MM/DD/YYYY')
     },
-    async onclick (fileID, filename) {
-      const file = await api.patient.request.downloadfile({
+    async getfile (fileID) {
+      const file = await api.patient.request.downloadfilebase64({
         facilityId: this.currentPatientAssociated.facilityID,
         id: fileID
       })
-      const link = document.createElement('a')
-      link.download = filename
-      const blob = new Blob([file.data])
-      console.log('fileName', filename)
-      const f = new File([blob], filename, { type: 'image/jpg' })
-      console.log('f', f)
-      const reader = new FileReader()
-      reader.onloadend = function () {
-        // const arr = reader.result.split('base64,')
-        // console.log('arr[1]', arr[1])
-        link.href = reader.result // data url
-        link.target = '_blank'
-        console.log('reader.result', reader.result)
-        link.click()
-      }
-      reader.readAsDataURL(blob)
+      const a = document.createElement('a')
+      a.href = 'data:application/octet-stream;base64,' + file.data.base64String
+      a.download = file.data.originalFileName // File name Here
+      a.click()
+      URL.revokeObjectURL(a)
     }
   },
   async mounted () {
