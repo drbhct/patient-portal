@@ -1,7 +1,7 @@
 <template>
   <section role="main">
     <form @submit.prevent="save" class="mt-5 mr-2 ml-2 justify-content-md-center">
-      <div id="cardAABody" class="col-6 mx-auto">
+      <div id="cardAABody" class="col-lg-6 mx-auto">
         <section class="card">
           <header class="card-header"><h2 class="card-title">Please tell us about your automobile accident</h2></header>
           <div class="card-body">
