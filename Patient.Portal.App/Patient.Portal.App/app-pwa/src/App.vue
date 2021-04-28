@@ -94,7 +94,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.13' // USER STORY #17422 Patient Portal NPH with updates on 17491
+      return '0.0.14' // Bug fixes on card #17509 and other updates
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo', 'getProfilePatientAssociated', 'currentPatientAssociated']),
     currentRouteName () {
