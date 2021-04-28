@@ -5,9 +5,9 @@
       <!-- start: header -->
       <header class="header">
         <div class="logo-container d-inline" >
-          <a href="/" class="logo" v-if="!$auth.isAuthenticated()">
+          <!-- <a href="/" class="logo" v-if="!$auth.isAuthenticated()">
             <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
-          </a>
+          </a> -->
           <div class="d-none d-sm-inline-block" v-if="$auth.isAuthenticated()">
             <span class="office-name" v-if="currentPatientAssociated">{{ currentPatientAssociated.officeName }}</span>
           </div>
@@ -94,7 +94,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.13' // USER STORY #17422 Patient Portal NPH with updates on 17491
+      return '0.0.14' // Bug fixes on card #17509 and other updates
     },
     ...mapGetters(['getIsLoading', 'getProfileAuthInfo', 'getProfilePatientAssociated', 'currentPatientAssociated']),
     currentRouteName () {

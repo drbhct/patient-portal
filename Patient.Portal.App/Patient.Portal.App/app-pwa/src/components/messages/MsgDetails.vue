@@ -6,13 +6,26 @@
     </a>
     <div class="row mx-1">
       <h3>{{ this.getMsgInfo.subject }}</h3>
-      <br />
+    </div>
+    <div class="row mx-1">
       <div class="col-md-10">
         <p class="mt-4" style="white-space:pre-wrap">
           {{ this.getMsgInfo.messageText }}
         </p>
       </div>
     </div>
+    <!--<div class="row text-md-right text-lg-right text-xl-rigth center">
+      <div class="col-lg-10 col-md-10">
+        <button class="btn btn-default btn-w-120">
+          <i class="fas fa-archive"></i>
+          <span> ARCHIVE</span>
+        </button>
+        <button class="btn btn-primary btn-w-120">
+          <i class="fas fa-reply"></i>
+          <span> REPLY</span>
+        </button>
+      </div>
+    </div>-->
   </div>
 </template>
 
@@ -37,5 +50,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  .btn-w-120 {
+    width: 120px !important;
+    margin-right:5px;
+    margin-left: 5px;
+  }
 </style>
