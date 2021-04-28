@@ -169,7 +169,8 @@ export default {
       'setIsLoading',
       'setProfileAuthInfo',
       'setTaskCurrentTaskType',
-      'setProfilePatientAssociated'
+      'setProfilePatientAssociated',
+      'setProfileCurrentPatient'
     ]),
     checkPassword () {
       this.password_length = this.form.password.length
@@ -287,6 +288,7 @@ export default {
         insertUserRes.data
       )
       this.setProfilePatientAssociated(patientAssosicated.data)
+      this.setProfileCurrentPatient(patientAssosicated.data[0])
 
       setTimeout(() => {
         this.isSaving = false

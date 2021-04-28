@@ -473,6 +473,7 @@ export default {
       this.form = patientInfo.data
       this.form.facilityId = this.currentPatientAssociated.facilityID
       this.form.patientId = this.form.id
+      this.isLoading = false
     },
     async getUsStates () {
       const result = await api.task.request.getUsStates()
