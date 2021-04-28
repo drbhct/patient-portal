@@ -11,11 +11,11 @@
         <table class="w-100">
           <tbody>
             <tr v-for="(item, index) in taskslist" :key="item.taskID">
-              <td v-if="item.taskType === 'STMT'" class="dash-task-col-title">{{(index + 1)}}) Pay Statement #3564</td>
+              <!--<td v-if="item.taskType === 'STMT'" class="dash-task-col-title">{{(index + 1)}}) Pay and view statement #3564</td>
               <td v-if="item.taskType === 'STMT'" class="dash-task-col-action">
                 <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn">PAY $520</button>
                 <p class="p-dash-stat">Statement due: 02/02/2020</p>
-              </td>
+              </td>-->
 
               <td v-if="item.taskType === 'NPH'" class="dash-task-col-title">{{(index + 1)}}) Health History</td>
               <td v-if="item.taskType === 'NPH'" class="dash-task-col-action">

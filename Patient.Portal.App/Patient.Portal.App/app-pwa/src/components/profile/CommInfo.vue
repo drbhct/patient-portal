@@ -39,6 +39,26 @@
       </div>
     </div>
     <div class="form-group row">
+      <label class="col-xl-2 col-lg-3 control-label text-lg-right pt-2" for="emailadd">Confirm Email Address:</label>
+      <div class="col-lg-6 col-xl-4">
+        <input type="text" class="form-control" id="inputDefault" v-model="emailadd" required>
+      </div>
+      <div class="col-lg-1 col-xl-1">
+        <i v-if="emailadd === commOptions.email" class="fas fa-check bg-check-green"></i>
+        <i v-if="emailadd !== commOptions.email && emailadd !== ''" class="fas fa-times bg-check-red"></i>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-xl-2 col-lg-3 control-label text-lg-right pt-2" for="mobilenum">Confirm Mobile Phone:</label>
+      <div class="col-lg-6 col-xl-4">
+        <input type="text" class="form-control" id="inputDefault" v-model="mobilenum" required>
+      </div>
+      <div class="col-lg-1 col-xl-1">
+        <i v-if="mobilenum === commOptions.mobilePhone" class="fas fa-check bg-check-green"></i>
+        <i v-if="mobilenum !== commOptions.mobilePhone && mobilenum !== ''" class="fas fa-times bg-check-red"></i>
+      </div>
+    </div>
+    <div class="form-group row">
       <div class="col-12 col-lg-6 col-xl-6">
         <button class="btn btn-primary btn-w-160" type="submit">UPDATE</button>
       </div>
@@ -53,7 +73,9 @@ export default {
   },
   data () {
     return {
-      commOptions: null
+      commOptions: null,
+      emailadd: '',
+      mobilenum: ''
     }
   },
   computed: {
@@ -70,22 +92,43 @@ export default {
       // CallMobilePhone + SendEmail
       // CallHomePhone
       // CallHomePhone + SendEmail
-
-      this.commOptions.facilityId = this.currentPatientAssociated.facilityID
-      const result = await api.auth.request.updatePatientCommOptions(this.commOptions)
-      if (result.data) {
-        this.$swal({
-          position: 'top',
-          title: 'Comm Info update successful',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 1000,
-          icon: 'success'
-        })
+      if (this.commOptions.email === this.emailadd) {
+        if (this.commOptions.mobilePhone === this.mobilenum) {
+          this.commOptions.facilityId = this.currentPatientAssociated.facilityID
+          const result = await api.auth.request.updatePatientCommOptions(this.commOptions)
+          if (result.data) {
+            this.$swal({
+              position: 'top',
+              title: 'Comm Info update successful',
+              showConfirmButton: false,
+              timerProgressBar: true,
+              timer: 1000,
+              icon: 'success'
+            })
+          } else {
+            this.$swal({
+              position: 'top',
+              title: 'Comm Info update error',
+              showConfirmButton: false,
+              timerProgressBar: true,
+              timer: 1000,
+              icon: 'error'
+            })
+          }
+        } else {
+          this.$swal({
+            position: 'top',
+            title: 'Invalid Mobile Phone',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 1000,
+            icon: 'error'
+          })
+        }
       } else {
         this.$swal({
           position: 'top',
-          title: 'Comm Info update error',
+          title: 'Invalid Email Address',
           showConfirmButton: false,
           timerProgressBar: true,
           timer: 1000,
@@ -110,5 +153,13 @@ export default {
   }
   .btn-w-160 {
     width: 160px !important;
+  }
+  .bg-check-green {
+    color: #00e600 !important;
+    line-height:2.5;
+  }
+  .bg-check-red {
+    color: #ff3300 !important;
+    line-height: 2.5;
   }
 </style>

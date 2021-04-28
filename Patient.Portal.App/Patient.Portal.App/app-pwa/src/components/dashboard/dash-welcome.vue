@@ -10,7 +10,7 @@
       </p>
 
       <ul>
-        <li>keep contact information current</li>
+        <li>Keep contact information current</li>
         <li>Request appointments</li>
         <li>Pay statements and view invoices</li>
         <li>Access documents</li>
