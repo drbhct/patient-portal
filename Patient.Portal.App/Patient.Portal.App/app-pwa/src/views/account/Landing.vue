@@ -138,18 +138,43 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-5 mb-5 mt-5 d-none d-sm-block">
-        <img
+      <div class="col-lg-5 mb-5 mt-5 d-sm-block">
+        <!-- <img
           data-src="holder.js/100px250"
           class="img-fluid"
           alt="100%x250"
           src="img/stock office.jpg"
           data-holder-rendered="true"
-        />
+        /> -->
+        <div class="">
+          <div class="row mb-3 justify-content-md-center">
+            <div class="col-xl-8 mb-5">
+              <p class="text-left">Your Patient Portal</p>
+              <p class="text-justify">
+                Access health information online, instead of over the phone or
+                in person. The patient portal allows you to:
+              </p>
+              <span class="text-left ml-3">
+                <ul>
+                  <li>Keep contact information current</li>
+                  <li>Request appointments</li>
+                  <!-- <li>Pay statements and view</li> -->
+                  <li>Pay and view statements</li>
+                  <li>Access documents</li>
+                  <li>And much more</li>
+                </ul>
+              </span>
+              <p class="text-left">
+                If you have any questions or concerns, please feel free to
+                contact us. Were here to help!
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="row mt-5 mr-2 ml-2">
-      <div class="col-lg-5 mb-5 order-2 order-sm-1">
+      <!-- <div class="col-lg-5 mb-5 order-2 order-sm-1">
         <div class="row mb-3 justify-content-md-center">
           <div class="col-xl-8 mb-5">
             <p class="text-left">Your Patient Portal</p>
@@ -162,6 +187,7 @@
                 <li>Keep contact information current</li>
                 <li>Request appointments</li>
                 <li>Pay statements and view</li>
+                <li>Pay and view statements</li>
                 <li>Access documents</li>
                 <li>And much more</li>
               </ul>
@@ -172,8 +198,8 @@
             </p>
           </div>
         </div>
-      </div>
-      <div class="col-lg-5 mb-5 order-1 order-sm-2">
+      </div> -->
+      <!-- <div class="col-lg-5 mb-5 order-1 order-sm-2">
         <div class="row mb-3 justify-content-md-center">
           <div class="col-xl-8 mb-5">
             <span class="text-center">
@@ -203,7 +229,7 @@
             <a href="https://www.embed-map.net/">add google map</a>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -268,7 +294,9 @@ export default {
         this.attachPatientInfo = getPatientResp.data
 
         // Check if account already exist
-        const isPatientExist = patientAssosicated.data.find(el => el.patientID === this.attachPatientInfo.id)
+        const isPatientExist = patientAssosicated.data.find(
+          (el) => el.patientID === this.attachPatientInfo.id
+        )
         // console.log('isPatientExist', isPatientExist)
         if (isPatientExist) {
           this.patientList = patientAssosicated.data

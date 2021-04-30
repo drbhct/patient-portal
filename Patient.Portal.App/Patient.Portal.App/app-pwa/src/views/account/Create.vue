@@ -169,7 +169,8 @@ export default {
       'setIsLoading',
       'setProfileAuthInfo',
       'setTaskCurrentTaskType',
-      'setProfilePatientAssociated'
+      'setProfilePatientAssociated',
+      'setProfileCurrentPatient'
     ]),
     checkPassword () {
       this.password_length = this.form.password.length
@@ -287,9 +288,12 @@ export default {
         insertUserRes.data
       )
       this.setProfilePatientAssociated(patientAssosicated.data)
+      this.setProfileCurrentPatient(patientAssosicated.data[0])
 
       setTimeout(() => {
         this.isSaving = false
+        // TODO: Need to soon set this to auth wrapper
+        localStorage.setItem('completeAuth', true)
         this.setTaskCurrentTaskType('PatientInfo')
       }, 2000)
       // this.$router.push('/')
