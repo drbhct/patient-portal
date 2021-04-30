@@ -201,6 +201,11 @@ export default {
       * @param {Number} payload.sendEmail
       * @param {Number} payload.callMobilePhone
       * @param {Number} payload.callHomePhone
+      * @param {Boolean} payload.twoWaySms
+      * @param {Boolean} payload.otherEmail
+      * @param {String} payload.mobilePhone
+      * @param {String} payload.homePhone
+      * @param {String} payload.email
       */
     async updatePatientCommOptions (payload) {
       return await securedJsonRequest.post('/patientportal/updatepatientcommoptions', payload)
@@ -254,6 +259,26 @@ export default {
       */
     async updatePatient (payload) {
       return await securedJsonRequest.post('/patientportal/updatePatient', payload)
+    },
+    /**
+     * Update patient mobile
+      * @param {Object} Payload request object for updating patient info
+      * @param {String} payload.facilityId
+      * @param {String} payload.patientId
+      * @param {String} payload.value
+      */
+    async updatePatientMobilePhone (payload) {
+      return await securedJsonRequest.post('/patientportal/updatepatientmobilephone', payload)
+    },
+    /**
+     * Update patient email
+      * @param {Object} Payload request object for updating patient info
+      * @param {String} payload.facilityId
+      * @param {String} payload.patientId
+      * @param {String} payload.value
+      */
+    async updatePatientEmail (payload) {
+      return await securedJsonRequest.post('/patientportal/updatepatientemail', payload)
     }
   }
 }
