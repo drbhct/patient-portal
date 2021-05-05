@@ -14,6 +14,14 @@
           <div class="d-sm-none d-inline" v-if="$auth.isAuthenticated()">
             <span class="office-name-m" v-if="currentPatientAssociated">{{ currentPatientAssociated.officeName }}</span>
           </div>
+          <!-- Begin: Task Office Name -->
+          <div class="d-none d-sm-inline-block" v-if="showTaskOfficeName">
+            <span class="office-name" v-if="getTaskOfficeName">{{ getTaskOfficeName }}</span>
+          </div>
+          <div class="d-sm-none d-inline" v-if="showTaskOfficeName">
+            <span class="office-name-m" v-if="getTaskOfficeName">{{ getTaskOfficeName }}</span>
+          </div>
+          <!-- End: Task Office Name -->
           <div class="d-md-none toggle-sidebar-left"
                data-toggle-class="sidebar-left-opened"
                data-target="html"
@@ -96,7 +104,7 @@ export default {
     version () {
       return '0.0.14' // Bug fixes on card #17509 and other updates
     },
-    ...mapGetters(['getIsLoading', 'getProfileAuthInfo', 'getProfilePatientAssociated', 'currentPatientAssociated']),
+    ...mapGetters(['getIsLoading', 'getProfileAuthInfo', 'getProfilePatientAssociated', 'currentPatientAssociated', 'getTaskOfficeName']),
     currentRouteName () {
       let route = this.$route.name
       if (route) {
@@ -128,6 +136,15 @@ export default {
         default:
           return true
       }
+    },
+    showTaskOfficeName () {
+      if (this.$route.path.toLowerCase() !== '/task') {
+        return false
+      }
+      if (this.$auth.isAuthenticated()) {
+        return false
+      }
+      return true
     }
   },
   methods: {

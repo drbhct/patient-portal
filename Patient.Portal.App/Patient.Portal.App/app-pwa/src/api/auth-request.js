@@ -279,6 +279,12 @@ export default {
       */
     async updatePatientEmail (payload) {
       return await securedJsonRequest.post('/patientportal/updatepatientemail', payload)
+    },
+    /**
+      * @param {String} payload facilityId
+    */
+    async getFacilityInfo (payload) {
+      return (await securedJsonRequest.get('/patientportal/getfacilityinfo/' + payload)).data
     }
   }
 }

@@ -25,3 +25,4 @@ export const getTaskCurrentCaseHistoryOats = state => state.task.currentCaseHist
 export const getTaskCurrentCaseHistoryFormValues = state => state.task.currentCaseHistoryComplaintFormValues
 export const getTaskCurrentCaseHistoryAutoAccident = state => state.task.currentCaseHistoryAutoAccident
 export const getTaskCurrentCaseHistoryAAFormValues = state => state.task.currentCaseHistoryAAFormValues
+export const getTaskOfficeName = state => state.task.officeName

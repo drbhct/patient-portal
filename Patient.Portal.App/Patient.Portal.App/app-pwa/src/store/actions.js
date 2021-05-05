@@ -75,3 +75,7 @@ export const setTaskCurrentCaseHistoryAAFormValues = async (store, payload) => {
 export const setProfileCurrentPatient = async (store, payload) => {
   await store.commit(types.CURRENT_PROFILE_PATIENT, payload)
 }
+
+export const setTaskOfficeName = async (store, payload) => {
+  await store.commit(types.TASK_CURRENT_OFFICE_NAME, payload)
+}

@@ -55,7 +55,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType'])
+    ...mapActions(['setTaskCurrentTaskType', 'setTaskOfficeName'])
   },
   async mounted () {
     const apiRes = await api.auth.request.apiLogin()
@@ -77,6 +77,7 @@ export default {
     if (!this.linkInfo) {
       this.initialize = true
       this.keyExpired = true
+
       setTimeout(() => {
         this.$router.push({ path: '/account/login' })
       }, 5000)
@@ -100,9 +101,12 @@ export default {
       })
       this.task = taskRes.data.find(el => el.taskID === this.linkInfo.taskID)
       console.log('this.task.taskType', this.task.taskType)
+      const facilityInfo = await api.auth.request.getFacilityInfo(this.linkInfo.facilityID)
+      await this.setTaskOfficeName(facilityInfo.officeName)
+      console.log('facilityInfo', facilityInfo)
       switch (this.task.taskType) {
         case 'NPH':
-          // this.module = 'CreateAccount'
+
           this.setTaskCurrentTaskType('CreateAccount')
           break
       }
