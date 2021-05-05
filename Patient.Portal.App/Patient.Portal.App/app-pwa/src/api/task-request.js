@@ -13,7 +13,8 @@ const securedJsonRequest = axios.create({
 
 securedJsonRequest.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('config')
+    // const token = localStorage.getItem('config')
+    const token = sessionStorage.getItem('config')
     if (token) {
       config.headers.common.Authorization = 'bearer ' + token
     }
@@ -44,7 +45,8 @@ securedJsonRequest.interceptors.response.use(
         // Vue.$swal(error.response.statusText)
       }
       if (error.response.status === 401) {
-        localStorage.clear()
+        // localStorage.clear()
+        sessionStorage.clear()
         // Unauthorized and logout the user or relogin
         window.location = '/account/login'
       }

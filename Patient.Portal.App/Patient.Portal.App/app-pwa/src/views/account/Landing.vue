@@ -394,6 +394,10 @@ export default {
     }
   },
   mounted () {
+    // Check if already login
+    if (this.$auth.isAuthenticated()) {
+      this.gotoTask()
+    }
     // localStorage.clear()
     // this.$auth.logout()
   }

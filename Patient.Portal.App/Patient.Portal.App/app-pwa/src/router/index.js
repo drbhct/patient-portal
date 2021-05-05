@@ -122,7 +122,8 @@ router.beforeResolve((to, from, next) => {
   if (to.matched.some(route => route.meta.requiresAuth)) {
     let isAuth = false
     // const user = Vue.$cookies.get('user')
-    const user = localStorage.getItem('config')
+    // const user = localStorage.getItem('config')
+    const user = sessionStorage.getItem('config')
     const profile = JSON.parse(localStorage.getItem('vuex'))
     if (!profile) {
       next({ path: '/account/login' })

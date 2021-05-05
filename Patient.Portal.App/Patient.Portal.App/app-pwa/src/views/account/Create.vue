@@ -293,7 +293,8 @@ export default {
       setTimeout(() => {
         this.isSaving = false
         // TODO: Need to soon set this to auth wrapper
-        localStorage.setItem('completeAuth', true)
+        // localStorage.setItem('completeAuth', true)
+        sessionStorage.setItem('completeAuth', true)
         this.setTaskCurrentTaskType('PatientInfo')
       }, 2000)
       // this.$router.push('/')

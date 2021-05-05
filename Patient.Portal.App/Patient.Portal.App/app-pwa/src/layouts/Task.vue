@@ -60,15 +60,16 @@ export default {
   async mounted () {
     const apiRes = await api.auth.request.apiLogin()
     // NOTE: Temporary will be move to cookies soon!
-    localStorage.setItem('config', apiRes.data.token)
-
+    // localStorage.setItem('config', apiRes.data.token)
+    sessionStorage.setItem('config', apiRes.data.token)
     if (!this.key) {
-      // For testing at the moment
-      // this.module = 'PatientInfo'
-      // this.module = 'NphAutoAccident'
-      this.setTaskCurrentTaskType('PatientInfo')
-      this.initialize = true
-      return
+      if (this.$auth.isAuthenticated()) {
+        this.setTaskCurrentTaskType('PatientInfo')
+        this.initialize = true
+        return
+      } else {
+        this.$router.push({ path: '/account/login' })
+      }
     }
 
     // NOTE: This is via task key>account>task type

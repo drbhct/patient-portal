@@ -13,7 +13,8 @@ const securedJsonRequest = axios.create({
 
 securedJsonRequest.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('config')
+    // const token = localStorage.getItem('config')
+    const token = sessionStorage.getItem('config')
     if (token) {
       config.headers.common.Authorization = 'bearer ' + token
     }
@@ -45,6 +46,7 @@ securedJsonRequest.interceptors.response.use(
       }
       if (error.response.status === 401) {
         // Unauthorized and logout the user or relogin
+        sessionStorage.clear()
         window.location = '/account/login'
       }
     } else if (error.request) {

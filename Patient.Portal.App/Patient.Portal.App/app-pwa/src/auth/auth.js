@@ -1,4 +1,4 @@
-/* globals localStorage */
+
 import auth from '../api/auth-request.js'
 export default {
   install (Vue, options) {
@@ -27,20 +27,25 @@ var myInstance = {
     }, appTokenRaw.data.token)
 
     if (userDataRaw.data) {
-      localStorage.setItem('config', appTokenRaw.data.token)
+      // localStorage.setItem('config', appTokenRaw.data.token)
+      sessionStorage.setItem('config', appTokenRaw.data.token)
     }
     return userDataRaw.data
   },
   logout () {
-    localStorage.clear()
+    // localStorage.clear()
+    sessionStorage.clear()
   },
   getToken () {
-    const token = localStorage.getItem('config')
+    // const token = localStorage.getItem('config')
+    const token = sessionStorage.getItem('config')
     return token
   },
   isAuthenticated () {
-    const token = localStorage.getItem('config')
-    const completeAuth = localStorage.getItem('completeAuth')
+    // const token = localStorage.getItem('config')
+    // const completeAuth = localStorage.getItem('completeAuth')
+    const token = sessionStorage.getItem('config')
+    const completeAuth = sessionStorage.getItem('completeAuth')
     if (!token) {
       return false
     }
@@ -52,6 +57,7 @@ var myInstance = {
     return true
   },
   completeAuth () {
-    localStorage.setItem('completeAuth', true)
+    // localStorage.setItem('completeAuth', true)
+    sessionStorage.setItem('completeAuth', true)
   }
 }
