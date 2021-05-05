@@ -62,7 +62,7 @@
                           <i class="far fa-calendar" aria-hidden="true"></i>
                         </router-link>
                       </li>
-                      <li
+                      <!--<li
                         v-if="currentRouteName !== 'billing'"
                         data-toggle="tooltip"
                         title="Billing"
@@ -75,7 +75,7 @@
                         >
                           <i class="fas fa-dollar-sign" aria-hidden="true"></i>
                         </router-link>
-                      </li>
+                      </li>-->
                       <li
                         v-if="currentRouteName !== 'profile'"
                         data-toggle="tooltip"

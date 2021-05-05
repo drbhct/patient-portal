@@ -30,14 +30,14 @@ const routes = [
         name: 'Appointments',
         component: () => import('../views/Appointments.vue')
       },
-      {
-        meta: {
-          requiresAuth: true
-        },
-        path: 'billing',
-        name: 'Billing',
-        component: () => import('../views/Billing.vue')
-      },
+      // {
+      //  meta: {
+      //    requiresAuth: true
+      //  },
+      //  path: 'billing',
+      //  name: 'Billing',
+      //  component: () => import('../views/Billing.vue')
+      // },
       {
         meta: {
           requiresAuth: true
