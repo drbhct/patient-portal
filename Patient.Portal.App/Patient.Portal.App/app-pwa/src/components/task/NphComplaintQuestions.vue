@@ -99,11 +99,9 @@
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">
                     <strong style="color: red; margin-right: 5px">*</strong>
-                    Using the slide, rate the intensity of your primary problem
-                    pain now 0 = None 1 = Minimal 2 = Very Mild 3 = Mild 4 =
-                    Mild to Moderate 5 = Moderate 6 = Moderate to Severe 7 =
-                    Mildly Severe, Restricts Some Activity 8 = Severe, Limits
-                    Most Activity 9 = Very Severe 10 = Excruciating
+                    Using the slide, rate the intensity of your <strong style="color: red">{{
+                      currentProblem.region
+                    }}</strong> pain now:
                   </label>
                   <div class="mt-4">
                     <vue-slider
@@ -111,6 +109,7 @@
                       :max="10"
                       :tooltip="'always'"
                     ></vue-slider>
+                    <span>0 = No pain, 10 = Excruciating pain</span>
                   </div>
                 </div>
               </div>
