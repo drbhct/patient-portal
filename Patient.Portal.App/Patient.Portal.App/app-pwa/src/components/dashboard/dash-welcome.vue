@@ -12,14 +12,14 @@
       <ul>
         <li>Keep contact information current</li>
         <li>Request appointments</li>
-        <li>Pay statements and view invoices</li>
+        <!--<li>Pay statements and view invoices</li>-->
         <li>Access documents</li>
         <li>And much more</li>
       </ul>
 
       <p>
         If you have any question or concerns, please feel free to contact us. We
-        here to help!
+        are here to help!
       </p>
     </div>
   </div>

@@ -119,7 +119,7 @@
     <div class="form-group row">
       <label class="col-xl-2 col-lg-3 control-label text-lg-right pt-2" for="mobilenum">Confirm Mobile Phone:</label>
       <div class="col-lg-6 col-xl-4">
-        <input type="text" class="form-control" id="inputDefault" v-model="mobilenum" v-mask="'(###)-###-####'" required>
+        <input type="text" class="form-control" id="inputDefault" v-model="mobilenum" v-mask="'(###) ###-####'" required>
       </div>
     </div>
     <div class="form-group row pt-3">

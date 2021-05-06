@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="modal" tabindex="-1" role="dialog" id="addPatientModal">
+    <div class="modal fade" tabindex="-1" role="dialog" id="addPatientModal">
       <div class="modal-dialog" role="document">
         <form @submit.prevent="patientAttach">
           <div class="modal-content">
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div class="modal" tabindex="-1" role="dialog" id="patientSelection">
+    <div class="modal fade" tabindex="-1" role="dialog" id="patientSelection">
       <div class="modal-dialog" role="document">
         <form @submit.prevent="patientSelect">
           <div class="modal-content">
@@ -237,7 +237,7 @@
 <script>
 import '../../assets/FormLayout.css'
 import api from '../../api/http-common.js'
-import { mapActions } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   data () {
     return {
@@ -253,12 +253,16 @@ export default {
       confirmLink: false
     }
   },
+  computed: {
+    ...mapGetters(['currentPatientAssociated'])
+  },
   methods: {
     ...mapActions([
       'setIsLoading',
       'setProfileAuthInfo',
       'setProfilePatientAssociated',
-      'setProfileCurrentPatient'
+      'setProfileCurrentPatient',
+      'setTaskCurrentTaskType'
     ]),
     async login () {
       const userData = await this.$auth.login(
@@ -328,7 +332,8 @@ export default {
         this.setProfilePatientAssociated(patientAssosicated.data)
         await this.setProfileCurrentPatient(patientAssosicated.data[0])
         this.$auth.completeAuth()
-        this.$router.push('/')
+        this.gotoTask() // added by Rizza Herrero 05/05/2021
+      // this.$router.push('/') commented out by Rizza Herrero 05/05/2021
       }
     },
     async patientSelect () {
@@ -338,7 +343,8 @@ export default {
       $('#patientSelection').modal('hide')
       await this.setProfileAuthInfo(this.profileAuthInfo)
       this.$auth.completeAuth()
-      this.$router.push('/')
+      this.gotoTask() // added by Rizza Herrero 05/05/2021
+      // this.$router.push('/') commented out by Rizza Herrero 05/05/2021
     },
     async patientAttach () {
       if (this.confirmLink) {
@@ -369,11 +375,29 @@ export default {
         this.setProfilePatientAssociated(patientAssosicated.data)
         await this.setProfileCurrentPatient(patientAssosicated.data[0])
         this.$auth.completeAuth()
+        this.gotoTask() // added by Rizza Herrero 05/05/2021
+      // this.$router.push('/') commented out by Rizza Herrero 05/05/2021
+      }
+    },
+    async gotoTask () {
+      const res = await api.patient.request.gettasks({
+        facilityId: this.currentPatientAssociated.facilityID,
+        patientId: this.currentPatientAssociated.patientID
+      })
+      const taskList = res.data
+      if (taskList.length === 1) {
+        await this.setTaskCurrentTaskType(taskList[0].taskType)
+        await this.$router.push({ path: '/task' })
+      } else {
         this.$router.push('/')
       }
     }
   },
   mounted () {
+    // Check if already login
+    if (this.$auth.isAuthenticated()) {
+      this.gotoTask()
+    }
     // localStorage.clear()
     // this.$auth.logout()
   }

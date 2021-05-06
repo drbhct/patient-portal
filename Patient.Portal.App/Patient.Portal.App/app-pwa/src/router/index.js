@@ -30,14 +30,14 @@ const routes = [
         name: 'Appointments',
         component: () => import('../views/Appointments.vue')
       },
-      {
-        meta: {
-          requiresAuth: true
-        },
-        path: 'billing',
-        name: 'Billing',
-        component: () => import('../views/Billing.vue')
-      },
+      // {
+      //  meta: {
+      //    requiresAuth: true
+      //  },
+      //  path: 'billing',
+      //  name: 'Billing',
+      //  component: () => import('../views/Billing.vue')
+      // },
       {
         meta: {
           requiresAuth: true
@@ -122,7 +122,8 @@ router.beforeResolve((to, from, next) => {
   if (to.matched.some(route => route.meta.requiresAuth)) {
     let isAuth = false
     // const user = Vue.$cookies.get('user')
-    const user = localStorage.getItem('config')
+    // const user = localStorage.getItem('config')
+    const user = sessionStorage.getItem('config')
     const profile = JSON.parse(localStorage.getItem('vuex'))
     if (!profile) {
       next({ path: '/account/login' })

@@ -49,7 +49,7 @@
           </section>
         </router-link>
       </div>
-      <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
+      <!--<div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
         <router-link to="/menu/billing" class="bg-dgreen">
           <section class="card mb-4">
             <div class="card-body bg-dgreen">
@@ -64,7 +64,7 @@
             </div>
           </section>
         </router-link>
-      </div>
+      </div>-->
       <div class="col-4 col-sm-4 col-md-4 col-lg-2 col-xl-2">
         <router-link to="/menu/profile" class="bg-purple">
           <section class="card mb-4">

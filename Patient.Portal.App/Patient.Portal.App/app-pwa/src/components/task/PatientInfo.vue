@@ -56,7 +56,7 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
-                  >Nick Name</label
+                  >Nickname</label
                 >
                 <input
                     type="text"
@@ -149,14 +149,14 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
-                  >Home Phone <span style="color: red">*</span></label
+                  >Home Phone <span v-show="form.cellPhone === ''" style="color: red">*</span></label
                 >
                 <input
                     type="text"
                     class="form-control"
                     v-model="form.homePhone"
-                    required
-                    v-mask="'(###)-###-####'"
+                    :required ="form.cellPhone === ''"
+                    v-mask="'(###) ###-####'"
                   />
                 </div>
               </div>
@@ -164,14 +164,14 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                    <label class="label f-weight-550"
-                  >Mobile Phone <span style="color: red">*</span></label
+                  >Mobile Phone <span v-show="form.homePhone === ''" style="color: red">*</span></label
                 >
                 <input
                     type="text"
                     class="form-control"
                     v-model="form.cellPhone"
-                    required
-                    v-mask="'(###)-###-####'"
+                    :required ="form.homePhone === ''"
+                    v-mask="'(###) ###-####'"
                   />
                 </div>
               </div>

@@ -20,7 +20,8 @@ const securedJsonRequest = axios.create({
 
 securedJsonRequest.interceptors.request.use(
   config => {
-    const token = localStorage.getItem('config')
+    // const token = localStorage.getItem('config')
+    const token = sessionStorage.getItem('config')
     if (token) {
       config.headers.common.Authorization = 'bearer ' + token
     }
@@ -51,7 +52,8 @@ securedJsonRequest.interceptors.response.use(
         // Vue.$swal(error.response.statusText)
       }
       if (error.response.status === 401) {
-        localStorage.clear()
+        // localStorage.clear()
+        sessionStorage.clear()
         // Unauthorized and logout the user or relogin
         window.location = '/account/login'
       }
@@ -279,6 +281,12 @@ export default {
       */
     async updatePatientEmail (payload) {
       return await securedJsonRequest.post('/patientportal/updatepatientemail', payload)
+    },
+    /**
+      * @param {String} payload facilityId
+    */
+    async getFacilityInfo (payload) {
+      return (await securedJsonRequest.get('/patientportal/getfacilityinfo/' + payload)).data
     }
   }
 }
