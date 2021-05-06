@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="modal" tabindex="-1" role="dialog" id="addPatientModal">
+    <div class="modal fade" tabindex="-1" role="dialog" id="addPatientModal">
       <div class="modal-dialog" role="document">
         <form @submit.prevent="patientAttach">
           <div class="modal-content">
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <div class="modal" tabindex="-1" role="dialog" id="patientSelection">
+    <div class="modal fade" tabindex="-1" role="dialog" id="patientSelection">
       <div class="modal-dialog" role="document">
         <form @submit.prevent="patientSelect">
           <div class="modal-content">
