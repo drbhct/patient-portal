@@ -56,7 +56,7 @@
 
     <div class="modal fade" tabindex="-1" role="dialog" id="patientSelection">
       <div class="modal-dialog" role="document">
-        <form @submit.prevent="patientSelect">
+        <div>
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title label">Multiple Patients</h5>
@@ -70,8 +70,16 @@
               </button>
             </div>
             <div class="modal-body">
-              <div class="form-group">
-                <label class="label f-weight-550">Patient</label>
+              <label class="label f-weight-550">Select the patient record you would like to manage</label>
+              <button type="button" class="mb-1 mt-1 mr-1 btn btn-default btn-lg btn-block" v-for="patient in patientList" :key="patient.id" @click="patientSelect(patient)">
+                {{ patient.firstName }} {{ patient.lastName }}
+                <h6>
+                  {{ patient.officeName }}
+                </h6>
+              </button>
+
+              <!-- <div class="form-group">
+                <label class="label f-weight-550">Select the patient record you would like to manage</label>
                 <select v-model="selectedPatient" required class="form-control">
                   <option
                     v-for="patient in patientList"
@@ -81,9 +89,9 @@
                     {{ patient.firstName }} {{ patient.lastName }}
                   </option>
                 </select>
-              </div>
+              </div> -->
             </div>
-            <div class="modal-footer">
+            <!-- <div class="modal-footer">
               <button type="submit" class="btn btn-primary">Select</button>
               <button
                 type="button"
@@ -92,9 +100,9 @@
               >
                 Close
               </button>
-            </div>
+            </div> -->
           </div>
-        </form>
+        </div>
       </div>
     </div>
 
@@ -129,7 +137,9 @@
               <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">
                 Login
               </button>
-              <a href="javascript:void(0)" class="ml-3">Need help logging in?</a>
+              <a href="javascript:void(0)" class="ml-3"
+                >Need help logging in?</a
+              >
             </form>
           </div>
         </section>
@@ -240,7 +250,10 @@ export default {
         // this.$router.push('/') commented out by Rizza Herrero 05/05/2021
       }
     },
-    async patientSelect () {
+    async patientSelect (patient) {
+      if (patient) {
+        this.selectedPatient = patient
+      }
       this.setProfilePatientAssociated(this.patientList)
       await this.setProfileCurrentPatient(this.selectedPatient)
       // eslint-disable-next-line no-undef
@@ -308,5 +321,5 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 </style>
