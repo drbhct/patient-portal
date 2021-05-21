@@ -59,7 +59,7 @@
         <form @submit.prevent="patientSelect">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title label">Multiple Patient(s)</h5>
+              <h5 class="modal-title label">Multiple Patients</h5>
               <button
                 type="button"
                 class="close"
