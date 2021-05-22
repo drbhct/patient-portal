@@ -80,10 +80,10 @@
     <section class="main-footer">
       <div class="footer-section text-center">
         <div>
-          <a class="footer-link" href="#">Contact</a> <span class="font-weight-bold">|</span>
-          <a class="footer-link" href="#">Support</a> <span class="font-weight-bold">|</span>
-          <a class="footer-link" href="#">Terms</a> <span class="font-weight-bold">|</span>
-          <a class="footer-link" href="#">Privacy</a>
+          <a class="footer-link" href="/contact">Contact Us</a> <span class="font-weight-bold">|</span>
+          <!--<a class="footer-link isDisabled" href="#">Support</a> <span class="font-weight-bold">|</span>-->
+          <a class="footer-link isDisabled" href="#">Terms</a> <span class="font-weight-bold">|</span>
+          <a class="footer-link isDisabled" href="#">Privacy</a>
         </div>
         <span class="m-footer__copyright">
           Copyright {{ new Date().getFullYear() }} &copy; Phunkey Inc. All rights reserved.
@@ -205,5 +205,12 @@ export default {
   }
   .userbox.show .dropdown-menu {
     padding: 30px 10px 0
+  }
+
+  .isDisabled {
+    color: currentColor;
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: none;
   }
 </style>
