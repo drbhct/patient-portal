@@ -15,7 +15,7 @@
           <label class="col-4 col-md-4 col-xl-2 col-lg-3 text-right f-title">Address:</label>
           <label class="col-8 col-md-6 col-xl-6 col-lg-6 text-left f-desc">{{ facilityInfo.address }}</label>
         </div>
-        <div class="row">
+        <div class="row" v-if="facilityInfo.address2.length > 0">
           <label class="col-4 col-md-4 col-xl-2 col-lg-3 text-right f-title">Address 2:</label>
           <label class="col-8 col-md-6 col-xl-6 col-lg-6 text-left f-desc">{{ facilityInfo.address2 }}</label>
         </div>
