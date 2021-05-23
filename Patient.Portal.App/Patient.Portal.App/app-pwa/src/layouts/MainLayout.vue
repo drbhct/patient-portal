@@ -1,7 +1,7 @@
 <template>
   <div class="inner-wrapper">
     <section role="main" class="content-body">
-      <header :class="checkMenuHeader" class="menu-header text-left">
+      <header :class="checkMenuHeader" class="menu-header text-left" v-if="currentRouteName !== 'contact'">
         <div class="menu-header-title">
           <i :class="menuIcon" aria-hidden="true"></i>
           <span class="h-title">{{ currentRouteName }}</span>
