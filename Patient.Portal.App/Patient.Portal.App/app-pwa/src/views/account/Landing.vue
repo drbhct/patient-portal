@@ -116,7 +116,7 @@
               </span>
               <!-- to error: add class "has-danger" -->
               <div class="form-group">
-                <label class="label f-weight-550">Username</label>
+                <label class="label f-weight-550">Email</label>
                 <input
                   type="email"
                   class="form-control form-control-sm"

@@ -75,6 +75,14 @@ export default {
       return await securedJsonRequest.post('/patientportal/gettasks', payload)
     },
     /**
+     * Get the task info via the taskId
+     * @param {Number} taskId ID of the task
+     * @returns {{ taskID: Number,userID:Number,facilityID:Number,patientID:Number,taskTypeID:Number,taskType:String, info}}
+     */
+    async getSpecificTask (taskId) {
+      return await securedJsonRequest.get(`/patientportal/gettask/${taskId}`)
+    },
+    /**
      * Method to check if patient has existing user account
     * @param {Object} Payload request object for checking if patient has associated user already
     * @param {String} payload.facilityid
