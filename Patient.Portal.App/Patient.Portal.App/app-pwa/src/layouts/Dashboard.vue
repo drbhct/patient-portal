@@ -40,7 +40,7 @@
             <button type="button" class="mb-1 mt-1 mr-1 btn btn-new">MAKE NEW APPOINTMENT</button>
           </div> -->
 
-          <div class="col-12 col-md-12 col-lg-6 col-xl-6">
+          <div class="col-12 col-md-12 col-lg-8 col-xl-8">
             <dash-welcome></dash-welcome>
           </div>
         </div>

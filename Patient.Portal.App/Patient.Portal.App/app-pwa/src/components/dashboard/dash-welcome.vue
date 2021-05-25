@@ -17,10 +17,40 @@
         <li>And much more</li>
       </ul>
 
-      <p>
-        If you have any question or concerns, please feel free to contact us. We
-        are here to help!
-      </p>
+      <div v-if="facilityInfo.phone.length > 0">
+        <span>
+          If you have any question or concerns, please feel free to contact us at {{ formatPhoneNumber(facilityInfo.phone) }}.
+          We are here to help!
+        </span>
+      </div>
     </div>
   </div>
 </template>
+<script>
+import api from '../../api/http-common.js'
+import { mapGetters } from 'vuex'
+
+export default {
+  data () {
+    return {
+      facilityInfo: null
+    }
+  },
+  computed: {
+    ...mapGetters(['currentPatientAssociated'])
+  },
+  methods: {
+    formatPhoneNumber (phoneNumberString) {
+      var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+      var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
+      if (match) {
+        return '(' + match[1] + ') ' + match[2] + '-' + match[3]
+      }
+      return null
+    }
+  },
+  async mounted () {
+    this.facilityInfo = await api.auth.request.getFacilityInfo(this.currentPatientAssociated.facilityID)
+  }
+}
+</script>
