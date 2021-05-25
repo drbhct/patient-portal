@@ -116,7 +116,7 @@
               </span>
               <!-- to error: add class "has-danger" -->
               <div class="form-group">
-                <label class="label f-weight-550">Username</label>
+                <label class="label f-weight-550">Email Address</label>
                 <input
                   type="email"
                   class="form-control form-control-sm"
@@ -137,9 +137,12 @@
               <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">
                 Login
               </button>
-              <a href="javascript:void(0)" class="ml-3"
+              <router-link to="/account/forgotpassword" class="ml-3">
+                Need help loggin in?
+              </router-link>
+              <!-- <a href="javascript:void(0)" class="ml-3"
                 >Need help logging in?</a
-              >
+              > -->
             </form>
           </div>
         </section>

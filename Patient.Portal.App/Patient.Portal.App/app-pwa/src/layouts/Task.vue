@@ -27,7 +27,8 @@ export default {
     NphQuestion: () => import('../components/task/NphQuestion.vue'),
     NphPersonalHistory: () => import('../components/task/NphPersonalHistory.vue'),
     NphFamilyHistory: () => import('../components/task/NphFamilyHistory.vue'),
-    NphThankyou: () => import('../components/task/NphThankyou.vue')
+    NphThankyou: () => import('../components/task/NphThankyou.vue'),
+    ResetPassword: () => import('../components/task/ResetPassword.vue')
   },
   data () {
     return {
@@ -79,10 +80,24 @@ export default {
       this.initialize = true
       this.keyExpired = true
 
-      setTimeout(() => {
-        this.$router.push({ path: '/account/login' })
-      }, 5000)
+      // setTimeout(() => {
+      //   this.$router.push({ path: '/account/login' })
+      // }, 5000)
     }
+
+    // Get Task
+    let taskRes
+    if (this.linkInfo.patientID > 0) {
+      taskRes = await api.task.request.gettask({
+        facilityId: this.linkInfo.facilityID,
+        patientId: this.linkInfo.patientID
+      })
+      this.task = taskRes.data.find(el => el.taskID === this.linkInfo.taskID)
+    } else {
+      taskRes = await api.task.request.getSpecificTask(this.linkInfo.taskID)
+      this.task = taskRes.data
+    }
+
     const pLookup = await api.task.request.patientLookup({
       facilityId: this.linkInfo.facilityID,
       patientId: this.linkInfo.patientID
@@ -95,12 +110,7 @@ export default {
       }, 5000)
     } else {
       this.initialize = true
-      // Get Task
-      const taskRes = await api.task.request.gettask({
-        facilityId: this.linkInfo.facilityID,
-        patientId: this.linkInfo.patientID
-      })
-      this.task = taskRes.data.find(el => el.taskID === this.linkInfo.taskID)
+
       console.log('this.task.taskType', this.task.taskType)
       const facilityInfo = await api.auth.request.getFacilityInfo(this.linkInfo.facilityID)
       await this.setTaskOfficeName(facilityInfo.officeName)
@@ -109,6 +119,9 @@ export default {
         case 'NPH':
 
           this.setTaskCurrentTaskType('CreateAccount')
+          break
+        case 'RESETPWD':
+          this.setTaskCurrentTaskType('ResetPassword')
           break
       }
     }

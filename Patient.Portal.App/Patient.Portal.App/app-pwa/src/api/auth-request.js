@@ -287,6 +287,15 @@ export default {
     */
     async getFacilityInfo (payload) {
       return (await securedJsonRequest.get('/patientportal/getfacilityinfo/' + payload)).data
+    },
+    /**
+     * Reset the user password via email
+     * @param {Object} payload request object for sending email notificatin link for user to reset their password
+     * @param {String} payload.email User account email
+     * @returns {{ value: Boolean, reason: String }} api will return the success object
+     */
+    async resetUserPassword (payload) {
+      return (await (securedJsonRequest.post('/patientportal/resetuserpwd', payload))).data
     }
   }
 }

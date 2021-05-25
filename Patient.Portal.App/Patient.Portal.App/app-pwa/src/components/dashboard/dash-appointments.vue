@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     date: function (date) {
-      return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')
+      return moment(date).format('dddd  MM/DD/YYYY @ h:mm a')
     }
   },
   async mounted () {
