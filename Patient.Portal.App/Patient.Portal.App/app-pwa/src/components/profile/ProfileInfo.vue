@@ -22,11 +22,63 @@
     <div class="form-group row">
       <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">Email:</label>
       <div class="col-lg-4 col-xl-4">
-        <input type="email" class="form-control" id="email" v-model="form.email" required>
+        <input type="email" pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" class="form-control" id="email" v-model="form.email" required>
+      </div>
+    </div>
+    <!--<div class="form-group row">
+      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">Address:</label>
+      <div class="col-lg-4 col-xl-4">
+        <input type="text" class="form-control" id="address" v-model="form.address" required>
       </div>
     </div>
     <div class="form-group row">
-      <div class="col-lg-2"></div>
+      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">City:</label>
+      <div class="col-lg-4 col-xl-4">
+        <input type="text" class="form-control" id="city" v-model="form.city" required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">State:</label>
+      <div class="col-lg-4 col-xl-4">
+        <select v-model="form.state" class="form-control">
+          <option v-for="state in usStates"
+                  :key="state.code"
+                  :value="state.code">
+            {{ state.name }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">Zip:</label>
+      <div class="col-lg-4 col-xl-4">
+        <input type="text" class="form-control" id="zip" v-model="form.zip" required>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">Home Phone:</label>
+      <div class="col-lg-4 col-xl-4">
+        <input type="text" class="form-control" id="zip" v-model="form.homePhone" :required="form.cellPhone === ''"
+               v-mask="'(###) ###-####'">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">Mobile Phone:</label>
+      <div class="col-lg-4 col-xl-4">
+        <input type="text" class="form-control" id="zip" v-model="form.cellPhone" :required="form.homePhone === ''"
+               v-mask="'(###) ###-####'">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">Work Phone:</label>
+      <div class="col-lg-4 col-xl-4">
+        <input type="text" class="form-control" id="zip" v-model="form.workPhone"
+               v-mask="'(###) ###-####'">
+      </div>
+    </div>-->
+    <div class="form-group row">
+      <div class="col-lg-2">
+      </div>
       <div class="col-lg-4 col-xl-4">
         <button class="btn btn-primary btn-w-160" type="submit">UPDATE</button>
       </div>
@@ -45,7 +97,15 @@ export default {
         lastName: '',
         nickName: '',
         email: ''
-      }
+        // address: '',
+        // state: '',
+        // city: '',
+        // zip: '',
+        // homePhone: '',
+        // cellPhone: '',
+        // workPhone: ''
+      },
+      usStates: []
     }
   },
   computed: {
@@ -65,6 +125,10 @@ export default {
         timer: 2000,
         icon: 'success'
       })
+    },
+    async getUsStates () {
+      const result = await api.task.request.getUsStates()
+      this.usStates = result.data
     }
   },
   mounted () {
