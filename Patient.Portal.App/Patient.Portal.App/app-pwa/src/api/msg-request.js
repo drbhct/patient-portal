@@ -70,6 +70,7 @@ export default {
       * @param {Object} payload  request object to get user patient message list
       * @param {String} payload.facilityId
       * @param {String} payload.patientId
+      * @param {Boolean} payload.includeArchived
       */
     async getMessageList (payload) {
       return await securedJsonRequest.post('/patientportal/GetMessageList', payload)
@@ -82,6 +83,56 @@ export default {
       */
     async setMessageAsRead (payload) {
       return await securedJsonRequest.post('/patientportal/UpdateMessageRead', payload)
+    },
+    /**
+     * Api access to get the message thread list
+      * @param {Object} payload  request object to get user patient message list
+      * @param {String} payload.facilityId
+      * @param {String} payload.patiendId
+      * @param {String} payload.parentId
+      */
+    async getMessageThread (payload) {
+      return await securedJsonRequest.post('/patientportal/GetMessageThread', payload)
+    },
+    /**
+     * Api access to reply
+      * @param {Object} payload  request object to get user patient message list
+      * @param {String} payload.facilityId
+      * @param {String} payload.patiendId
+      * @param {String} payload.parentId
+      * @param {String} payload.message
+      */
+    async insertMessageReply (payload) {
+      return await securedJsonRequest.post('/patientportal/InsertMessageReply', payload)
+    },
+    /**
+     * Api access to reply
+      * @param {Object} payload  request object to get user patient message list
+      * @param {String} payload.facilityId
+      * @param {String} payload.id
+      */
+    async archiveMessage (payload) {
+      return await securedJsonRequest.post('/patientportal/archivemessage', payload)
+    },
+    /**
+     * Api access to message count
+      * @param {Object} payload  request object to get user patient message list
+      * @param {String} payload.facilityId
+      * @param {String} payload.patientId
+      */
+    async getArchivedMessageCount (payload) {
+      return await securedJsonRequest.post('/patientportal/getarchivedmessagecount', payload)
+    },
+    /**
+     * Api access to insert new message
+      * @param {Object} payload  request object to get user patient message list
+      * @param {String} payload.facilityId
+      * @param {String} payload.patiendId
+      * @param {String} payload.subject
+      * @param {String} payload.message
+      */
+    async insertMessage (payload) {
+      return await securedJsonRequest.post('/patientportal/insertmessage', payload)
     }
   }
 }

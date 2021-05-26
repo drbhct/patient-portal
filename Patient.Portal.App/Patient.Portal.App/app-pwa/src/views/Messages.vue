@@ -8,11 +8,13 @@
 <script>
 import List from '../components/messages/MsgList.vue'
 import Detail from '../components/messages/MsgDetails.vue'
+import Create from '../components/messages/MsgCreate.vue'
 import { mapGetters } from 'vuex'
 export default {
   components: {
     List,
-    Detail
+    Detail,
+    Create
   },
   data () {
     return {

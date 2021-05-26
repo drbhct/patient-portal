@@ -164,6 +164,8 @@ export default {
     },
     checkMenuHeader: function () {
       if (this.currentRouteName === 'messages') {
+        this.setCurrentMsgInfo({})
+        this.setMsgCurrentPage('List')
         return 'bg-blue'
       }
       if (this.currentRouteName === 'documents') {
@@ -206,7 +208,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logoutApp']),
+    ...mapActions(['logoutApp', 'setMsgCurrentPage', 'setCurrentMsgInfo']),
     closeSidebar () {
       // console.log('closing sidebar')
       document
