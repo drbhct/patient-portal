@@ -15,8 +15,8 @@
         <thead>
           <tr>
             <th>Subject</th>
-            <th>Date</th>
             <th>From</th>
+            <th>Date</th>
             <th></th>
           </tr>
         </thead>
@@ -27,8 +27,8 @@
                 {{ msg.subject }}
               </a>
             </td>
-            <td>{{ formatData(msg.date) }}</td>
             <td>{{ getFromName(msg) }}</td>
+            <td>{{ formatData(msg.date) }}</td>
             <td>
               <a href="javascript:void(0)" @click="archive(msg.id)" title="Archive">
                 <i class="fas fa-archive"></i>
