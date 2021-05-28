@@ -15,7 +15,7 @@
           <div class="mailbox-email-screen pt-2">
             <div v-for="(msg, index) in msgThread" :key="msg.id" class="card mb-2">
               <div class="card-header" :class="{ collapsed:  index !== msgThread.length - 1 }" data-toggle="collapse" :data-target="'#collapse-'+ index">
-                <div class="card-actions">
+                <div class="card-actions float-right">
                   <a href="#" class="card-action card-action-toggle" :class="{ collapsed:  index !== msgThread.length - 1 }" data-toggle="collapse" :data-target="'#collapse-'+ index"></a>
                   <a v-if="!msg.fromPatient" href="javascript:void(0)" @click="reply" class="fas fa-reply modal-basic"></a>
                 </div>
@@ -143,6 +143,9 @@ export default {
 
   .collapsed .card-action-toggle:before {
     content: "\f0d8";
+  }
+  .card-header {
+    padding: 12px !important;
   }
 
 </style>
