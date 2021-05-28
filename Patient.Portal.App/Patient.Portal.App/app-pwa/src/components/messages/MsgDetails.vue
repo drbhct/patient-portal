@@ -14,15 +14,15 @@
         <div class="mailbox-email-container">
           <div class="mailbox-email-screen pt-2">
             <div v-for="(msg, index) in msgThread" :key="msg.id" class="card mb-2">
-              <div class="card-header">
+              <div class="card-header" :class="{ collapsed:  index !== msgThread.length - 1 }" data-toggle="collapse" :data-target="'#collapse-'+ index">
                 <div class="card-actions">
-                  <a href="#" class="card-action card-action-toggle" data-toggle="collapse" :data-target="'#collapse-'+ index"></a>
+                  <a href="#" class="card-action card-action-toggle" :class="{ collapsed:  index !== msgThread.length - 1 }" data-toggle="collapse" :data-target="'#collapse-'+ index"></a>
                   <a v-if="!msg.fromPatient" href="javascript:void(0)" @click="reply" class="fas fa-reply modal-basic"></a>
                 </div>
                 <p class="card-title"> {{ getFromName(msg) }} <i class="fas fa-angle-right fa-fw"></i> {{ getToName(msg) }} </p>
+                <span class="m-0"><small>{{ date(msg.entryDate) }}</small></span>
               </div>
               <div :id="'collapse-'+ index" class="card-body collapse" :class="{ show:  index == msgThread.length - 1 }">
-                <p class="m-0 text-right"><small>{{ date(msg.entryDate) }}</small></p>
                 <p>{{msg.messageText}}</p>
               </div>
             </div>
@@ -137,4 +137,12 @@ export default {
     margin-right:5px;
     margin-left: 5px;
   }
+  .card-action-toggle:before {
+    content: "\f0d7";
+  }
+
+  .collapsed .card-action-toggle:before {
+    content: "\f0d8";
+  }
+
 </style>
