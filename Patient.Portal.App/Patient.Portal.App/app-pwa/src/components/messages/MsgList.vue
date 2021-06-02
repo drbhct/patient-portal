@@ -22,12 +22,12 @@
         </thead>
         <tbody>
           <tr v-for="msg in filteredList" :key="'msg' + msg.id">
-            <td>
+            <td :class="!msg.read ? 'font-weight-bold' : 'font-weight-normal'">
               <a href="javascript:void(0)" @click="viewMsg(msg)">
                 {{ msg.subject }}
               </a>
             </td>
-            <td>{{ getFromName(msg) }}</td>
+            <td :class="!msg.read ? 'font-weight-bold' : 'font-weight-normal'">{{ getFromName(msg) }}</td>
             <td>{{ formatData(msg.date) }}</td>
             <td>
               <a href="javascript:void(0)" @click="archive(msg.id)" title="Archive">
@@ -116,6 +116,7 @@ export default {
         id: id
       }
       await api.msg.request.archiveMessage(params)
+      this.getMessagesCount()
       this.loadMessages()
     },
     async send () {
