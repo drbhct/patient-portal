@@ -949,6 +949,198 @@ export default {
         this.setTaskCurrentTaskType('NphComplaintLocation')
       }
     },
+    loadValue (items) {
+      var me = this
+      for (const i in items) {
+        const code = items[i].code
+        const value = items[i].value
+        console.log(code)
+        console.log(value)
+        if (code === 'AccidentDate') {
+          this.form.dateAccident = value
+        }
+        if (code === 'AccidentTime') {
+          this.form.timeAccident = value
+        }
+        if (code === 'AccidentDamageCost') {
+          this.form.estimatedDamage = value
+        }
+        if (code === 'NumVehicles') {
+          this.form.numVehicles = value
+        }
+        if (code === 'Street') {
+          this.form.streetAddress = value
+        }
+        if (code === 'City') {
+          this.form.city = value
+        }
+        if (code === 'State') {
+          this.form.state = value
+        }
+        if (code === 'WeatherCondition') {
+          const found = this.aaConditions.find(element => element === value)
+          if (found) {
+            this.form.aaConditions = value
+          } else {
+            this.form.aaConditions = 'Other'
+            this.aaConditions = value
+          }
+        }
+        if (code === 'GeneralDescription') {
+          const found = this.accidentDescription.find(element => element === value)
+          if (found) {
+            this.form.aaDescription = value
+          } else {
+            this.form.aaDescription = 'Other'
+            this.aaDescription = value
+          }
+        }
+        if (code === 'AfterImpact') {
+          const found = this.accidentImpact.find(element => element === value)
+          if (found) {
+            this.form.aaImpact = value
+          } else {
+            this.form.aaImpact = 'Other'
+            this.aaImpact = value
+          }
+        }
+        if (code === 'PatientLocation') {
+          const found = this.accidentLocationVehicle.find(element => element === value)
+          if (found) {
+            this.form.aaLocationVehicle = value
+          } else {
+            this.form.aaLocationVehicle = 'Other'
+            this.aaLocationVehicle = value
+          }
+        }
+        if (code === 'PatientAwareness') {
+          const found = this.accidentAwareness.find(element => element === value)
+          if (found) {
+            this.form.aaAwareness = value
+          } else {
+            this.form.aaAwareness = 'Other'
+            this.aaAwareness = value
+          }
+        }
+        if (code === 'PatientVehicleType') {
+          const found = this.accidentVehicleType.find(element => element === value)
+          if (found) {
+            this.form.aaVehicleType = value
+          } else {
+            this.form.aaVehicleType = 'Other'
+            this.aaVehicleType = value
+          }
+        }
+        if (code === 'OtherVehicleType') {
+          const found = this.accidentVehicleType.find(element => element === value)
+          if (found) {
+            this.form.aaVehicleTypeOther = value
+          } else {
+            this.form.aaVehicleTypeOther = 'Other'
+            this.aaVehicleTypeOther = value
+          }
+        }
+        if (code === 'PatientVehicleVelocity') {
+          const found = this.accidentVehicleState.find(element => element === value)
+          if (found) {
+            this.form.aaVehicleState = value
+          } else {
+            this.form.aaVehicleState = 'Other'
+            this.aaVehicleState = value
+          }
+        }
+        if (code === 'PatientVehicleSpeed') {
+          this.form.aaVehicleSpeed = value
+        }
+        if (code === 'OtherVehicleSpeed') {
+          this.form.aaOtherVehicleSpeed = value
+        }
+        if (code === 'Consciousness') {
+          this.form.aaConsciousness = value
+        }
+        if (code === 'Airbags') {
+          this.form.aaAirbags = value
+        }
+        if (code === 'HeadrestType') {
+          this.form.aaHeadrestType = value
+        }
+        if (code === 'HeadrestPosition') {
+          this.form.aaHeadrestPosition = value
+        }
+        if (code === 'SeatbeltType') {
+          const found = this.accidentSeatbeltType.find(element => element === value)
+          if (found) {
+            this.form.aaSeatbeltType = value
+          } else {
+            this.form.aaSeatbeltType = 'Other'
+            this.aaSeatbeltType = value
+          }
+        }
+        if (code === 'SeatbeltResult') {
+          this.form.aaSeatbeltEffect = value
+        }
+        if (code === 'VehicleDamage') {
+          this.form.aaVehicleDamage = value.split(',')
+        }
+        if (code === 'VehicleDents') {
+          this.form.aaVehicleDents = value.split(',')
+        }
+        if (code === 'VehicleDoors') {
+          this.form.aaVehicleDoors = value.split(',')
+        }
+        if (code === 'HeadPosition') {
+          this.form.aaHeadPosition = value
+        }
+        if (code === 'TorsoPosition') {
+          this.form.aaTorso = value
+        }
+        if (code === 'HandPosition') {
+          this.form.aaHandPosition = value
+        }
+        if (code === 'Hospital') {
+          this.form.aaHospital = value
+        }
+        if (code === 'HospitalName') {
+          this.form.aaHospital = value
+        }
+        if (code === 'HospitalTransport') {
+          this.form.aaHospitalTranspo = value
+        }
+        if (code === 'HospitalOvernight') {
+          this.form.aaHospitalized = value
+        }
+        if (code === 'HospitalPainMeds') {
+          this.form.aaPainMed = value
+        }
+        if (code === 'HospitalMuscleRelaxers') {
+          this.form.aaMuscleRelaxers = value
+        }
+        if (code === 'HospitalStitches') {
+          this.form.aaStitches = value
+        }
+        if (code === 'HospitalMedicalEquipment') {
+          this.form.aaMedEquip = value.split(',')
+        }
+        if (code === 'HospitalXrays') {
+          this.form.aaXray = value
+        }
+        if (code === 'HospitalMRI') {
+          this.form.aaMRI = value
+        }
+        if (code === 'HospitalImaging') {
+          this.form.aaOtherImages = value
+        }
+        if (code === 'BodyPartsImpacted') {
+          this.form.aaImpactLocations = value.split(',')
+        }
+        this.form.aaImpactLocations.forEach(function (item) {
+          if (code === 'Impact_' + item.replace(/ /g, '_')) {
+            var aaImpactLoc = 'aaImpactLocCar' + item
+            me.form[aaImpactLoc] = value
+          }
+        })
+      }
+    },
     setCodeValue (value, code) {
       const found = this.accidentInfo.some(el => el.code === code)
       if (!found) {
@@ -968,8 +1160,17 @@ export default {
       await api.task.request.updateCaseHistoryAaValues(param)
       this.setTaskCurrentTaskType('NphComplaintLocation')
     },
+    async getAAValues () {
+      const param = {
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryId: this.getTaskCurrentCaseHistoryId
+      }
+      const response = await api.task.request.getCaseHistoryAaValues(param)
+      this.loadValue(response.data)
+    },
     initializeData () {
       console.log('initializeData.......')
+      this.getAAValues()
       this.form = {
         dateAccident: '',
         timeAccident: null,
@@ -1014,12 +1215,9 @@ export default {
         aaOtherImages: ''
       }
       this.accidentInfo = this.getTaskCurrentCaseHistoryAutoAccident
-      console.log('before...........')
       if (this.getTaskCurrentCaseHistoryAAFormValues) {
-        console.log('pasok here!!!')
-        this.form = JSON.parse(
-          JSON.stringify(this.getTaskCurrentCaseHistoryAAFormValues))
-        console.log(this.form)
+        this.form = JSON.parse(JSON.stringify(this.getTaskCurrentCaseHistoryAAFormValues))
+
         if (this.form.aaConditions === 'Other') {
           const index = this.accidentInfo.findIndex(el => el.code === 'WeatherCondition')
           if (index >= 0) {
