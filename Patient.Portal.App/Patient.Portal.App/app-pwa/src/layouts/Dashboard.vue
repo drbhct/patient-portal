@@ -80,7 +80,10 @@ export default {
       this.setIsLoading(true)
       console.log(this.selectedPatient)
       await this.setProfileCurrentPatient(this.selectedPatient)
-      setTimeout(function () { me.setIsLoading(false) }, 500)
+      setTimeout(function () {
+        me.setIsLoading(false)
+        me.$router.push('/')
+      }, 500)
     }
   },
   async mounted () {

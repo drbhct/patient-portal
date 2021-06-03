@@ -157,7 +157,10 @@ export default {
       const me = this
       this.setIsLoading(true)
       await this.setProfileCurrentPatient(patient)
-      setTimeout(function () { me.setIsLoading(false) }, 500)
+      setTimeout(function () {
+        me.setIsLoading(false)
+        me.$router.push('/')
+      }, 500)
     }
   },
   created () {
