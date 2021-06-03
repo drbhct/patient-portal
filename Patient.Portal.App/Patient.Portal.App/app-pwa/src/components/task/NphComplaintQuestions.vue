@@ -899,15 +899,17 @@ export default {
 
       this.isSaving = false
       const isExist = this.formHistory.find(
-        (c) => c.complaint === this.complaint
+        (c) => c.complaint === this.complaint && c.patientId === this.currentPatientAssociated.patientID
       )
       if (!isExist) {
         this.formHistory.push({
           complaint: this.complaint,
-          form: this.form
+          form: this.form,
+          patientId: this.currentPatientAssociated.patientID
         })
       } else {
-        isExist.form = this.form
+        // isExist.form = this.form
+        this.form = isExist.form
       }
       this.setTaskCurrentCaseHistoryComplaintFormVal(
         JSON.parse(JSON.stringify(this.formHistory))
@@ -923,7 +925,7 @@ export default {
         await this.initializeData()
 
         const exist = this.formHistory.find(
-          (c) => c.complaint === this.complaint
+          (c) => c.complaint === this.complaint && c.patientId === this.currentPatientAssociated.patientID
         )
         if (exist) {
           this.form = exist.form
@@ -1196,29 +1198,11 @@ export default {
       )
       // this.formHistory.text = ''
       const isExist = this.formHistory.find(
-        (c) => c.complaint === this.complaint
+        (c) => c.complaint === this.complaint && c.patientId === this.currentPatientAssociated.patientID
       )
       if (isExist) {
         this.form = JSON.parse(JSON.stringify(isExist.form))
       }
-      // this.form = Object.assign({}, this.getTaskCurrentCaseHistoryFormValues)
-      // this.form = JSON.parse(JSON.stringify(this.getTaskCurrentCaseHistoryFormValues))
-      // this.form = {
-      //   describe: this.getTaskCurrentCaseHistoryFormValues.describe,
-      //   describeOther: this.getTaskCurrentCaseHistoryFormValues.describeOther,
-      //   describeSelectLimit: this.getTaskCurrentCaseHistoryFormValues.describeSelectLimit,
-      //   dateOccured: this.getTaskCurrentCaseHistoryFormValues.dateOccured,
-      //   expPain: this.getTaskCurrentCaseHistoryFormValues.expPain,
-      //   paintIntensity: this.getTaskCurrentCaseHistoryFormValues.paintIntensity,
-      //   radiatesQuestionsAndAnswer: this.getTaskCurrentCaseHistoryFormValues.radiatesQuestionsAndAnswer,
-      //   painQuality: this.getTaskCurrentCaseHistoryFormValues.painQuality,
-      //   painQualityImprovement: this.getTaskCurrentCaseHistoryFormValues.painQualityImprovement,
-      //   painFactor: this.getTaskCurrentCaseHistoryFormValues.painFactor,
-      //   painFactorImprovement: this.getTaskCurrentCaseHistoryFormValues.painFactorImprovement,
-      //   painInterference: this.getTaskCurrentCaseHistoryFormValues.painInterference,
-      //   painInterferenceHelp: this.getTaskCurrentCaseHistoryFormValues.painInterferenceHelp,
-      //   oatQuestions: this.getTaskCurrentCaseHistoryFormValues.oatQuestions
-      // }
     }
   }
 }
