@@ -7,7 +7,7 @@
       <div class="col">
         <section class="card">
           <header class="card-header"></header>
-          <div class="card-body">
+          <div class="card-body" id="frmBody">
             <div v-if="!isLoading">
               <div class="row">
                 <div class="col-lg-6 mx-auto text-center">
@@ -253,7 +253,7 @@ export default {
       this.setTaskCurrentTaskType('NphThankyou')
     }
   },
-  async mounted () {
+  async activated () {
     this.isLoading = true
     const familyHistoryData = await api.task.request.getCaseHistoryFamilyHealthHistory(
       {
@@ -282,6 +282,12 @@ export default {
     })
 
     this.isLoading = false
+
+    setTimeout(() => {
+      const el = document.getElementById('frmBody')
+      el.scrollIntoView({ behavior: 'smooth' })
+      console.log('should be scrolling to top!')
+    }, 1000)
   }
 }
 </script>

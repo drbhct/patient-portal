@@ -527,7 +527,7 @@ export default {
       this.setTaskCurrentTaskType('NphFamilyHistory')
     }
   },
-  async mounted () {
+  async activated () {
     this.isLoading = true
     const patientInfo = await api.task.request.getPatient({
       facilityId: this.currentPatientAssociated.facilityID,
@@ -756,8 +756,13 @@ export default {
 
     this.isLoading = false
 
-    const el = document.getElementById('frmBody')
-    el.scrollIntoView({ behavior: 'smooth' })
+    setTimeout(() => {
+      const el = document.getElementById('frmBody')
+      el.scrollIntoView({ behavior: 'smooth' })
+      console.log('should be scrolling to top!')
+    }, 1000)
+
+    // document.getElementById('frmBody').scrollIntoView({ behavior: 'smooth' })
   }
 }
 </script>
