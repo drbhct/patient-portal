@@ -9,7 +9,7 @@
           <header class="card-header">
             <h2 class="card-title"></h2>
           </header>
-          <div class="card-body">
+          <div class="card-body" id="frmBody">
             <div v-if="!isLoading">
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
@@ -415,6 +415,12 @@ export default {
       })
     }
     this.isLoading = false
+
+    setTimeout(() => {
+      const el = document.getElementById('frmBody')
+      el.scrollIntoView({ behavior: 'smooth' })
+      console.log('should be scrolling to top!')
+    }, 1000)
   }
 }
 </script>

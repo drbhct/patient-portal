@@ -930,8 +930,11 @@ export default {
         if (exist) {
           this.form = exist.form
         }
-        const el = document.getElementById('cardBody')
-        el.scrollIntoView({ behavior: 'smooth' })
+        setTimeout(() => {
+          const el = document.getElementById('cardBody')
+          el.scrollIntoView({ behavior: 'smooth' })
+          console.log('should be scrolling to top!')
+        }, 1000)
         return
       }
 
@@ -967,8 +970,11 @@ export default {
         if (oldForm) {
           this.form = oldForm.form
         }
-        const el = document.getElementById('cardBody')
-        el.scrollIntoView({ behavior: 'smooth' })
+        setTimeout(() => {
+          const el = document.getElementById('cardBody')
+          el.scrollIntoView({ behavior: 'smooth' })
+          console.log('should be scrolling to top!')
+        }, 1000)
       }
     },
     async initializeData () {
@@ -1189,7 +1195,7 @@ export default {
     }
   },
   async mounted () {},
-  async beforeMount () {
+  async activated () {
     await this.initializeData()
     if (this.getTaskCurrentCaseHistoryFormValues) {
       // this.formHistory = this.getTaskCurrentCaseHistoryFormValues
@@ -1204,6 +1210,12 @@ export default {
         this.form = JSON.parse(JSON.stringify(isExist.form))
       }
     }
+
+    setTimeout(() => {
+      const el = document.getElementById('cardBody')
+      el.scrollIntoView({ behavior: 'smooth' })
+      console.log('should be scrolling to top!')
+    }, 1000)
   }
 }
 </script>
