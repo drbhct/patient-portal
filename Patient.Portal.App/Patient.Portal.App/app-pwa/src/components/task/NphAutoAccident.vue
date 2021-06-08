@@ -400,17 +400,20 @@
                   <multiselect v-model="form.aaImpactLocations"
                                :options="accidentImpactLocations"
                                :multiple="true"
-                               @remove="removePart"></multiselect>
+                                @remove="removePart"
+                               ></multiselect>
                 </div>
               </div>
               <div class="form-group row" v-for="item in form.aaImpactLocations" :key="item">
                 <div class="col-lg-12">
                   <label class="label font-weight-600">
-                    Select everything your {{item}} hit during the accident:
+                    Select everything your {{ item }} hit during the accident:
                   </label>
-                  <multiselect v-model="form['aaImpactLocCar' + item]"
+                  <multiselect v-model="form['aaImpactLocCar' + item.replace( /\s/g, '')]"
                                :options="accidentLocationParts"
-                               :multiple="true"></multiselect>
+                               :multiple="true"
+                               @select="reloadImpactLoc"
+                               @remove="reloadImpactLoc"></multiselect>
                 </div>
               </div>
             </div>
@@ -745,8 +748,13 @@ export default {
       const result = await api.task.request.getUsStates()
       this.usStates = result.data
     },
+    reloadImpactLoc () {
+      const arrLoc = this.form.aaImpactLocations
+      this.form.aaImpactLocations = []
+      this.form.aaImpactLocations = arrLoc
+    },
     removePart (value) {
-      const obj = 'aaImpactLocCar' + value
+      const obj = 'aaImpactLocCar' + value.replace(/\s/g, '')
       delete this.form[obj]
     },
     async previous () {
@@ -934,11 +942,10 @@ export default {
         var me = this
         this.setCodeValue(this.form.aaImpactLocations.join(), 'BodyPartsImpacted')
         this.form.aaImpactLocations.forEach(function (item) {
-          var aaImpactLoc = 'aaImpactLocCar' + item
+          var aaImpactLoc = 'aaImpactLocCar' + item.replace(/\s/g, '')
           me.setCodeValue(me.form[aaImpactLoc].join(), 'Impact_' + item.replace(/ /g, '_'))
         })
       }
-
       if (this.accidentInfo.length > 0) {
         this.setTaskCurrentCaseHistoryAAFormValues(JSON.parse(JSON.stringify(this.form)))
         this.setTaskCurrentCaseHistoryAutoAccident(this.accidentInfo)
@@ -1132,15 +1139,18 @@ export default {
         if (code === 'BodyPartsImpacted') {
           this.form.aaImpactLocations = value.split(',')
         }
+        var arrImpact = []
         this.form.aaImpactLocations.forEach(function (item) {
           if (code === 'Impact_' + item.replace(/ /g, '_')) {
-            var aaImpactLoc = 'aaImpactLocCar' + item
-            me.form[aaImpactLoc] = value
+            var aaImpactLoc = 'aaImpactLocCar' + item.replace(/\s/g, '')
+            arrImpact = value.split(',')
+            me.form[aaImpactLoc] = arrImpact
           }
         })
       }
     },
     setCodeValue (value, code) {
+      // console.log(value + ' + ' + code)
       const found = this.accidentInfo.some(el => el.code === code)
       if (!found) {
         this.accidentInfo.push({ code: code, value: value })
@@ -1150,13 +1160,14 @@ export default {
       }
     },
     async setAAValues () {
+      console.log('setAAValues')
       const param = {
         facilityId: this.currentPatientAssociated.facilityID,
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         values: this.accidentInfo
       }
-
       await api.task.request.updateCaseHistoryAaValues(param)
+      this.isSaving = false
       this.setTaskCurrentTaskType('NphComplaintLocation')
     },
     async getAAValues () {
