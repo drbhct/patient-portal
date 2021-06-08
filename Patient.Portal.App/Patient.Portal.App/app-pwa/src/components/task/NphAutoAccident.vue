@@ -954,8 +954,7 @@ export default {
       for (const i in items) {
         const code = items[i].code
         const value = items[i].value
-        console.log(code)
-        console.log(value)
+
         if (code === 'AccidentDate') {
           this.form.dateAccident = value
         }
@@ -978,7 +977,7 @@ export default {
           this.form.state = value
         }
         if (code === 'WeatherCondition') {
-          const found = this.aaConditions.find(element => element === value)
+          const found = this.accidentConditions.find(element => element === value)
           if (found) {
             this.form.aaConditions = value
           } else {
