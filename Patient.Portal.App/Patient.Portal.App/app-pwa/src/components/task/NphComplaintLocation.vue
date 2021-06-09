@@ -18,6 +18,7 @@
                     visit</label
                   >
                   <multiselect
+                  :searchable="false"
                     v-model="form.regions"
                     :options="regionsLocation"
                     :group-select="true"
