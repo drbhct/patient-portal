@@ -88,7 +88,7 @@
                   <label class="label font-weight-600">
                     How would you describe the accident conditions?
                   </label>
-                  <multiselect v-model="form.aaConditions"
+                  <multiselect v-model="form.aaConditions" :searchable="false"
                                :options="accidentConditions"></multiselect>
                 </div>
               </div>
@@ -107,7 +107,7 @@
                   <label class="label font-weight-600">
                     How would you describe what happened?
                   </label>
-                  <multiselect v-model="form.aaDescription"
+                  <multiselect v-model="form.aaDescription" :searchable="false"
                                :options="accidentDescription"></multiselect>
                 </div>
               </div>
@@ -126,7 +126,7 @@
                   <label class="label font-weight-600">
                     What happened to your vehicle immediately after impact?
                   </label>
-                  <multiselect v-model="form.aaImpact"
+                  <multiselect v-model="form.aaImpact" :searchable="false"
                                :options="accidentImpact"></multiselect>
                 </div>
               </div>
@@ -145,7 +145,7 @@
                   <label class="label font-weight-600">
                     Where were you sitting at the time of the accident?
                   </label>
-                  <multiselect v-model="form.aaLocationVehicle"
+                  <multiselect v-model="form.aaLocationVehicle" :searchable="false"
                                :options="accidentLocationVehicle"></multiselect>
                 </div>
               </div>
@@ -164,7 +164,7 @@
                   <label class="label font-weight-600">
                     Did you know the accident was coming?
                   </label>
-                  <multiselect v-model="form.aaAwareness"
+                  <multiselect v-model="form.aaAwareness" :searchable="false"
                                :options="accidentAwareness"></multiselect>
                 </div>
               </div>
@@ -183,7 +183,7 @@
                   <label class="label font-weight-600">
                     What type of vehicle were you in during the accident?
                   </label>
-                  <multiselect v-model="form.aaVehicleType"
+                  <multiselect v-model="form.aaVehicleType" :searchable="false"
                                :options="accidentVehicleType"></multiselect>
                 </div>
               </div>
@@ -202,7 +202,7 @@
                   <label class="label font-weight-600">
                     What type was the other vehicle?
                   </label>
-                  <multiselect v-model="form.aaVehicleTypeOther"
+                  <multiselect v-model="form.aaVehicleTypeOther" :searchable="false"
                                :options="accidentVehicleType"></multiselect>
                 </div>
               </div>
@@ -221,7 +221,7 @@
                   <label class="label font-weight-600">
                     At the time of the impact were you:
                   </label>
-                  <multiselect v-model="form.aaVehicleState"
+                  <multiselect v-model="form.aaVehicleState" :searchable="false"
                                :options="accidentVehicleState"></multiselect>
                 </div>
               </div>
@@ -247,7 +247,7 @@
                   <label class="label font-weight-600">
                     Your Vehicle
                   </label>
-                  <multiselect v-model="form.aaVehicleSpeed"
+                  <multiselect v-model="form.aaVehicleSpeed" :searchable="false"
                                :options="speedList"></multiselect>
                 </div>
               </div>
@@ -256,7 +256,7 @@
                   <label class="label font-weight-600">
                     Other Vehicle
                   </label>
-                  <multiselect v-model="form.aaOtherVehicleSpeed"
+                  <multiselect v-model="form.aaOtherVehicleSpeed" :searchable="false"
                                :options="speedList"></multiselect>
                 </div>
               </div>
@@ -272,7 +272,7 @@
                   <label class="label font-weight-600">
                     Did you lose consciousness during the accident?
                   </label>
-                  <multiselect v-model="form.aaConsciousness"
+                  <multiselect v-model="form.aaConsciousness" :searchable="false"
                                :options="accidentConsciousness"></multiselect>
                 </div>
               </div>
@@ -281,7 +281,7 @@
                   <label class="label font-weight-600">
                     Did the airbags deployed during the accident?
                   </label>
-                  <multiselect v-model="form.aaAirbags"
+                  <multiselect v-model="form.aaAirbags" :searchable="false"
                                :options="accidentAirbags"></multiselect>
                 </div>
               </div>
@@ -290,7 +290,7 @@
                   <label class="label font-weight-600">
                     What type of headrests where in your vehicle?
                   </label>
-                  <multiselect v-model="form.aaHeadrestType"
+                  <multiselect v-model="form.aaHeadrestType" :searchable="false"
                                :options="accidentHeadrestType"></multiselect>
                 </div>
               </div>
@@ -299,7 +299,7 @@
                   <label class="label font-weight-600">
                     Where was the headrest in relation to your body?
                   </label>
-                  <multiselect v-model="form.aaHeadrestPosition"
+                  <multiselect v-model="form.aaHeadrestPosition" :searchable="false"
                                :options="accidentHeadrestPosition"></multiselect>
                 </div>
               </div>
@@ -308,7 +308,7 @@
                   <label class="label font-weight-600">
                     What type of seatbelt where you wearing?
                   </label>
-                  <multiselect v-model="form.aaSeatbeltType"
+                  <multiselect v-model="form.aaSeatbeltType" :searchable="false"
                                :options="accidentSeatbeltType"
                                @select="setCodeValue($event, 'SeatbeltType')"></multiselect>
                 </div>
@@ -328,7 +328,7 @@
                   <label class="label font-weight-600">
                     Did the accident cause you to slide out of your seatbelt?
                   </label>
-                  <multiselect v-model="form.aaSeatbeltEffect"
+                  <multiselect v-model="form.aaSeatbeltEffect" :searchable="false"
                                :options="accidentSeatbeltEffect"></multiselect>
                 </div>
               </div>
@@ -337,7 +337,7 @@
                   <label class="label font-weight-600">
                     Select parts of your vehicle that were damaged:
                   </label>
-                  <multiselect v-model="form.aaVehicleDamage"
+                  <multiselect v-model="form.aaVehicleDamage" :searchable="false"
                                :options="accidentVehicleDamage"
                                :multiple="true"></multiselect>
                 </div>
@@ -347,7 +347,7 @@
                   <label class="label font-weight-600">
                     Select parts of your vehicle that were dented inward during the accident:
                   </label>
-                  <multiselect v-model="form.aaVehicleDents"
+                  <multiselect v-model="form.aaVehicleDents" :searchable="false"
                                :options="accidentVehicleDents"
                                :multiple="true"></multiselect>
                 </div>
@@ -357,7 +357,7 @@
                   <label class="label font-weight-600">
                     Select all the doors that would no longer open as a result of the accident:
                   </label>
-                  <multiselect v-model="form.aaVehicleDoors"
+                  <multiselect v-model="form.aaVehicleDoors" :searchable="false"
                                :options="accidentVehicleDoors"
                                :multiple="true"></multiselect>
                 </div>
@@ -367,7 +367,7 @@
                   <label class="label font-weight-600">
                     How was your head positioned during the accident?
                   </label>
-                  <multiselect v-model="form.aaHeadPosition"
+                  <multiselect v-model="form.aaHeadPosition" :searchable="false"
                                :options="accidentHeadPosition"
                                @select="setCodeValue($event, 'HeadPosition')"></multiselect>
                 </div>
@@ -377,7 +377,7 @@
                   <label class="label font-weight-600">
                     How was your torso positioned during the accident?
                   </label>
-                  <multiselect v-model="form.aaTorso"
+                  <multiselect v-model="form.aaTorso" :searchable="false"
                                :options="accidentTorso"
                                @select="setCodeValue($event, 'TorsoPosition')"></multiselect>
                 </div>
@@ -387,7 +387,7 @@
                   <label class="label font-weight-600">
                     How were your hands positioned during the accident?
                   </label>
-                  <multiselect v-model="form.aaHandPosition"
+                  <multiselect v-model="form.aaHandPosition" :searchable="false"
                                :options="accidentHandPosition"
                                @select="setCodeValue($event, 'HandPosition')"></multiselect>
                 </div>
@@ -397,7 +397,7 @@
                   <label class="label font-weight-600">
                     Select all the parts of your body that where impacted during the accident:
                   </label>
-                  <multiselect v-model="form.aaImpactLocations"
+                  <multiselect v-model="form.aaImpactLocations" :searchable="false"
                                :options="accidentImpactLocations"
                                :multiple="true"
                                @remove="removePart"></multiselect>
@@ -408,7 +408,7 @@
                   <label class="label font-weight-600">
                     Select everything your {{item}} hit during the accident:
                   </label>
-                  <multiselect v-model="form['aaImpactLocCar' + item]"
+                  <multiselect v-model="form['aaImpactLocCar' + item]" :searchable="false"
                                :options="accidentLocationParts"
                                :multiple="true"></multiselect>
                 </div>
@@ -425,7 +425,7 @@
                   <label class="label font-weight-600">
                     Did you go to the Hospital after the accident?
                   </label>
-                  <multiselect v-model="form.aaHospital"
+                  <multiselect v-model="form.aaHospital" :searchable="false"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'Hospital')"></multiselect>
                 </div>
@@ -443,7 +443,7 @@
                   <label class="label font-weight-600">
                     How did you get to the Hospital?
                   </label>
-                  <multiselect v-model="form.aaHospitalTranspo"
+                  <multiselect v-model="form.aaHospitalTranspo" :searchable="false"
                                :options="accidentHospitalTranspo"
                                @select="setCodeValue($event, 'HospitalTransport')"></multiselect>
                 </div>
@@ -453,7 +453,7 @@
                   <label class="label font-weight-600">
                     Were you hospitalized overnight?
                   </label>
-                  <multiselect v-model="form.aaHospitalized"
+                  <multiselect v-model="form.aaHospitalized" :searchable="false"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalOvernight')"></multiselect>
                 </div>
@@ -463,7 +463,7 @@
                   <label class="label font-weight-600">
                     At the Hospital, did you receive pain medication?
                   </label>
-                  <multiselect v-model="form.aaPainMed"
+                  <multiselect v-model="form.aaPainMed" :searchable="false"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalPainMeds')"></multiselect>
                 </div>
@@ -473,7 +473,7 @@
                   <label class="label font-weight-600">
                     At the Hospital, did you receive muscle relaxers?
                   </label>
-                  <multiselect v-model="form.aaMuscleRelaxers"
+                  <multiselect v-model="form.aaMuscleRelaxers" :searchable="false"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalMuscleRelaxers')"></multiselect>
                 </div>
@@ -483,7 +483,7 @@
                   <label class="label font-weight-600">
                     At the hospital, did you receive stitches?
                   </label>
-                  <multiselect v-model="form.aaStitches"
+                  <multiselect v-model="form.aaStitches" :searchable="false"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalStitches')"></multiselect>
                 </div>
@@ -493,7 +493,7 @@
                   <label class="label font-weight-600">
                     Please select the items you received at the Hospital
                   </label>
-                  <multiselect v-model="form.aaMedEquip"
+                  <multiselect v-model="form.aaMedEquip" :searchable="false"
                                :options="accidentMedEquip"
                                :multiple="true"></multiselect>
                 </div>
@@ -503,7 +503,7 @@
                   <label class="label font-weight-600">
                     At the Hospital, were Xray's taken?
                   </label>
-                  <multiselect v-model="form.aaXray"
+                  <multiselect v-model="form.aaXray" :searchable="false"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalXrays')"></multiselect>
                 </div>
@@ -513,7 +513,7 @@
                   <label class="label font-weight-600">
                     At the Hospital, was an MRI taken?
                   </label>
-                  <multiselect v-model="form.aaMRI"
+                  <multiselect v-model="form.aaMRI" :searchable="false"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalMRI')"></multiselect>
                 </div>
@@ -523,7 +523,7 @@
                   <label class="label font-weight-600">
                     At the Hospital, were any other type of images taken?
                   </label>
-                  <multiselect v-model="form.aaOtherImages"
+                  <multiselect v-model="form.aaOtherImages" :searchable="false"
                                :options="accidentYesNo"
                                @select="setCodeValue($event, 'HospitalImaging')"></multiselect>
                 </div>
