@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">Nick Name:</label>
+      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">Nickname :</label>
       <div class="col-lg-4 col-xl-4">
         <input type="text" class="form-control" id="nickname" v-model="form.nickName">
       </div>
