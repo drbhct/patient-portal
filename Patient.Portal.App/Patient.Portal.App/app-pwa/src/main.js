@@ -9,7 +9,11 @@ import VueMask from 'v-mask'
 import VueContentPlaceholders from 'vue-content-placeholders'
 import * as Sentry from '@sentry/vue'
 import { Integrations } from '@sentry/tracing'
-import auth from './auth/auth.js'
+// import auth from './auth/auth.js'
+import PubNubVue from 'pubnub-vue'
+import { AuthSimplePlugin } from './auth/auth-simple.js'
+
+Vue.use(PubNubVue, { subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY, publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY })
 Sentry.init({
   Vue,
   dsn: 'https://903308b1d24a48768a190cd33ddb2b42@o264517.ingest.sentry.io/5689328',
@@ -21,7 +25,8 @@ Sentry.init({
   tracesSampleRate: 1.0
 })
 
-Vue.use(auth)
+Vue.use(new AuthSimplePlugin())
+// Vue.use(auth)
 Vue.use(VueContentPlaceholders)
 Vue.use(VueSweetalert2)
 Vue.use(VueMask)

@@ -153,7 +153,7 @@ import { mapActions } from 'vuex'
 export default {
   computed: {
     isAuthenticated () {
-      return this.$auth.isAuthenticated()
+      return this.$auth.isAuthenticated
     },
     currentRouteName () {
       let route = this.$route.name

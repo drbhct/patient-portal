@@ -134,9 +134,10 @@
                   v-model="loginForm.password"
                 />
               </div>
-              <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">
+              <btn-saving :is-saving="isSaving" :loading-text="'Validating...'" :display-text="'Login'"/>
+              <!-- <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">
                 Login
-              </button>
+              </button> -->
               <router-link to="/account/forgotpassword" class="ml-3">
                 Need help loggin in?
               </router-link>
@@ -155,9 +156,14 @@
 import '../../assets/FormLayout.css'
 import api from '../../api/http-common.js'
 import { mapGetters, mapActions } from 'vuex'
+import BtnSaving from '../../components/button-saving.vue'
 export default {
+  components: {
+    BtnSaving
+  },
   data () {
     return {
+      isSaving: false,
       loginForm: {
         userName: '',
         password: ''
@@ -182,6 +188,7 @@ export default {
       'setTaskCurrentTaskType'
     ]),
     async login () {
+      this.isSaving = true
       const userData = await this.$auth.login(
         this.loginForm.userName,
         this.loginForm.password
@@ -196,6 +203,7 @@ export default {
           timer: 2000,
           icon: 'error'
         })
+        this.isSaving = false
         return
       }
 
@@ -248,6 +256,7 @@ export default {
         await this.setProfileAuthInfo(this.profileAuthInfo)
         this.setProfilePatientAssociated(patientAssosicated.data)
         await this.setProfileCurrentPatient(patientAssosicated.data[0])
+        this.isSaving = false
         this.$auth.completeAuth()
         this.gotoTask() // added by Rizza Herrero 05/05/2021
         // this.$router.push('/') commented out by Rizza Herrero 05/05/2021
@@ -262,6 +271,7 @@ export default {
       // eslint-disable-next-line no-undef
       $('#patientSelection').modal('hide')
       await this.setProfileAuthInfo(this.profileAuthInfo)
+      this.isSaving = false
       this.$auth.completeAuth()
       this.gotoTask() // added by Rizza Herrero 05/05/2021
       // this.$router.push('/') commented out by Rizza Herrero 05/05/2021
@@ -294,6 +304,7 @@ export default {
         await this.setProfileAuthInfo(this.profileAuthInfo)
         this.setProfilePatientAssociated(patientAssosicated.data)
         await this.setProfileCurrentPatient(patientAssosicated.data[0])
+        this.isSaving = false
         this.$auth.completeAuth()
         this.gotoTask() // added by Rizza Herrero 05/05/2021
         // this.$router.push('/') commented out by Rizza Herrero 05/05/2021

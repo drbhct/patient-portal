@@ -15,6 +15,7 @@ export default {
     // }
     // Vue.prototype.$auth.logout()
     // console.log('isAuthenticated', Vue.prototype.$auth.isAuthenticated())
+    Vue.prototype.$isAuthenticated = Vue.observable(myInstance.isAuthenticated())
   }
 }
 

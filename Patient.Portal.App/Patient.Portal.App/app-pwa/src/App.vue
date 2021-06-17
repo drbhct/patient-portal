@@ -100,6 +100,36 @@ export default {
   components: {
     Loading
   },
+  watch: {
+    currentPatientAssociated: function (val, oldVal) {
+      if (!this.$auth.isAuthenticated()) {
+        return
+      }
+      console.log('From currentPatientAssociated --------------')
+      if (oldVal) {
+        console.log('Initialize pubnub channel unsubscribe....')
+        console.log('old>currentPatientAssociated>', oldVal)
+      }
+      if (val) {
+        console.log('Initialize pubnub channel subscriptions....')
+        console.log('currentPatientAssociated>', this.currentPatientAssociated)
+      }
+    },
+    isAuth: function (val, oldVal) {
+      // console.log('watch>isAuth>oldVal', oldVal)
+      // console.log('watch>isAuth>val', val)
+      // console.log('watch>isAuthenticated()', this.$auth.isAuthenticated())
+      console.log('From isAuth --------------')
+      if (val && this.$auth.isAuthenticated()) {
+        console.log('Initialize pubnub channel subscriptions....')
+        console.log('isAuth>currentPatientAssociated>', this.currentPatientAssociated)
+      }
+      if (!val && !this.$auth.isAuthenticated()) {
+        console.log('Initialize pubnub channel unsubscribe....')
+        console.log('isAuth>currentPatientAssociated>', this.currentPatientAssociated)
+      }
+    }
+  },
   computed: {
     version () {
       return '0.0.14' // Bug fixes on card #17509 and other updates
@@ -145,6 +175,9 @@ export default {
         return false
       }
       return true
+    },
+    isAuth () {
+      return this.$auth.logged
     }
   },
   methods: {

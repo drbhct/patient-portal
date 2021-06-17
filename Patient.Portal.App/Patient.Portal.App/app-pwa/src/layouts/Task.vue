@@ -64,7 +64,7 @@ export default {
     // localStorage.setItem('config', apiRes.data.token)
     sessionStorage.setItem('config', apiRes.data.token)
     if (!this.key) {
-      if (this.$auth.isAuthenticated()) {
+      if (this.$auth.isAuthenticated) {
         this.setTaskCurrentTaskType('PatientInfo')
         this.initialize = true
         return
