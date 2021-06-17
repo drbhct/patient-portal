@@ -90,6 +90,14 @@ export default {
     const patientAssosicated = await api.auth.request.getUserPatient(this.getProfileAuthInfo.id)
     this.setProfilePatientAssociated(patientAssosicated.data)
     this.selectedPatient = this.currentPatientAssociated
+
+    // // TODO: Set pubnub subcription on home page.
+    // if(this.currentPatientAssociated){
+    //   let channel = `ch-portal-msg-${}-${}`
+    //   // this.$pnSubsribe({})
+    // }else{
+
+    // }
   }
 }
 </script>
