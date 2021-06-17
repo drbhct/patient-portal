@@ -164,8 +164,8 @@ export default {
     },
     checkMenuHeader: function () {
       if (this.currentRouteName === 'messages') {
-        this.setCurrentMsgInfo({})
-        this.setMsgCurrentPage('List')
+        // this.setCurrentMsgInfo({})
+        // this.setMsgCurrentPage('List')
         return 'bg-blue'
       }
       if (this.currentRouteName === 'documents') {
@@ -216,9 +216,7 @@ export default {
         .classList.remove('sidebar-left-opened')
     },
     async logout () {
-      this.$cookies.remove('user')
-      localStorage.removeItem('config')
-      await this.logoutApp()
+      this.$auth.logout()
       this.$router.push('/account/login')
     }
   }

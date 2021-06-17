@@ -13,7 +13,14 @@ import { Integrations } from '@sentry/tracing'
 import PubNubVue from 'pubnub-vue'
 import { AuthSimplePlugin } from './auth/auth-simple.js'
 
-Vue.use(PubNubVue, { subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY, publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY })
+Vue.use(PubNubVue, {
+  subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
+  publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY,
+  uuid: window.Login,
+  ssl: true,
+  presenceTimeout: 130
+})
+
 Sentry.init({
   Vue,
   dsn: 'https://903308b1d24a48768a190cd33ddb2b42@o264517.ingest.sentry.io/5689328',

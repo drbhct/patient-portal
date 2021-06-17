@@ -185,7 +185,9 @@ export default {
       'setProfileAuthInfo',
       'setProfilePatientAssociated',
       'setProfileCurrentPatient',
-      'setTaskCurrentTaskType'
+      'setTaskCurrentTaskType',
+      'setMsgCurrentPage',
+      'setCurrentMsgInfo'
     ]),
     async login () {
       this.isSaving = true
@@ -316,9 +318,22 @@ export default {
         patientId: this.currentPatientAssociated.patientID
       })
       const taskList = res.data
+      let taskRes
       if (taskList.length === 1) {
-        await this.setTaskCurrentTaskType(taskList[0].taskType)
-        await this.$router.push({ path: '/task' })
+        switch (taskList[0].taskType) {
+          case 'MSG':
+            taskRes = await api.task.request.getSpecificTask(taskList[0].taskID)
+
+            this.setCurrentMsgInfo({ id: parseInt(taskRes.data.info), subject: '' })
+            this.setMsgCurrentPage('Detail')
+            // console.log('taskRes>', taskRes)
+            this.$router.push({ path: '/menu/messages' })
+            break
+          default:
+            await this.setTaskCurrentTaskType(taskList[0].taskType)
+            await this.$router.push({ path: '/task' })
+            break
+        }
       } else {
         this.$router.push('/')
       }
@@ -326,9 +341,9 @@ export default {
   },
   mounted () {
     // Check if already login
-    if (this.$auth.isAuthenticated()) {
-      this.gotoTask()
-    }
+    // if (this.$auth.isAuthenticated()) {
+    //   this.gotoTask()
+    // }
     // localStorage.clear()
     // this.$auth.logout()
   }
