@@ -25,7 +25,7 @@
                   <label class="label f-weight-550">
                     {{ infoQandA.question }}
                   </label>
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="infoQandA.answer"
                     :options="infoQandA.selections"
                     :multiple="false"
@@ -61,7 +61,7 @@
                       <label class="label f-weight-550">
                         {{ condition.question }}
                       </label>
-                      <multiselect
+                      <multiselect :searchable="false"
                         v-model="condition.answer"
                         :options="conditionApplySelection"
                         :multiple="true"
@@ -89,7 +89,7 @@
                     <label class="label f-weight-550">
                       {{ medQandA.question }}
                     </label>
-                    <multiselect
+                    <multiselect :searchable="false"
                       v-model="medQandA.answer"
                       :options="yesNoSelection"
                       :multiple="false"
@@ -97,7 +97,7 @@
                   </div>
                   <div v-if="medQandA.answer === 'Yes'">
                     <label class="label f-weight-550"> Select Year {{ medQandA.question }} taken</label>
-                    <multiselect
+                    <multiselect :searchable="false"
                       v-model="medQandA.year"
                       :options="medicineYearSelection"
                       :multiple="false"
@@ -116,7 +116,7 @@
                   <label class="label f-weight-550">
                   {{ medQandA.question }}
                 </label>
-                <multiselect
+                <multiselect :searchable="false"
                     v-model="medQandA.answer"
                     :options="yesNoSelection"
                     :multiple="false"
@@ -151,7 +151,7 @@
                   <label class="label f-weight-550">
                   What languages do you speak?
                 </label>
-                <multiselect
+                <multiselect :searchable="false"
                     v-model="form.language"
                     :options="languageList"
                     :multiple="false"
@@ -165,7 +165,7 @@
                   <label class="label f-weight-550">
                   Ethnicity
                 </label>
-                <multiselect
+                <multiselect :searchable="false"
                     v-model="form.ethnicity"
                     :options="ethnicilityList"
                     :multiple="false"
@@ -179,7 +179,7 @@
                   <label class="label f-weight-550">
                   Which category describes your race?
                 </label>
-                <multiselect
+                <multiselect :searchable="false"
                     v-model="form.race"
                     :options="raceList"
                     :multiple="false"

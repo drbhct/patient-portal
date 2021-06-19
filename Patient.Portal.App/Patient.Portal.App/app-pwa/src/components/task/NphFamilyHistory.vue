@@ -21,7 +21,7 @@
                   <label class="label f-weight-550">
                     Select one condition for Immediate Family Health History
                   </label>
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="form.condition"
                     :options="conditionSelection"
                     :multiple="true"
@@ -42,14 +42,14 @@
                   </label>
                   <div class="row">
                     <div class="col-lg-6">
-                    <multiselect
+                    <multiselect :searchable="false"
                       v-model="famCondition.family"
                       :options="familySelection"
                       :multiple="false"
                     />
                   </div>
                   <div class="col-lg-6">
-                    <multiselect
+                    <multiselect :searchable="false"
                       v-model="famCondition.stat"
                       :options="statusSelection"
                       :multiple="false"

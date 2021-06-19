@@ -16,7 +16,7 @@
               >
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">{{ q.question }}</label>
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="q.answer"
                     :options="yesNoSelection"
                     :multiple="false"

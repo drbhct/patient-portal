@@ -34,7 +34,7 @@
                     }}</strong>
                     pain occurs</label
                   >
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="form.describe"
                     :options="complaintLocations"
                     :group-select="false"
@@ -89,7 +89,7 @@
                     }}</strong>
                     pain?</label
                   >
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="form.expPain"
                     :options="expPains"
                   ></multiselect>
@@ -130,7 +130,7 @@
                   <label class="label f-weight-550">{{
                     radiatesQuestion.question
                   }}</label>
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="radiatesQuestion.answer"
                     :options="radiatesSelections"
                   ></multiselect>
@@ -142,7 +142,7 @@
                     ><strong style="color: red; margin-right: 5px">*</strong>How
                     would you best describe the sensation of your pain?</label
                   >
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="form.painQuality"
                     :options="painQualitySelection"
                     :multiple="true"
@@ -155,7 +155,7 @@
                     ><strong style="color: red; margin-right: 5px">*</strong
                     >Over the past/weeks/months this complaint is</label
                   >
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="form.painQualityImprovement"
                     :options="painQualityImprovementSelection"
                     :multiple="false"
@@ -168,7 +168,7 @@
                   <label class="label f-weight-550"
                     >What aggravates your pain or makes it feel worse?
                   </label>
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="form.painFactor"
                     :options="painFactorSelection"
                     :multiple="true"
@@ -180,7 +180,7 @@
                   <label class="label f-weight-550"
                     >What relieves the pain?</label
                   >
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="form.painFactorImprovement"
                     :options="painFactorImprovementSelection"
                     :multiple="true"
@@ -194,7 +194,7 @@
                   <label class="label f-weight-550"
                     >How much does your problem interfere with work?
                   </label>
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="form.painInterference"
                     :options="painInterferenceSelection"
                     :multiple="false"
@@ -206,7 +206,7 @@
                   <label class="label f-weight-550"
                     >Have you seen anyone for your pain?</label
                   >
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="form.painInterferenceHelp"
                     :options="painInterferenceHelpSelection"
                     :multiple="true"
@@ -239,7 +239,7 @@
                       >*</strong
                     >{{ oatQ.description }}</label
                   >
-                  <multiselect
+                  <multiselect :searchable="false"
                     v-model="oatQ.selectedAnswer"
                     :options="oatQ.answerList"
                     :label="'description'"

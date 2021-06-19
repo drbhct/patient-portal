@@ -7,17 +7,33 @@
                     v-if="isSaving"
                   ></span>
                     <span v-if="isSaving">
-                      Saving..
+                      {{ loadingText }}
                     </span>
                     <span v-else>
-                      Next
+                      {{ displayText }}
                     </span>
                 </button>
 </template>
 
 <script>
 export default {
-  props: ['isSaving']
+  props: {
+    isSaving: {
+      type: Boolean,
+      required: true,
+      default: false
+    },
+    loadingText: {
+      type: String,
+      required: false,
+      default: 'Saving ...'
+    },
+    displayText: {
+      type: String,
+      required: false,
+      default: 'Next'
+    }
+  }
 }
 </script>
 
