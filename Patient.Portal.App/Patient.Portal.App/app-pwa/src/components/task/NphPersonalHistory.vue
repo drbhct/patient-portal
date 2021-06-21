@@ -133,7 +133,7 @@
                   <span
                     class="help-block"
                     v-if="medQandA.code === 'LastMenstrualPeriod'"
-                    >Leave field empty if not sure</span
+                    >Leave field empty if not sure.</span
                   >
                 </div>
               </div>
@@ -250,7 +250,7 @@ export default {
           { question: 'Chills', answer: [] },
           { question: 'Dizziness', answer: [] },
           { question: 'Tremors', answer: [] },
-          { question: 'Mempry Loss', answer: [] },
+          { question: 'Memory Loss', answer: [] },
           { question: 'Night Sweats', answer: [] },
           { question: 'Hot Joints', answer: [] },
           { question: 'Fainting', answer: [] },
@@ -258,7 +258,7 @@ export default {
           { question: 'Joint Swelling', answer: [] },
           { question: 'Loss of Coordination', answer: [] },
           { question: 'Lumps/Masses', answer: [] },
-          { question: 'Difficulty of Speeech', answer: [] }
+          { question: 'Difficulty of Speech', answer: [] }
         ],
         medicineInfoQuestion: [
           { question: 'Insulin', answer: '', year: '', code: 'Insulin' },
@@ -309,7 +309,7 @@ export default {
             code: 'SignificantPastTrauma'
           },
           {
-            question: 'Do you have a pacemaker',
+            question: 'Do you have a pacemaker?',
             answer: '',
             code: 'Pacemaker'
           }
