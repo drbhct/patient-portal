@@ -139,7 +139,7 @@
                 Login
               </button> -->
               <router-link to="/account/forgotpassword" class="ml-3">
-                Need help loggin in?
+                Need help logging in?
               </router-link>
               <!-- <a href="javascript:void(0)" class="ml-3"
                 >Need help logging in?</a
