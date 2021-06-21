@@ -11,16 +11,10 @@
         <table class="w-100">
           <tbody>
             <tr v-for="(item, index) in taskslist" :key="item.taskID">
-              <!--<td v-if="item.taskType === 'STMT'" class="dash-task-col-title">{{(index + 1)}}) Pay and view statement #3564</td>
-              <td v-if="item.taskType === 'STMT'" class="dash-task-col-action">
-                <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn">PAY $520</button>
-                <p class="p-dash-stat">Statement due: 02/02/2020</p>
-              </td>-->
-
-              <td v-if="item.taskType === 'NPH'" class="dash-task-col-title">{{(index + 1)}}) Health History</td>
-              <td v-if="item.taskType === 'NPH'" class="dash-task-col-action">
+              <td class="dash-task-col-title">{{(index + 1)}}) {{ setTitle(item.taskType )}}</td>
+              <td class="dash-task-col-action">
                 <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn" @click="gotoTask(item)">
-                  GO TO HEALTH HISTORY
+                  {{ setButton(item.taskType )}}
                 </button>
               </td>
             </tr>
@@ -46,10 +40,43 @@ export default {
     ...mapGetters(['getProfilePatientAssociated', 'currentPatientAssociated'])
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType']),
+    ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage']),
+    setTitle (val) {
+      switch (val) {
+        case 'NPH':
+          return 'Health History'
+        case 'MSG':
+          return 'Message'
+        default:
+          return ''
+      }
+    },
+    setButton (val) {
+      switch (val) {
+        case 'NPH':
+          return 'GO TO HEALTH HISTORY'
+        case 'MSG':
+          return 'GO TO MESSAGE'
+        default:
+          return ''
+      }
+    },
     async gotoTask (task) {
-      await this.setTaskCurrentTaskType(task.taskType)
-      await this.$router.push({ path: '/task' })
+      let taskRes
+      switch (task.taskType) {
+        case 'NPH':
+          await this.setTaskCurrentTaskType(task.taskType)
+          await this.$router.push({ path: '/task' })
+          break
+        case 'MSG':
+          taskRes = await api.task.request.getSpecificTask(task.taskID)
+          this.setCurrentMsgInfo({ id: parseInt(taskRes.data.info), subject: '' })
+          this.setMsgCurrentPage('Detail')
+          this.$router.push({ path: '/menu/messages' })
+          break
+        default:
+          break
+      }
     },
     date: function (date) {
       return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')

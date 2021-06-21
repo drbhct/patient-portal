@@ -19,7 +19,7 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">
-                    Select one condition for Immediate Family Health History
+                    Select one condition for immediate family health history
                   </label>
                   <multiselect :searchable="false"
                     v-model="form.condition"
