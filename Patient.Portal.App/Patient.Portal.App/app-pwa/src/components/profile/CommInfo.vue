@@ -53,7 +53,7 @@
               <div class="form-group row">
                 <div class="col-lg-12">
                   <label class="label font-weight-600">
-                    I authorize {{ currentPatientAssociated.officeName }} to communicate with me via Text Message
+                    I authorize {{ currentPatientAssociated.officeName }} to communicate with me via text message
                   </label>
                   <div class="form-check text-center">
                     <input type="radio"
