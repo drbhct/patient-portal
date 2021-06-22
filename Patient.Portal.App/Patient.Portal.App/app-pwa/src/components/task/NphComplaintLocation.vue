@@ -385,7 +385,7 @@ export default {
     // this.isLoading = false
   },
   async activated () {
-    console.log('activated!')
+    // console.log('activated!')
     this.isLoading = true
     const result = await api.task.request.getCaseHistoryProblems({
       facilityId: this.currentPatientAssociated.facilityID,
@@ -393,11 +393,11 @@ export default {
     })
     this.form.regions = []
     this.forDelete = result.data
-    console.log('this.form.regions>', this.form.regions)
-    console.log('this.forDelete>', this.forDelete)
+    // console.log('this.form.regions>', this.form.regions)
+    // console.log('this.forDelete>', this.forDelete)
     if (this.forDelete.length > 0) {
       this.forDelete.forEach((el) => {
-        console.log('pushing this.form.regions>el.region', el.region)
+        // console.log('pushing this.form.regions>el.region', el.region)
         this.form.regions.push(el.region)
         switch (el.ordinal) {
           case 1:
@@ -420,7 +420,7 @@ export default {
     setTimeout(() => {
       const el = document.getElementById('frmBody')
       el.scrollIntoView({ behavior: 'smooth' })
-      console.log('should be scrolling to top!')
+      // console.log('should be scrolling to top!')
     }, 1000)
   }
 }
