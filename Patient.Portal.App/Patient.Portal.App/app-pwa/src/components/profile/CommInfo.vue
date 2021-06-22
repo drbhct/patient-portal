@@ -192,10 +192,10 @@ export default {
     })
 
     if (res.data) {
-      if (res.data.twoWaySms === 1) {
-        res.data.twoWaySms = true
-      } else {
+      if (res.data.twoWaySms === 0) {
         res.data.twoWaySms = false
+      } else {
+        res.data.twoWaySms = true
       }
       if (res.data.otherEmail === 1) {
         res.data.otherEmail = true
