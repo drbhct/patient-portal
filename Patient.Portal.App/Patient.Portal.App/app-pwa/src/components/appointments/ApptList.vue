@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     date: function (date) {
-      return moment(date).format('dddd  MM/DD/YYYY @ h:mm a')
+      return moment(date).format('dddd MM/DD/YYYY @ h:mm a')
     }
   },
   async mounted () {
@@ -40,9 +40,13 @@ export default {
       facilityId: this.currentPatientAssociated.facilityID,
       patientId: this.currentPatientAssociated.patientID
     })
-    this.applist = res.data
+    const data = res.data
+    this.applist = data.map(date => new Date(date))
+    this.applist = this.applist.sort(function (a, b) {
+      return a - b
+    })
     // eslint-disable-next-line no-undef
-    setTimeout(function () { $('#tblDemo').DataTable({ bFilter: false, bInfo: false }) }, 300)
+    // setTimeout(function () { $('#tblDemo').DataTable({ bFilter: false, bInfo: false }) }, 300)
   }
 }
 </script>
