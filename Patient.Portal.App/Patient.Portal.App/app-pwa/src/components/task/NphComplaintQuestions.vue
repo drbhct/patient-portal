@@ -214,7 +214,7 @@
                 </div>
               </div>
               <hr />
-              <div class="row">
+              <div class="row" v-if="currentOat">
                 <div class="col-lg-12 text-center">
                   <h4 class="label f-weight-550">
                     Regarding your
@@ -933,7 +933,7 @@ export default {
         setTimeout(() => {
           const el = document.getElementById('cardBody')
           el.scrollIntoView({ behavior: 'smooth' })
-          console.log('should be scrolling to top!')
+          // console.log('should be scrolling to top!')
         }, 1000)
         return
       }
@@ -973,7 +973,7 @@ export default {
         setTimeout(() => {
           const el = document.getElementById('cardBody')
           el.scrollIntoView({ behavior: 'smooth' })
-          console.log('should be scrolling to top!')
+          // console.log('should be scrolling to top!')
         }, 1000)
       }
     },
@@ -1124,6 +1124,12 @@ export default {
         (el) => el.caseHistoryProblemID === this.currentProblem.id
       )
 
+      if (!this.currentOat) {
+        this.form.oatQuestions = []
+        this.isLoading = false
+        return
+      }
+
       // Get oat questions
       const response = await api.task.request.getCaseHistoryOatQuestions({
         facilityId: this.currentPatientAssociated.facilityID,
@@ -1214,7 +1220,7 @@ export default {
     setTimeout(() => {
       const el = document.getElementById('cardBody')
       el.scrollIntoView({ behavior: 'smooth' })
-      console.log('should be scrolling to top!')
+      // console.log('should be scrolling to top!')
     }, 1000)
   }
 }
