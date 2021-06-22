@@ -40,13 +40,11 @@ export default {
       facilityId: this.currentPatientAssociated.facilityID,
       patientId: this.currentPatientAssociated.patientID
     })
-    this.applist = res.data
-    // for testing only
-    this.applist = [new Date('2021-07-23T05:25:00'), new Date('2021-06-23T05:25:00'), new Date('2021-07-24T05:25:00'), new Date('2021-06-21T05:25:00')]
-    this.apptList = this.applist.sort(function (a, b) {
+    const data = res.data
+    this.applist = data.map(date => new Date(date))
+    this.applist = this.applist.sort(function (a, b) {
       return a - b
     })
-    console.log('sorting..')
     // eslint-disable-next-line no-undef
     // setTimeout(function () { $('#tblDemo').DataTable({ bFilter: false, bInfo: false }) }, 300)
   }
