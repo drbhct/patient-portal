@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     date: function (date) {
-      return moment(date).format('dddd  MM/DD/YYYY @ h:mm a')
+      return moment(date).format('dddd MM/DD/YYYY @ h:mm a')
     }
   },
   async mounted () {
@@ -41,6 +41,9 @@ export default {
       patientId: this.currentPatientAssociated.patientID
     })
     this.applist = res.data
+    // for testing only
+    this.applist = ['2021-07-23T05:25:00', '2021-06-23T05:25:00', '2021-07-24T05:25:00', '2021-06-21T05:25:00']
+    this.applist.sort()
     // eslint-disable-next-line no-undef
     setTimeout(function () { $('#tblDemo').DataTable({ bFilter: false, bInfo: false }) }, 300)
   }
