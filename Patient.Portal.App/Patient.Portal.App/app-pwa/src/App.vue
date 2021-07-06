@@ -108,7 +108,7 @@
                   <i class="fas fa-sign-out-alt fa-2x"></i>
                 </a>
               </li>
-              <li>
+              <!--<li>
                 <a
                   href="#"
                   class="nav-link"
@@ -118,7 +118,7 @@
                 >
                   <i class="fas fa-question-circle fa-2x"></i>
                 </a>
-              </li>
+              </li>-->
             </ul>
             <div
               class="logged-info d-none d-sm-block"
@@ -387,10 +387,11 @@ export default {
   display: block;
   padding: 0.5rem 0rem;
 }
-.notifications {
-  padding-right: 1.5rem;
-  margin-left: 5rem;
-}
+  .notifications {
+    /*padding-right: 1.5rem;*/
+    /*margin-left: 5rem;*/
+    margin-left: 7rem;
+  }
 html.header-dark .header .separator {
   background-image: linear-gradient(#f6f6f6 60%, #ededed);
 }
