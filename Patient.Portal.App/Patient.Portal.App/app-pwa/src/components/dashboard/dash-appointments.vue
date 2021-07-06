@@ -1,0 +1,39 @@
+<template>
+    <div class="row">
+      <div class="col col-xl-8 col-xl-8">
+        <p class="dash-appt-title">Upcoming appointments</p>
+        <ul class="list-unstyled list-text-aligned-right">
+          <li v-for="item in applist" :key="item.index">{{ date(item) }}</li>
+        </ul>
+      </div>
+    </div>
+</template>
+<script>
+import api from '../../api/http-common.js'
+import { mapGetters } from 'vuex'
+import moment from 'moment'
+
+export default {
+  data () {
+    return {
+      applist: null,
+      dt: null
+    }
+  },
+  computed: {
+    ...mapGetters(['getProfilePatientAssociated', 'currentPatientAssociated'])
+  },
+  methods: {
+    date: function (date) {
+      return moment(date).format('dddd  MM/DD/YYYY @ h:mm a')
+    }
+  },
+  async mounted () {
+    const res = await api.patient.request.getpatientfutureappts({
+      facilityId: this.currentPatientAssociated.facilityID,
+      patientId: this.currentPatientAssociated.patientID
+    })
+    this.applist = res.data
+  }
+}
+</script>
