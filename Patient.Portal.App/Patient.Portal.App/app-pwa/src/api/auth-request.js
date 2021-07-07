@@ -119,6 +119,7 @@ export default {
       * @param {Object} payload  request object for update user email
       * @param {String} payload.id
       * @param {String} payload.email
+      * @param {String} payload.pwd
       */
     async updateUserEmail (payload) {
       return await securedJsonRequest.post('/patientportal/updateuseremail', payload)
