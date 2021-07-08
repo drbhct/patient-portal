@@ -1,10 +1,14 @@
 <template>
     <div class="row">
       <div class="col col-xl-8 col-xl-8">
-        <p class="dash-appt-title">Upcoming appointments</p>
+        <!--<p class="dash-appt-title">Upcoming appointments</p>-->
+        <div class="header-t-text d-block">
+          Upcoming appointments
+        </div>
         <ul class="list-unstyled list-text-aligned-right">
           <li v-for="item in applist" :key="item.index">{{ date(item) }}</li>
         </ul>
+        <span v-if="applist.length === 0"> No upcoming appointments.</span>
       </div>
     </div>
 </template>
