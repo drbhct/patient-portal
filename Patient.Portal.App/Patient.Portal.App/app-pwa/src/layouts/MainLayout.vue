@@ -17,7 +17,7 @@
                 <div class="nano-content">
                   <nav
                     id="menu"
-                    class="nav-main sidebar-padding"
+                    class="nav-main sidebar-padding" style="width: 95px!important;"
                     role="navigation"
                   >
                     <ul class="nav nav-main">
@@ -33,6 +33,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="far fa-comment" aria-hidden="true"></i>
+                          <span>Messages</span>
                         </router-link>
                       </li>
                       <li
@@ -46,7 +47,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-file" aria-hidden="true"></i>
-                          <span style="overflow-wrap: break-word;">Docs</span>
+                          <span>Documents</span>
                         </router-link>
                       </li>
                       <li
@@ -61,6 +62,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="far fa-calendar" aria-hidden="true"></i>
+                          <span>Appointments</span>
                         </router-link>
                       </li>
                       <!--<li
@@ -89,6 +91,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-user" aria-hidden="true"></i>
+                           <span>Profile</span>
                         </router-link>
                       </li>
                       <li
@@ -103,6 +106,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-tasks" aria-hidden="true"></i>
+                           <span>Tasks</span>
                         </router-link>
                       </li>
                       <li
@@ -116,6 +120,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-home" aria-hidden="true"></i>
+                           <span>Home</span>
                         </router-link>
                       </li>
                       <li
@@ -130,6 +135,7 @@
                           title="Logout"
                         >
                           <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                           <span>Logout</span>
                         </a>
                       </li>
                     </ul>
@@ -334,7 +340,8 @@ export default {
 }
 
 .sidebar-w {
-  width: 60px;
+  width:245%;
+  /* width: 60px;  */
 }
 
 ul.nav-main li {
