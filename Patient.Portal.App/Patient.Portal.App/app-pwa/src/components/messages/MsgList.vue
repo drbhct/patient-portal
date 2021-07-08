@@ -8,7 +8,7 @@
         <input type="checkbox" @change="showArchive">
         <label>Show Archived Messages</label>
       </div>
-      <button class="btn btn-primary btn-w-160" @click="createMsg">Create Message</button>
+      <button :title="btnTooltip" class="btn btn-primary btn-w-160" @click="createMsg">Create Message</button>
     </div>
     <div v-if="!isLoading" class="col-md-12">
       <table class="table mb-5" v-if="messages.length > 0">
@@ -176,6 +176,9 @@ export default {
           return x.parentID === 0 && x.archived === false
         }
       })
+    },
+    btnTooltip: function () {
+      return 'Send message to ' + this.currentPatientAssociated.officeName
     }
   },
   async mounted () {
