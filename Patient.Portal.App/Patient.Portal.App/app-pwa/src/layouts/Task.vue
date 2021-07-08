@@ -56,7 +56,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType', 'setTaskOfficeName'])
+    ...mapActions(['setTaskCurrentTaskType', 'setTaskOfficeName', 'setTaskCode'])
   },
   async mounted () {
     const apiRes = await api.auth.request.apiLogin()
@@ -114,7 +114,8 @@ export default {
       // console.log('this.task.taskType', this.task.taskType)
       const facilityInfo = await api.auth.request.getFacilityInfo(this.linkInfo.facilityID)
       await this.setTaskOfficeName(facilityInfo.officeName)
-      console.log('this.task.taskType', this.task.taskType)
+      console.log('this.task.taskType>', this.task.taskType)
+      console.log('task>', this.task.taskType === 'NPH')
       this.setTaskCode(this.task.taskType)
       switch (this.task.taskType) {
         case 'NPH':
