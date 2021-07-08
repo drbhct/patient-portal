@@ -11,6 +11,7 @@
                     <i class="far fa-comment" aria-hidden="true"></i>
                   </div>
                   <span class="widget-title mt-0 font-weight-semibold mt-0 text-center">Messages</span>
+                  <span class="badge badge-light ml-2 py-1 px-2" :title="`You have ${unReadMsgCount} unread message.`" v-if="unReadMsgCount>0">{{ unReadMsgCount }}</span>
                 </div>
               </div>
             </div>
@@ -101,6 +102,29 @@
   </form>
 
 </template>
+<script>
+import api from '../../api/http-common.js'
+import { mapGetters } from 'vuex'
+export default {
+  data () {
+    return {
+      unReadMsgCount: 0
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'currentPatientAssociated'
+    ])
+  },
+  async mounted () {
+    const result = await api.msg.request.getUnReadMessageCount({
+      facilityId: this.currentPatientAssociated.facilityID,
+      patiendId: this.currentPatientAssociated.patientID
+    })
+    this.unReadMsgCount = result.data
+  }
+}
+</script>
 <style scoped>
   .bg-dgreen {
     background: #28a745;
