@@ -80,6 +80,6 @@ export const setTaskOfficeName = async (store, payload) => {
   await store.commit(types.TASK_CURRENT_OFFICE_NAME, payload)
 }
 
-export const setTaskCode = async (store, payload) => {
-  await store.commit(types.TASK_CURRENT_CODE, payload)
+export const setTaskCode = (store, payload) => {
+  store.commit(types.TASK_CURRENT_CODE, payload)
 }
