@@ -429,7 +429,8 @@ export default {
       'getProfilePatientAssociated',
       'getTaskPreviousTaskType',
       'getTaskCurrentTaskType',
-      'currentPatientAssociated'
+      'currentPatientAssociated',
+      'getTaskCode'
     ])
   },
   methods: {
@@ -473,6 +474,12 @@ export default {
       this.form = patientInfo.data
       this.form.facilityId = this.currentPatientAssociated.facilityID
       this.form.patientId = this.form.id
+      switch (this.getTaskCode) {
+        case 'AANPH':
+        case 'AACH':
+          this.isAutoAccident = true
+          break
+      }
       this.isLoading = false
     },
     async getUsStates () {

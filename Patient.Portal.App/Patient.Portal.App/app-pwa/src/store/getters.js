@@ -26,3 +26,4 @@ export const getTaskCurrentCaseHistoryFormValues = state => state.task.currentCa
 export const getTaskCurrentCaseHistoryAutoAccident = state => state.task.currentCaseHistoryAutoAccident
 export const getTaskCurrentCaseHistoryAAFormValues = state => state.task.currentCaseHistoryAAFormValues
 export const getTaskOfficeName = state => state.task.officeName
+export const getTaskCode = state => state.task.taskCode

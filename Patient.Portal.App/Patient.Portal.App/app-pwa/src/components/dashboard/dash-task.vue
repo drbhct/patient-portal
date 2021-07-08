@@ -47,7 +47,7 @@ export default {
     ...mapGetters(['getProfilePatientAssociated', 'currentPatientAssociated'])
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage']),
+    ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage', 'setTaskCode']),
     setTitle (val) {
       switch (val) {
         case 'NPH':
@@ -70,6 +70,7 @@ export default {
     },
     async gotoTask (task) {
       let taskRes
+      this.setTaskCode(task.taskType)
       switch (task.taskType) {
         case 'NPH':
           await this.setTaskCurrentTaskType(task.taskType)

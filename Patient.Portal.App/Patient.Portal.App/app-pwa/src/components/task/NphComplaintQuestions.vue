@@ -337,7 +337,8 @@ export default {
       'getTaskPreviousTaskType',
       'getTaskCurrentCaseHistoryFormValues',
       'getTaskCurrentTaskType',
-      'currentPatientAssociated'
+      'currentPatientAssociated',
+      'getTaskCode'
     ]),
     buttonText: function () {
       if (
@@ -939,7 +940,15 @@ export default {
       }
 
       // this.form.describe = []
-      this.setTaskCurrentTaskType('NphPersonalHistory')
+      switch (this.getTaskCode) {
+        case 'CH':
+        case 'AACH':
+          this.setTaskCurrentTaskType('NphThankyou')
+          break
+        default:
+          this.setTaskCurrentTaskType('NphPersonalHistory')
+          break
+      }
     },
     async previous () {
       if (this.currentProblemIndex === 0) {

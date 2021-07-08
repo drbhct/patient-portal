@@ -111,10 +111,11 @@ export default {
     } else {
       this.initialize = true
 
-      console.log('this.task.taskType', this.task.taskType)
+      // console.log('this.task.taskType', this.task.taskType)
       const facilityInfo = await api.auth.request.getFacilityInfo(this.linkInfo.facilityID)
       await this.setTaskOfficeName(facilityInfo.officeName)
-      console.log('facilityInfo', facilityInfo)
+      // console.log('facilityInfo', facilityInfo)
+      this.setTaskCode(this.task.taskType)
       switch (this.task.taskType) {
         case 'NPH':
 
