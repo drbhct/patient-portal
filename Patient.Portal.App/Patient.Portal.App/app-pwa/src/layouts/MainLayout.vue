@@ -46,6 +46,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-file" aria-hidden="true"></i>
+                          <span style="overflow-wrap: break-word;">Docs</span>
                         </router-link>
                       </li>
                       <li
