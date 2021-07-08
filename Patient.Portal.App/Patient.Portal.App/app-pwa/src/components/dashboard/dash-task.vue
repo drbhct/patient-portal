@@ -51,6 +51,9 @@ export default {
     setTitle (val) {
       switch (val) {
         case 'NPH':
+        case 'AANPH':
+        case 'CH':
+        case 'AACH':
           return 'Health History'
         case 'MSG':
           return 'Message'
@@ -61,6 +64,9 @@ export default {
     setButton (val) {
       switch (val) {
         case 'NPH':
+        case 'AANPH':
+        case 'CH':
+        case 'AACH':
           return 'GO TO HEALTH HISTORY'
         case 'MSG':
           return 'GO TO MESSAGE'
@@ -73,6 +79,9 @@ export default {
       this.setTaskCode(task.taskType)
       switch (task.taskType) {
         case 'NPH':
+        case 'AANPH':
+        case 'CH':
+        case 'AACH':
           await this.setTaskCurrentTaskType(task.taskType)
           await this.$router.push({ path: '/task' })
           break
