@@ -119,7 +119,7 @@ export default {
   async mounted () {
     const result = await api.msg.request.getUnReadMessageCount({
       facilityId: this.currentPatientAssociated.facilityID,
-      patiendId: this.currentPatientAssociated.patientID
+      patientId: this.currentPatientAssociated.patientID
     })
     this.unReadMsgCount = result.data
   }
