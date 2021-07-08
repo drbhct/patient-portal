@@ -19,6 +19,13 @@
               </td>
             </tr>
           </tbody>
+          <tfoot>
+            <tr v-if="taskslist.length === 0">
+              <td colspan="2">
+                <span>No tasks found.</span>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
