@@ -87,6 +87,11 @@ export default {
           break
         case 'MSG':
           taskRes = await api.task.request.getSpecificTask(task.taskID)
+          await api.task.request.updateTaskComplete({
+            facilityId: this.currentPatientAssociated.facilityID,
+            id: task.taskID,
+            patientId: this.currentPatientAssociated.patientID
+          })
           this.setCurrentMsgInfo({ id: parseInt(taskRes.data.info), subject: '' })
           this.setMsgCurrentPage('Detail')
           this.$router.push({ path: '/menu/messages' })
