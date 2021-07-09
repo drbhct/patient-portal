@@ -142,6 +142,16 @@ export default {
       */
     async getUnReadMessageCount  (payload) {
       return await securedJsonRequest.post('/patientportal/getunreadmessagecount ', payload)
+    },
+    /**
+     * Api access get set unread value
+      * @param {Object} payload  request object to update message read
+      * @param {String} payload.facilityId
+      * @param {String} payload.id
+      * @param {Boolean} payload.read
+      */
+    async updateMessageRead (payload) {
+      return await securedJsonRequest.post('/patientportal/updatemessageread ', payload)
     }
   }
 }

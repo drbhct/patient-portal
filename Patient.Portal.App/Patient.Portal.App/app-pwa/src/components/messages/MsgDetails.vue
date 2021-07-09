@@ -81,6 +81,15 @@ export default {
       })
       this.msgThread = response.data
       this.msgThread.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0))
+      this.updateMsgRead()
+    },
+    async updateMsgRead () {
+      const response = await api.msg.request.updateMessageRead({
+        facilityId: this.currentPatientAssociated.facilityID,
+        id: this.getMsgInfo.id,
+        read: true
+      })
+      console.log(response)
     },
     getFromName (msgInfo) {
       if (msgInfo.fromPatient) {
