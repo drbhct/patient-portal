@@ -10,14 +10,14 @@
 
       <div class="content">
         <div class="row">
-          <div class="col-lg-1 col-xl-1 col-md-1">
+          <div class="col-lg-2 col-xl-2 col-md-2">
             <!-- start: sidebar -->
             <aside id="sidebar-left" class="sidebar-left sidebar-width">
               <div class="nano">
                 <div class="nano-content">
                   <nav
                     id="menu"
-                    class="nav-main sidebar-padding" style="width: 95px!important;"
+                    class="nav-main sidebar-padding"
                     role="navigation"
                   >
                     <ul class="nav nav-main">
@@ -145,7 +145,7 @@
             </aside>
             <!-- end: sidebar -->
           </div>
-          <div class="col-lg-11 col-xl-11 col-md-10 content-custom mb-4">
+          <div class="col-lg-10 col-xl-10 col-md-10 content-custom mb-4">
             <!-- start: page -->
             <router-view></router-view>
             <!-- end: page -->
@@ -323,7 +323,7 @@ export default {
 }
 
 .sidebar-width {
-  width: 100px !important;
+  width: 190px !important;
 }
 
 .content-custom {
@@ -336,11 +336,11 @@ export default {
 .sidebar-padding {
   padding: 15px;
   background: #f6f6f6;
-  width: 90px;
+  width: 190px;
 }
 
 .sidebar-w {
-  width:245%;
+  width:100%;
   /* width: 60px;  */
 }
 
