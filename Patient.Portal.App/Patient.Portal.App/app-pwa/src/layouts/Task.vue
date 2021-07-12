@@ -80,9 +80,9 @@ export default {
       this.initialize = true
       this.keyExpired = true
 
-      // setTimeout(() => {
-      //   this.$router.push({ path: '/account/login' })
-      // }, 5000)
+      setTimeout(() => {
+        this.$router.push({ path: '/account/login' })
+      }, 5000)
     }
 
     // Get Task
