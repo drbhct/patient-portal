@@ -26,6 +26,8 @@
                       placeholder="Email"
                       required
                       autocomplete="username"
+                      id="em"
+                      tabindex="0"
                     />
                   </div>
                   <div class="form-group mb-4">
@@ -311,6 +313,10 @@ export default {
     })
 
     this.patientInfo = getPatientResp.data
+
+    setTimeout(() => {
+      document.getElementById('em').focus()
+    }, 500)
   }
 }
 </script>
