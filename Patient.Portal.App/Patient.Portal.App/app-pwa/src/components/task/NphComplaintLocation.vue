@@ -26,7 +26,11 @@
                     @select="selectChange"
                     @remove="selectRemove"
                     :max="4"
-                  ></multiselect>
+                  >
+                    <span slot="maxElements">
+                      Maximum of 4 regions selected. Remove a region to select another.
+                    </span>
+                  </multiselect>
                 </div>
               </div>
 
@@ -385,6 +389,14 @@ export default {
     // this.isLoading = false
   },
   async activated () {
+    this.form = {
+      regions: [],
+      complaint1: '',
+      complaint2: '',
+      complaint3: '',
+      complaint4: ''
+    }
+
     // console.log('activated!')
     this.isLoading = true
     const result = await api.task.request.getCaseHistoryProblems({
