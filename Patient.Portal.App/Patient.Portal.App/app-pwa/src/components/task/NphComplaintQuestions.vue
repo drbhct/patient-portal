@@ -32,7 +32,7 @@
                     <strong style="color: red">{{
                       currentProblem.region
                     }}</strong>
-                    pain occurs</label
+                    pain occurs:</label
                   >
                   <multiselect :searchable="false"
                     v-model="form.describe"
@@ -66,7 +66,7 @@
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
                     >Please indicate the date your symptoms first
-                    occurred</label
+                    occurred.</label
                   >
                   <datepicker
                     v-model="form.dateOccured"
@@ -117,7 +117,7 @@
               <div class="row">
                 <div class="col-lg-12 text-center">
                   <h4 class="label f-weight-550">
-                    If your pain radiates or travels, please indicate where
+                    If your pain radiates or travels, please indicate where.
                   </h4>
                 </div>
               </div>
