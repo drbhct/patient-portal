@@ -185,6 +185,9 @@
                     v-model="form.dob"
                     :input-class="'form-control'"
                     :format="'MMMM dd, yyyy'"
+                    :id="'dpicker'"
+                    :required="true"
+                    :typeable="false"
                   ></datepicker>
                 </div>
               </div>
@@ -327,7 +330,7 @@
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
-                <button
+                <!-- <button
                   type="reset"
                   class="btn btn-default mr-2"
                   @click="previous"
@@ -337,7 +340,7 @@
                   "
                 >
                   Back
-                </button>
+                </button> -->
                 <btn-saving :is-saving="isSaving"/>
               </div>
             </div>
@@ -361,6 +364,7 @@ export default {
   },
   data () {
     return {
+      isRequired: true,
       isLoading: true,
       isSaving: false,
       portalId: null,
@@ -491,6 +495,13 @@ export default {
     await this.getUsStates()
     await this.getPatientInfo()
     this.isLoading = false
+    document.getElementById('dpicker').removeAttribute('readonly')
+    // document.getElementById('dpicker').addEventListener('keypress', (e) => {
+    //   e.preventDefault()
+    // })
+    // document.getElementById('dpicker').setAttribute('required')
+    // console.log(this.$refs.dpicker)
+    // this.$refs.dpicker.requried = true
   }
 }
 </script>

@@ -13,7 +13,7 @@
                   <div class="form-group">
                     <div class="alert alert-info" role="alert">
                       <p><i class="fas fa-info-circle mr-1"></i>Create account for patient <strong>{{ patientInfo.firstName }} {{ patientInfo.lastName }}</strong>.<br>
-                        Click <strong>Login instead</strong> if you wish to associate patient to existing user.
+                        <strong><a href="javascript:void(0)" @click="gotoLogin">LOG IN</a></strong> if you wish to associate a patient to an existing user.
                       </p>
                     </div>
                   </div>
@@ -60,7 +60,7 @@
                       <li
                         v-bind:class="{ is_valid: contains_eight_characters }"
                       >
-                        8 Characters
+                        At least 8 characters
                       </li>
                       <li v-bind:class="{ is_valid: contains_number }">
                         Contains Number
@@ -241,7 +241,7 @@ export default {
       if (exist.data) {
         this.$swal({
           position: 'top',
-          title: 'Email is already in used.',
+          title: 'An account exists for the email address provided.',
           showConfirmButton: false,
           timerProgressBar: true,
           timer: 2000,
