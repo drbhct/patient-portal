@@ -152,7 +152,7 @@ import api from '../../api/http-common.js'
 export default {
   data () {
     return {
-      username: '',
+      // username: '',
       form: {
         password: '',
         confirmPassword: ''
@@ -176,6 +176,9 @@ export default {
     ...mapGetters(['getProfileAuthInfo']),
     matchConfirm () {
       return this.form.password === this.form.confirmPassword
+    },
+    username () {
+      return this.getProfileAuthInfo.email
     }
   },
   methods: {
