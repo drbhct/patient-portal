@@ -145,7 +145,7 @@
             </aside>
             <!-- end: sidebar -->
           </div>
-          <div class="col-lg-10 col-xl-10 col-md-10 content-custom mb-4">
+          <div class="col-lg-10 col-xl-10 col-md-8 content-custom mb-4">
             <!-- start: page -->
             <router-view></router-view>
             <!-- end: page -->
