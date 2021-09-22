@@ -818,7 +818,7 @@ export default {
         facilityId: this.currentPatientAssociated.facilityID,
         caseHistoryProblemId: this.currentProblem.id,
         fieldName: 'Progress',
-        value: this.form.painQualityImprovement[0]
+        value: this.form.painQualityImprovement
       })
 
       // Pain factory payload
@@ -841,12 +841,12 @@ export default {
       }
 
       // Inteference payload
-      if (this.form.painQualityImprovement.length > 0) {
+      if (this.form.painInterference.length > 0) {
         this.apiSubmitForm.caseProblems.push({
           facilityId: this.currentPatientAssociated.facilityID,
           caseHistoryProblemId: this.currentProblem.id,
           fieldName: 'Work',
-          value: this.form.painQualityImprovement[0]
+          value: this.form.painInterference
         })
       }
 

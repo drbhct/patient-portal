@@ -223,7 +223,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.15' // Bug fixes on card #17509 and other updates
+      return '0.0.16' // Bug fixes on card #17771
     },
     ...mapGetters([
       'getIsLoading',
