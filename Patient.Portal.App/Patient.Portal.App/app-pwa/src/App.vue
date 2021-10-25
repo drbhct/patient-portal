@@ -136,11 +136,11 @@
       <transition name="fade" mode="out-in">
         <router-view></router-view>
       </transition>
-      <a class="scroll-to-top hidden-mobile visible" href="#">
+      <!-- <a class="scroll-to-top hidden-mobile visible" href="javascript:void(0)">
         <i class="fas fa-chevron-up"></i>
-      </a>
+      </a> -->
     </section>
-    <section class="main-footer">
+    <section class="main-footer" v-if="showFooterMenu">
       <div class="footer-section text-center">
         <div>
           <a class="footer-link" href="/contact">Contact Us</a>
@@ -223,7 +223,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.15' // Bug fixes on card #17509 and other updates
+      return '0.0.16' // Bug fixes on card #17771
     },
     ...mapGetters([
       'getIsLoading',
@@ -275,6 +275,14 @@ export default {
     },
     isAuth () {
       return this.$auth.logged
+    },
+    showFooterMenu () {
+      switch (this.$route.path.toLowerCase()) {
+        case '/task':
+          return false
+        default:
+          return true
+      }
     }
   },
   methods: {

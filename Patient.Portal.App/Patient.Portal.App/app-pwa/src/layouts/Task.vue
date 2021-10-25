@@ -56,7 +56,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType', 'setTaskOfficeName'])
+    ...mapActions(['setTaskCurrentTaskType', 'setTaskOfficeName', 'setTaskCode'])
   },
   async mounted () {
     const apiRes = await api.auth.request.apiLogin()
@@ -80,9 +80,9 @@ export default {
       this.initialize = true
       this.keyExpired = true
 
-      // setTimeout(() => {
-      //   this.$router.push({ path: '/account/login' })
-      // }, 5000)
+      setTimeout(() => {
+        this.$router.push({ path: '/account/login' })
+      }, 5000)
     }
 
     // Get Task
@@ -111,17 +111,25 @@ export default {
     } else {
       this.initialize = true
 
-      console.log('this.task.taskType', this.task.taskType)
+      // console.log('this.task.taskType', this.task.taskType)
       const facilityInfo = await api.auth.request.getFacilityInfo(this.linkInfo.facilityID)
       await this.setTaskOfficeName(facilityInfo.officeName)
-      console.log('facilityInfo', facilityInfo)
+      console.log('this.task.taskType>', this.task.taskType)
+      console.log('task>', this.task.taskType === 'NPH')
+      this.setTaskCode(this.task.taskType)
       switch (this.task.taskType) {
         case 'NPH':
-
+        case 'AANPH':
+        case 'CH':
+        case 'AACH':
+          console.log('it is nph')
           this.setTaskCurrentTaskType('CreateAccount')
           break
         case 'RESETPWD':
           this.setTaskCurrentTaskType('ResetPassword')
+          break
+        default:
+          console.warn('Unable to recognise task type ' + this.task.taskType)
           break
       }
     }

@@ -394,6 +394,16 @@ export default {
     */
     async getCaseHistoryAaValues (payload) {
       return await securedJsonRequest.post('/patientportal/GetCaseHistoryAaValues', payload)
+    },
+    /**
+    *
+    * @param {Object} Payload request object
+    * @param {Number} payload.facilityid Facility ID where the patient is assoicated
+    * @param {Number} payload.id ID of the task to tag as complete
+    * @param {Number} payload.patientId ID  of the patient associated to the task
+    */
+    async updateTaskComplete (payload) {
+      return await securedJsonRequest.post('/patientportal/updatetaskcomplete', payload)
     }
   }
 }

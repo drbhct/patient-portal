@@ -10,7 +10,7 @@
 
       <div class="content">
         <div class="row">
-          <div class="col-lg-1 col-xl-1 col-md-1">
+          <div class="col-lg-2 col-xl-2 col-md-2">
             <!-- start: sidebar -->
             <aside id="sidebar-left" class="sidebar-left sidebar-width">
               <div class="nano">
@@ -33,6 +33,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="far fa-comment" aria-hidden="true"></i>
+                          <span>Messages</span>
                         </router-link>
                       </li>
                       <li
@@ -46,6 +47,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-file" aria-hidden="true"></i>
+                          <span>Documents</span>
                         </router-link>
                       </li>
                       <li
@@ -60,6 +62,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="far fa-calendar" aria-hidden="true"></i>
+                          <span>Appointments</span>
                         </router-link>
                       </li>
                       <!--<li
@@ -88,6 +91,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-user" aria-hidden="true"></i>
+                           <span>Profile</span>
                         </router-link>
                       </li>
                       <li
@@ -102,6 +106,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-tasks" aria-hidden="true"></i>
+                           <span>Tasks</span>
                         </router-link>
                       </li>
                       <li
@@ -115,6 +120,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-home" aria-hidden="true"></i>
+                           <span>Home</span>
                         </router-link>
                       </li>
                       <li
@@ -129,6 +135,7 @@
                           title="Logout"
                         >
                           <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                           <span>Logout</span>
                         </a>
                       </li>
                     </ul>
@@ -138,7 +145,7 @@
             </aside>
             <!-- end: sidebar -->
           </div>
-          <div class="col-lg-11 col-xl-11 col-md-10 content-custom mb-4">
+          <div class="col-lg-10 col-xl-10 col-md-8 content-custom mb-4">
             <!-- start: page -->
             <router-view></router-view>
             <!-- end: page -->
@@ -316,7 +323,7 @@ export default {
 }
 
 .sidebar-width {
-  width: 100px !important;
+  width: 190px !important;
 }
 
 .content-custom {
@@ -329,11 +336,12 @@ export default {
 .sidebar-padding {
   padding: 15px;
   background: #f6f6f6;
-  width: 90px;
+  width: 190px;
 }
 
 .sidebar-w {
-  width: 60px;
+  width:100%;
+  /* width: 60px;  */
 }
 
 ul.nav-main li {

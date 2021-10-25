@@ -19,6 +19,13 @@
               </td>
             </tr>
           </tbody>
+          <tfoot>
+            <tr v-if="taskslist.length === 0">
+              <td colspan="2">
+                <span>No tasks found.</span>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
@@ -40,10 +47,13 @@ export default {
     ...mapGetters(['getProfilePatientAssociated', 'currentPatientAssociated'])
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage']),
+    ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage', 'setTaskCode']),
     setTitle (val) {
       switch (val) {
         case 'NPH':
+        case 'AANPH':
+        case 'CH':
+        case 'AACH':
           return 'Health History'
         case 'MSG':
           return 'Message'
@@ -54,6 +64,9 @@ export default {
     setButton (val) {
       switch (val) {
         case 'NPH':
+        case 'AANPH':
+        case 'CH':
+        case 'AACH':
           return 'GO TO HEALTH HISTORY'
         case 'MSG':
           return 'GO TO MESSAGE'
@@ -63,13 +76,22 @@ export default {
     },
     async gotoTask (task) {
       let taskRes
+      this.setTaskCode(task.taskType)
       switch (task.taskType) {
         case 'NPH':
+        case 'AANPH':
+        case 'CH':
+        case 'AACH':
           await this.setTaskCurrentTaskType(task.taskType)
           await this.$router.push({ path: '/task' })
           break
         case 'MSG':
           taskRes = await api.task.request.getSpecificTask(task.taskID)
+          await api.task.request.updateTaskComplete({
+            facilityId: this.currentPatientAssociated.facilityID,
+            id: task.taskID,
+            patientId: this.currentPatientAssociated.patientID
+          })
           this.setCurrentMsgInfo({ id: parseInt(taskRes.data.info), subject: '' })
           this.setMsgCurrentPage('Detail')
           this.$router.push({ path: '/menu/messages' })

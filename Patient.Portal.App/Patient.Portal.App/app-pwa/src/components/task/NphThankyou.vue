@@ -9,14 +9,23 @@
           <header class="card"></header>
           <div class="card-body">
             <div class="" v-if="!isLoading">
-              <div
+              <div class="row text-center f-weight-550">
+                <div class="col-lg-12 text-center">
+                  <h3 class="label f-weight-550">
+                    Thank you! We look forward to seeing you.
+                  </h3>
+                  <h4 class="label f-weight-550">{{ currentPatientAssociated.officeName }}</h4>
+                </div>
+              </div>
+              <!-- <div
                 class="form-group row"
                 v-for="q in form.questions"
                 :key="q.code"
               >
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">{{ q.question }}</label>
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="q.answer"
                     :options="yesNoSelection"
                     :multiple="false"
@@ -30,7 +39,7 @@
                     The doctor will ask you for details during your visit.
                   </h3>
                 </div>
-              </div>
+              </div> -->
             </div>
             <div v-else>
               <div class="col-12">
@@ -51,7 +60,7 @@
                 >
                   Back
                 </button>
-                <btn-saving :is-saving="isSaving" />
+                <btn-saving :is-saving="isSaving" :loading-text="'Completing...'" :display-text="'Continue'"/>
               </div>
             </div>
           </footer>
@@ -62,14 +71,14 @@
 </template>
 
 <script>
-import Multiselect from 'vue-multiselect'
+// import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import api from '../../api/http-common.js'
 import { mapGetters, mapActions } from 'vuex'
 import BtnSaving from '../button-saving.vue'
 export default {
   components: {
-    Multiselect,
+    // Multiselect,
     BtnSaving
   },
   data () {
@@ -110,33 +119,33 @@ export default {
     ...mapActions(['setTaskCurrentTaskType']),
     async submit () {
       this.isSaving = true
-      const payload = {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId,
-        questions: []
-      }
-      this.form.questions.forEach((c) => {
-        payload.questions.push({
-          description: c.code,
-          answer: c.answer
-        })
-      })
-      // console.log('payload>', payload)
-      await api.task.request.updateCaseHistoryQuestions(payload)
+      // const payload = {
+      //   facilityId: this.currentPatientAssociated.facilityID,
+      //   caseHistoryId: this.getTaskCurrentCaseHistoryId,
+      //   questions: []
+      // }
+      // this.form.questions.forEach((c) => {
+      //   payload.questions.push({
+      //     description: c.code,
+      //     answer: c.answer
+      //   })
+      // })
+      // // console.log('payload>', payload)
+      // await api.task.request.updateCaseHistoryQuestions(payload)
       await api.task.request.updateCaseHistoryComplete({
         facilityId: this.currentPatientAssociated.facilityID,
         caseHistoryId: this.getTaskCurrentCaseHistoryId
       })
 
-      this.$swal({
-        text: 'New Patient History Complete.',
-        position: 'top-center',
-        title: 'Success',
-        showConfirmButton: false,
-        timerProgressBar: true,
-        timer: 2000,
-        icon: 'success'
-      })
+      // this.$swal({
+      //   text: 'New Patient History Complete.',
+      //   position: 'top-center',
+      //   title: 'Success',
+      //   showConfirmButton: false,
+      //   timerProgressBar: true,
+      //   timer: 2000,
+      //   icon: 'success'
+      // })
       this.isSaving = false
       await this.$router.push({ path: '/' })
     },
@@ -146,9 +155,8 @@ export default {
       )
       let prevPage = ''
       if (currentIndex === -1) {
-        prevPage = this.getTaskPreviousTaskType[
-          this.getTaskPreviousTaskType.length - 1
-        ]
+        prevPage =
+          this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
       } else {
         prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
       }

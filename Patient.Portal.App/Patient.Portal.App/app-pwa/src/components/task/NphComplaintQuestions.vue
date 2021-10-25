@@ -32,7 +32,7 @@
                     <strong style="color: red">{{
                       currentProblem.region
                     }}</strong>
-                    pain occurs</label
+                    pain occurs:</label
                   >
                   <multiselect :searchable="false"
                     v-model="form.describe"
@@ -66,7 +66,7 @@
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
                     >Please indicate the date your symptoms first
-                    occurred</label
+                    occurred.</label
                   >
                   <datepicker
                     v-model="form.dateOccured"
@@ -117,7 +117,7 @@
               <div class="row">
                 <div class="col-lg-12 text-center">
                   <h4 class="label f-weight-550">
-                    If your pain radiates or travels, please indicate where
+                    If your pain radiates or travels, please indicate where.
                   </h4>
                 </div>
               </div>
@@ -337,7 +337,8 @@ export default {
       'getTaskPreviousTaskType',
       'getTaskCurrentCaseHistoryFormValues',
       'getTaskCurrentTaskType',
-      'currentPatientAssociated'
+      'currentPatientAssociated',
+      'getTaskCode'
     ]),
     buttonText: function () {
       if (
@@ -817,7 +818,7 @@ export default {
         facilityId: this.currentPatientAssociated.facilityID,
         caseHistoryProblemId: this.currentProblem.id,
         fieldName: 'Progress',
-        value: this.form.painQualityImprovement[0]
+        value: this.form.painQualityImprovement
       })
 
       // Pain factory payload
@@ -840,12 +841,12 @@ export default {
       }
 
       // Inteference payload
-      if (this.form.painQualityImprovement.length > 0) {
+      if (this.form.painInterference.length > 0) {
         this.apiSubmitForm.caseProblems.push({
           facilityId: this.currentPatientAssociated.facilityID,
           caseHistoryProblemId: this.currentProblem.id,
           fieldName: 'Work',
-          value: this.form.painQualityImprovement[0]
+          value: this.form.painInterference
         })
       }
 
@@ -939,7 +940,15 @@ export default {
       }
 
       // this.form.describe = []
-      this.setTaskCurrentTaskType('NphPersonalHistory')
+      switch (this.getTaskCode) {
+        case 'CH':
+        case 'AACH':
+          this.setTaskCurrentTaskType('NphThankyou')
+          break
+        default:
+          this.setTaskCurrentTaskType('NphPersonalHistory')
+          break
+      }
     },
     async previous () {
       if (this.currentProblemIndex === 0) {

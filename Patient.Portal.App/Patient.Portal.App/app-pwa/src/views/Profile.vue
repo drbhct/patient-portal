@@ -1,11 +1,11 @@
 <template>
   <div class="form">
-    <div class="col-12 col-lg-12 col-xl-12 col-align-center">
+    <div class="col-12 col-md-12 col-lg-12 col-xl-12 col-align-center">
       <button @click="setProfileCurrentPage('MyInfo')"
               type="button" class="mb-4 mt-2 mr-2 btn btn-mar"
               v-bind:class="{'disabled' : getProfileCurrentPage !== 'MyInfo' }">
         <i class="fas fa-user fa-2x"></i>
-        <span class="btn-title">My Info</span>
+        <span class="btn-title btn-w-65">Patient Info</span>
       </button>
       <button @click="setProfileCurrentPage('LoginInfo')"
               type="button" class="mb-4 mt-2 mr-2 btn btn-mar"
@@ -26,8 +26,8 @@
         <span class="btn-title">Payment</span>
       </button>
     </div>
-    <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
     <div class="col-12 col-lg-12 col-xl-12">
+      <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
       <component v-bind:is="getProfileCurrentPage"></component>
     </div>
   </div>
@@ -58,6 +58,9 @@ export default {
 }
 </script>
 <style scoped>
+  .btn-w-65 {
+    width:65px !important;
+  }
   .col-align-center {
     text-align:left !important;
   }

@@ -234,6 +234,9 @@ html.header-dark .header .header-right {
   .body {
     min-height: 480px !important;
   }
+  html.sidebar-left-opened.csstransforms .sidebar-left {
+    margin-left: 93%;
+  }
 }
 /* ----------- iPhone 6, 6S, 7 and 8 ----------- */
 @media only screen (max-device-width: 667px){
@@ -246,4 +249,19 @@ html.header-dark .header .header-right {
   .body {
     min-height: 670px !important;
   }
+  html.sidebar-left-opened.csstransforms .sidebar-left {
+    margin-left: 105%;
+  }
 }
+
+@media only screen and (max-width: 767px) {
+  .sidebar-left {
+    left: -50% !important;
+    min-width:0 !important
+  }
+  html.sidebar-light .sidebar-left {
+    margin-left: 150%;
+  }
+}
+
+

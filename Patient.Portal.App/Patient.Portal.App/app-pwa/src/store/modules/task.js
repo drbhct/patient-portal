@@ -9,7 +9,8 @@ const state = {
   currentCaseHistoryComplaintFormValues: null,
   currentCaseHistoryAutoAccident: [],
   currentCaseHistoryAAFormValues: null,
-  officeName: ''
+  officeName: '',
+  taskCode: ''
 }
 
 const mutations = {
@@ -48,6 +49,9 @@ const mutations = {
   },
   [types.TASK_CURRENT_OFFICE_NAME] (state, payload) {
     state.officeName = payload
+  },
+  [types.TASK_CURRENT_CODE] (state, payload) {
+    state.taskCode = payload
   }
 }
 
