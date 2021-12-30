@@ -425,7 +425,7 @@ export default {
       genderList: [
         { id: 'M', value: 'Male' },
         { id: 'F', value: 'Female' },
-        { id: 'N', value: 'Non-Binary' }
+        { id: 'X', value: 'Non-Binary' }
       ]
     }
   },
