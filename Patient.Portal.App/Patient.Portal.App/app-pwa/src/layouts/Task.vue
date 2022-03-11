@@ -131,7 +131,7 @@ export default {
       if (!this.task) {
         this.hasAccount = false
         this.setTaskIsAccessOnly(true)
-          .this.setTaskCurrentTaskType('CreateAccount')
+        this.setTaskCurrentTaskType('CreateAccount')
         return
       }
 
