@@ -65,7 +65,8 @@ export default {
     ...mapActions([
       'setTaskCurrentTaskType',
       'setTaskOfficeName',
-      'setTaskCode'
+      'setTaskCode',
+      'setTaskIsAccessOnly'
     ])
   },
   async mounted () {
@@ -129,7 +130,8 @@ export default {
 
       if (!this.task) {
         this.hasAccount = false
-        this.setTaskCurrentTaskType('CreateAccount')
+        this.setTaskIsAccessOnly(true)
+          .this.setTaskCurrentTaskType('CreateAccount')
         return
       }
 
