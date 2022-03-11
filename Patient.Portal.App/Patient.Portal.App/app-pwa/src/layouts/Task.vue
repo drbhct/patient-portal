@@ -1,14 +1,17 @@
 <template>
   <div>
     <div class="content-body">
-        <div class="row mt-5 mr-2 ml-2 justify-content-md-center">
-            <h2 v-if="!initialize">Initializing App ...</h2>
-            <h2 v-if="initialize && (hasAccount || keyExpired)">{{ message }}</h2>
-        </div>
-        <keep-alive>
-          <component v-bind:is="getTaskCurrentTaskType" v-if="initialize" :link-info="linkInfo"></component>
-        </keep-alive>
-
+      <div class="row mt-5 mr-2 ml-2 justify-content-md-center">
+        <h2 v-if="!initialize">Initializing App ...</h2>
+        <h2 v-if="initialize && (hasAccount || keyExpired)">{{ message }}</h2>
+      </div>
+      <keep-alive>
+        <component
+          v-bind:is="getTaskCurrentTaskType"
+          v-if="initialize"
+          :link-info="linkInfo"
+        ></component>
+      </keep-alive>
     </div>
   </div>
 </template>
@@ -21,11 +24,14 @@ export default {
     // Lazy Loading components
     CreateAccount: () => import('../views/account/Create.vue'),
     PatientInfo: () => import('../components/task/PatientInfo.vue'),
-    NphComplaintLocation: () => import('../components/task/NphComplaintLocation.vue'),
-    NphComplaintQuestions: () => import('../components/task/NphComplaintQuestions.vue'),
+    NphComplaintLocation: () =>
+      import('../components/task/NphComplaintLocation.vue'),
+    NphComplaintQuestions: () =>
+      import('../components/task/NphComplaintQuestions.vue'),
     NphAutoAccident: () => import('../components/task/NphAutoAccident.vue'),
     NphQuestion: () => import('../components/task/NphQuestion.vue'),
-    NphPersonalHistory: () => import('../components/task/NphPersonalHistory.vue'),
+    NphPersonalHistory: () =>
+      import('../components/task/NphPersonalHistory.vue'),
     NphFamilyHistory: () => import('../components/task/NphFamilyHistory.vue'),
     NphThankyou: () => import('../components/task/NphThankyou.vue'),
     ResetPassword: () => import('../components/task/ResetPassword.vue')
@@ -56,7 +62,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType', 'setTaskOfficeName', 'setTaskCode'])
+    ...mapActions([
+      'setTaskCurrentTaskType',
+      'setTaskOfficeName',
+      'setTaskCode',
+      'setTaskIsAccessOnly'
+    ])
   },
   async mounted () {
     const apiRes = await api.auth.request.apiLogin()
@@ -92,7 +103,7 @@ export default {
         facilityId: this.linkInfo.facilityID,
         patientId: this.linkInfo.patientID
       })
-      this.task = taskRes.data.find(el => el.taskID === this.linkInfo.taskID)
+      this.task = taskRes.data.find((el) => el.taskID === this.linkInfo.taskID)
     } else {
       taskRes = await api.task.request.getSpecificTask(this.linkInfo.taskID)
       this.task = taskRes.data
@@ -112,8 +123,18 @@ export default {
       this.initialize = true
 
       // console.log('this.task.taskType', this.task.taskType)
-      const facilityInfo = await api.auth.request.getFacilityInfo(this.linkInfo.facilityID)
+      const facilityInfo = await api.auth.request.getFacilityInfo(
+        this.linkInfo.facilityID
+      )
       await this.setTaskOfficeName(facilityInfo.officeName)
+
+      if (!this.task) {
+        this.hasAccount = false
+        this.setTaskIsAccessOnly(true)
+        this.setTaskCurrentTaskType('CreateAccount')
+        return
+      }
+
       console.log('this.task.taskType>', this.task.taskType)
       console.log('task>', this.task.taskType === 'NPH')
       this.setTaskCode(this.task.taskType)

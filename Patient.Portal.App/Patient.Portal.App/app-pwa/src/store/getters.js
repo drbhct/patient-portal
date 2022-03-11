@@ -27,3 +27,4 @@ export const getTaskCurrentCaseHistoryAutoAccident = state => state.task.current
 export const getTaskCurrentCaseHistoryAAFormValues = state => state.task.currentCaseHistoryAAFormValues
 export const getTaskOfficeName = state => state.task.officeName
 export const getTaskCode = state => state.task.taskCode
+export const getTaskIsAccessOnly = state => state.task.isAccessOnly
