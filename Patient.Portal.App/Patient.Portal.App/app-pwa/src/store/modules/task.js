@@ -10,7 +10,8 @@ const state = {
   currentCaseHistoryAutoAccident: [],
   currentCaseHistoryAAFormValues: null,
   officeName: '',
-  taskCode: ''
+  taskCode: '',
+  isAccessOnly: false
 }
 
 const mutations = {
@@ -52,6 +53,9 @@ const mutations = {
   },
   [types.TASK_CURRENT_CODE] (state, payload) {
     state.taskCode = payload
+  },
+  [types.TASK_IS_ACCESS_ONLY] (state, payload) {
+    state.isAccessOnly = payload
   }
 }
 
