@@ -128,7 +128,7 @@
 <script>
 import BtnSaving from '../../components/button-saving.vue'
 import api from '../../api/http-common.js'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   components: {
     BtnSaving
@@ -162,6 +162,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(['getTaskIsAccessOnly']),
     key () {
       return this.$route.query.key
     }
@@ -297,7 +298,11 @@ export default {
         // TODO: Need to soon set this to auth wrapper
         // localStorage.setItem('completeAuth', true)
         sessionStorage.setItem('completeAuth', true)
-        this.setTaskCurrentTaskType('PatientInfo')
+        if (this.getTaskIsAccessOnly) {
+          this.$router.push('/')
+        } else {
+          this.setTaskCurrentTaskType('PatientInfo')
+        }
       }, 2000)
       // this.$router.push('/')
     },

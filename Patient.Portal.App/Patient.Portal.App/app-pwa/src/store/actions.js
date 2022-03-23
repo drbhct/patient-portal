@@ -83,3 +83,7 @@ export const setTaskOfficeName = async (store, payload) => {
 export const setTaskCode = (store, payload) => {
   store.commit(types.TASK_CURRENT_CODE, payload)
 }
+
+export const setTaskIsAccessOnly = (store, payload) => {
+  store.commit(types.TASK_IS_ACCESS_ONLY, payload)
+}
