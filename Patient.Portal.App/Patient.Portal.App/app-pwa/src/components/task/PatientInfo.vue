@@ -82,13 +82,12 @@
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Address 1</label
-                >
+                  <label class="label f-weight-550">Address 1 <span style="color: red">*</span> </label>
                 <input
                     type="text"
                     class="form-control"
                     v-model="form.address"
+                    required
                   />
                 </div>
               </div>
@@ -109,18 +108,18 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
-                  >City</label
+                  >City <span style="color: red">*</span> </label
                 >
-                <input type="text" class="form-control" v-model="form.city" />
+                <input type="text" class="form-control" v-model="form.city" required />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
-                  >State</label
+                  >State <span style="color: red">*</span> </label
                 >
-                <select v-model="form.state" class="form-control">
+                <select v-model="form.state" class="form-control" required>
                     <option
                       v-for="state in usStates"
                       :key="state.code"
@@ -136,12 +135,13 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
-                  >Zip Code</label
+                  >Zip Code <span style="color: red">*</span> </label
                 >
                 <input
                     type="text"
                     class="form-control"
                     v-model="form.zip"
+                    required
                   />
                 </div>
               </div>
