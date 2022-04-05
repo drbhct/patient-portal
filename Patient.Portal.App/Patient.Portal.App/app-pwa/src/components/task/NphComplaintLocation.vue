@@ -24,7 +24,6 @@
                     :group-select="true"
                     :multiple="true"
                     @select="selectChange"
-                    @remove="selectRemove"
                     :max="4"
                   >
                     <span slot="maxElements">
@@ -139,81 +138,102 @@ export default {
     }
   },
   watch: {
-    'form.complaint1': function (val) {
-      if (!val) {
-        const index = this.problems.findIndex((el) => el.ordinal === 1)
-        if (index >= 0) {
-          this.problems.splice(index, 1)
-        }
-        return
-      }
-      if (val) {
-        const existing = this.problems.find((el) => el.ordinal === 1)
-        if (!existing) {
-          this.problems.push({
-            id: 0,
-            ordinal: 1,
-            region: val
-          })
-        } else {
-          existing.region = val
-        }
-      }
-    },
-    'form.complaint2': function (val) {
-      if (!val) {
-        const index = this.problems.findIndex((el) => el.ordinal === 2)
-        if (index >= 0) {
-          this.problems.splice(index, 1)
-        }
-        return
-      }
+    // 'form.complaint1': function (val) { -------------------- COMMENTED OUT BY RIZZA 04/02/2022
+    //  if (!val) {
+    //    const index = this.problems.findIndex((el) => el.ordinal === 1)
+    //    if (index >= 0) {
+    //      this.problems.splice(index, 1)
+    //    }
+    //    return
+    //  }
+    //  if (val) {
+    //    const existing = this.problems.find((el) => el.ordinal === 1)
+    //    if (!existing) {
+    //      this.problems.push({
+    //        id: 0,
+    //        ordinal: 1,
+    //        region: val
+    //      })
+    //    } else {
+    //      existing.region = val
+    //    }
+    //  }
+    // },
+    // 'form.complaint2': function (val) {
+    //  if (!val) {
+    //    const index = this.problems.findIndex((el) => el.ordinal === 2)
+    //    if (index >= 0) {
+    //      this.problems.splice(index, 1)
+    //    }
+    //    return
+    //  }
 
-      const existing = this.problems.find((el) => el.ordinal === 2)
-      if (!existing) {
+    //  const existing = this.problems.find((el) => el.ordinal === 2)
+    //  if (!existing) {
+    //    this.problems.push({
+    //      id: 0,
+    //      ordinal: 2,
+    //      region: val
+    //    })
+    //  } else {
+    //    existing.region = val
+    //  }
+    // },
+    // 'form.complaint3': function (val) {
+    //  if (!val) {
+    //    const index = this.problems.findIndex((el) => el.ordinal === 3)
+    //    if (index >= 0) {
+    //      this.problems.splice(index, 1)
+    //    }
+    //    return
+    //  }
+    //  const existing = this.problems.find((el) => el.ordinal === 3)
+    //  if (!existing) {
+    //    this.problems.push({
+    //      id: 0,
+    //      ordinal: 3,
+    //      region: val
+    //    })
+    //  }
+    // },
+    // 'form.complaint4': function (val) {
+    //  if (!val) {
+    //    const index = this.problems.findIndex((el) => el.ordinal === 4)
+    //    if (index >= 0) {
+    //      this.problems.splice(index, 1)
+    //    }
+    //    return
+    //  }
+    //  const existing = this.problems.find((el) => el.ordinal === 4)
+    //  if (!existing) {
+    //    this.problems.push({
+    //      id: 0,
+    //      ordinal: 4,
+    //      region: val
+    //    })
+    //  } else {
+    //    existing.region = val
+    //  }
+    // },
+    'form.regions': function () {
+      // added by Rizza 04/02/2022
+      this.problems = []
+      this.form.complaint1 = ''
+      this.form.complaint2 = ''
+      this.form.complaint3 = ''
+      this.form.complaint4 = ''
+
+      for (var i = 0; i < this.form.regions.length; i++) {
+        const region = this.form.regions[i]
+        const ctr = i + 1
+        const name = 'complaint' + ctr
+        this.form[name] = region
+
         this.problems.push({
           id: 0,
-          ordinal: 2,
-          region: val
+          ordinal: ctr,
+          region: region
         })
-      } else {
-        existing.region = val
-      }
-    },
-    'form.complaint3': function (val) {
-      if (!val) {
-        const index = this.problems.findIndex((el) => el.ordinal === 3)
-        if (index >= 0) {
-          this.problems.splice(index, 1)
-        }
-        return
-      }
-      const existing = this.problems.find((el) => el.ordinal === 3)
-      if (!existing) {
-        this.problems.push({
-          id: 0,
-          ordinal: 3,
-          region: val
-        })
-      }
-    },
-    'form.complaint4': function (val) {
-      if (!val) {
-        const index = this.problems.findIndex((el) => el.ordinal === 4)
-        if (index >= 0) {
-          this.problems.splice(index, 1)
-        }
-        return
-      }
-      const existing = this.problems.find((el) => el.ordinal === 4)
-      if (!existing) {
-        this.problems.push({
-          id: 0,
-          ordinal: 4,
-          region: val
-        })
-      } else {
-        existing.region = val
       }
     }
   },
@@ -270,23 +290,23 @@ export default {
         this.form.complaint4 = selected
       }
     },
-    selectRemove (removed) {
-      if (this.form.complaint1 === removed) {
-        this.form.complaint1 = ''
-        return
-      }
-      if (this.form.complaint2 === removed) {
-        this.form.complaint2 = ''
-        return
-      }
-      if (this.form.complaint3 === removed) {
-        this.form.complaint3 = ''
-        return
-      }
-      if (this.form.complaint4 === removed) {
-        this.form.complaint4 = ''
-      }
-    },
+    // selectRemove (removed) { -------------------- COMMENTED OUT BY RIZZA 04/02/2022
+    //  if (this.form.complaint1 === removed) {
+    //    this.form.complaint1 = ''
+    //    return
+    //  }
+    //  if (this.form.complaint2 === removed) {
+    //    this.form.complaint2 = ''
+    //    return
+    //  }
+    //  if (this.form.complaint3 === removed) {
+    //    this.form.complaint3 = ''
+    //    return
+    //  }
+    //  if (this.form.complaint4 === removed) {
+    //    this.form.complaint4 = ''
+    //  }
+    // },
     async next () {
       if (this.form.regions.length === 0) {
         this.$swal({
