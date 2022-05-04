@@ -117,6 +117,7 @@
               <div class="row">
                 <div class="col-lg-12 text-center">
                   <h4 class="label f-weight-550">
+                    <strong style="color: red; margin-right: 5px">*</strong>
                     If your pain radiates or travels, please indicate where.
                   </h4>
                 </div>
@@ -166,7 +167,9 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
-                    >What aggravates your pain or makes it feel worse?
+                    >
+                    <strong style="color: red; margin-right: 5px">*</strong>
+                    What aggravates your pain or makes it feel worse?
                   </label>
                   <multiselect :searchable="false"
                     v-model="form.painFactor"
@@ -177,8 +180,9 @@
               </div>
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                    >What relieves the pain?</label
+                  <label class="label f-weight-550">
+                    <strong style="color: red; margin-right: 5px">*</strong>
+                    What relieves the pain?</label
                   >
                   <multiselect :searchable="false"
                     v-model="form.painFactorImprovement"
@@ -192,7 +196,8 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
-                    >How much does your problem interfere with work?
+                    ><strong style="color: red; margin-right: 5px">*</strong>
+                    How much does your problem interfere with work?
                   </label>
                   <multiselect :searchable="false"
                     v-model="form.painInterference"
@@ -204,7 +209,8 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
-                    >Have you seen anyone for your pain?</label
+                    ><strong style="color: red; margin-right: 5px">*</strong>
+                    Have you seen anyone for your pain?</label
                   >
                   <multiselect :searchable="false"
                     v-model="form.painInterferenceHelp"
@@ -565,7 +571,7 @@ export default {
       }
     },
     radiatesSelections: function () {
-      return ['Left', 'Right', 'Both']
+      return ['Left', 'Right', 'Both', 'None']
     },
     expPains: function () {
       return [
@@ -655,7 +661,8 @@ export default {
         'Orthopedist',
         'Physical Therapist',
         'Primary Care Doctor',
-        'Other'
+        'Other',
+        'None'
       ]
     }
   },
@@ -688,6 +695,17 @@ export default {
           reference: 'refExpPain'
         }
       }
+
+      const hasUnAnswerRadiates = this.form.radiatesQuestionsAndAnswer.filter(
+        (el) => el.answer === ''
+      )
+      if (hasUnAnswerRadiates.length > 0) {
+        return {
+          result: false,
+          msg: 'Please answer where pain radiates or travels.'
+        }
+      }
+
       if (this.form.painQuality.length === 0) {
         return {
           result: false,
@@ -704,6 +722,41 @@ export default {
         }
       }
 
+      // TODO: Aggravates checking
+      if (this.form.painFactor.length === 0) {
+        return {
+          result: false,
+          msg: 'Please answer what aggravates your pain or makes it feel worse.',
+          reference: 'refExpPainImprovement'
+        }
+      }
+
+      // TODO: What relieves pain checking
+      if (this.form.painFactorImprovement.length === 0) {
+        return {
+          result: false,
+          msg: 'Please answer what relieves the pain.',
+          reference: 'refExpPainImprovement'
+        }
+      }
+
+      // TODO: How much does your problem interfere checking
+      if (this.form.painInterference.length === 0) {
+        return {
+          result: false,
+          msg: 'Please answer how much your problem interferes with work.',
+          reference: 'refExpPainImprovement'
+        }
+      }
+
+      // TODO: Have you seen anyone checking
+      if (this.form.painInterferenceHelp.length === 0) {
+        return {
+          result: false,
+          msg: 'Please answer have you seen anyone for your pain.',
+          reference: 'refExpPainImprovement'
+        }
+      }
       const noAnswerOat = this.form.oatQuestions.find(
         (el) => !el.selectedAnswer
       )
