@@ -34,7 +34,8 @@
                     }}</strong>
                     pain occurs:</label
                   >
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="form.describe"
                     :options="complaintLocations"
                     :group-select="false"
@@ -89,7 +90,8 @@
                     }}</strong>
                     pain?</label
                   >
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="form.expPain"
                     :options="expPains"
                   ></multiselect>
@@ -99,9 +101,11 @@
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">
                     <strong style="color: red; margin-right: 5px">*</strong>
-                    Using the slide, rate the intensity of your <strong style="color: red">{{
+                    Using the slide, rate the intensity of your
+                    <strong style="color: red">{{
                       currentProblem.region
-                    }}</strong> pain now:
+                    }}</strong>
+                    pain now:
                   </label>
                   <div class="mt-4">
                     <vue-slider
@@ -117,9 +121,13 @@
               <div class="row">
                 <div class="col-lg-12 text-center">
                   <h4 class="label f-weight-550">
+                    <strong style="color: red; margin-right: 5px">*</strong>
                     If your pain radiates or travels, please indicate where.
                   </h4>
                 </div>
+              </div>
+              <div class="col-lg-6 mx-auto text-center">
+                <button class="btn" :class="{ 'btn-primary':radiateIsNone, 'btn-default': !radiateIsNone }" type="reset" @click="radiateIsNone = !radiateIsNone">None</button>
               </div>
               <div
                 class="form-group row"
@@ -130,7 +138,8 @@
                   <label class="label f-weight-550">{{
                     radiatesQuestion.question
                   }}</label>
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="radiatesQuestion.answer"
                     :options="radiatesSelections"
                   ></multiselect>
@@ -142,7 +151,8 @@
                     ><strong style="color: red; margin-right: 5px">*</strong>How
                     would you best describe the sensation of your pain?</label
                   >
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="form.painQuality"
                     :options="painQualitySelection"
                     :multiple="true"
@@ -155,7 +165,8 @@
                     ><strong style="color: red; margin-right: 5px">*</strong
                     >Over the past/weeks/months this complaint is</label
                   >
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="form.painQualityImprovement"
                     :options="painQualityImprovementSelection"
                     :multiple="false"
@@ -165,10 +176,12 @@
               <hr />
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                    >What aggravates your pain or makes it feel worse?
+                  <label class="label f-weight-550">
+                    <strong style="color: red; margin-right: 5px">*</strong>
+                    What aggravates your pain or makes it feel worse?
                   </label>
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="form.painFactor"
                     :options="painFactorSelection"
                     :multiple="true"
@@ -177,10 +190,12 @@
               </div>
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                    >What relieves the pain?</label
+                  <label class="label f-weight-550">
+                    <strong style="color: red; margin-right: 5px">*</strong>
+                    What relieves the pain?</label
                   >
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="form.painFactorImprovement"
                     :options="painFactorImprovementSelection"
                     :multiple="true"
@@ -192,9 +207,11 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
-                    >How much does your problem interfere with work?
+                    ><strong style="color: red; margin-right: 5px">*</strong>
+                    How much does your problem interfere with work?
                   </label>
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="form.painInterference"
                     :options="painInterferenceSelection"
                     :multiple="false"
@@ -204,9 +221,11 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
-                    >Have you seen anyone for your pain?</label
+                    ><strong style="color: red; margin-right: 5px">*</strong>
+                    Have you seen anyone for your pain?</label
                   >
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="form.painInterferenceHelp"
                     :options="painInterferenceHelpSelection"
                     :multiple="true"
@@ -239,7 +258,8 @@
                       >*</strong
                     >{{ oatQ.description }}</label
                   >
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="oatQ.selectedAnswer"
                     :options="oatQ.answerList"
                     :label="'description'"
@@ -298,6 +318,7 @@ export default {
     return {
       isSaving: false,
       isLoading: false,
+      radiateIsNone: false,
       form: {
         describe: [],
         describeOther: '',
@@ -565,7 +586,7 @@ export default {
       }
     },
     radiatesSelections: function () {
-      return ['Left', 'Right', 'Both']
+      return ['Left', 'Right', 'Both', 'None']
     },
     expPains: function () {
       return [
@@ -655,7 +676,8 @@ export default {
         'Orthopedist',
         'Physical Therapist',
         'Primary Care Doctor',
-        'Other'
+        'Other',
+        'None'
       ]
     }
   },
@@ -688,11 +710,22 @@ export default {
           reference: 'refExpPain'
         }
       }
+
+      const hasAnswerRadiates = this.form.radiatesQuestionsAndAnswer.filter(
+        (el) => el.answer !== ''
+      )
+
+      if (hasAnswerRadiates.length === 0 && !this.radiateIsNone) {
+        return {
+          result: false,
+          msg: 'Please answer where pain radiates or travels otherwise set the None button.'
+        }
+      }
+
       if (this.form.painQuality.length === 0) {
         return {
           result: false,
-          msg:
-            'Please answer how would you best describe the sensation of your pain?',
+          msg: 'Please answer how would you best describe the sensation of your pain?',
           reference: 'refPainSensation'
         }
       }
@@ -704,6 +737,41 @@ export default {
         }
       }
 
+      // TODO: Aggravates checking
+      if (this.form.painFactor.length === 0) {
+        return {
+          result: false,
+          msg: 'Please answer what aggravates your pain or makes it feel worse.',
+          reference: 'refExpPainImprovement'
+        }
+      }
+
+      // TODO: What relieves pain checking
+      if (this.form.painFactorImprovement.length === 0) {
+        return {
+          result: false,
+          msg: 'Please answer what relieves the pain.',
+          reference: 'refExpPainImprovement'
+        }
+      }
+
+      // TODO: How much does your problem interfere checking
+      if (this.form.painInterference.length === 0) {
+        return {
+          result: false,
+          msg: 'Please answer how much your problem interferes with work.',
+          reference: 'refExpPainImprovement'
+        }
+      }
+
+      // TODO: Have you seen anyone checking
+      if (this.form.painInterferenceHelp.length === 0) {
+        return {
+          result: false,
+          msg: 'Please answer have you seen anyone for your pain.',
+          reference: 'refExpPainImprovement'
+        }
+      }
       const noAnswerOat = this.form.oatQuestions.find(
         (el) => !el.selectedAnswer
       )
@@ -900,7 +968,9 @@ export default {
 
       this.isSaving = false
       const isExist = this.formHistory.find(
-        (c) => c.complaint === this.complaint && c.patientId === this.currentPatientAssociated.patientID
+        (c) =>
+          c.complaint === this.complaint &&
+          c.patientId === this.currentPatientAssociated.patientID
       )
       if (!isExist) {
         this.formHistory.push({
@@ -926,7 +996,9 @@ export default {
         await this.initializeData()
 
         const exist = this.formHistory.find(
-          (c) => c.complaint === this.complaint && c.patientId === this.currentPatientAssociated.patientID
+          (c) =>
+            c.complaint === this.complaint &&
+            c.patientId === this.currentPatientAssociated.patientID
         )
         if (exist) {
           this.form = exist.form
@@ -957,9 +1029,10 @@ export default {
         )
         let prevPage = ''
         if (currentIndex === -1) {
-          prevPage = this.getTaskPreviousTaskType[
-            this.getTaskPreviousTaskType.length - 1
-          ]
+          prevPage =
+            this.getTaskPreviousTaskType[
+              this.getTaskPreviousTaskType.length - 1
+            ]
         } else {
           prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
         }
@@ -1219,7 +1292,9 @@ export default {
       )
       // this.formHistory.text = ''
       const isExist = this.formHistory.find(
-        (c) => c.complaint === this.complaint && c.patientId === this.currentPatientAssociated.patientID
+        (c) =>
+          c.complaint === this.complaint &&
+          c.patientId === this.currentPatientAssociated.patientID
       )
       if (isExist) {
         this.form = JSON.parse(JSON.stringify(isExist.form))
