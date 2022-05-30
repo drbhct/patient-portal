@@ -57,6 +57,8 @@ export default {
           return 'Health History'
         case 'MSG':
           return 'Message'
+        case 'STMT':
+          return 'Statement'
         default:
           return ''
       }
