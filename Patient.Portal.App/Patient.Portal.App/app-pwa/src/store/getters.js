@@ -8,6 +8,7 @@ export const getMsgInfo = state => state.messages.currentMsgInfo
 // billing module
 export const getBillingCurrentPage = state => state.billing.currentBillingPageView
 export const getBillingBalanceDue = state => state.billing.balanceDue
+export const getBillingTaskStatement = state => state.billing.taskStatement
 
 // PROFILE
 export const getProfileCurrentPage = state => state.profile.currentProfilePageView

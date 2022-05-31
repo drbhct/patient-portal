@@ -23,7 +23,7 @@ Vue.use(PubNubVue, {
 
 Sentry.init({
   Vue,
-  dsn: 'https://903308b1d24a48768a190cd33ddb2b42@o264517.ingest.sentry.io/5689328',
+  dsn: 'https://baff50e5a05944ca933adaeb43c960ca@o1202081.ingest.sentry.io/6455112',
   integrations: [new Integrations.BrowserTracing()],
 
   // Set tracesSampleRate to 1.0 to capture 100%

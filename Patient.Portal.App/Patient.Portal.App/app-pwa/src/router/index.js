@@ -26,18 +26,26 @@ const routes = [
         meta: {
           requiresAuth: true
         },
+        path: 'statement',
+        name: 'Statement',
+        component: () => import('../components/billing/TaskStatement.vue')
+      },
+      {
+        meta: {
+          requiresAuth: true
+        },
         path: 'appointments',
         name: 'Appointments',
         component: () => import('../views/Appointments.vue')
       },
-      // {
-      //  meta: {
-      //    requiresAuth: true
-      //  },
-      //  path: 'billing',
-      //  name: 'Billing',
-      //  component: () => import('../views/Billing.vue')
-      // },
+      {
+        meta: {
+          requiresAuth: true
+        },
+        path: 'billing',
+        name: 'Billing',
+        component: () => import('../views/Billing.vue')
+      },
       {
         meta: {
           requiresAuth: true
