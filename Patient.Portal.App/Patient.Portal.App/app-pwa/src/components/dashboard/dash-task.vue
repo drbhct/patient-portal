@@ -72,6 +72,8 @@ export default {
           return 'GO TO HEALTH HISTORY'
         case 'MSG':
           return 'GO TO MESSAGE'
+        case 'STMT':
+          return 'PAY STATEMENT'
         default:
           return ''
       }
