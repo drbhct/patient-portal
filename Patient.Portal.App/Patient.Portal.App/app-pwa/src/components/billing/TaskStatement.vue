@@ -490,6 +490,19 @@ export default {
     }
   },
   async mounted () {
+    if (!this.getBillingTaskStatement) {
+      this.$swal({
+        text: 'No Task found for statement payment!',
+        position: 'top-center',
+        title: 'Error',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 2000,
+        icon: 'error'
+      })
+      this.$router.push('/')
+      return
+    }
     const response = await api.patient.request.getpaymentprofilelist({
       facilityid: this.currentPatientAssociated.facilityID,
       id: this.currentPatientAssociated.patientID
