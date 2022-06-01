@@ -399,7 +399,7 @@ export default {
           facilityId: this.currentPatientAssociated.facilityID,
           patientId: this.currentPatientAssociated.patientID,
           amount: this.form.totalDue,
-          statementBatchID: this.statementInfo.statementBatchID
+          statementBatchID: this.statementInfo.StatementBatchID
         }
         if (this.form.isManual) {
           payload.nameOnCard = this.form.cardInfo.nameOnCard
