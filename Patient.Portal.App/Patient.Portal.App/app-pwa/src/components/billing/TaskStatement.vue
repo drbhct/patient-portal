@@ -159,7 +159,7 @@
               </li>
             </ul>
           </div>
-          <div class="col-lg-5 mx-1 my-1">
+          <!-- <div class="col-lg-5 mx-1 my-1">
             <button
               class="btn btn-default btn-lg btn-block"
               type="reset"
@@ -167,6 +167,17 @@
             >
               Pay with different card
             </button>
+          </div> -->
+        </div>
+        <div class="form-group">
+          <div class="col-lg-6">
+            <button
+            class="btn btn-default btn-lg btn-block"
+            type="reset"
+            @click="payWithDiffCard"
+          >
+            Pay with different card
+          </button>
           </div>
         </div>
         <div class="form-group row">
@@ -186,9 +197,31 @@
             />
           </div>
         </div>
+        <hr />
+        <div class="form-group-row"><h4>Notify the Recipient</h4></div>
+        <div class="form-group row">
+          <div class="col-lg-3">
+            <label>Email address for receipt</label>
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-lg-6">
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Enter Email"
+              required
+              v-model="form.email"
+            />
+          </div>
+        </div>
         <div class="form-group row">
           <div class="col-lg-6 mx-1 my-1">
-            <btn-saving :is-saving="isSaving" :loading-text="'Processing payment ...'" :display-text="'Make Payment'"/>
+            <btn-saving
+              :is-saving="isSaving"
+              :loading-text="'Processing payment ...'"
+              :display-text="'Make Payment'"
+            />
             <!-- <button class="btn btn-primary btn-lg btn-block">
               MAKE PAYMENT
             </button> -->
@@ -214,7 +247,8 @@ export default {
       form: {
         totalDue: 0,
         cardInfo: null,
-        isManual: false
+        isManual: false,
+        email: ''
       },
       otherCardForm: {
         nameOnCard: '',
@@ -227,7 +261,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentPatientAssociated', 'getBillingTaskStatement']),
+    ...mapGetters(['currentPatientAssociated', 'getBillingTaskStatement', 'getProfileAuthInfo']),
     statementInfo () {
       if (!this.getBillingTaskStatement) {
         return null
@@ -399,6 +433,7 @@ export default {
           facilityId: this.currentPatientAssociated.facilityID,
           patientId: this.currentPatientAssociated.patientID,
           amount: this.form.totalDue,
+          email: this.form.email,
           statementBatchID: this.statementInfo.StatementBatchID
         }
         if (this.form.isManual) {
@@ -467,6 +502,8 @@ export default {
     if (this.statementInfo) {
       this.form.totalDue = this.statementInfo.TotalDue
     }
+
+    this.form.email = this.getProfileAuthInfo.email
   }
 }
 </script>
