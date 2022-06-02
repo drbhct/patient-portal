@@ -248,7 +248,8 @@ export default {
         totalDue: 0,
         cardInfo: null,
         isManual: false,
-        email: ''
+        email: '',
+        taskId: ''
       },
       otherCardForm: {
         nameOnCard: '',
@@ -434,7 +435,8 @@ export default {
           patientId: this.currentPatientAssociated.patientID,
           amount: this.form.totalDue,
           email: this.form.email,
-          statementBatchID: this.statementInfo.StatementBatchID
+          statementBatchID: this.statementInfo.StatementBatchID,
+          taskId: this.form.taskId
         }
         if (this.form.isManual) {
           payload.nameOnCard = this.form.cardInfo.nameOnCard
@@ -516,6 +518,7 @@ export default {
       this.form.totalDue = this.statementInfo.TotalDue
     }
 
+    this.form.taskId = this.getBillingTaskStatement.taskID
     this.form.email = this.getProfileAuthInfo.email
   }
 }
