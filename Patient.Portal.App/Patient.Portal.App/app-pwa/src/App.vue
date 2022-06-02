@@ -322,7 +322,11 @@ export default {
       await this.setProfileCurrentPatient(patient)
       setTimeout(function () {
         me.setIsLoading(false)
-        me.$router.push('/')
+        if (me.$route.path !== '/') {
+          me.$router.push('/')
+        } else {
+          me.$router.go(0)
+        }
       }, 500)
     }
   },

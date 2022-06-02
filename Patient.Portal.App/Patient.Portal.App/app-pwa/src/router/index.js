@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import Dashboard from '../layouts/Dashboard.vue'
 Vue.use(VueRouter)
-
 const routes = [
   {
     path: '/menu',
@@ -80,7 +80,7 @@ const routes = [
     meta: {
       requiresAuth: true
     },
-    component: () => import('../layouts/Dashboard.vue')
+    component: Dashboard
   },
   {
     path: '/account',
