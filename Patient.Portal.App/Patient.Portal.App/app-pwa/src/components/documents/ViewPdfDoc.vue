@@ -1,14 +1,30 @@
 <template>
-  <div class="mx-1">
-    <h1>View File</h1>
-    <div class="col-lg-12"></div>
+  <div class="">
+    <div class="col-lg-12" v-if="file.fileName">
+      <h1>{{ file.fileName }}</h1>
+      <pdf :src="file.fileObj" :page="1">
+        <template slot="loading"> loading content here... </template>
+      </pdf>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import api from '../../api/http-common.js'
+import pdf from 'pdfvuer'
 export default {
+  data () {
+    return {
+      file: {
+        fileName: '',
+        fileObj: ''
+      }
+    }
+  },
+  components: {
+    pdf
+  },
   computed: {
     ...mapGetters([
       'currentPatientAssociated',
@@ -21,7 +37,9 @@ export default {
       facilityId: this.currentPatientAssociated.facilityID,
       id: this.$route.query.fileId
     })
-    console.log('fileResponse>', fileResponse)
+
+    this.file.fileName = fileResponse.data.originalFileName
+    this.file.fileObj = 'data:image/;base64,' + fileResponse.data.base64String
   }
 }
 </script>
