@@ -34,6 +34,14 @@ const routes = [
         meta: {
           requiresAuth: true
         },
+        path: 'viewpdf',
+        name: 'ViewPdf',
+        component: () => import('../components/documents/ViewPdfDoc.vue')
+      },
+      {
+        meta: {
+          requiresAuth: true
+        },
         path: 'appointments',
         name: 'Appointments',
         component: () => import('../views/Appointments.vue')
