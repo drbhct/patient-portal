@@ -100,7 +100,7 @@
     </div>
     <div class="col-lg-12">
       <h2>
-        Statement Batch # {{ statementInfo.StatementBatchID }}
+        Statement {{ statementInfo.StatementDate }}
         <span
           title="Download File"
           class="ml-2"
