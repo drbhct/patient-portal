@@ -2,6 +2,7 @@
   <div class="">
     <div class="col-lg-12" v-if="file.fileName">
       <h1>{{ file.fileName }}</h1>
+      <hr>
       <pdf :src="file.fileObj" :page="1">
         <template slot="loading"> loading content here... </template>
       </pdf>
