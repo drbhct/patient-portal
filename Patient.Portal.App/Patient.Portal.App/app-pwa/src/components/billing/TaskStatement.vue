@@ -105,7 +105,7 @@
           title="Download File"
           class="ml-2"
           style="cursor: pointer"
-          @click="downloadFile(statementInfo.FileID)"
+          @click="viewFileInTab(statementInfo.FileID)"
           ><i class="fa-solid fa-file-pdf"></i
         ></span>
       </h2>
@@ -172,12 +172,12 @@
         <div class="form-group">
           <div class="col-lg-6">
             <button
-            class="btn btn-default btn-lg btn-block"
-            type="reset"
-            @click="payWithDiffCard"
-          >
-            Pay with different card
-          </button>
+              class="btn btn-default btn-lg btn-block"
+              type="reset"
+              @click="payWithDiffCard"
+            >
+              Pay with different card
+            </button>
           </div>
         </div>
         <div class="form-group row">
@@ -262,7 +262,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentPatientAssociated', 'getBillingTaskStatement', 'getProfileAuthInfo']),
+    ...mapGetters([
+      'currentPatientAssociated',
+      'getBillingTaskStatement',
+      'getProfileAuthInfo'
+    ]),
     statementInfo () {
       if (!this.getBillingTaskStatement) {
         return null
@@ -410,10 +414,19 @@ export default {
       const file = fileResponse.data
       const a = document.createElement('a')
       a.href = 'data:image/;base64,' + file.base64String
-      a.download = `Statement ${this.statementInfo.StatementBatchID}`
+      a.download = file.originalFileName
       document.body.appendChild(a)
       a.click()
       document.body.removeChild(a)
+    },
+    async viewFileInTab (fileId) {
+      const routeData = this.$router.resolve({
+        path: '/menu/viewpdf',
+        query: {
+          fileId: fileId
+        }
+      })
+      window.open(routeData.href, '_blank')
     },
     async makePayment () {
       try {
