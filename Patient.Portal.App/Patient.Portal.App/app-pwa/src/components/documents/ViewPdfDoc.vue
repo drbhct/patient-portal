@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <div class="col-lg-12" v-if="file.fileName">
-      <h1>{{ file.fileName }}</h1>
+      <h1>Statement {{ statementInfo.StatementDate }}</h1>
       <hr>
       <pdf :src="file.fileObj" :page="1">
         <template slot="loading"> loading content here... </template>
@@ -31,7 +31,15 @@ export default {
       'currentPatientAssociated',
       'getBillingTaskStatement',
       'getProfileAuthInfo'
-    ])
+    ]),
+    statementInfo () {
+      if (!this.getBillingTaskStatement) {
+        return null
+      }
+
+      const info = JSON.parse(this.getBillingTaskStatement.info)
+      return info
+    }
   },
   async mounted () {
     const fileResponse = await api.patient.request.downloadfilebase64({
