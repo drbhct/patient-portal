@@ -83,6 +83,18 @@
                   maxlength="4"
                 />
               </div>
+              <div class="form-group">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="otherCardForm.saveAlias"
+                  />
+                  <label class="form-check-label" for="flexCheckDefault">
+                    Save card for future use?
+                  </label>
+                </div>
+              </div>
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary">Submit</button>
@@ -130,7 +142,7 @@
         </div>
       </div>
       <form class="my-5 col-lg-7" @submit.prevent="makePayment">
-        <div class="form-group row">
+        <div class="form-group row" v-if="creditCardList.length > 0">
           <div class="col-lg-3">
             <label>Select Payment Method</label>
           </div>
@@ -176,7 +188,7 @@
               type="reset"
               @click="payWithDiffCard"
             >
-              Pay with different card
+              {{ cardText}}
             </button>
           </div>
         </div>
@@ -249,7 +261,8 @@ export default {
         cardInfo: null,
         isManual: false,
         email: '',
-        taskId: ''
+        taskId: '',
+        saveAlias: false
       },
       otherCardForm: {
         nameOnCard: '',
@@ -257,7 +270,8 @@ export default {
         expDate: '',
         month: '',
         year: '',
-        cardCode: ''
+        cardCode: '',
+        saveAlias: false
       }
     }
   },
@@ -274,6 +288,12 @@ export default {
 
       const info = JSON.parse(this.getBillingTaskStatement.info)
       return info
+    },
+    cardText () {
+      if (this.creditCardList.length === 0) {
+        return 'Add Credit Card'
+      }
+      return 'Pay with different card'
     }
   },
   methods: {
@@ -354,6 +374,7 @@ export default {
       } else {
         this.form.cardInfo = cardInfo
         this.form.isManual = true
+        this.form.saveAlias = cardInfo.saveAlias
       }
     },
     payWithDiffCard () {
@@ -383,6 +404,7 @@ export default {
       )
       this.creditCardList.push(this.form.cardInfo)
       this.form.isManual = true
+      this.form.saveAlias = this.otherCardForm.saveAlias
       // eslint-disable-next-line no-undef
       $('#newCardModal').modal('toggle')
     },
@@ -449,7 +471,8 @@ export default {
           amount: this.form.totalDue,
           email: this.form.email,
           statementBatchID: this.statementInfo.StatementBatchID,
-          taskId: this.form.taskId
+          taskId: this.form.taskId,
+          saveAlias: this.form.saveAlias
         }
         if (this.form.isManual) {
           payload.nameOnCard = this.form.cardInfo.nameOnCard
