@@ -12,7 +12,7 @@
       </div>
       <div class="row padding-bottom-10">
         <div class="col-12 col-lg-6 col-xl-6">
-          <button class="btn btn-primary btn-w-160" v-on:click="remove">REMOVE</button>
+          <button class="btn btn-primary btn-w-160" v-on:click="remove(item)">REMOVE</button>
         </div>
       </div>
     </div>
@@ -45,6 +45,14 @@ export default {
         return 'XXXX-XXXX-XXXX-' + acctNo.substr(-4)
       }
     },
+    async loadList () {
+      const res = await api.patient.request.getpaymentprofilelist({
+        facilityid: this.currentPatientAssociated.facilityID,
+        id: this.currentPatientAssociated.patientID
+      })
+
+      this.cardlist = res.data
+    },
     getCardType (acctNo) {
       const number = acctNo
       let re = new RegExp('^4')
@@ -67,7 +75,7 @@ export default {
     generateCardNumberMask () {
       return this.getCardType === 'amex' ? this.amexCardMask : this.otherCardMask
     },
-    remove () {
+    remove (item) {
       this.$swal({
         position: 'top-center',
         title: 'Are you sure you want to remove this card?',
@@ -79,17 +87,18 @@ export default {
         icon: 'warning'
       }).then((result) => {
         if (result.isConfirmed) {
-          this.removeCC()
+          this.removeCC(item)
         }
       })
     },
-    async removeCC () {
+    async removeCC (item) {
       const res = await api.patient.request.deletepaymentprofile({
         facilityid: this.currentPatientAssociated.facilityID,
-        id: this.currentPatientAssociated.patientID,
+        id: item.id,
         user: 'Patient Portal'
       })
       if (res.data) {
+        this.loadList()
         this.$swal('Success', 'Credit Card details has been successfully removed.', 'success')
       } else {
         this.$swal({
@@ -105,13 +114,8 @@ export default {
       this.$swal('Success', 'Credit Card details has been successfully removed.', 'success')
     }
   },
-  async mounted () {
-    const res = await api.patient.request.getpaymentprofilelist({
-      facilityid: this.currentPatientAssociated.facilityID,
-      id: this.currentPatientAssociated.patientID
-    })
-
-    this.cardlist = res.data
+  mounted () {
+    this.loadList()
   }
 }
 </script>
