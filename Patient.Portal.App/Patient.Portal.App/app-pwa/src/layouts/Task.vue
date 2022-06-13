@@ -66,7 +66,8 @@ export default {
       'setTaskCurrentTaskType',
       'setTaskOfficeName',
       'setTaskCode',
-      'setTaskIsAccessOnly'
+      'setTaskIsAccessOnly',
+      'setBillingStatementTask'
     ])
   },
   async mounted () {
@@ -145,6 +146,11 @@ export default {
         case 'AACH':
           console.log('it is nph')
           this.setTaskCurrentTaskType('CreateAccount')
+          break
+        case 'STMT':
+          taskRes = await api.task.request.getSpecificTask(this.task.taskID)
+          this.setBillingStatementTask(taskRes.data)
+          this.$router.push({ path: '/menu/statement' })
           break
         case 'RESETPWD':
           this.setTaskCurrentTaskType('ResetPassword')
