@@ -91,3 +91,7 @@ export const setTaskIsAccessOnly = (store, payload) => {
 export const setBillingStatementTask = (store, payload) => {
   store.commit(types.BILLING_TASK_STATEMENT, payload)
 }
+
+export const setTaskIsAccessOnlyRoute = (store, payload) => {
+  store.commit(types.TASK_IS_ACCESS_ONLY_ROUTE, payload)
+}

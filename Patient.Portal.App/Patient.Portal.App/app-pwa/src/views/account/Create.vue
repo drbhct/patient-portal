@@ -162,7 +162,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getTaskIsAccessOnly']),
+    ...mapGetters(['getTaskIsAccessOnly', 'getTaskIsAccessOnlyRoute']),
     key () {
       return this.$route.query.key
     }
@@ -299,7 +299,7 @@ export default {
         // localStorage.setItem('completeAuth', true)
         sessionStorage.setItem('completeAuth', true)
         if (this.getTaskIsAccessOnly) {
-          this.$router.push('/')
+          this.$router.push(this.getTaskIsAccessOnlyRoute)
         } else {
           this.setTaskCurrentTaskType('PatientInfo')
         }
