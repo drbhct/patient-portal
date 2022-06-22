@@ -140,6 +140,10 @@ const router = new VueRouter({
 })
 
 router.beforeResolve((to, from, next) => {
+  // console.log('to >', to)
+  if (to.path === '/default.aspx') {
+    next({ path: '/account/login' })
+  }
   if (to.matched.some(route => route.meta.requiresAuth)) {
     let isAuth = false
     // const user = Vue.$cookies.get('user')
