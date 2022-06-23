@@ -47,7 +47,7 @@ export default {
     ...mapGetters(['getProfilePatientAssociated', 'currentPatientAssociated'])
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage', 'setTaskCode']),
+    ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage', 'setTaskCode', 'setBillingStatementTask']),
     setTitle (val) {
       switch (val) {
         case 'NPH':
@@ -57,6 +57,8 @@ export default {
           return 'Health History'
         case 'MSG':
           return 'Message'
+        case 'STMT':
+          return 'Statement'
         default:
           return ''
       }
@@ -70,6 +72,8 @@ export default {
           return 'GO TO HEALTH HISTORY'
         case 'MSG':
           return 'GO TO MESSAGE'
+        case 'STMT':
+          return 'PAY STATEMENT'
         default:
           return ''
       }
@@ -95,6 +99,11 @@ export default {
           this.setCurrentMsgInfo({ id: parseInt(taskRes.data.info), subject: '' })
           this.setMsgCurrentPage('Detail')
           this.$router.push({ path: '/menu/messages' })
+          break
+        case 'STMT':
+          taskRes = await api.task.request.getSpecificTask(task.taskID)
+          this.setBillingStatementTask(taskRes.data)
+          this.$router.push({ path: '/menu/statement' })
           break
         default:
           break

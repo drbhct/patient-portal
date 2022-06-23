@@ -12,7 +12,25 @@ import { Integrations } from '@sentry/tracing'
 // import auth from './auth/auth.js'
 import PubNubVue from 'pubnub-vue'
 import { AuthSimplePlugin } from './auth/auth-simple.js'
+import VueHtmlToPaper from 'vue-html-to-paper'
 
+const options = {
+  name: '_blank',
+  specs: [
+    'fullscreen=yes',
+    'titlebar=yes',
+    'scrollbars=yes'
+  ],
+  styles: [
+    'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
+    'https://unpkg.com/kidlat-css/css/kidlat.css'
+  ],
+  timeout: 1000, // default timeout before the print window appears
+  autoClose: true, // if false, the window will not close after printing
+  windowTitle: window.document.title // override the window title
+}
+
+Vue.use(VueHtmlToPaper, options)
 Vue.use(PubNubVue, {
   subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
   publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY,
@@ -23,7 +41,7 @@ Vue.use(PubNubVue, {
 
 Sentry.init({
   Vue,
-  dsn: 'https://903308b1d24a48768a190cd33ddb2b42@o264517.ingest.sentry.io/5689328',
+  dsn: 'https://baff50e5a05944ca933adaeb43c960ca@o1202081.ingest.sentry.io/6455112',
   integrations: [new Integrations.BrowserTracing()],
 
   // Set tracesSampleRate to 1.0 to capture 100%

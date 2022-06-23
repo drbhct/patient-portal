@@ -4,7 +4,7 @@
       <header :class="checkMenuHeader" class="menu-header text-left" v-if="currentRouteName !== 'contact'">
         <div class="menu-header-title">
           <i :class="menuIcon" aria-hidden="true"></i>
-          <span class="h-title">{{ currentRouteName }}</span>
+          <span class="h-title">{{ title }}</span>
         </div>
       </header>
 
@@ -169,6 +169,16 @@ export default {
       }
       return route
     },
+    title () {
+      switch (this.currentRouteName) {
+        case 'statement':
+          return 'Patient Statement'
+        case 'viewpdf':
+          return 'Patient Statement File'
+        default:
+          return this.currentRouteName
+      }
+    },
     checkMenuHeader: function () {
       if (this.currentRouteName === 'messages') {
         // this.setCurrentMsgInfo({})
@@ -190,6 +200,12 @@ export default {
       if (this.currentRouteName === 'tasks') {
         return 'bg-red'
       }
+      if (this.currentRouteName === 'statement') {
+        return 'bg-red'
+      }
+      if (this.currentRouteName === 'viewpdf') {
+        return 'bg-green'
+      }
       return ''
     },
     menuIcon: function () {
@@ -210,6 +226,12 @@ export default {
       }
       if (this.currentRouteName === 'tasks') {
         return 'fas fa-tasks'
+      }
+      if (this.currentRouteName.toLowerCase() === 'statement') {
+        return 'fas fa-tasks'
+      }
+      if (this.currentRouteName === 'viewpdf') {
+        return 'fas fa-file'
       }
       return ''
     }

@@ -34,7 +34,8 @@ export default {
       import('../components/task/NphPersonalHistory.vue'),
     NphFamilyHistory: () => import('../components/task/NphFamilyHistory.vue'),
     NphThankyou: () => import('../components/task/NphThankyou.vue'),
-    ResetPassword: () => import('../components/task/ResetPassword.vue')
+    ResetPassword: () => import('../components/task/ResetPassword.vue'),
+    Statement: () => import('../components/billing/TaskStatement.vue')
   },
   data () {
     return {
@@ -66,7 +67,8 @@ export default {
       'setTaskCurrentTaskType',
       'setTaskOfficeName',
       'setTaskCode',
-      'setTaskIsAccessOnly'
+      'setTaskIsAccessOnly',
+      'setBillingStatementTask'
     ])
   },
   async mounted () {
@@ -145,6 +147,17 @@ export default {
         case 'AACH':
           console.log('it is nph')
           this.setTaskCurrentTaskType('CreateAccount')
+          break
+        case 'STMT':
+          this.hasAccount = false
+          this.setTaskIsAccessOnly(true)
+          this.setTaskIsAccessOnly('/menu/statement')
+          this.setBillingStatementTask(taskRes.data)
+          this.setTaskCurrentTaskType('CreateAccount')
+          // taskRes = await api.task.request.getSpecificTask(this.task.taskID)
+          // this.setBillingStatementTask(taskRes.data)
+          // this.setTaskCurrentTaskType('Statement')
+          // this.$router.push({ path: '/menu/statement' })
           break
         case 'RESETPWD':
           this.setTaskCurrentTaskType('ResetPassword')

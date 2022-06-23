@@ -152,6 +152,20 @@ export default {
     */
     async downloadfilebase64 (payload) {
       return await securedJsonRequest.post('/patientportal/downloadfilebase64', payload)
+    },
+    /**
+    * @param {Object} payload  request object for payment
+    * @param {Number} payload.facilityId
+    * @param {Number} payload.patientId
+    * @param {String} payload.alias payment profile MerchantPaymentMethodID when using card on file
+    * @param {String} payload.nameOnCard payment when using manual card input
+    * @param {String} payload.expDate payment when using manual card input
+    * @param {String} payload.cardCode payment when using manual card input
+    * @param {Number} payload.amount
+    * @param {Number} payload.statementBatchID
+    */
+    async makeStatementPayment (payload) {
+      return await securedJsonRequest.post('/patientportal/manualsale', payload)
     }
   }
 }

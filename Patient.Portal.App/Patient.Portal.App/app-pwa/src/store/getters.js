@@ -8,6 +8,7 @@ export const getMsgInfo = state => state.messages.currentMsgInfo
 // billing module
 export const getBillingCurrentPage = state => state.billing.currentBillingPageView
 export const getBillingBalanceDue = state => state.billing.balanceDue
+export const getBillingTaskStatement = state => state.billing.taskStatement
 
 // PROFILE
 export const getProfileCurrentPage = state => state.profile.currentProfilePageView
@@ -28,3 +29,4 @@ export const getTaskCurrentCaseHistoryAAFormValues = state => state.task.current
 export const getTaskOfficeName = state => state.task.officeName
 export const getTaskCode = state => state.task.taskCode
 export const getTaskIsAccessOnly = state => state.task.isAccessOnly
+export const getTaskIsAccessOnlyRoute = state => state.task.isAccessOnlyRoute

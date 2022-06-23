@@ -11,7 +11,8 @@ const state = {
   currentCaseHistoryAAFormValues: null,
   officeName: '',
   taskCode: '',
-  isAccessOnly: false
+  isAccessOnly: false,
+  isAccessOnlyRoute: '/'
 }
 
 const mutations = {
@@ -56,6 +57,9 @@ const mutations = {
   },
   [types.TASK_IS_ACCESS_ONLY] (state, payload) {
     state.isAccessOnly = payload
+  },
+  [types.TASK_IS_ACCESS_ONLY_ROUTE] (state, payload) {
+    state.isAccessOnlyRoute = payload
   }
 }
 

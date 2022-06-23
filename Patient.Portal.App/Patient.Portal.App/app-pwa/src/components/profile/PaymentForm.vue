@@ -170,8 +170,9 @@ export default {
       }
 
       const response = await api.patient.request.capturecardalias(data)
-      if (response.data > 0) {
-        this.paymentMethodID = response.data
+      if (response.data) {
+        const data = response.data
+        this.paymentMethodID = data.id
         this.insertpaymentprofile(expDate)
       } else {
         this.$swal({

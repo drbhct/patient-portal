@@ -187,7 +187,8 @@ export default {
       'setProfileCurrentPatient',
       'setTaskCurrentTaskType',
       'setMsgCurrentPage',
-      'setCurrentMsgInfo'
+      'setCurrentMsgInfo',
+      'setBillingStatementTask'
     ]),
     async login () {
       this.isSaving = true
@@ -326,8 +327,12 @@ export default {
 
             this.setCurrentMsgInfo({ id: parseInt(taskRes.data.info), subject: '' })
             this.setMsgCurrentPage('Detail')
-            // console.log('taskRes>', taskRes)
             this.$router.push({ path: '/menu/messages' })
+            break
+          case 'STMT':
+            taskRes = await api.task.request.getSpecificTask(taskList[0].taskID)
+            this.setBillingStatementTask(taskRes.data)
+            this.$router.push({ path: '/menu/statement' })
             break
           default:
             await this.setTaskCurrentTaskType(taskList[0].taskType)

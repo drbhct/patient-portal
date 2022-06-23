@@ -2,7 +2,8 @@ import * as types from '../mutation-types'
 
 const state = {
   currentBillingPageView: 'Default',
-  balanceDue: 0
+  balanceDue: 0,
+  taskStatement: null
 }
 
 const mutations = {
@@ -11,6 +12,9 @@ const mutations = {
   },
   [types.BILLING_BALANCE_DUE] (state, payload) {
     state.balanceDue = payload
+  },
+  [types.BILLING_TASK_STATEMENT] (state, payload) {
+    state.taskStatement = payload
   }
 }
 

@@ -20,7 +20,8 @@ const vuexLocalStorage = new VuexPersist({
     'profile.profileAuthInfo',
     'profile.patientAssociated',
     'profile.currentPatient',
-    'task.currentCaseHistoryComplaintFormValues'
+    'task.currentCaseHistoryComplaintFormValues',
+    'billing.taskStatement'
   ]
 })
 
