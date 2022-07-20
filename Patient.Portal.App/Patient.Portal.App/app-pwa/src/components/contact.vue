@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="row">
     <div class="header-d-text">
       Welcome<span class="d-sm-none"> to Your Patient Portal</span>
@@ -27,7 +27,6 @@
 <script>
 import api from '../../api/http-common.js'
 import { mapGetters } from 'vuex'
-import moment from 'moment'
 
 export default {
   data () {
@@ -38,10 +37,11 @@ export default {
   computed: {
     ...mapGetters(['currentPatientAssociated'])
   },
-  methods: {
-  },
+  methods: {},
   async mounted () {
-    this.facilityInfo = await api.auth.request.getFacilityInfo(this.currentPatientAssociated.facilityID)
+    this.facilityInfo = await api.auth.request.getFacilityInfo(
+      this.currentPatientAssociated.facilityID
+    )
   }
 }
 </script>

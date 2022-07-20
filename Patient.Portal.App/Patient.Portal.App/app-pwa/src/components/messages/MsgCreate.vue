@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <div class="col-10">
     <!--<a href="javascript:void(0)" @click="setMsgCurrentPage('List')">
       <i class="fas fa-angle-left"></i>
