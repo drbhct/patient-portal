@@ -8,7 +8,8 @@ import axios from 'axios'
 // if (user) {
 //   token = user
 // }
-const apiUrl = 'https://peak-api-dev.azurewebsites.net'
+// const apiUrl = 'https://peak-api-dev.azurewebsites.net'
+const apiUrl = 'https://hct-api-ncentral.healthcoretech.com'
 
 const securedJsonRequest = axios.create({
   baseURL: apiUrl,
@@ -78,94 +79,118 @@ export default {
      * @param {String} payload.patientid
      */
     async getpatientfutureappts (payload) {
-      return await securedJsonRequest.post('/patientportal/getpatientfutureappts', payload)
+      return await securedJsonRequest.post(
+        '/patientportal/getpatientfutureappts',
+        payload
+      )
     },
     /**
-    * @param {Object} Payload request for patient tasks
-    * @param {String} payload.facilityid
-    * @param {String} payload.patientid
-    */
+     * @param {Object} Payload request for patient tasks
+     * @param {String} payload.facilityid
+     * @param {String} payload.patientid
+     */
     async gettasks (payload) {
       return await securedJsonRequest.post('/patientportal/gettasks/', payload)
     },
     /**
-    * @param {Object} Payload request for patient document list
-    * @param {String} payload.facilityid
-    * @param {String} payload.patientid
-    */
+     * @param {Object} Payload request for patient document list
+     * @param {String} payload.facilityid
+     * @param {String} payload.patientid
+     */
     async getattachmentlist (payload) {
-      return await securedJsonRequest.post('/patientportal/getattachmentlist', payload)
+      return await securedJsonRequest.post(
+        '/patientportal/getattachmentlist',
+        payload
+      )
     },
     /**
-    * @param {Object} Payload
-    * @param {String} payload.facilityid
-    * @param {String} payload.id
-    */
+     * @param {Object} Payload
+     * @param {String} payload.facilityid
+     * @param {String} payload.id
+     */
     async getpaymentprofilelist (payload) {
-      return await securedJsonRequest.post('/patientportal/getpaymentprofilelist', payload)
+      return await securedJsonRequest.post(
+        '/patientportal/getpaymentprofilelist',
+        payload
+      )
     },
     /**
-    * @param {Object} payload  request object for saving user profile payment
-    * @param {String} payload.facilityId
-    * @param {String} payload.patientId
-    * @param {String} payload.nameOnAccount
-    * @param {Boolean} payload.accountNo
-    * @param {Date} payload.expDate
-    * @param {String} payload.routeNo
-    * @param {String} payload.address1
-    * @param {String} payload.address2
-    * @param {String} payload.city
-    * @param {String} payload.state
-    * @param {String} payload.zip
-    * @param {String} payload.merchantPaymentMethodID
-    * @param {String} payload.paymentMethodID
-    * @param {String} payload.paymentMethod
-    */
+     * @param {Object} payload  request object for saving user profile payment
+     * @param {String} payload.facilityId
+     * @param {String} payload.patientId
+     * @param {String} payload.nameOnAccount
+     * @param {Boolean} payload.accountNo
+     * @param {Date} payload.expDate
+     * @param {String} payload.routeNo
+     * @param {String} payload.address1
+     * @param {String} payload.address2
+     * @param {String} payload.city
+     * @param {String} payload.state
+     * @param {String} payload.zip
+     * @param {String} payload.merchantPaymentMethodID
+     * @param {String} payload.paymentMethodID
+     * @param {String} payload.paymentMethod
+     */
     async insertpaymentprofile (payload) {
-      return await securedJsonRequest.post('/patientportal/insertpaymentprofile', payload)
+      return await securedJsonRequest.post(
+        '/patientportal/insertpaymentprofile',
+        payload
+      )
     },
     /**
-    * @param {Object} payload  request object for capture card alias
-    * @param {String} payload.facilityId
-    * @param {String} payload.patientId
-    * @param {String} payload.nameOnCard
-    * @param {String} payload.acctNum
-    * @param {Date} payload.expDate
-    * @param {String} payload.cardCode
-    */
+     * @param {Object} payload  request object for capture card alias
+     * @param {String} payload.facilityId
+     * @param {String} payload.patientId
+     * @param {String} payload.nameOnCard
+     * @param {String} payload.acctNum
+     * @param {Date} payload.expDate
+     * @param {String} payload.cardCode
+     */
     async capturecardalias (payload) {
-      return await securedJsonRequest.post('/patientportal/capturecardalias', payload)
+      return await securedJsonRequest.post(
+        '/patientportal/capturecardalias',
+        payload
+      )
     },
     /**
-    * @param {Object} payload  request object for capture card alias
-    * @param {String} payload.facilityId
-    * @param {String} payload.id
-    * @param {String} payload.user
-    */
+     * @param {Object} payload  request object for capture card alias
+     * @param {String} payload.facilityId
+     * @param {String} payload.id
+     * @param {String} payload.user
+     */
     async deletepaymentprofile (payload) {
-      return await securedJsonRequest.post('/patientportal/deletepaymentprofile', payload)
+      return await securedJsonRequest.post(
+        '/patientportal/deletepaymentprofile',
+        payload
+      )
     },
     /**
-    * @param {Object} payload  request object for capture card alias
-    * @param {String} payload.facilityId
-    * @param {String} payload.id
-    */
+     * @param {Object} payload  request object for capture card alias
+     * @param {String} payload.facilityId
+     * @param {String} payload.id
+     */
     async downloadfilebase64 (payload) {
-      return await securedJsonRequest.post('/patientportal/downloadfilebase64', payload)
+      return await securedJsonRequest.post(
+        '/patientportal/downloadfilebase64',
+        payload
+      )
     },
     /**
-    * @param {Object} payload  request object for payment
-    * @param {Number} payload.facilityId
-    * @param {Number} payload.patientId
-    * @param {String} payload.alias payment profile MerchantPaymentMethodID when using card on file
-    * @param {String} payload.nameOnCard payment when using manual card input
-    * @param {String} payload.expDate payment when using manual card input
-    * @param {String} payload.cardCode payment when using manual card input
-    * @param {Number} payload.amount
-    * @param {Number} payload.statementBatchID
-    */
+     * @param {Object} payload  request object for payment
+     * @param {Number} payload.facilityId
+     * @param {Number} payload.patientId
+     * @param {String} payload.alias payment profile MerchantPaymentMethodID when using card on file
+     * @param {String} payload.nameOnCard payment when using manual card input
+     * @param {String} payload.expDate payment when using manual card input
+     * @param {String} payload.cardCode payment when using manual card input
+     * @param {Number} payload.amount
+     * @param {Number} payload.statementBatchID
+     */
     async makeStatementPayment (payload) {
-      return await securedJsonRequest.post('/patientportal/manualsale', payload)
+      return await securedJsonRequest.post(
+        '/patientportal/manualsale',
+        payload
+      )
     }
   }
 }
