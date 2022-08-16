@@ -2,8 +2,8 @@ import axios from 'axios'
 // import Vue from 'vue'
 
 // const user = Vue.$cookies.get('user')
-// const apiUrl = 'https://peak-api-dev.azurewebsites.net'
-const apiUrl = 'https://hct-api-ncentral.healthcoretech.com'
+const apiUrl = 'https://peak-api-dev.azurewebsites.net'
+// const apiUrl = 'https://hct-api-ncentral.healthcoretech.com'
 
 const securedJsonRequest = axios.create({
   baseURL: apiUrl,
