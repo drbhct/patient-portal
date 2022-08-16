@@ -8,8 +8,8 @@ import axios from 'axios'
 // if (user) {
 //   token = user
 // }
-// const apiUrl = 'https://peak-api-dev.azurewebsites.net'
-const apiUrl = 'https://hct-api-ncentral.healthcoretech.com'
+const apiUrl = 'https://peak-api-dev.azurewebsites.net'
+// const apiUrl = 'https://hct-api-ncentral.healthcoretech.com'
 
 const securedJsonRequest = axios.create({
   baseURL: apiUrl,

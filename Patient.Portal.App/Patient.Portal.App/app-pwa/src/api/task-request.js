@@ -2,8 +2,8 @@ import axios from 'axios'
 // import Vue from 'vue'
 
 // const user = Vue.$cookies.get('user')
-// const apiUrl = 'https://peak-api-dev.azurewebsites.net'
-const apiUrl = 'https://hct-api-ncentral.healthcoretech.com'
+const apiUrl = 'https://peak-api-dev.azurewebsites.net'
+// const apiUrl = 'https://hct-api-ncentral.healthcoretech.com'
 
 const securedJsonRequest = axios.create({
   baseURL: apiUrl,
@@ -295,6 +295,18 @@ export default {
     async updatePatient (payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatepatient',
+        payload
+      )
+    },
+    /**
+     * @param {String} payload.facilityId
+     * @param {String} payload.patientId
+     * @param {String} payload.field
+     * @param {String} payload.value
+     */
+    async updatePatientField (payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/updatepatientfield',
         payload
       )
     },

@@ -27,6 +27,14 @@
         </div>
       </div>
       <div class="form-group row">
+        <div class="col-12 col-lg-6 col-xl-6">
+          <div class="checkbox-custom checkbox-default">
+            <input type="checkbox" v-model="form.paperStmt">
+            <label>Opt out of paper statements</label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
         <div class="col-lg-2">
         </div>
         <div class="col-lg-4 col-xl-4">
@@ -48,7 +56,8 @@ export default {
         firstName: '',
         lastName: '',
         nickName: '',
-        email: ''
+        email: '',
+        paperStmt: false
       }
     }
   },
@@ -67,7 +76,7 @@ export default {
       this.form = patientInfo.data
       this.form.facilityId = this.currentPatientAssociated.facilityID
       this.form.patientId = this.form.id
-
+      this.paperStmt = this.form.paperStmt
       this.isLoading = false
     },
     async updatePatientInfo () {
@@ -78,7 +87,9 @@ export default {
       )
       const patientList = patientAssosicated.data
       const patientSelected = patientList.find(x => x.patientID === this.form.patientId)
+
       await this.setProfileCurrentPatient(patientSelected)
+      await this.updatePatientField()
 
       this.$swal({
         position: 'top-center',
@@ -88,6 +99,15 @@ export default {
         timer: 2000,
         icon: 'success'
       })
+    },
+    async updatePatientField () {
+      const param = {
+        facilityId: this.form.facilityId,
+        patientId: this.form.patientId,
+        field: 'PaperStmt',
+        value: this.form.paperStmt
+      }
+      await api.task.request.updatePatientField(param)
     }
   },
   mounted () {
