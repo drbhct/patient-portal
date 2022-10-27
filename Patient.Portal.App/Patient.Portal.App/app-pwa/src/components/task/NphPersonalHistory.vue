@@ -25,7 +25,8 @@
                   <label class="label f-weight-550">
                     {{ infoQandA.question }}
                   </label>
-                  <multiselect :searchable="false"
+                  <multiselect
+                    :searchable="false"
                     v-model="infoQandA.answer"
                     :options="infoQandA.selections"
                     :multiple="false"
@@ -61,7 +62,8 @@
                       <label class="label f-weight-550">
                         {{ condition.question }}
                       </label>
-                      <multiselect :searchable="false"
+                      <multiselect
+                        :searchable="false"
                         v-model="condition.answer"
                         :options="conditionApplySelection"
                         :multiple="true"
@@ -84,20 +86,23 @@
                 :key="medQandA.question"
               >
                 <div class="col-lg-6 mx-auto">
-                  <div
-                  >
+                  <div>
                     <label class="label f-weight-550">
                       {{ medQandA.question }}
                     </label>
-                    <multiselect :searchable="false"
+                    <multiselect
+                      :searchable="false"
                       v-model="medQandA.answer"
                       :options="yesNoSelection"
                       :multiple="false"
                     />
                   </div>
                   <div v-if="medQandA.answer === 'Yes'">
-                    <label class="label f-weight-550"> Select Year {{ medQandA.question }} taken</label>
-                    <multiselect :searchable="false"
+                    <label class="label f-weight-550">
+                      Select Year {{ medQandA.question }} taken</label
+                    >
+                    <multiselect
+                      :searchable="false"
                       v-model="medQandA.year"
                       :options="medicineYearSelection"
                       :multiple="false"
@@ -114,9 +119,10 @@
               >
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">
-                  {{ medQandA.question }}
-                </label>
-                <multiselect :searchable="false"
+                    {{ medQandA.question }}
+                  </label>
+                  <multiselect
+                    :searchable="false"
                     v-model="medQandA.answer"
                     :options="yesNoSelection"
                     :multiple="false"
@@ -135,56 +141,6 @@
                     v-if="medQandA.code === 'LastMenstrualPeriod'"
                     >Leave field empty if not sure.</span
                   >
-                </div>
-              </div>
-
-              <hr />
-
-              <div class="row">
-                <div class="col-lg-6 mx-auto">
-                  <h4 class="label f-weight-550">Demographics</h4>
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">
-                  What languages do you speak?
-                </label>
-                <multiselect :searchable="false"
-                    v-model="form.language"
-                    :options="languageList"
-                    :multiple="false"
-                    :label="'description'"
-                  />
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">
-                  Ethnicity
-                </label>
-                <multiselect :searchable="false"
-                    v-model="form.ethnicity"
-                    :options="ethnicilityList"
-                    :multiple="false"
-                    :label="'description'"
-                  />
-                </div>
-              </div>
-
-              <div class="form-group row">
-                <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">
-                  Which category describes your race?
-                </label>
-                <multiselect :searchable="false"
-                    v-model="form.race"
-                    :options="raceList"
-                    :multiple="false"
-                    :label="'description'"
-                  />
                 </div>
               </div>
             </div>
@@ -392,7 +348,7 @@ export default {
     ...mapActions(['setTaskCurrentTaskType']),
     prev () {
       const currentIndex = this.getTaskPreviousTaskType.findIndex(
-        (c) => c === this.getTaskCurrentTaskType
+        c => c === this.getTaskCurrentTaskType
       )
       let prevPage = ''
       if (currentIndex === -1) {
@@ -416,7 +372,7 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         questions: []
       }
-      this.form.infoQuestion.forEach((el) => {
+      this.form.infoQuestion.forEach(el => {
         infoPayload.questions.push({
           description: el.code,
           answer: el.answer
@@ -431,9 +387,9 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         conditions: []
       }
-      this.form.conditionQandA.forEach((el) => {
-        const isPresent = el.answer.find((c) => c === 'Present') !== undefined
-        const isPast = el.answer.find((c) => c === 'Past') !== undefined
+      this.form.conditionQandA.forEach(el => {
+        const isPresent = el.answer.find(c => c === 'Present') !== undefined
+        const isPast = el.answer.find(c => c === 'Past') !== undefined
         caseConditionPayload.conditions.push({
           description: el.question,
           past: isPast,
@@ -449,7 +405,7 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         questions: []
       }
-      this.form.medicineInfoQuestion.forEach((el) => {
+      this.form.medicineInfoQuestion.forEach(el => {
         medicineInfoPayload.questions.push({
           description: el.code,
           answer: el.answer === 'Yes' ? `${el.answer},${el.year}` : el.answer
@@ -461,7 +417,7 @@ export default {
         caseHistoryId: this.getTaskCurrentCaseHistoryId,
         questions: []
       }
-      this.form.medicineInfo2Question.forEach((el) => {
+      this.form.medicineInfo2Question.forEach(el => {
         if (el.code === 'LastMenstrualPeriod') {
           if (el.answer) {
             el.answer = moment(el.answer).format('YYYY-MM-DD')
@@ -472,42 +428,6 @@ export default {
           answer: el.answer
         })
       })
-
-      // console.log('medicineInfoPayload>', medicineInfoPayload)
-      // console.log('medicineInfo2Payload>', medicineInfo2Payload)
-
-      let ethnicity = ''
-      let race = ''
-      let lang = ''
-      let declineEthnicity = false
-      let declineRace = false
-      let declineLanguage = false
-      if (this.form.ethnicity) {
-        ethnicity = this.form.ethnicity.code
-        declineEthnicity =
-          this.form.ethnicity.description === 'Decline to Answer'
-      }
-      if (this.form.race) {
-        race = this.form.race.code
-        declineRace = this.form.race.description === 'Decline to Answer'
-      }
-      if (this.form.language) {
-        lang = this.form.language.code
-        declineLanguage =
-          this.form.language.description === 'Decline to Answer'
-      }
-      // Demographics payload
-      const demographicsPayload = {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId,
-        ethnicity: ethnicity,
-        races: race,
-        languages: lang,
-        declineEthnicity: declineEthnicity,
-        declineRace: declineRace,
-        declineLanguage: declineLanguage
-      }
-      // console.log('demographicsPayload>', demographicsPayload)
 
       // info questions
       await api.task.request.updateCaseHistoryQuestions(infoPayload)
@@ -520,8 +440,6 @@ export default {
       // medicine questions
       await api.task.request.updateCaseHistoryQuestions(medicineInfoPayload)
       await api.task.request.updateCaseHistoryQuestions(medicineInfo2Payload)
-      // demographics questions
-      await api.task.request.updateCaseHistoryDemographic(demographicsPayload)
 
       this.isSaving = false
       this.setTaskCurrentTaskType('NphFamilyHistory')
@@ -645,7 +563,7 @@ export default {
     let languageList = await api.task.request.getLanguageList(
       this.currentPatientAssociated.facilityID
     )
-    languageList = languageList.data.filter((el) => el.display)
+    languageList = languageList.data.filter(el => el.display)
     languageList.push({
       code: 'Other',
       description: 'Other',
@@ -676,18 +594,18 @@ export default {
       }
     )
     const hasAnswerQuestions = caseHistoryQuestions.data.filter(
-      (el) => el.answer !== ''
+      el => el.answer !== ''
     )
-    hasAnswerQuestions.forEach((el) => {
+    hasAnswerQuestions.forEach(el => {
       const update = this.form.infoQuestion.find(
-        (infoEl) => infoEl.code === el.description
+        infoEl => infoEl.code === el.description
       )
       if (update) {
         update.answer = el.answer
       }
 
       const medInfo = this.form.medicineInfoQuestion.find(
-        (medInfoEl) => medInfoEl.code === el.description
+        medInfoEl => medInfoEl.code === el.description
       )
       if (medInfo) {
         const ansArr = el.answer.split(',')
@@ -699,7 +617,7 @@ export default {
       }
 
       const medInfo2 = this.form.medicineInfo2Question.find(
-        (medInfoEl) => medInfoEl.code === el.description
+        medInfoEl => medInfoEl.code === el.description
       )
       if (medInfo2) {
         if (medInfo2.description === 'LastMenstrualPeriod') {
@@ -709,40 +627,14 @@ export default {
       }
     })
 
-    let demographicsData = await api.task.request.getCaseHistoryDemographic({
-      facilityId: this.currentPatientAssociated.facilityID,
-      caseHistoryId: this.getTaskCurrentCaseHistoryId
-    })
-    demographicsData = demographicsData.data
-    // console.log('demographicsData>', demographicsData)
-
-    if (demographicsData.languages) {
-      const findLang = this.languageList.find(
-        (el) => el.code === demographicsData.languages
-      )
-      this.form.language = findLang
-    }
-    if (demographicsData.ethnicity) {
-      const findEthnicity = this.ethnicilityList.find(
-        (el) => el.code === demographicsData.ethnicity
-      )
-      this.form.ethnicity = findEthnicity
-    }
-    if (demographicsData.races) {
-      const findRace = this.raceList.find(
-        (el) => el.code === demographicsData.races
-      )
-      this.form.race = findRace
-    }
-
     const conditionsData = await api.task.request.getCaseHistoryConditions({
       facilityId: this.currentPatientAssociated.facilityID,
       caseHistoryId: this.getTaskCurrentCaseHistoryId
     })
 
-    conditionsData.data.forEach((el) => {
+    conditionsData.data.forEach(el => {
       const condQandA = this.form.conditionQandA.find(
-        (c) => c.question === el.description
+        c => c.question === el.description
       )
       if (condQandA) {
         if (el.present) {
@@ -761,11 +653,8 @@ export default {
       el.scrollIntoView({ behavior: 'smooth' })
       console.log('should be scrolling to top!')
     }, 1000)
-
-    // document.getElementById('frmBody').scrollIntoView({ behavior: 'smooth' })
   }
 }
 </script>
 
-<style>
-</style>
+<style></style>

@@ -10,101 +10,71 @@
           </a> -->
           <div class="d-none d-sm-inline-block" v-if="$auth.isAuthenticated()">
             <span class="office-name" v-if="currentPatientAssociated">{{
-              currentPatientAssociated.officeName
+                currentPatientAssociated.officeName
             }}</span>
           </div>
           <div class="d-sm-none d-inline" v-if="$auth.isAuthenticated()">
             <span class="office-name-m" v-if="currentPatientAssociated">{{
-              currentPatientAssociated.officeName
+                currentPatientAssociated.officeName
             }}</span>
           </div>
           <!-- Begin: Task Office Name -->
           <div class="d-none d-sm-inline-block" v-if="showTaskOfficeName">
             <span class="office-name" v-if="getTaskOfficeName">{{
-              getTaskOfficeName
+                getTaskOfficeName
             }}</span>
           </div>
           <div class="d-sm-none d-inline" v-if="showTaskOfficeName">
             <span class="office-name-m" v-if="getTaskOfficeName">{{
-              getTaskOfficeName
+                getTaskOfficeName
             }}</span>
           </div>
           <!-- End: Task Office Name -->
-          <div
-            class="d-md-none toggle-sidebar-left"
-            data-toggle-class="sidebar-left-opened"
-            data-target="html"
-            data-fire-event="sidebar-left-opened"
-            v-show="showMobileMenu"
-          >
+          <div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html"
+            data-fire-event="sidebar-left-opened" v-show="showMobileMenu">
             <i class="fas fa-bars" aria-label="Toggle sidebar"></i>
           </div>
         </div>
 
-        <div
-          class="header-right d-sm-block d-md-block d-lg-block"
-          v-if="$auth.isAuthenticated()"
-        >
+        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="$auth.isAuthenticated()">
           <!-- <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
             <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div> -->
           <div id="userbox" class="userbox">
             <a href="#" data-toggle="dropdown" aria-expanded="false">
               <div class="profile-info">
-                <span
-                  class="name font-weight-600 text-white"
-                  v-if="currentPatientAssociated"
-                  >{{ currentPatientAssociated.firstName }}
-                  {{ currentPatientAssociated.lastName }}</span
-                >
+                <span class="name font-weight-600 text-white" v-if="currentPatientAssociated">{{
+                    currentPatientAssociated.firstName
+                }}
+                  {{ currentPatientAssociated.lastName }}</span>
               </div>
               <i class="fa custom-caret"></i>
             </a>
-            <div
-              v-if="getProfilePatientAssociated.length > 0"
-              class="dropdown-menu"
-              x-placement="bottom-start"
-              style="
+            <div v-if="getProfilePatientAssociated.length > 0" class="dropdown-menu" x-placement="bottom-start" style="
                 position: absolute;
                 will-change: transform;
                 top: 0px;
                 left: 0px;
                 transform: translate3d(-8px, 35px, 0px);
-              "
-            >
+              ">
               <ul class="list-unstyled mb-2">
                 <li class="divider"></li>
-                <li
-                  v-for="patient in getProfilePatientAssociated"
-                  :key="patient.id"
-                  v-on:click="selectPatient(patient)"
-                >
-                  <a
-                    class="font-weight-600 text-white"
-                    role="menuitem"
-                    tabindex="-1"
-                    >{{ patient.firstName }} {{ patient.lastName }}</a
-                  >
+                <li v-for="patient in getProfilePatientAssociated" :key="patient.id"
+                  v-on:click="selectPatient(patient)">
+                  <a class="font-weight-600 text-white" role="menuitem" tabindex="-1">{{ patient.firstName }} {{
+                      patient.lastName
+                  }}</a>
                 </li>
               </ul>
             </div>
           </div>
-          <span
-            class="separator"
-            v-if="currentPatientAssociated && currentRouteName !== 'landing'"
-          ></span>
+          <span class="separator" v-if="currentPatientAssociated && currentRouteName !== 'landing'"></span>
           <div class="float-right">
             <ul class="notifications">
               <li>
-                <a
-                  href="javascript:void(0)"
-                  class="nav-link"
-                  @click="logout"
-                  title="Logout"
-                  v-if="
-                    currentPatientAssociated && currentRouteName !== 'landing'
-                  "
-                >
+                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-if="
+                  currentPatientAssociated && currentRouteName !== 'landing'
+                ">
                   <i class="fas fa-sign-out-alt fa-2x"></i>
                 </a>
               </li>
@@ -120,14 +90,9 @@
                 </a>
               </li>-->
             </ul>
-            <div
-              class="logged-info d-none d-sm-block"
-              v-if="getProfileAuthInfo"
-            >
-              <span class="font-weight-600"
-                >Signed in as {{ getProfileAuthInfo.firstName }}
-                {{ getProfileAuthInfo.lastName }}</span
-              >
+            <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
+              <span class="font-weight-600">Signed in as {{ getProfileAuthInfo.firstName }}
+                {{ getProfileAuthInfo.lastName }}</span>
             </div>
           </div>
         </div>
@@ -223,7 +188,7 @@ export default {
   },
   computed: {
     version () {
-      return '0.0.18' // Bug fixes on card #18301
+      return '1.4.3' // Bug fixes on card #18301
     },
     ...mapGetters([
       'getIsLoading',
@@ -286,7 +251,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['logoutApp', 'setProfileCurrentPatient', 'setIsLoading', 'setCurrentMsgInfo', 'setMsgCurrentPage']),
+    ...mapActions([
+      'logoutApp',
+      'setProfileCurrentPatient',
+      'setIsLoading',
+      'setCurrentMsgInfo',
+      'setMsgCurrentPage'
+    ]),
     async newPubnubMsg (msg) {
       // console.log('newPubnubMsg>', msg)
       const msgJson = JSON.parse(msg.message)
@@ -304,7 +275,10 @@ export default {
 
       // console.log('swal>result>', result)
       if (result.isConfirmed) {
-        this.setCurrentMsgInfo({ id: parseInt(msgJson.messageId), subject: '' })
+        this.setCurrentMsgInfo({
+          id: parseInt(msgJson.messageId),
+          subject: ''
+        })
         this.setMsgCurrentPage('Detail')
         this.$router.push({ path: '/menu/messages' })
       }
@@ -379,6 +353,7 @@ export default {
 .slide-up-enter-active {
   transition: all 0.2s ease;
 }
+
 .office-name {
   color: #ffffff;
   font-size: 30px;
@@ -387,6 +362,7 @@ export default {
   vertical-align: middle;
   line-height: 1.8;
 }
+
 .office-name-m {
   color: #ffffff;
   font-size: 24px;
@@ -395,21 +371,26 @@ export default {
   vertical-align: middle;
   line-height: 2.2;
 }
+
 .nav-link {
   display: block;
   padding: 0.5rem 0rem;
 }
-  .notifications {
-    /*padding-right: 1.5rem;*/
-    /*margin-left: 5rem;*/
-    margin-left: 7rem;
-  }
+
+.notifications {
+  /*padding-right: 1.5rem;*/
+  /*margin-left: 5rem;*/
+  margin-left: 7rem;
+}
+
 html.header-dark .header .separator {
   background-image: linear-gradient(#f6f6f6 60%, #ededed);
 }
+
 .userbox {
   margin: 0;
 }
+
 .userbox.show .dropdown-menu {
   padding: 30px 10px 0;
 }
