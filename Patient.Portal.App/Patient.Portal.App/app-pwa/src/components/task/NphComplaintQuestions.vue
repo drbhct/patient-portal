@@ -127,7 +127,17 @@
                 </div>
               </div>
               <div class="col-lg-6 mx-auto text-center">
-                <button class="btn" :class="{ 'btn-primary':radiateIsNone, 'btn-default': !radiateIsNone }" type="reset" @click="radiateIsNone = !radiateIsNone">None</button>
+                <button
+                  class="btn"
+                  :class="{
+                    'btn-primary': radiateIsNone,
+                    'btn-default': !radiateIsNone
+                  }"
+                  type="reset"
+                  @click="radiateIsNone = !radiateIsNone"
+                >
+                  None
+                </button>
               </div>
               <div
                 class="form-group row"
@@ -383,7 +393,7 @@ export default {
     //   return oat
     // },
     showSpecifyDescribe: function () {
-      const isOther = this.form.describe.find((el) => el === 'Other')
+      const isOther = this.form.describe.find(el => el === 'Other')
       if (isOther) {
         return true
       } else {
@@ -642,7 +652,8 @@ export default {
         'Stooping',
         'Stress',
         'Walking',
-        'Other'
+        'Other',
+        'None'
       ]
     },
     painFactorImprovementSelection: function () {
@@ -655,7 +666,8 @@ export default {
         'Stretching',
         'Chiropractic',
         'Massage',
-        'Sitting'
+        'Sitting',
+        'None'
       ]
     },
     painInterferenceSelection: function () {
@@ -712,20 +724,22 @@ export default {
       }
 
       const hasAnswerRadiates = this.form.radiatesQuestionsAndAnswer.filter(
-        (el) => el.answer !== ''
+        el => el.answer !== ''
       )
 
       if (hasAnswerRadiates.length === 0 && !this.radiateIsNone) {
         return {
           result: false,
-          msg: 'Please answer where pain radiates or travels otherwise set the None button.'
+          msg:
+            'Please answer where pain radiates or travels otherwise set the None button.'
         }
       }
 
       if (this.form.painQuality.length === 0) {
         return {
           result: false,
-          msg: 'Please answer how would you best describe the sensation of your pain?',
+          msg:
+            'Please answer how would you best describe the sensation of your pain?',
           reference: 'refPainSensation'
         }
       }
@@ -741,7 +755,8 @@ export default {
       if (this.form.painFactor.length === 0) {
         return {
           result: false,
-          msg: 'Please answer what aggravates your pain or makes it feel worse.',
+          msg:
+            'Please answer what aggravates your pain or makes it feel worse.',
           reference: 'refExpPainImprovement'
         }
       }
@@ -772,9 +787,7 @@ export default {
           reference: 'refExpPainImprovement'
         }
       }
-      const noAnswerOat = this.form.oatQuestions.find(
-        (el) => !el.selectedAnswer
-      )
+      const noAnswerOat = this.form.oatQuestions.find(el => !el.selectedAnswer)
       if (noAnswerOat) {
         return {
           result: false,
@@ -814,7 +827,7 @@ export default {
       }
 
       // Name Payload
-      this.form.describe.forEach((el) => {
+      this.form.describe.forEach(el => {
         this.apiSubmitForm.caseProblems.push({
           facilityId: this.currentPatientAssociated.facilityID,
           caseHistoryProblemId: this.currentProblem.id,
@@ -853,7 +866,7 @@ export default {
 
       // Symptoms/Radiates payload
       const hasAnswerRadiates = this.form.radiatesQuestionsAndAnswer.filter(
-        (el) => el.answer !== ''
+        el => el.answer !== ''
       )
       if (hasAnswerRadiates.length > 0) {
         let radiateStr = ''
@@ -930,7 +943,7 @@ export default {
 
       // oats payload
       const oatQuestionAndAnswer = []
-      this.form.oatQuestions.forEach((el) => {
+      this.form.oatQuestions.forEach(el => {
         oatQuestionAndAnswer.push({
           oatId: el.oatID,
           Question: el.description,
@@ -968,7 +981,7 @@ export default {
 
       this.isSaving = false
       const isExist = this.formHistory.find(
-        (c) =>
+        c =>
           c.complaint === this.complaint &&
           c.patientId === this.currentPatientAssociated.patientID
       )
@@ -996,7 +1009,7 @@ export default {
         await this.initializeData()
 
         const exist = this.formHistory.find(
-          (c) =>
+          c =>
             c.complaint === this.complaint &&
             c.patientId === this.currentPatientAssociated.patientID
         )
@@ -1025,14 +1038,13 @@ export default {
     async previous () {
       if (this.currentProblemIndex === 0) {
         const currentIndex = this.getTaskPreviousTaskType.findIndex(
-          (c) => c === this.getTaskCurrentTaskType
+          c => c === this.getTaskCurrentTaskType
         )
         let prevPage = ''
         if (currentIndex === -1) {
-          prevPage =
-            this.getTaskPreviousTaskType[
-              this.getTaskPreviousTaskType.length - 1
-            ]
+          prevPage = this.getTaskPreviousTaskType[
+            this.getTaskPreviousTaskType.length - 1
+          ]
         } else {
           prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
         }
@@ -1047,7 +1059,7 @@ export default {
 
         await this.initializeData()
         const oldForm = this.formHistory.find(
-          (c) => c.complaint === this.complaint
+          c => c.complaint === this.complaint
         )
         if (oldForm) {
           this.form = oldForm.form
@@ -1203,7 +1215,7 @@ export default {
       }
 
       this.currentOat = this.getTaskCurrentCaseHistoryOats.find(
-        (el) => el.caseHistoryProblemID === this.currentProblem.id
+        el => el.caseHistoryProblemID === this.currentProblem.id
       )
 
       if (!this.currentOat) {
@@ -1260,7 +1272,7 @@ export default {
       }
 
       // Reconstruct oat data
-      oatQuestions.forEach((el) => {
+      oatQuestions.forEach(el => {
         switch (check.description) {
           case 'DIFFICULTY':
           case 'VAS':
@@ -1268,7 +1280,7 @@ export default {
             break
           default: {
             const answerList = this.oatAnswerList.filter(
-              (ansEl) => ansEl.oatQuestionID === el.id
+              ansEl => ansEl.oatQuestionID === el.id
             )
             el.answerList = answerList
             break
@@ -1292,7 +1304,7 @@ export default {
       )
       // this.formHistory.text = ''
       const isExist = this.formHistory.find(
-        (c) =>
+        c =>
           c.complaint === this.complaint &&
           c.patientId === this.currentPatientAssociated.patientID
       )
