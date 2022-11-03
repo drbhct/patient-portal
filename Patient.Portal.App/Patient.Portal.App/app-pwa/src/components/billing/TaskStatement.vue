@@ -10,26 +10,13 @@
             <div class="modal-body">
               <div class="form-group">
                 <label for="nameOnCard">Name on Card</label>
-                <input
-                  class="form-control"
-                  type="text"
-                  name="nameOnCard"
-                  id="nameOnCard"
-                  v-model="otherCardForm.nameOnCard"
-                  required
-                />
+                <input class="form-control" type="text" name="nameOnCard" id="nameOnCard"
+                  v-model="otherCardForm.nameOnCard" required />
               </div>
               <div class="form-group">
                 <label for="accountNo">Account No.</label>
-                <input
-                  required
-                  type="number"
-                  name="accountNo"
-                  id="accountNo"
-                  class="form-control"
-                  v-model="otherCardForm.acctNum"
-                  maxlength="20"
-                />
+                <input required type="number" name="accountNo" id="accountNo" class="form-control"
+                  v-model="otherCardForm.acctNum" maxlength="20" />
               </div>
               <div class="form-group">
                 <!-- <label for="expDate">Exp Date</label>
@@ -45,51 +32,28 @@
                 <div class="row form-group pb-3">
                   <div class="col-lg-6">
                     <div class="form-group">
-                      <label class="col-form-label" for="formGroupExampleInput"
-                        >Month</label
-                      >
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder=""
-                        maxlength="2"
-                        v-model="otherCardForm.month"
-                      />
+                      <label class="col-form-label" for="formGroupExampleInput">Month</label>
+                      <input type="text" class="form-control" placeholder="" maxlength="2"
+                        v-model="otherCardForm.month" />
                     </div>
                   </div>
                   <div class="col-lg-6">
                     <div class="form-group">
                       <label class="col-form-label">Year</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder=""
-                        maxlength="2"
-                        v-model="otherCardForm.year"
-                      />
+                      <input type="text" class="form-control" placeholder="" maxlength="2"
+                        v-model="otherCardForm.year" />
                     </div>
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <label for="cardCode">Card Code</label>
-                <input
-                  required
-                  type="text"
-                  name="cardCode"
-                  id="cardCode"
-                  class="form-control"
-                  v-model="otherCardForm.cardCode"
-                  maxlength="4"
-                />
+                <input required type="text" name="cardCode" id="cardCode" class="form-control"
+                  v-model="otherCardForm.cardCode" maxlength="4" />
               </div>
               <div class="form-group">
                 <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    v-model="otherCardForm.saveAlias"
-                  />
+                  <input class="form-check-input" type="checkbox" v-model="otherCardForm.saveAlias" />
                   <label class="form-check-label" for="flexCheckDefault">
                     Save card for future use?
                   </label>
@@ -98,11 +62,7 @@
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary">Submit</button>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-              >
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">
                 Close
               </button>
             </div>
@@ -113,13 +73,8 @@
     <div class="col-lg-12">
       <h2>
         Statement {{ statementInfo.StatementDate }}
-        <span
-          title="Download File"
-          class="ml-2"
-          style="cursor: pointer"
-          @click="viewFileInTab(statementInfo.FileID)"
-          ><i class="fa-solid fa-file-pdf"></i
-        ></span>
+        <span title="Download File" class="ml-2" style="cursor: pointer" @click="viewFileInTab(statementInfo.FileID)"><i
+            class="fa-solid fa-file-pdf"></i></span>
       </h2>
       <div v-if="statementInfo" class="ml-3">
         <div class="row">
@@ -141,111 +96,82 @@
           </div>
         </div>
       </div>
-      <form class="my-5 col-lg-7" @submit.prevent="makePayment">
-        <div class="form-group row" v-if="creditCardList.length > 0">
-          <div class="col-lg-3">
-            <label>Select Payment Method</label>
+      <fieldset v-if="canProcess">
+        <form class="my-5 col-lg-7" @submit.prevent="makePayment">
+          <div class="form-group row" v-if="creditCardList.length > 0">
+            <div class="col-lg-3">
+              <label>Select Payment Method</label>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-lg-6 mx-1 my-1">
-            <ul class="list-group list-group-flush">
-              <li
-                class="list-group-item text-dark"
-                v-for="(cc, index) in creditCardList"
-                :key="index"
-                @click="selectCard(cc)"
-              >
-                <div
-                  class="credit-card"
-                  :class="[
+          <div class="form-group row">
+            <div class="col-lg-6 mx-1 my-1">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item text-dark" v-for="(cc, index) in creditCardList" :key="index"
+                  @click="selectCard(cc)">
+                  <div class="credit-card" :class="[
                     setCardClass(cc.paymentMethod),
                     { 'bg-success': cc.selected },
-                  ]"
-                >
-                  <div class="credit-card-last4">
-                    {{ displayAcctNo(cc.accountNo) }}
+                  ]">
+                    <div class="credit-card-last4">
+                      {{ displayAcctNo(cc.accountNo) }}
+                    </div>
+                    <div class="credit-card-expiry mt-2">
+                      {{
+                          displayCardExp(cc)
+                      }}
+                    </div>
                   </div>
-                  <div class="credit-card-expiry mt-2">10/22</div>
-                </div>
-              </li>
-            </ul>
+                </li>
+              </ul>
+            </div>
           </div>
-          <!-- <div class="col-lg-5 mx-1 my-1">
-            <button
-              class="btn btn-default btn-lg btn-block"
-              type="reset"
-              @click="payWithDiffCard"
-            >
-              Pay with different card
-            </button>
-          </div> -->
-        </div>
-        <div class="form-group">
-          <div class="col-lg-6">
-            <button
-              class="btn btn-default btn-lg btn-block"
-              type="reset"
-              @click="payWithDiffCard"
-            >
-              {{ cardText}}
-            </button>
+          <div class="form-group">
+            <div class="col-lg-6">
+              <button class="btn btn-default btn-lg btn-block" type="reset" @click="payWithDiffCard">
+                {{ cardText }}
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-lg-3">
-            <label>Amount to Pay</label>
+          <div class="form-group row">
+            <div class="col-lg-3">
+              <label>Amount to Pay</label>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-lg-6">
-            <input
-              type="number"
-              step="0.01"
-              class="form-control"
-              placeholder="Enter Amount"
-              required
-              v-model="form.totalDue"
-            />
+          <div class="form-group row">
+            <div class="col-lg-6">
+              <input type="number" step="0.01" class="form-control" placeholder="Enter Amount" required
+                v-model="form.totalDue" />
+            </div>
           </div>
-        </div>
-        <hr />
-        <div class="form-group-row"><h4>Notify the Recipient</h4></div>
-        <div class="form-group row">
-          <div class="col-lg-3">
-            <label>Email address for receipt</label>
+          <hr />
+          <div class="form-group-row">
+            <h4>Notify the Recipient</h4>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-lg-6">
-            <input
-              type="email"
-              class="form-control"
-              placeholder="Enter Email"
-              required
-              v-model="form.email"
-            />
+          <div class="form-group row">
+            <div class="col-lg-3">
+              <label>Email address for receipt</label>
+            </div>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-lg-6 mx-1 my-1">
-            <btn-saving
-              :is-saving="isSaving"
-              :loading-text="'Processing payment ...'"
-              :display-text="'Make Payment'"
-            />
-            <!-- <button class="btn btn-primary btn-lg btn-block">
-              MAKE PAYMENT
-            </button> -->
+          <div class="form-group row">
+            <div class="col-lg-6">
+              <input type="email" class="form-control" placeholder="Enter Email" required v-model="form.email" />
+            </div>
           </div>
-        </div>
-      </form>
+          <div class="form-group row">
+            <div class="col-lg-6 mx-1 my-1">
+              <btn-saving :is-saving="isSaving" :loading-text="'Processing payment ...'"
+                :display-text="'Make Payment'" />
+            </div>
+          </div>
+        </form>
+      </fieldset>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import moment from 'moment'
+import { mapGetters, mapActions } from 'vuex'
 import api from '../../api/http-common.js'
 import BtnSaving from '../../components/button-saving.vue'
 export default {
@@ -254,6 +180,7 @@ export default {
   },
   data () {
     return {
+      facilityInfo: null,
       isSaving: false,
       creditCardList: [],
       form: {
@@ -279,8 +206,16 @@ export default {
     ...mapGetters([
       'currentPatientAssociated',
       'getBillingTaskStatement',
-      'getProfileAuthInfo'
+      'getProfileAuthInfo',
+      'getFacilityInfo'
     ]),
+    canProcess () {
+      if (!this.facilityInfo) {
+        return false
+      }
+
+      return this.facilityInfo.openEdge
+    },
     statementInfo () {
       if (!this.getBillingTaskStatement) {
         return null
@@ -297,6 +232,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setFacilityInfo']),
     // https://stackoverflow.com/questions/3108986/gaussian-bankers-rounding-in-javascript
     evenRound (num, decimalPlaces, hasFormat) {
       try {
@@ -360,6 +296,14 @@ export default {
         return acctNo.substring(acctNo.length - 4)
       }
       return acctNo
+    },
+    displayCardExp (cardInfo) {
+      if (cardInfo.expDate) {
+        const expData = moment(cardInfo.expDate).format('MM/YY')
+        return expData
+      } else {
+        return `${cardInfo.month}/${cardInfo.year}`
+      }
     },
     selectCard (cardInfo) {
       this.creditCardList.forEach((el) => {
@@ -451,6 +395,18 @@ export default {
       window.open(routeData.href, '_blank')
     },
     async makePayment () {
+      if (!this.facilityInfo.openEdge) {
+        this.$swal({
+          text: 'Facility payment processing not available',
+          position: 'top-center',
+          title: 'Payment Processing Error',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+        return
+      }
       try {
         this.isSaving = true
         if (!this.form.cardInfo) {
@@ -545,6 +501,11 @@ export default {
       facilityid: this.currentPatientAssociated.facilityID,
       id: this.currentPatientAssociated.patientID
     })
+    this.facilityInfo = await api.auth.request.getFacilityInfo(
+      this.currentPatientAssociated.facilityID
+    )
+    this.setFacilityInfo(this.facilityInfo)
+
     response.data.forEach((el) => {
       el.selected = false
     })

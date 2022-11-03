@@ -16,6 +16,7 @@ export const getProfilePaymentCurrentPage = state => state.profile.currentProfil
 export const getProfileAuthInfo = state => state.profile.profileAuthInfo
 export const getProfilePatientAssociated = state => state.profile.patientAssociated
 export const currentPatientAssociated = state => state.profile.currentPatient
+export const getFacilityInfo = state => state.profile.facilityInfo
 
 // task
 export const getTaskCurrentTaskType = state => state.task.currentTaskType

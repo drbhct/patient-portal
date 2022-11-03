@@ -6,11 +6,7 @@
         <h2 v-if="initialize && (hasAccount || keyExpired)">{{ message }}</h2>
       </div>
       <keep-alive>
-        <component
-          v-bind:is="getTaskCurrentTaskType"
-          v-if="initialize"
-          :link-info="linkInfo"
-        ></component>
+        <component v-bind:is="getTaskCurrentTaskType" v-if="initialize" :link-info="linkInfo"></component>
       </keep-alive>
     </div>
   </div>
@@ -68,7 +64,8 @@ export default {
       'setTaskOfficeName',
       'setTaskCode',
       'setTaskIsAccessOnly',
-      'setBillingStatementTask'
+      'setBillingStatementTask',
+      'setFacilityInfo'
     ])
   },
   async mounted () {
@@ -128,6 +125,7 @@ export default {
       const facilityInfo = await api.auth.request.getFacilityInfo(
         this.linkInfo.facilityID
       )
+      this.setFacilityInfo(facilityInfo)
       await this.setTaskOfficeName(facilityInfo.officeName)
 
       if (!this.task) {

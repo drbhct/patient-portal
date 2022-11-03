@@ -19,7 +19,9 @@
 
       <div v-if="facilityInfo.phone.length > 0">
         <span>
-          If you have any question or concerns, please feel free to contact us at {{ formatPhoneNumber(facilityInfo.phone) }}.
+          If you have any question or concerns, please feel free to contact us at {{
+    formatPhoneNumber(facilityInfo.phone)
+          }}.
           We are here to help!
         </span>
       </div>
@@ -28,7 +30,7 @@
 </template>
 <script>
 import api from '../../api/http-common.js'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   data () {
@@ -40,6 +42,7 @@ export default {
     ...mapGetters(['currentPatientAssociated'])
   },
   methods: {
+    ...mapActions(['setFacilityInfo']),
     formatPhoneNumber (phoneNumberString) {
       var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
       var match = cleaned.match(/^(\d{3})(\d{3})(\d{4})$/)
@@ -51,6 +54,7 @@ export default {
   },
   async mounted () {
     this.facilityInfo = await api.auth.request.getFacilityInfo(this.currentPatientAssociated.facilityID)
+    this.setFacilityInfo(this.facilityInfo)
   }
 }
 </script>

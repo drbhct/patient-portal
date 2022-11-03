@@ -5,7 +5,8 @@ const state = {
   currentProfilePaymentView: 'PaymentCardList',
   profileAuthInfo: null,
   patientAssociated: null,
-  currentPatient: null
+  currentPatient: null,
+  facilityInfo: null
 }
 
 const mutations = {
@@ -29,6 +30,9 @@ const mutations = {
   },
   [types.CURRENT_PROFILE_PATIENT] (state, payload) {
     state.currentPatient = payload
+  },
+  [types.PROFILE_FACILITY_INFO] (state, payload) {
+    state.facilityInfo = payload
   }
 }
 
