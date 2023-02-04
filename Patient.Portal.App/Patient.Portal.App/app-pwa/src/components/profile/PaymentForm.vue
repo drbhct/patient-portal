@@ -173,7 +173,26 @@ export default {
       if (response.data) {
         const data = response.data
         this.paymentMethodID = data.id
-        this.insertpaymentprofile(expDate)
+        // this.insertpaymentprofile(expDate) // no need to call this since capturecardalias insert the record in the payment profile
+        if (data.value) {
+          this.$swal({
+            position: 'top-center',
+            title: 'Credit Card details added',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'success'
+          })
+        } else {
+          this.$swal({
+            position: 'top-center',
+            title: 'Failed adding credit card details',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'error'
+          })
+        }
       } else {
         this.$swal({
           position: 'top-center',
@@ -187,8 +206,10 @@ export default {
     },
     async insertpaymentprofile (expDate) {
       const acctNo = this.form.accountNo.replace(/ /g, '')
+      const first6Digits = acctNo.substr(0, 6)
       const last4Digits = acctNo.substr(-4)
-      this.form.accountNo = last4Digits
+      const acctNum = first6Digits + 'XXXXXX' + last4Digits
+      this.form.accountNo = acctNum
       this.form.expDate = expDate
       this.form.facilityId = this.currentPatientAssociated.facilityID
       this.form.patientId = this.currentPatientAssociated.patientID
