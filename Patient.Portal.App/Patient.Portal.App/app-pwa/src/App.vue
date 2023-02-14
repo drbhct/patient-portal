@@ -10,23 +10,23 @@
           </a> -->
           <div class="d-none d-sm-inline-block" v-if="$auth.isAuthenticated()">
             <span class="office-name" v-if="currentPatientAssociated">{{
-                currentPatientAssociated.officeName
+              currentPatientAssociated.officeName
             }}</span>
           </div>
           <div class="d-sm-none d-inline" v-if="$auth.isAuthenticated()">
             <span class="office-name-m" v-if="currentPatientAssociated">{{
-                currentPatientAssociated.officeName
+              currentPatientAssociated.officeName
             }}</span>
           </div>
           <!-- Begin: Task Office Name -->
           <div class="d-none d-sm-inline-block" v-if="showTaskOfficeName">
             <span class="office-name" v-if="getTaskOfficeName">{{
-                getTaskOfficeName
+              getTaskOfficeName
             }}</span>
           </div>
           <div class="d-sm-none d-inline" v-if="showTaskOfficeName">
             <span class="office-name-m" v-if="getTaskOfficeName">{{
-                getTaskOfficeName
+              getTaskOfficeName
             }}</span>
           </div>
           <!-- End: Task Office Name -->
@@ -44,7 +44,7 @@
             <a href="#" data-toggle="dropdown" aria-expanded="false">
               <div class="profile-info">
                 <span class="name font-weight-600 text-white" v-if="currentPatientAssociated">{{
-                    currentPatientAssociated.firstName
+                  currentPatientAssociated.firstName
                 }}
                   {{ currentPatientAssociated.lastName }}</span>
               </div>
@@ -62,7 +62,7 @@
                 <li v-for="patient in getProfilePatientAssociated" :key="patient.id"
                   v-on:click="selectPatient(patient)">
                   <a class="font-weight-600 text-white" role="menuitem" tabindex="-1">{{ patient.firstName }} {{
-                      patient.lastName
+                    patient.lastName
                   }}</a>
                 </li>
               </ul>
@@ -188,7 +188,7 @@ export default {
   },
   computed: {
     version () {
-      return '1.7.3' // Bug fixes on https://projects.zoho.com/portal/healthcoretech#buginfo/1962177000000148005/1962177000000592032
+      return '1.8.4' // Bug fixes on https://projects.zoho.com/portal/healthcoretech#buginfo/1962177000000148005/1962177000000592032
     },
     ...mapGetters([
       'getIsLoading',
