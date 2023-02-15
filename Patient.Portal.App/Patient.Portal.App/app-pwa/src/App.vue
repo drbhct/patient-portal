@@ -188,7 +188,7 @@ export default {
   },
   computed: {
     version () {
-      return '1.8.4' // Bug fixes on https://projects.zoho.com/portal/healthcoretech#buginfo/1962177000000148005/1962177000000592032
+      return '1.8.5' // Bug fixes on https://projects.zoho.com/portal/healthcoretech#buginfo/1962177000000148005/1962177000000592032
     },
     ...mapGetters([
       'getIsLoading',

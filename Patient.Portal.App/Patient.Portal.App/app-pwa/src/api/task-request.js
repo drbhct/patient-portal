@@ -251,7 +251,7 @@ export default {
      * @param {Object} Payload request object
      * @param {Number} payload.facilityid
      * @param {Number} payload.caseHistoryId
-     * @param {Number} payload.id the index of the condition
+     * @param {Number} payload.id the id of the record otherwise set to 0 to insert new record
      * @param {String} payload.description
      * @param {String} payload.relation
      * @param {Boolean} payload.present

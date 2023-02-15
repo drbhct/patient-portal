@@ -211,7 +211,7 @@ export default {
         payload.push({
           facilityId: this.currentPatientAssociated.facilityID,
           caseHistoryId: this.getTaskCurrentCaseHistoryId,
-          id: index,
+          id: 0,
           description: el.question,
           relation: el.family,
           present: el.stat === 'Present',
