@@ -70,8 +70,16 @@
               </button>
             </div>
             <div class="modal-body">
-              <label class="label f-weight-550">Select the patient record you would like to manage</label>
-              <button type="button" class="mb-1 mt-1 mr-1 btn btn-default btn-lg btn-block" v-for="patient in patientList" :key="patient.id" @click="patientSelect(patient)">
+              <label class="label f-weight-550"
+                >Select the patient record you would like to manage</label
+              >
+              <button
+                type="button"
+                class="mb-1 mt-1 mr-1 btn btn-default btn-lg btn-block"
+                v-for="patient in patientList"
+                :key="patient.id"
+                @click="patientSelect(patient)"
+              >
                 {{ patient.firstName }} {{ patient.lastName }}
                 <h6>
                   {{ patient.officeName }}
@@ -134,7 +142,11 @@
                   v-model="loginForm.password"
                 />
               </div>
-              <btn-saving :is-saving="isSaving" :loading-text="'Validating...'" :display-text="'Login'"/>
+              <btn-saving
+                :is-saving="isSaving"
+                :loading-text="'Validating...'"
+                :display-text="'Login'"
+              />
               <!-- <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">
                 Login
               </button> -->
@@ -227,7 +239,9 @@ export default {
 
         // Check if account already exist
         const isPatientExist = patientAssosicated.data.find(
-          (el) => el.patientID === this.attachPatientInfo.id
+          el =>
+            el.patientID === this.linkInfo.patientID &&
+            el.facilityID === this.linkInfo.facilityID
         )
         // console.log('isPatientExist', isPatientExist)
         if (isPatientExist) {
@@ -323,14 +337,21 @@ export default {
       if (taskList.length === 1) {
         switch (taskList[0].taskType) {
           case 'MSG':
-            taskRes = await api.task.request.getSpecificTask(taskList[0].taskID)
+            taskRes = await api.task.request.getSpecificTask(
+              taskList[0].taskID
+            )
 
-            this.setCurrentMsgInfo({ id: parseInt(taskRes.data.info), subject: '' })
+            this.setCurrentMsgInfo({
+              id: parseInt(taskRes.data.info),
+              subject: ''
+            })
             this.setMsgCurrentPage('Detail')
             this.$router.push({ path: '/menu/messages' })
             break
           case 'STMT':
-            taskRes = await api.task.request.getSpecificTask(taskList[0].taskID)
+            taskRes = await api.task.request.getSpecificTask(
+              taskList[0].taskID
+            )
             this.setBillingStatementTask(taskRes.data)
             this.$router.push({ path: '/menu/statement' })
             break
@@ -355,5 +376,4 @@ export default {
 }
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

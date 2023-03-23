@@ -30,51 +30,81 @@
             }}</span>
           </div>
           <!-- End: Task Office Name -->
-          <div class="d-md-none toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html"
-            data-fire-event="sidebar-left-opened" v-show="showMobileMenu">
+          <div
+            class="d-md-none toggle-sidebar-left"
+            data-toggle-class="sidebar-left-opened"
+            data-target="html"
+            data-fire-event="sidebar-left-opened"
+            v-show="showMobileMenu"
+          >
             <i class="fas fa-bars" aria-label="Toggle sidebar"></i>
           </div>
         </div>
 
-        <div class="header-right d-sm-block d-md-block d-lg-block" v-if="$auth.isAuthenticated()">
+        <div
+          class="header-right d-sm-block d-md-block d-lg-block"
+          v-if="$auth.isAuthenticated()"
+        >
           <!-- <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
             <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
           </div> -->
           <div id="userbox" class="userbox">
             <a href="#" data-toggle="dropdown" aria-expanded="false">
               <div class="profile-info">
-                <span class="name font-weight-600 text-white" v-if="currentPatientAssociated">{{
-                  currentPatientAssociated.firstName
-                }}
-                  {{ currentPatientAssociated.lastName }}</span>
+                <span
+                  class="name font-weight-600 text-white"
+                  v-if="currentPatientAssociated"
+                  >{{ currentPatientAssociated.firstName }}
+                  {{ currentPatientAssociated.lastName }}</span
+                >
               </div>
               <i class="fa custom-caret"></i>
             </a>
-            <div v-if="getProfilePatientAssociated.length > 0" class="dropdown-menu" x-placement="bottom-start" style="
+            <div
+              v-if="getProfilePatientAssociated.length > 0"
+              class="dropdown-menu"
+              x-placement="bottom-start"
+              style="
                 position: absolute;
                 will-change: transform;
                 top: 0px;
                 left: 0px;
                 transform: translate3d(-8px, 35px, 0px);
-              ">
+              "
+            >
               <ul class="list-unstyled mb-2">
                 <li class="divider"></li>
-                <li v-for="patient in getProfilePatientAssociated" :key="patient.id"
-                  v-on:click="selectPatient(patient)">
-                  <a class="font-weight-600 text-white" role="menuitem" tabindex="-1">{{ patient.firstName }} {{
-                    patient.lastName
-                  }}</a>
+                <li
+                  v-for="patient in getProfilePatientAssociated"
+                  :key="patient.id"
+                  v-on:click="selectPatient(patient)"
+                >
+                  <a
+                    class="font-weight-600 text-white"
+                    role="menuitem"
+                    tabindex="-1"
+                    >{{ patient.firstName }} {{ patient.lastName }}</a
+                  >
                 </li>
               </ul>
             </div>
           </div>
-          <span class="separator" v-if="currentPatientAssociated && currentRouteName !== 'landing'"></span>
+          <span
+            class="separator"
+            v-if="currentPatientAssociated && currentRouteName !== 'landing'"
+          ></span>
           <div class="float-right">
             <ul class="notifications">
               <li>
-                <a href="javascript:void(0)" class="nav-link" @click="logout" title="Logout" v-if="
-                  currentPatientAssociated && currentRouteName !== 'landing'
-                ">
+                <a
+                  href="javascript:void(0)"
+                  class="nav-link"
+                  @click="logout"
+                  title="Logout"
+                  v-if="
+                    currentPatientAssociated && currentRouteName !== 'landing'
+                  "
+                >
                   <i class="fas fa-sign-out-alt fa-2x"></i>
                 </a>
               </li>
@@ -90,9 +120,14 @@
                 </a>
               </li>-->
             </ul>
-            <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
-              <span class="font-weight-600">Signed in as {{ getProfileAuthInfo.firstName }}
-                {{ getProfileAuthInfo.lastName }}</span>
+            <div
+              class="logged-info d-none d-sm-block"
+              v-if="getProfileAuthInfo"
+            >
+              <span class="font-weight-600"
+                >Signed in as {{ getProfileAuthInfo.firstName }}
+                {{ getProfileAuthInfo.lastName }}</span
+              >
             </div>
           </div>
         </div>
@@ -188,7 +223,7 @@ export default {
   },
   computed: {
     version () {
-      return '1.8.5' // Bug fixes on https://projects.zoho.com/portal/healthcoretech#buginfo/1962177000000148005/1962177000000592032
+      return '1.8.6' // Bug fixes on https://projects.zoho.com/portal/healthcoretech#buginfo/1962177000000148005/1962177000000979001
     },
     ...mapGetters([
       'getIsLoading',
