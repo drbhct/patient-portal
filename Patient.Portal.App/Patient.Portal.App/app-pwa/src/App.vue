@@ -223,7 +223,7 @@ export default {
   },
   computed: {
     version () {
-      return '1.8.6' // Bug fixes on https://projects.zoho.com/portal/healthcoretech#buginfo/1962177000000148005/1962177000000979001
+      return '1.8.7' // Matt instructions on zoho cliq to use the insertcasehistoryfamilyhealthhistory as of 21/06/2023
     },
     ...mapGetters([
       'getIsLoading',

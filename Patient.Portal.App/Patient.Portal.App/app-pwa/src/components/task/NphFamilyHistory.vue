@@ -1,6 +1,9 @@
 <template>
   <section role="main">
-    <form class="mt-5 mr-2 ml-2 justify-content-md-center" @submit.prevent="submit">
+    <form
+      class="mt-5 mr-2 ml-2 justify-content-md-center"
+      @submit.prevent="submit"
+    >
       <div class="col">
         <section class="card">
           <header class="card-header"></header>
@@ -18,33 +21,56 @@
                   <label class="label f-weight-550">
                     Select one condition for immediate family health history
                   </label>
-                  <multiselect :searchable="false" v-model="form.condition" :options="conditionSelection"
-                    :multiple="true" @select="selectChange" @remove="removeChange" />
+                  <multiselect
+                    :searchable="false"
+                    v-model="form.condition"
+                    :options="conditionSelection"
+                    :multiple="true"
+                    @select="selectChange"
+                    @remove="removeChange"
+                  />
                 </div>
               </div>
 
-              <div class="form-group row" v-for="(famCondition, index) in form.familyCondition"
-                :key="famCondition.question">
+              <div
+                class="form-group row"
+                v-for="(famCondition, index) in form.familyCondition"
+                :key="famCondition.question"
+              >
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550 me-5">
                     {{ famCondition.question }}
                   </label>
-                  <span style="margin-left:10px;cursor: pointer;" @click="addSameConditionToFam(famCondition)">
+                  <span
+                    style="margin-left:10px;cursor: pointer;"
+                    @click="addSameConditionToFam(famCondition)"
+                  >
                     <i class="fa-solid fa-person-circle-plus"></i>
                     Add Family
                   </span>
-                  <span style="margin-left:10px;cursor: pointer;" @click="removeFamCondition(famCondition, index)">
+                  <span
+                    style="margin-left:10px;cursor: pointer;"
+                    @click="removeFamCondition(famCondition, index)"
+                  >
                     <i class="fa-solid fa-person-circle-xmark"></i>
                     Remove
                   </span>
                   <div class="row">
                     <div class="col-lg-6">
-                      <multiselect :searchable="false" v-model="famCondition.family" :options="familySelection"
-                        :multiple="false" />
+                      <multiselect
+                        :searchable="false"
+                        v-model="famCondition.family"
+                        :options="familySelection"
+                        :multiple="false"
+                      />
                     </div>
                     <div class="col-lg-6">
-                      <multiselect :searchable="false" v-model="famCondition.stat" :options="statusSelection"
-                        :multiple="false" />
+                      <multiselect
+                        :searchable="false"
+                        v-model="famCondition.stat"
+                        :options="statusSelection"
+                        :multiple="false"
+                      />
                     </div>
                   </div>
                 </div>
@@ -63,7 +89,12 @@
         <footer class="card-footer">
           <div class="row justify-content-end">
             <div class="col-sm-9">
-              <button type="reset" class="btn btn-default mr-2" @click="prev" v-if="getTaskPreviousTaskType">
+              <button
+                type="reset"
+                class="btn btn-default mr-2"
+                @click="prev"
+                v-if="getTaskPreviousTaskType"
+              >
                 Back
               </button>
               <btn-saving :is-saving="isSaving" />
@@ -153,9 +184,13 @@ export default {
     removeFamCondition (famCondition, index) {
       this.form.familyCondition.splice(index, 1)
 
-      const containsQuestion = this.form.familyCondition.find(el => el.question === famCondition.question)
+      const containsQuestion = this.form.familyCondition.find(
+        el => el.question === famCondition.question
+      )
       if (!containsQuestion) {
-        this.form.condition = this.form.condition.filter(el => el !== famCondition.question)
+        this.form.condition = this.form.condition.filter(
+          el => el !== famCondition.question
+        )
       }
     },
     selectChange (selected) {
@@ -182,12 +217,12 @@ export default {
         return
       }
       this.form.familyCondition = this.form.familyCondition.filter(
-        (x) => x.question !== remove
+        x => x.question !== remove
       )
     },
     prev () {
       const currentIndex = this.getTaskPreviousTaskType.findIndex(
-        (c) => c === this.getTaskCurrentTaskType
+        c => c === this.getTaskCurrentTaskType
       )
       let prevPage = ''
       if (currentIndex === -1) {
@@ -221,34 +256,11 @@ export default {
         })
       })
 
-      // console.log('payload >', payload)
-
-      const promMultipleInsert = new Promise((resolve, reject) => {
-        payload.forEach(async (el, index, arr) => {
-          await api.task.request.updateCaseHistoryFamilyHealthHistory(el)
-          if (index === arr.length - 1) {
-            resolve()
-          }
-        })
+      await api.task.request.insertCaseHistoryFamilyHealthHistory({
+        facilityId: this.currentPatientAssociated.facilityID,
+        caseHistoryId: this.getTaskCurrentCaseHistoryId,
+        histories: payload
       })
-
-      const promMultipleDelete = new Promise((resolve, reject) => {
-        this.familyHistoryData.forEach(async (el, index, arr) => {
-          await api.task.request.deleteCaseHistoryFamilyHealthHistory({
-            facilityId: this.currentPatientAssociated.facilityID,
-            id: el.id
-          })
-          if (index === arr.length - 1) {
-            resolve()
-          }
-        })
-      })
-      if (this.familyHistoryData.length > 0) {
-        await promMultipleDelete
-      }
-      if (payload.length > 0) {
-        await promMultipleInsert
-      }
 
       this.isSaving = false
       this.setTaskCurrentTaskType('NphThankyou')
@@ -263,10 +275,18 @@ export default {
       }
     )
     this.familyHistoryData = familyHistoryData.data
+    this.form.familyCondition = []
+    this.form.condition = []
 
     // Construct data
-    this.familyHistoryData.forEach((el) => {
-      this.form.condition.push(el.description)
+    this.familyHistoryData.forEach(el => {
+      var isConditionAlreadyAdded = this.form.condition.find(
+        el2 => el.description
+      )
+      if (!isConditionAlreadyAdded) {
+        this.form.condition.push(el.description)
+      }
+
       let stat = ''
       if (el.past) {
         stat = 'Past'
@@ -293,6 +313,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
