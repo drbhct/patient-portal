@@ -1,9 +1,9 @@
 import axios from 'axios'
 // import Vue from 'vue'
 
-// const prodApiEndpointDomain = 'https://hct-api-ncentral.healthcoretech.com'
-const devApiEndpointDomain = 'https://hct-api-ncentral-dev.azurewebsites.net'
-const apiUrl = devApiEndpointDomain
+const prodApiEndpointDomain = 'https://hct-api-ncentral.healthcoretech.com'
+// const devApiEndpointDomain = 'https://hct-api-ncentral-dev.azurewebsites.net'
+const apiUrl = prodApiEndpointDomain
 
 const securedJsonRequest = axios.create({
   baseURL: apiUrl,
