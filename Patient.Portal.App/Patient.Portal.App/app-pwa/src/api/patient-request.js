@@ -78,7 +78,7 @@ export default {
      * @param {String} payload.facilityid
      * @param {String} payload.patientid
      */
-    async getpatientfutureappts (payload) {
+    async getpatientfutureappts(payload) {
       return await securedJsonRequest.post(
         '/patientportal/getpatientfutureappts',
         payload
@@ -89,7 +89,7 @@ export default {
      * @param {String} payload.facilityid
      * @param {String} payload.patientid
      */
-    async gettasks (payload) {
+    async gettasks(payload) {
       return await securedJsonRequest.post('/patientportal/gettasks/', payload)
     },
     /**
@@ -97,7 +97,7 @@ export default {
      * @param {String} payload.facilityid
      * @param {String} payload.patientid
      */
-    async getattachmentlist (payload) {
+    async getattachmentlist(payload) {
       return await securedJsonRequest.post(
         '/patientportal/getattachmentlist',
         payload
@@ -108,7 +108,7 @@ export default {
      * @param {String} payload.facilityid
      * @param {String} payload.id
      */
-    async getpaymentprofilelist (payload) {
+    async getpaymentprofilelist(payload) {
       return await securedJsonRequest.post(
         '/patientportal/getpaymentprofilelist',
         payload
@@ -131,7 +131,7 @@ export default {
      * @param {String} payload.paymentMethodID
      * @param {String} payload.paymentMethod
      */
-    async insertpaymentprofile (payload) {
+    async insertpaymentprofile(payload) {
       return await securedJsonRequest.post(
         '/patientportal/insertpaymentprofile',
         payload
@@ -146,7 +146,7 @@ export default {
      * @param {Date} payload.expDate
      * @param {String} payload.cardCode
      */
-    async capturecardalias (payload) {
+    async capturecardalias(payload) {
       return await securedJsonRequest.post(
         '/patientportal/capturecardalias',
         payload
@@ -158,7 +158,7 @@ export default {
      * @param {String} payload.id
      * @param {String} payload.user
      */
-    async deletepaymentprofile (payload) {
+    async deletepaymentprofile(payload) {
       return await securedJsonRequest.post(
         '/patientportal/deletepaymentprofile',
         payload
@@ -169,7 +169,7 @@ export default {
      * @param {String} payload.facilityId
      * @param {String} payload.id
      */
-    async downloadfilebase64 (payload) {
+    async downloadfilebase64(payload) {
       return await securedJsonRequest.post(
         '/patientportal/downloadfilebase64',
         payload
@@ -186,9 +186,48 @@ export default {
      * @param {Number} payload.amount
      * @param {Number} payload.statementBatchID
      */
-    async makeStatementPayment (payload) {
+    async makeStatementPayment(payload) {
+      return await securedJsonRequest.post('/patientportal/manualsale', payload)
+    },
+    /**
+     * @param {Object} payload  request object for payment
+     * @param {Number} payload.facilityId
+     * @param {Number} payload.patientId
+     * @param {String} payload.alias payment profile MerchantPaymentMethodID when using card on file
+     * @param {String} payload.nameOnCard payment when using manual card input
+     * @param {String} payload.expDate payment when using manual card input
+     * @param {String} payload.cardCode payment when using manual card input
+     * @param {Number} payload.amount
+     * @param {Number} payload.statementBatchID
+     */
+    async makeStatementPaymentViaFortis(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/manualsale',
+        '/patientportal/FortisSaleWithAlias',
+        payload
+      )
+    },
+    /**
+     * @param {Object} payload  request object for payment
+     * @param {Number} payload.facilityId
+     * @param {Number} payload.patientId
+     * @param {Number} payload.amount
+     * @param {Number} payload.statementBatchID
+     */
+    async getFortisTransactionUrl(payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/getFortisTransactionUrl',
+        payload
+      )
+    },
+    /**
+     * @param {Object} payload  request object for payment
+     * @param {Number} payload.facilityId
+     * @param {Number} payload.Id
+     * @param {Number} payload.email
+     */
+    async fortisTransactionComplete(payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/fortisTransactionComplete',
         payload
       )
     }

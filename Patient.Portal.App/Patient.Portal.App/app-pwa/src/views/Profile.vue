@@ -1,29 +1,49 @@
 <template>
   <div class="form">
     <div class="col-12 col-md-12 col-lg-12 col-xl-12 col-align-center">
-      <button @click="setProfileCurrentPage('MyInfo')" type="button" class="mb-4 mt-2 mr-2 btn btn-mar"
-        v-bind:class="{'disabled' : getProfileCurrentPage !== 'MyInfo' }">
+      <button
+        @click="setProfileCurrentPage('MyInfo')"
+        type="button"
+        class="mb-4 mt-2 mr-2 btn btn-mar"
+        v-bind:class="{ disabled: getProfileCurrentPage !== 'MyInfo' }"
+      >
         <i class="fas fa-user fa-2x"></i>
         <span class="btn-title btn-w-65">Patient Info</span>
       </button>
-      <button @click="setProfileCurrentPage('LoginInfo')" type="button" class="mb-4 mt-2 mr-2 btn btn-mar"
-        v-bind:class="{ 'disabled': getProfileCurrentPage !== 'LoginInfo' }">
+      <button
+        @click="setProfileCurrentPage('LoginInfo')"
+        type="button"
+        class="mb-4 mt-2 mr-2 btn btn-mar"
+        v-bind:class="{ disabled: getProfileCurrentPage !== 'LoginInfo' }"
+      >
         <i class="fas fa-lock fa-2x"></i>
         <span class="btn-title">Login Info</span>
       </button>
-      <button @click="setProfileCurrentPage('CommInfo')" type="button" class="mb-4 mt-2 mr-2 btn btn-mar"
-        v-bind:class="{ 'disabled': getProfileCurrentPage !== 'CommInfo' }">
+      <button
+        @click="setProfileCurrentPage('CommInfo')"
+        type="button"
+        class="mb-4 mt-2 mr-2 btn btn-mar"
+        v-bind:class="{ disabled: getProfileCurrentPage !== 'CommInfo' }"
+      >
         <i class="fas fa-comments fa-2x"></i>
         <span class="btn-title">Comm Info</span>
       </button>
-      <button @click="setProfileCurrentPage('PaymentInfo')" type="button" class="mb-4 mt-2 mr-2 btn btn-mar"
-        v-if="canProcess" v-bind:class="{ 'disabled': getProfileCurrentPage !== 'PaymentInfo' }">
+      <button
+        @click="setProfileCurrentPage('PaymentInfo')"
+        type="button"
+        class="mb-4 mt-2 mr-2 btn btn-mar"
+        v-if="canProcess"
+        v-bind:class="{ disabled: getProfileCurrentPage !== 'PaymentInfo' }"
+      >
         <i class="fas fa-dollar-sign fa-2x"></i>
         <span class="btn-title">Payment</span>
       </button>
     </div>
     <div class="col-12 col-lg-12 col-xl-12">
-      <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
+      <img
+        class="dash-divider"
+        src="img/line-divider-transparent-1_edited.png"
+      />
       <component v-bind:is="getProfileCurrentPage"></component>
     </div>
   </div>
@@ -37,7 +57,6 @@ import { mapGetters, mapActions } from 'vuex'
 import api from '../api/http-common.js'
 
 export default {
-
   components: {
     MyInfo,
     LoginInfo,
@@ -57,7 +76,7 @@ export default {
         return false
       }
 
-      return this.facilityInfo.openEdge
+      return this.facilityInfo.openEdge || this.facilityInfo.fortis
     }
   },
   methods: {

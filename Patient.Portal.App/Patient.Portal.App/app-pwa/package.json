@@ -1,6 +1,6 @@
 {
   "name": "app-pwa",
-  "version": "1.8.6",
+  "version": "1.9.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --host localhost",
@@ -64,7 +64,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {
+      "space-before-function-paren": "off"
+    }
   },
   "browserslist": [
     "> 1%",

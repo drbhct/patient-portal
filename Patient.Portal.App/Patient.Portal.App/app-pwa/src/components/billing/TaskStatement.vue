@@ -10,13 +10,26 @@
             <div class="modal-body">
               <div class="form-group">
                 <label for="nameOnCard">Name on Card</label>
-                <input class="form-control" type="text" name="nameOnCard" id="nameOnCard"
-                  v-model="otherCardForm.nameOnCard" required />
+                <input
+                  class="form-control"
+                  type="text"
+                  name="nameOnCard"
+                  id="nameOnCard"
+                  v-model="otherCardForm.nameOnCard"
+                  required
+                />
               </div>
               <div class="form-group">
                 <label for="accountNo">Account No.</label>
-                <input required type="number" name="accountNo" id="accountNo" class="form-control"
-                  v-model="otherCardForm.acctNum" maxlength="20" />
+                <input
+                  required
+                  type="number"
+                  name="accountNo"
+                  id="accountNo"
+                  class="form-control"
+                  v-model="otherCardForm.acctNum"
+                  maxlength="20"
+                />
               </div>
               <div class="form-group">
                 <!-- <label for="expDate">Exp Date</label>
@@ -32,28 +45,51 @@
                 <div class="row form-group pb-3">
                   <div class="col-lg-6">
                     <div class="form-group">
-                      <label class="col-form-label" for="formGroupExampleInput">Month</label>
-                      <input type="text" class="form-control" placeholder="" maxlength="2"
-                        v-model="otherCardForm.month" />
+                      <label class="col-form-label" for="formGroupExampleInput"
+                        >Month</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder=""
+                        maxlength="2"
+                        v-model="otherCardForm.month"
+                      />
                     </div>
                   </div>
                   <div class="col-lg-6">
                     <div class="form-group">
                       <label class="col-form-label">Year</label>
-                      <input type="text" class="form-control" placeholder="" maxlength="2"
-                        v-model="otherCardForm.year" />
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder=""
+                        maxlength="2"
+                        v-model="otherCardForm.year"
+                      />
                     </div>
                   </div>
                 </div>
               </div>
               <div class="form-group">
                 <label for="cardCode">Card Code</label>
-                <input required type="text" name="cardCode" id="cardCode" class="form-control"
-                  v-model="otherCardForm.cardCode" maxlength="4" />
+                <input
+                  required
+                  type="text"
+                  name="cardCode"
+                  id="cardCode"
+                  class="form-control"
+                  v-model="otherCardForm.cardCode"
+                  maxlength="4"
+                />
               </div>
               <div class="form-group">
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" v-model="otherCardForm.saveAlias" />
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    v-model="otherCardForm.saveAlias"
+                  />
                   <label class="form-check-label" for="flexCheckDefault">
                     Save card for future use?
                   </label>
@@ -62,7 +98,11 @@
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
                 Close
               </button>
             </div>
@@ -73,8 +113,13 @@
     <div class="col-lg-12">
       <h2>
         Statement {{ statementInfo.StatementDate }}
-        <span title="Download File" class="ml-2" style="cursor: pointer" @click="viewFileInTab(statementInfo.FileID)"><i
-            class="fa-solid fa-file-pdf"></i></span>
+        <span
+          title="Download File"
+          class="ml-2"
+          style="cursor: pointer"
+          @click="viewFileInTab(statementInfo.FileID)"
+          ><i class="fa-solid fa-file-pdf"></i
+        ></span>
       </h2>
       <div v-if="statementInfo" class="ml-3">
         <div class="row">
@@ -106,19 +151,24 @@
           <div class="form-group row">
             <div class="col-lg-6 mx-1 my-1">
               <ul class="list-group list-group-flush">
-                <li class="list-group-item text-dark" v-for="(cc, index) in creditCardList" :key="index"
-                  @click="selectCard(cc)">
-                  <div class="credit-card" :class="[
-                    setCardClass(cc.paymentMethod),
-                    { 'bg-success': cc.selected },
-                  ]">
+                <li
+                  class="list-group-item text-dark"
+                  v-for="(cc, index) in creditCardList"
+                  :key="index"
+                  @click="selectCard(cc)"
+                >
+                  <div
+                    class="credit-card"
+                    :class="[
+                      setCardClass(cc.paymentMethod),
+                      { 'bg-success': cc.selected }
+                    ]"
+                  >
                     <div class="credit-card-last4">
                       {{ displayAcctNo(cc.accountNo) }}
                     </div>
                     <div class="credit-card-expiry mt-2">
-                      {{
-                          displayCardExp(cc)
-                      }}
+                      {{ displayCardExp(cc) }}
                     </div>
                   </div>
                 </li>
@@ -127,7 +177,11 @@
           </div>
           <div class="form-group">
             <div class="col-lg-6">
-              <button class="btn btn-default btn-lg btn-block" type="reset" @click="payWithDiffCard">
+              <button
+                class="btn btn-default btn-lg btn-block"
+                type="reset"
+                @click="payWithDiffCard"
+              >
                 {{ cardText }}
               </button>
             </div>
@@ -139,8 +193,14 @@
           </div>
           <div class="form-group row">
             <div class="col-lg-6">
-              <input type="number" step="0.01" class="form-control" placeholder="Enter Amount" required
-                v-model="form.totalDue" />
+              <input
+                type="number"
+                step="0.01"
+                class="form-control"
+                placeholder="Enter Amount"
+                required
+                v-model="form.totalDue"
+              />
             </div>
           </div>
           <hr />
@@ -154,13 +214,22 @@
           </div>
           <div class="form-group row">
             <div class="col-lg-6">
-              <input type="email" class="form-control" placeholder="Enter Email" required v-model="form.email" />
+              <input
+                type="email"
+                class="form-control"
+                placeholder="Enter Email"
+                required
+                v-model="form.email"
+              />
             </div>
           </div>
           <div class="form-group row">
             <div class="col-lg-6 mx-1 my-1">
-              <btn-saving :is-saving="isSaving" :loading-text="'Processing payment ...'"
-                :display-text="'Make Payment'" />
+              <btn-saving
+                :is-saving="isSaving"
+                :loading-text="'Processing payment ...'"
+                :display-text="'Make Payment'"
+              />
             </div>
           </div>
         </form>
@@ -178,7 +247,7 @@ export default {
   components: {
     BtnSaving
   },
-  data () {
+  data() {
     return {
       facilityInfo: null,
       isSaving: false,
@@ -199,6 +268,13 @@ export default {
         year: '',
         cardCode: '',
         saveAlias: false
+      },
+      fortisPaymentViaUrl: {
+        id: 0,
+        channel: '',
+        messageTypeId: 58,
+        reason: '',
+        value: false
       }
     }
   },
@@ -209,14 +285,14 @@ export default {
       'getProfileAuthInfo',
       'getFacilityInfo'
     ]),
-    canProcess () {
+    canProcess() {
       if (!this.facilityInfo) {
         return false
       }
 
-      return this.facilityInfo.openEdge
+      return this.facilityInfo.openEdge || this.facilityInfo.fortis
     },
-    statementInfo () {
+    statementInfo() {
       if (!this.getBillingTaskStatement) {
         return null
       }
@@ -224,7 +300,7 @@ export default {
       const info = JSON.parse(this.getBillingTaskStatement.info)
       return info
     },
-    cardText () {
+    cardText() {
       if (this.creditCardList.length === 0) {
         return 'Add Credit Card'
       }
@@ -234,7 +310,7 @@ export default {
   methods: {
     ...mapActions(['setFacilityInfo']),
     // https://stackoverflow.com/questions/3108986/gaussian-bankers-rounding-in-javascript
-    evenRound (num, decimalPlaces, hasFormat) {
+    evenRound(num, decimalPlaces, hasFormat) {
       try {
         if (!num) {
           return ''
@@ -279,7 +355,7 @@ export default {
         console.error('error> ' + ex)
       }
     },
-    setCardClass (cardBrand) {
+    setCardClass(cardBrand) {
       switch (cardBrand.toLowerCase()) {
         case 'mc':
           return 'mastercard selectable'
@@ -291,13 +367,13 @@ export default {
           return `${cardBrand.toLowerCase()} selectable`
       }
     },
-    displayAcctNo (acctNo) {
+    displayAcctNo(acctNo) {
       if (acctNo.length > 4) {
         return acctNo.substring(acctNo.length - 4)
       }
       return acctNo
     },
-    displayCardExp (cardInfo) {
+    displayCardExp(cardInfo) {
       if (cardInfo.expDate) {
         const expData = moment(cardInfo.expDate).format('MM/YY')
         return expData
@@ -305,8 +381,8 @@ export default {
         return `${cardInfo.month}/${cardInfo.year}`
       }
     },
-    selectCard (cardInfo) {
-      this.creditCardList.forEach((el) => {
+    selectCard(cardInfo) {
+      this.creditCardList.forEach(el => {
         el.selected = false
       })
       cardInfo.selected = true
@@ -321,22 +397,131 @@ export default {
         this.form.saveAlias = cardInfo.saveAlias
       }
     },
-    payWithDiffCard () {
-      this.otherCardForm = {
-        nameOnCard: '',
-        accountNo: '',
-        expDate: '',
-        cardCode: ''
+    async payWithDiffCard() {
+      if (this.facilityInfo.openEdge) {
+        this.otherCardForm = {
+          nameOnCard: '',
+          accountNo: '',
+          expDate: '',
+          cardCode: ''
+        }
+        // eslint-disable-next-line no-undef
+        $('#newCardModal').modal({
+          show: true,
+          backdrop: 'static'
+        })
       }
-      // eslint-disable-next-line no-undef
-      $('#newCardModal').modal({
-        show: true,
-        backdrop: 'static'
-      })
+      if (this.facilityInfo.fortis) {
+        const payload = {
+          facilityId: this.currentPatientAssociated.facilityID,
+          patientId: this.currentPatientAssociated.patientID,
+          amount: this.form.totalDue,
+          email: this.form.email,
+          statementBatchID: this.statementInfo.StatementBatchID,
+          taskId: this.form.taskId
+        }
+        var paymentUrlResponse = await api.patient.request.getFortisTransactionUrl(
+          payload
+        )
+
+        if (!paymentUrlResponse.data) {
+          this.$swal({
+            text: 'Unable to acquire the payment setup',
+            position: 'top-center',
+            title: 'Error',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'error'
+          })
+          return
+        }
+        if (!paymentUrlResponse.data.value) {
+          this.$swal({
+            text: paymentUrlResponse.data.reason,
+            position: 'top-center',
+            title: 'Error',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'error'
+          })
+          return
+        }
+
+        this.fortisPaymentViaUrl = paymentUrlResponse.data
+        console.log(paymentUrlResponse.data)
+
+        // Get the URL of the iframe to open.
+        const iframeUrl = paymentUrlResponse.data.url
+
+        // Open a new tab.
+        const newTab = window.open(iframeUrl, '_blank')
+
+        // Create an iframe element.
+        const iframe = document.createElement('iframe')
+
+        // Set the iframe's `src` attribute to the URL of the iframe to open.
+        iframe.src = iframeUrl
+
+        // Append the iframe element to the new tab's document body.
+        newTab.document.body.appendChild(iframe)
+
+        const pnInstance = this.$pnGetInstance()
+
+        pnInstance.subscribe({ channels: [this.fortisPaymentViaUrl.channel] })
+
+        this.pubNubMsg.channel = this.fortisPaymentViaUrl.channel
+
+        this.pubNubMsg.msg = this.$pnGetMessage(
+          this.fortisPaymentViaUrl.channel,
+          this.newPubnubMsg
+        )
+        // Store a reference to the new tab.
+        const newTabReference = newTab
+
+        // Close the new tab later.
+        // Additional safe guard just in case they left the tab open for 5 minutes
+        setTimeout(function() {
+          newTabReference.close()
+        }, 300000)
+      }
     },
-    diffCardPayment () {
+    async newPubnubMsg(msg) {
+      try {
+        const msgJson = JSON.parse(msg.message)
+        if (msgJson.id === this.fortisPaymentViaUrl.id) {
+          await api.patient.request.fortisTransactionComplete({
+            facilityId: this.currentPatientAssociated.facilityID,
+            email: this.form.email,
+            id: msgJson.id
+          })
+          this.$swal({
+            text: 'Transaction complete',
+            position: 'top-center',
+            title: 'Error',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'success'
+          })
+        }
+      } catch (ex) {
+        console.error(ex)
+        this.$swal({
+          text: 'Error occured unable to complete transaction',
+          position: 'top-center',
+          title: 'Error',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+      }
+    },
+    diffCardPayment() {
       this.form.cardInfo = this.otherCardForm
-      this.creditCardList.forEach((el) => {
+      this.creditCardList.forEach(el => {
         el.selected = false
       })
       this.form.cardInfo.paymentMethod = this.getCardType(
@@ -352,7 +537,7 @@ export default {
       // eslint-disable-next-line no-undef
       $('#newCardModal').modal('toggle')
     },
-    getCardType (accountNum) {
+    getCardType(accountNum) {
       const number = accountNum
       let re = new RegExp('^4')
       if (number.match(re) != null) return 'visa'
@@ -371,7 +556,7 @@ export default {
 
       return 'visa' // default type
     },
-    async downloadFile (fileId) {
+    async downloadFile(fileId) {
       const fileResponse = await api.patient.request.downloadfilebase64({
         facilityId: this.currentPatientAssociated.facilityID,
         id: fileId
@@ -385,7 +570,7 @@ export default {
       a.click()
       document.body.removeChild(a)
     },
-    async viewFileInTab (fileId) {
+    async viewFileInTab(fileId) {
       const routeData = this.$router.resolve({
         path: '/menu/viewpdf',
         query: {
@@ -394,19 +579,7 @@ export default {
       })
       window.open(routeData.href, '_blank')
     },
-    async makePayment () {
-      if (!this.facilityInfo.openEdge) {
-        this.$swal({
-          text: 'Facility payment processing not available',
-          position: 'top-center',
-          title: 'Payment Processing Error',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
-        return
-      }
+    async makePaymentOpenEdge() {
       try {
         this.isSaving = true
         if (!this.form.cardInfo) {
@@ -424,7 +597,7 @@ export default {
         const payload = {
           facilityId: this.currentPatientAssociated.facilityID,
           patientId: this.currentPatientAssociated.patientID,
-          amount: this.form.totalDue,
+          amount: parseFloat(this.form.totalDue),
           email: this.form.email,
           statementBatchID: this.statementInfo.StatementBatchID,
           taskId: this.form.taskId,
@@ -481,9 +654,96 @@ export default {
       } finally {
         this.isSaving = false
       }
+    },
+    async makePaymentFortis() {
+      try {
+        this.isSaving = true
+        if (!this.form.cardInfo) {
+          this.$swal({
+            text: 'Please select a payment method.',
+            position: 'top-center',
+            title: 'Payment Error',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'error'
+          })
+          return
+        }
+        const payload = {
+          facilityId: this.currentPatientAssociated.facilityID,
+          patientId: this.currentPatientAssociated.patientID,
+          amount: '1.00',
+          statementBatchID: this.statementInfo.StatementBatchID,
+          taskId: this.form.taskId,
+          alias: this.form.cardInfo
+        }
+
+        const response = await api.patient.request.makeStatementPaymentViaFortis(
+          payload
+        )
+        if (!response.data.value) {
+          this.$swal({
+            text: response.data.reason,
+            position: 'top-center',
+            title: 'Payment Error',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 4000,
+            icon: 'error'
+          })
+        } else {
+          this.$swal({
+            text: response.data.reason,
+            position: 'top-center',
+            title: 'Payment Success',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 5000,
+            icon: 'success'
+          })
+
+          setTimeout(() => {
+            this.$router.push('/')
+          }, 1000)
+        }
+      } catch (ex) {
+        this.$swal({
+          text: 'Exception occured. Please try processing again.',
+          position: 'top-center',
+          title: 'Error',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+      } finally {
+        this.isSaving = false
+      }
+    },
+    async makePayment() {
+      if (!this.facilityInfo.openEdge && !this.facilityInfo.fortis) {
+        this.$swal({
+          text: 'Facility payment processing not available',
+          position: 'top-center',
+          title: 'Payment Processing Error',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+        return
+      }
+
+      if (this.facilityInfo.openEdge) {
+        await this.makePaymentOpenEdge()
+      }
+      if (this.facilityInfo.fortis) {
+        await this.makePaymentFortis()
+      }
     }
   },
-  async mounted () {
+  async mounted() {
     if (!this.getBillingTaskStatement) {
       this.$swal({
         text: 'No Task found for statement payment!',
@@ -506,7 +766,7 @@ export default {
     )
     this.setFacilityInfo(this.facilityInfo)
 
-    response.data.forEach((el) => {
+    response.data.forEach(el => {
       el.selected = false
     })
     this.creditCardList = response.data
