@@ -1,18 +1,18 @@
 <template>
   <button class="btn btn-primary" type="submit">
-                  <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                    v-if="isSaving"
-                  ></span>
-                    <span v-if="isSaving">
-                      {{ loadingText }}
-                    </span>
-                    <span v-else>
-                      {{ displayText }}
-                    </span>
-                </button>
+    <span
+      class="spinner-border spinner-border-sm"
+      role="status"
+      aria-hidden="true"
+      v-if="isSaving"
+    ></span>
+    <span v-if="isSaving">
+      {{ loadingText }}
+    </span>
+    <span v-else>
+      {{ displayText }}
+    </span>
+  </button>
 </template>
 
 <script>
@@ -37,6 +37,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

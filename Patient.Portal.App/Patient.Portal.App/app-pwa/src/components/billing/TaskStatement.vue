@@ -1,3 +1,4 @@
+<!-- eslint-disable no-undef -->
 <template>
   <div class="mx-1">
     <div class="modal fade" tabindex="-1" role="dialog" id="newCardModal">
@@ -141,7 +142,7 @@
           </div>
         </div>
       </div>
-      <fieldset v-if="canProcess">
+      <fieldset v-if="canProcess && !isFortisPaymentViaElements">
         <form class="my-5 col-lg-7" @submit.prevent="makePayment">
           <div class="form-group row" v-if="creditCardList.length > 0">
             <div class="col-lg-3">
@@ -223,7 +224,7 @@
               />
             </div>
           </div>
-          <div class="form-group row">
+          <div class="form-group row" v-if="!isFortisPaymentViaElements">
             <div class="col-lg-6 mx-1 my-1">
               <btn-saving
                 :is-saving="isSaving"
@@ -235,6 +236,13 @@
         </form>
       </fieldset>
     </div>
+    <div class="col-lg-12 mb-5" v-if="isFortisPaymentViaElements">
+      <FortisCardPayment
+        :form="form"
+        :statement-info="statementInfo"
+        :fortis-payment-via-url="fortisPaymentViaUrl"
+      />
+    </div>
   </div>
 </template>
 
@@ -243,9 +251,11 @@ import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 import api from '../../api/http-common.js'
 import BtnSaving from '../../components/button-saving.vue'
+import FortisCardPayment from './FortisCardPayment.vue'
 export default {
   components: {
-    BtnSaving
+    BtnSaving,
+    FortisCardPayment
   },
   data() {
     return {
@@ -275,7 +285,8 @@ export default {
         messageTypeId: 58,
         reason: '',
         value: false
-      }
+      },
+      isFortisPaymentViaElements: false
     }
   },
   computed: {
@@ -348,6 +359,11 @@ export default {
             retVal = retVal + ' %'
             break
           default:
+            // console.log("retVal>", retVal)
+            retVal = Number(retVal).toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            })
             break
         }
         return retVal
@@ -386,11 +402,11 @@ export default {
         el.selected = false
       })
       cardInfo.selected = true
-      console.log('cardInfo>', cardInfo)
+      // console.log('cardInfo>', cardInfo)
       if (cardInfo.merchantPaymentMethodID) {
         this.form.cardInfo = cardInfo.merchantPaymentMethodID
         this.form.isManual = false
-        console.log('this.form.isManual>', this.form.isManual)
+        // console.log('this.form.isManual>', this.form.isManual)
       } else {
         this.form.cardInfo = cardInfo
         this.form.isManual = true
@@ -437,8 +453,13 @@ export default {
           return
         }
         if (!paymentUrlResponse.data.value) {
+          var errorReason = ''
+          if (paymentUrlResponse.data.reason) {
+            const errorJson = JSON.parse(paymentUrlResponse.data.reason)
+            errorReason = errorJson.message
+          }
           this.$swal({
-            text: paymentUrlResponse.data.reason,
+            text: errorReason,
             position: 'top-center',
             title: 'Error',
             showConfirmButton: false,
@@ -450,41 +471,50 @@ export default {
         }
 
         this.fortisPaymentViaUrl = paymentUrlResponse.data
-        console.log(paymentUrlResponse.data)
+        // console.log(paymentUrlResponse.data)
 
-        // Get the URL of the iframe to open.
-        const iframeUrl = paymentUrlResponse.data.url
+        this.isFortisPaymentViaElements = true
 
-        // Open a new tab.
-        const newTab = window.open(iframeUrl, '_blank')
+        // eslint-disable-next-line no-undef
+        // var elements = new Commerce.elements('{{ client_token }}')
+        // elements.create({
+        //   container: '#payment',
+        //   theme: 'default'
+        // })
 
-        // Create an iframe element.
-        const iframe = document.createElement('iframe')
+        // // Get the URL of the iframe to open.
+        // const iframeUrl = paymentUrlResponse.data.url
 
-        // Set the iframe's `src` attribute to the URL of the iframe to open.
-        iframe.src = iframeUrl
+        // // Open a new tab.
+        // const newTab = window.open(iframeUrl, '_blank')
 
-        // Append the iframe element to the new tab's document body.
-        newTab.document.body.appendChild(iframe)
+        // // Create an iframe element.
+        // const iframe = document.createElement('iframe')
 
-        const pnInstance = this.$pnGetInstance()
+        // // Set the iframe's `src` attribute to the URL of the iframe to open.
+        // iframe.src = iframeUrl
 
-        pnInstance.subscribe({ channels: [this.fortisPaymentViaUrl.channel] })
+        // // Append the iframe element to the new tab's document body.
+        // newTab.document.body.appendChild(iframe)
 
-        this.pubNubMsg.channel = this.fortisPaymentViaUrl.channel
+        // const pnInstance = this.$pnGetInstance()
 
-        this.pubNubMsg.msg = this.$pnGetMessage(
-          this.fortisPaymentViaUrl.channel,
-          this.newPubnubMsg
-        )
-        // Store a reference to the new tab.
-        const newTabReference = newTab
+        // pnInstance.subscribe({ channels: [this.fortisPaymentViaUrl.channel] })
 
-        // Close the new tab later.
-        // Additional safe guard just in case they left the tab open for 5 minutes
-        setTimeout(function() {
-          newTabReference.close()
-        }, 300000)
+        // this.pubNubMsg.channel = this.fortisPaymentViaUrl.channel
+
+        // this.pubNubMsg.msg = this.$pnGetMessage(
+        //   this.fortisPaymentViaUrl.channel,
+        //   this.newPubnubMsg
+        // )
+        // // Store a reference to the new tab.
+        // const newTabReference = newTab
+
+        // // Close the new tab later.
+        // // Additional safe guard just in case they left the tab open for 5 minutes
+        // setTimeout(function() {
+        //   newTabReference.close()
+        // }, 300000)
       }
     },
     async newPubnubMsg(msg) {
@@ -673,12 +703,13 @@ export default {
         const payload = {
           facilityId: this.currentPatientAssociated.facilityID,
           patientId: this.currentPatientAssociated.patientID,
-          amount: '1.00',
+          amount: this.evenRound(this.form.totalDue, 2),
           statementBatchID: this.statementInfo.StatementBatchID,
           taskId: this.form.taskId,
           alias: this.form.cardInfo
         }
 
+        // console.log('payload>', payload)
         const response = await api.patient.request.makeStatementPaymentViaFortis(
           payload
         )
