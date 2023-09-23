@@ -79,12 +79,15 @@ export default {
       theme: 'default'
     })
     elements.on('paymentFinished', async result => {
+      console.log('paymentFinished...')
+      console.log('paymentFinished>', result)
       if (result.status === 'approved') {
         // Transaction approved
         await api.patient.request.fortisTransactionComplete({
           facilityId: this.currentPatientAssociated.facilityID,
           email: this.form.email,
-          id: this.fortisPaymentViaUrl.id
+          id: this.fortisPaymentViaUrl.id,
+          transactionId: result.data.id
         })
         this.$swal({
           text: 'Transaction complete',

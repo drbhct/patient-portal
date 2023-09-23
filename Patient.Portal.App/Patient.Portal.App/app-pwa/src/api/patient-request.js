@@ -224,6 +224,7 @@ export default {
      * @param {Number} payload.facilityId
      * @param {Number} payload.Id
      * @param {Number} payload.email
+     * @param {String} payload.transactionId
      */
     async fortisTransactionComplete(payload) {
       return await securedJsonRequest.post(
