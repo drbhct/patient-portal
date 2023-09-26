@@ -231,6 +231,29 @@ export default {
         '/patientportal/fortisTransactionComplete',
         payload
       )
+    },
+    /**
+     * @param {Object} payload  request object for payment
+     * @param {Number} payload.facilityId
+     * @param {Number} payload.posId
+     * @param {Number} payload.transactionId
+     */
+    async UpdateFortisTransactionApiId(payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/UpdateFortisTransactionApiId',
+        payload
+      )
+    },
+    /**
+     * @param {Object} payload  request object for payment
+     * @param {Number} payload.facilityId
+     * @param {Number} payload.posId
+     */
+    async CheckPosTransactionComplete(payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/CheckPosTransactionComplete',
+        payload
+      )
     }
   }
 }
