@@ -7,7 +7,9 @@ import VueCookies from 'vue-cookies'
 import VueSweetalert2 from 'vue-sweetalert2'
 import VueMask from 'v-mask'
 import VueContentPlaceholders from 'vue-content-placeholders'
+// eslint-disable-next-line no-unused-vars
 import * as Sentry from '@sentry/vue'
+// eslint-disable-next-line no-unused-vars
 import { Integrations } from '@sentry/tracing'
 // import auth from './auth/auth.js'
 import PubNubVue from 'pubnub-vue'
@@ -16,11 +18,7 @@ import VueHtmlToPaper from 'vue-html-to-paper'
 
 const options = {
   name: '_blank',
-  specs: [
-    'fullscreen=yes',
-    'titlebar=yes',
-    'scrollbars=yes'
-  ],
+  specs: ['fullscreen=yes', 'titlebar=yes', 'scrollbars=yes'],
   styles: [
     'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
     'https://unpkg.com/kidlat-css/css/kidlat.css'
@@ -41,7 +39,8 @@ Vue.use(PubNubVue, {
 
 Sentry.init({
   Vue,
-  dsn: 'https://baff50e5a05944ca933adaeb43c960ca@o1202081.ingest.sentry.io/6455112',
+  dsn:
+    'https://baff50e5a05944ca933adaeb43c960ca@o1202081.ingest.sentry.io/6455112',
   integrations: [new Integrations.BrowserTracing()],
 
   // Set tracesSampleRate to 1.0 to capture 100%

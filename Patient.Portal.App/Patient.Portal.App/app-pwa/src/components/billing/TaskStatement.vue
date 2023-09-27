@@ -205,23 +205,22 @@
             </div>
           </div>
           <hr />
-          <div class="form-group-row">
-            <h4>Notify the Recipient</h4>
-          </div>
-          <div class="form-group row">
-            <div class="col-lg-3">
-              <label>Email address for receipt</label>
+          <div class="mb-3">
+            <div class="form-group row">
+              <div class="col-lg-3">
+                <label>Email address for receipt</label>
+              </div>
             </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-lg-6">
-              <input
-                type="email"
-                class="form-control"
-                placeholder="Enter Email"
-                required
-                v-model="form.email"
-              />
+            <div class="form-group row">
+              <div class="col-lg-6">
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Enter Email"
+                  required
+                  v-model="form.email"
+                />
+              </div>
             </div>
           </div>
           <div class="form-group row" v-if="!isFortisPaymentViaElements">
@@ -259,6 +258,10 @@ export default {
   },
   data() {
     return {
+      pubNubMsg: {
+        channel: '',
+        msg: []
+      },
       facilityInfo: null,
       isSaving: false,
       creditCardList: [],
@@ -312,7 +315,7 @@ export default {
       return info
     },
     cardText() {
-      if (this.creditCardList.length === 0) {
+      if (this.creditCardList.length === 0 && !this.facilityInfo.fortis) {
         return 'Add Credit Card'
       }
       return 'Pay with different card'
@@ -474,79 +477,6 @@ export default {
         // console.log(paymentUrlResponse.data)
 
         this.isFortisPaymentViaElements = true
-
-        // eslint-disable-next-line no-undef
-        // var elements = new Commerce.elements('{{ client_token }}')
-        // elements.create({
-        //   container: '#payment',
-        //   theme: 'default'
-        // })
-
-        // // Get the URL of the iframe to open.
-        // const iframeUrl = paymentUrlResponse.data.url
-
-        // // Open a new tab.
-        // const newTab = window.open(iframeUrl, '_blank')
-
-        // // Create an iframe element.
-        // const iframe = document.createElement('iframe')
-
-        // // Set the iframe's `src` attribute to the URL of the iframe to open.
-        // iframe.src = iframeUrl
-
-        // // Append the iframe element to the new tab's document body.
-        // newTab.document.body.appendChild(iframe)
-
-        // const pnInstance = this.$pnGetInstance()
-
-        // pnInstance.subscribe({ channels: [this.fortisPaymentViaUrl.channel] })
-
-        // this.pubNubMsg.channel = this.fortisPaymentViaUrl.channel
-
-        // this.pubNubMsg.msg = this.$pnGetMessage(
-        //   this.fortisPaymentViaUrl.channel,
-        //   this.newPubnubMsg
-        // )
-        // // Store a reference to the new tab.
-        // const newTabReference = newTab
-
-        // // Close the new tab later.
-        // // Additional safe guard just in case they left the tab open for 5 minutes
-        // setTimeout(function() {
-        //   newTabReference.close()
-        // }, 300000)
-      }
-    },
-    async newPubnubMsg(msg) {
-      try {
-        const msgJson = JSON.parse(msg.message)
-        if (msgJson.id === this.fortisPaymentViaUrl.id) {
-          await api.patient.request.fortisTransactionComplete({
-            facilityId: this.currentPatientAssociated.facilityID,
-            email: this.form.email,
-            id: msgJson.id
-          })
-          this.$swal({
-            text: 'Transaction complete',
-            position: 'top-center',
-            title: 'Error',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'success'
-          })
-        }
-      } catch (ex) {
-        console.error(ex)
-        this.$swal({
-          text: 'Error occured unable to complete transaction',
-          position: 'top-center',
-          title: 'Error',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
       }
     },
     diffCardPayment() {

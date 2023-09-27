@@ -166,7 +166,7 @@ export default {
   components: {
     Loading
   },
-  data () {
+  data() {
     return {
       currentChannel: '',
       pubNubMsg: {
@@ -176,7 +176,7 @@ export default {
     }
   },
   watch: {
-    currentPatientAssociated: function (val, oldVal) {
+    currentPatientAssociated: function(val, oldVal) {
       if (!this.$auth.isAuthenticated()) {
         return
       }
@@ -199,7 +199,7 @@ export default {
         )
       }
     },
-    isAuth: function (val, oldVal) {
+    isAuth: function(val, oldVal) {
       if (val && this.$auth.isAuthenticated()) {
         const pnInstance = this.$pnGetInstance()
 
@@ -222,8 +222,8 @@ export default {
     }
   },
   computed: {
-    version () {
-      return '1.8.7' // Matt instructions on zoho cliq to use the insertcasehistoryfamilyhealthhistory as of 21/06/2023
+    version() {
+      return '1.9.4' // Fortis payment integration
     },
     ...mapGetters([
       'getIsLoading',
@@ -232,14 +232,14 @@ export default {
       'currentPatientAssociated',
       'getTaskOfficeName'
     ]),
-    currentRouteName () {
+    currentRouteName() {
       let route = this.$route.name
       if (route) {
         route = route.toLowerCase()
       }
       return route
     },
-    showHeader () {
+    showHeader() {
       switch (this.currentRouteName) {
         case 'landing':
         case 'account':
@@ -250,7 +250,7 @@ export default {
           return true
       }
     },
-    showMobileMenu () {
+    showMobileMenu() {
       switch (this.$route.path.toLowerCase()) {
         case '/account/create':
         case '/account/landing':
@@ -264,7 +264,7 @@ export default {
           return true
       }
     },
-    showTaskOfficeName () {
+    showTaskOfficeName() {
       if (this.$route.path.toLowerCase() !== '/task') {
         return false
       }
@@ -273,10 +273,10 @@ export default {
       }
       return true
     },
-    isAuth () {
+    isAuth() {
       return this.$auth.logged
     },
-    showFooterMenu () {
+    showFooterMenu() {
       switch (this.$route.path.toLowerCase()) {
         case '/task':
           return false
@@ -293,7 +293,7 @@ export default {
       'setCurrentMsgInfo',
       'setMsgCurrentPage'
     ]),
-    async newPubnubMsg (msg) {
+    async newPubnubMsg(msg) {
       // console.log('newPubnubMsg>', msg)
       const msgJson = JSON.parse(msg.message)
       // console.log('newPubnubMsg>actual msg>', msgJson)
@@ -318,18 +318,18 @@ export default {
         this.$router.push({ path: '/menu/messages' })
       }
     },
-    newPubnubPresence (ps) {
+    newPubnubPresence(ps) {
       // console.log('ps>', ps)
     },
-    async logout () {
+    async logout() {
       this.$auth.logout()
       this.$router.push('/account/login')
     },
-    async selectPatient (patient) {
+    async selectPatient(patient) {
       const me = this
       this.setIsLoading(true)
       await this.setProfileCurrentPatient(patient)
-      setTimeout(function () {
+      setTimeout(function() {
         me.setIsLoading(false)
         if (me.$route.path !== '/') {
           me.$router.push('/')
@@ -339,7 +339,7 @@ export default {
       }, 500)
     }
   },
-  created () {
+  created() {
     console.info('%c Patient Portal v' + this.version, 'background:green')
     // console.log('this.$auth', this.$auth.isAuthenticated())
     // if (this.$auth.isAthenticated()) {

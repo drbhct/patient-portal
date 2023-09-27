@@ -222,9 +222,10 @@ export default {
     /**
      * @param {Object} payload  request object for payment
      * @param {Number} payload.facilityId
-     * @param {Number} payload.Id
+     * @param {Number} payload.posId
      * @param {Number} payload.email
      * @param {String} payload.transactionId
+     * @param {String} payload.patientId
      */
     async fortisTransactionComplete(payload) {
       return await securedJsonRequest.post(

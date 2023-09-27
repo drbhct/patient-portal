@@ -1,10 +1,7 @@
 <template>
   <div>
     <div class="col-lg-12 mb-5">
-      <h3>Fortis Payment Manual</h3>
-      <div class="form-group-row">
-        <h4>Notify the Recipient</h4>
-      </div>
+      <!-- <h3>Fortis Payment Manual</h3> -->
       <div class="form-group row">
         <div class="col-lg-3">
           <label>Email address for receipt</label>
@@ -28,13 +25,19 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 // eslint-disable-next-line no-unused-vars
 import api from '../../api/http-common.js'
 
 export default {
   data() {
-    return {}
+    return {
+      pubNubMsg: {
+        channel: '',
+        msg: []
+      },
+      fortisPaymentResult: null
+    }
   },
   props: {
     form: {
@@ -58,6 +61,86 @@ export default {
       'getFacilityInfo'
     ])
   },
+  methods: {
+    ...mapActions(['setIsLoading']),
+    async newPubnubMsg(msg) {
+      try {
+        this.setIsLoading(true)
+        // const msgJson = JSON.parse(msg.message)
+        console.log('msgJson', msg)
+
+        // Check if can complete the transaction
+        var canCompleteTransactionResponse = await api.patient.request.CheckPosTransactionComplete(
+          {
+            facilityId: this.currentPatientAssociated.facilityID,
+            posId: this.fortisPaymentViaUrl.id
+          }
+        )
+        if (!canCompleteTransactionResponse.data.value) {
+          this.$swal({
+            text: canCompleteTransactionResponse.data.reason,
+            position: 'top-center',
+            title: 'Payment',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'error'
+          })
+          return
+        }
+
+        var completeResponse = await api.patient.request.fortisTransactionComplete(
+          {
+            facilityId: this.currentPatientAssociated.facilityID,
+            email: this.form.email,
+            posId: this.fortisPaymentViaUrl.id,
+            transactionId: this.fortisPaymentResult.data.id,
+            taskId: this.form.taskId,
+            patientId: this.currentPatientAssociated.patientID
+          }
+        )
+
+        if (completeResponse.data.value) {
+          this.$swal({
+            text: completeResponse.data.reason,
+            position: 'top-center',
+            title: 'Payment',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'success'
+          })
+          setTimeout(() => {
+            this.setIsLoading(false)
+            this.$router.push('/')
+          }, 1000)
+        } else {
+          this.$swal({
+            text: completeResponse.data.reason,
+            position: 'top-center',
+            title: 'Payment Error',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'error'
+          })
+        }
+      } catch (ex) {
+        console.error(ex)
+        this.$swal({
+          text: 'Error occured unable to complete transaction',
+          position: 'top-center',
+          title: 'Error',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 2000,
+          icon: 'error'
+        })
+      } finally {
+        this.setIsLoading(false)
+      }
+    }
+  },
   async mounted() {
     const payload = {
       facilityId: this.currentPatientAssociated.facilityID,
@@ -78,102 +161,45 @@ export default {
       container: '#payment',
       theme: 'default'
     })
-    elements.on('paymentFinished', async result => {
-      console.log('paymentFinished...')
-      console.log('paymentFinished>', result)
-      console.log('paymentFinished...')
-      console.log('paymentFinished>', result)
-      if (result.status === 'approved') {
-        // Update transaction api Id
-        const updateTransactionId = await api.patient.request.UpdateFortisTransactionApiId(
-          {
-            facilityId: this.currentPatientAssociated.facilityID,
-            id: this.fortisPaymentViaUrl.id,
-            transactionId: result.data.id
-          }
-        )
-
-        if (!updateTransactionId.data.value) {
-          this.$swal({
-            text: updateTransactionId.data.reason,
-            position: 'top-center',
-            title: 'UpdateFortisTransactionApiId Failed',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-          return
+    elements.on('done', async result => {
+      console.log('payment>done')
+      console.log('resul>', result)
+      this.fortisPaymentResult = result
+      // Update transaction api Idd
+      const updateTransactionId = await api.patient.request.UpdateFortisTransactionApiId(
+        {
+          facilityId: this.currentPatientAssociated.facilityID,
+          posId: this.fortisPaymentViaUrl.id,
+          transactionId: result.data.id
         }
+      )
 
-        // Check if can complete the transaction
-        var canCompleteTransactionResponse = await api.patient.request.CheckPosTransactionComplete(
-          {
-            facilityId: this.currentPatientAssociated.facilityID,
-            id: this.fortisPaymentViaUrl.id
-          }
-        )
-        if (!canCompleteTransactionResponse.data.value) {
-          this.$swal({
-            text: canCompleteTransactionResponse.data.reason,
-            position: 'top-center',
-            title: 'Payment',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-          return
-        }
-
-        // Transaction approved
-        var completeResponse = await api.patient.request.fortisTransactionComplete(
-          {
-            facilityId: this.currentPatientAssociated.facilityID,
-            email: this.form.email,
-            id: this.fortisPaymentViaUrl.id,
-            transactionId: result.data.id,
-            taskId: this.form.taskId
-          }
-        )
-        if (completeResponse.data.value) {
-          this.$swal({
-            text: completeResponse.data.reason,
-            position: 'top-center',
-            title: 'Payment',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'success'
-          })
-          setTimeout(() => {
-            this.$router.push('/')
-          }, 1000)
-        } else {
-          this.$swal({
-            text: completeResponse.data.reason,
-            position: 'top-center',
-            title: 'Payment Error',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-        }
-      } else {
-        // Transaction declined, voided, refunded...
+      console.log('updateTransactionId>', updateTransactionId)
+      if (!updateTransactionId.data.value) {
         this.$swal({
-          text: 'Unable to complete the transaction',
+          text: updateTransactionId.data.reason,
           position: 'top-center',
-          title: 'Transaction unsuccessful',
+          title: 'UpdateFortisTransactionApiId Failed',
           showConfirmButton: false,
           timerProgressBar: true,
           timer: 2000,
-          icon: 'success'
+          icon: 'error'
         })
+        return
       }
+
+      // Register pubnub channel
+      const pnInstance = this.$pnGetInstance()
+
+      pnInstance.subscribe({ channels: [this.fortisPaymentViaUrl.channel] })
+
+      this.pubNubMsg.channel = this.fortisPaymentViaUrl.channel
+
+      this.pubNubMsg.msg = this.$pnGetMessage(
+        this.fortisPaymentViaUrl.channel,
+        this.newPubnubMsg
+      )
     })
-    console.log('fortis card payment initialize ...')
   }
 }
 </script>
