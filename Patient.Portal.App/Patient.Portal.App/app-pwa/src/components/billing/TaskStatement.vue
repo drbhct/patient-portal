@@ -142,6 +142,7 @@
           </div>
         </div>
       </div>
+      <hr />
       <fieldset v-if="canProcess && !isFortisPaymentViaElements">
         <form class="my-5 col-lg-7" @submit.prevent="makePayment">
           <div class="form-group row" v-if="creditCardList.length > 0">
@@ -176,17 +177,6 @@
               </ul>
             </div>
           </div>
-          <div class="form-group">
-            <div class="col-lg-6">
-              <button
-                class="btn btn-default btn-lg btn-block"
-                type="reset"
-                @click="payWithDiffCard"
-              >
-                {{ cardText }}
-              </button>
-            </div>
-          </div>
           <div class="form-group row">
             <div class="col-lg-3">
               <label>Amount to Pay</label>
@@ -204,7 +194,6 @@
               />
             </div>
           </div>
-          <hr />
           <div class="mb-3">
             <div class="form-group row">
               <div class="col-lg-3">
@@ -223,13 +212,25 @@
               </div>
             </div>
           </div>
-          <div class="form-group row" v-if="!isFortisPaymentViaElements">
-            <div class="col-lg-6 mx-1 my-1">
+          <div
+            class="form-group row justify-content-start"
+            v-if="!isFortisPaymentViaElements"
+          >
+            <div class="col-md-3 m-1">
               <btn-saving
                 :is-saving="isSaving"
                 :loading-text="'Processing payment ...'"
                 :display-text="'Make Payment'"
               />
+            </div>
+            <div class="col-md-4 m-1" v-if="creditCardList.length > 0">
+              <button
+                class="btn btn-default"
+                type="reset"
+                @click="payWithDiffCard"
+              >
+                {{ cardText }}
+              </button>
             </div>
           </div>
         </form>
@@ -456,13 +457,8 @@ export default {
           return
         }
         if (!paymentUrlResponse.data.value) {
-          var errorReason = ''
-          if (paymentUrlResponse.data.reason) {
-            const errorJson = JSON.parse(paymentUrlResponse.data.reason)
-            errorReason = errorJson.message
-          }
           this.$swal({
-            text: errorReason,
+            text: paymentUrlResponse.data.reason,
             position: 'top-center',
             title: 'Error',
             showConfirmButton: false,
@@ -700,7 +696,11 @@ export default {
         await this.makePaymentOpenEdge()
       }
       if (this.facilityInfo.fortis) {
-        await this.makePaymentFortis()
+        if (this.creditCardList && this.creditCardList.length > 0) {
+          await this.makePaymentFortis()
+        } else {
+          await this.payWithDiffCard()
+        }
       }
     }
   },
