@@ -138,6 +138,8 @@ export default {
         })
       } finally {
         this.setIsLoading(false)
+        const pnInstance = this.$pnGetInstance()
+        pnInstance.unsubscribe({ channels: [this.fortisPaymentViaUrl.channel] })
       }
     }
   },
