@@ -145,7 +145,7 @@ export default {
   },
   async mounted() {
     // eslint-disable-next-line no-undef
-    var elements = new Commerce.elements(fortisPaymentViaUrl.clientToken)
+    var elements = new Commerce.elements(this.fortisPaymentViaUrl.clientToken)
     elements.create({
       container: '#payment',
       theme: 'default'
