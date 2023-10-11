@@ -144,21 +144,8 @@ export default {
     }
   },
   async mounted() {
-    const payload = {
-      facilityId: this.currentPatientAssociated.facilityID,
-      patientId: this.currentPatientAssociated.patientID,
-      amount: this.form.totalDue,
-      email: this.form.email,
-      statementBatchID: this.statementInfo.StatementBatchID,
-      taskId: this.form.taskId
-    }
-    var paymentUrlResponse = await api.patient.request.getFortisTransactionUrl(
-      payload
-    )
-    // console.log(paymentUrlResponse)
-
     // eslint-disable-next-line no-undef
-    var elements = new Commerce.elements(paymentUrlResponse.data.clientToken)
+    var elements = new Commerce.elements(fortisPaymentViaUrl.clientToken)
     elements.create({
       container: '#payment',
       theme: 'default'
