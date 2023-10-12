@@ -322,12 +322,22 @@ export default {
       }
       this.isSaving = true
       if (this.forDelete.length > 0) {
-        this.forDelete.forEach(async (el) => {
+        // this.forDelete.forEach(async (el) => {
+        //  await api.task.request.deleteCaseHistoryProblem({
+        //    facilityId: this.currentPatientAssociated.facilityID,
+        //    caseHistoryProblemId: el.id
+        //  })
+        //  console.log('deleteCaseHistoryProblem: ' + el.id)
+        // })
+
+        // modified and added by Rizza 10/13/2023
+        // foreach above is not working async
+        for await (const result of this.forDelete) {
           await api.task.request.deleteCaseHistoryProblem({
             facilityId: this.currentPatientAssociated.facilityID,
-            caseHistoryProblemId: el.id
+            caseHistoryProblemId: result.id
           })
-        })
+        }
       }
 
       const promMultipleInsert = new Promise((resolve, reject) => {
@@ -339,6 +349,8 @@ export default {
             region: el.region,
             name: ''
           })
+          console.log('insertCaseHistoryProblem')
+          console.log(arr)
           if (index === arr.length - 1) {
             resolve()
           }
