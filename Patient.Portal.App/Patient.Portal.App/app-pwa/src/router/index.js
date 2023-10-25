@@ -83,6 +83,15 @@ const routes = [
     ]
   },
   {
+    meta: {
+      requiresAuth: true
+    },
+    name: 'fortis-payment',
+    path: '/statement/payment/new-card',
+    template: '<router-view/>',
+    component: () => import('../components/billing/FortisCardPayment.vue')
+  },
+  {
     path: '/',
     name: 'Dashboard',
     meta: {

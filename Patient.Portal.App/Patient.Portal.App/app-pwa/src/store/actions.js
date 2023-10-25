@@ -1,6 +1,6 @@
 import * as types from './mutation-types.js'
 
-export const logoutApp = async (store) => {
+export const logoutApp = async store => {
   await store.commit(types.PROFILE_AUTH_INFO, null)
   await store.commit(types.PROFILE_PATIENT_ASSOCIATED, null)
 }
@@ -60,8 +60,14 @@ export const setTaskCurrentCaseHistoryOats = async (store, payload) => {
   await store.commit(types.TASK_CURRENT_CASE_HISTORY_OATS, payload)
 }
 
-export const setTaskCurrentCaseHistoryComplaintFormVal = async (store, payload) => {
-  await store.commit(types.TASK_CURRENT_CASE_HISTORY_COMPLAINT_FORM_VAL, payload)
+export const setTaskCurrentCaseHistoryComplaintFormVal = async (
+  store,
+  payload
+) => {
+  await store.commit(
+    types.TASK_CURRENT_CASE_HISTORY_COMPLAINT_FORM_VAL,
+    payload
+  )
 }
 
 export const setTaskCurrentCaseHistoryAutoAccident = async (store, payload) => {
@@ -98,4 +104,14 @@ export const setTaskIsAccessOnlyRoute = (store, payload) => {
 
 export const setFacilityInfo = (store, payload) => {
   store.commit(types.PROFILE_FACILITY_INFO, payload)
+}
+export const setFortisPaymentForm = (store, payload) => {
+  store.commit(types.FORTIS_PAYMENT_FORM, payload)
+}
+
+export const setFortisStatementInfo = (store, payload) => {
+  store.commit(types.FORTIS_STATEMENT_INFO, payload)
+}
+export const setFortisPaymentUrl = (store, payload) => {
+  store.commit(types.FORTIS_PAYMENT_VIA_URL, payload)
 }

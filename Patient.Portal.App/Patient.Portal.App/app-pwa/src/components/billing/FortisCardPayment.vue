@@ -1,23 +1,9 @@
 <template>
-  <div>
-    <div class="col-lg-12 mb-5">
-      <!-- <h3>Fortis Payment Manual</h3> -->
-      <div class="form-group row">
-        <div class="col-lg-3">
-          <label>Email address for receipt</label>
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-lg-6">
-          <input
-            type="email"
-            class="form-control"
-            placeholder="Enter Email"
-            required
-            v-model="form.email"
-          />
-        </div>
-      </div>
+  <div class="container mt-5 pt-5">
+    <div class="col-lg-12 mb-5 mt-5">
+      <h4 class="text-center" v-if="close">
+        Payment complete. You may now close the page
+      </h4>
       <div id="payment">
         <!-- Elements will create input elements here -->
       </div>
@@ -36,21 +22,8 @@ export default {
         channel: '',
         msg: []
       },
-      fortisPaymentResult: null
-    }
-  },
-  props: {
-    form: {
-      type: Object,
-      required: true
-    },
-    statementInfo: {
-      type: Object,
-      required: true
-    },
-    fortisPaymentViaUrl: {
-      type: Object,
-      required: true
+      fortisPaymentResult: null,
+      close: false
     }
   },
   computed: {
@@ -58,7 +31,10 @@ export default {
       'currentPatientAssociated',
       'getBillingTaskStatement',
       'getProfileAuthInfo',
-      'getFacilityInfo'
+      'getFacilityInfo',
+      'getFortisPaymentForm',
+      'getFortisStatementInfo',
+      'getFortisPaymentViaUrl'
     ])
   },
   methods: {
@@ -73,7 +49,7 @@ export default {
         var canCompleteTransactionResponse = await api.patient.request.CheckPosTransactionComplete(
           {
             facilityId: this.currentPatientAssociated.facilityID,
-            posId: this.fortisPaymentViaUrl.id
+            posId: this.getFortisPaymentViaUrl.id
           }
         )
         if (!canCompleteTransactionResponse.data.value) {
@@ -92,10 +68,10 @@ export default {
         var completeResponse = await api.patient.request.fortisTransactionComplete(
           {
             facilityId: this.currentPatientAssociated.facilityID,
-            email: this.form.email,
-            posId: this.fortisPaymentViaUrl.id,
+            email: this.getFortisPaymentForm.email,
+            posId: this.getFortisPaymentViaUrl.id,
             transactionId: this.fortisPaymentResult.data.id,
-            taskId: this.form.taskId,
+            taskId: this.getFortisPaymentForm.taskId,
             patientId: this.currentPatientAssociated.patientID
           }
         )
@@ -118,7 +94,7 @@ export default {
           this.$swal({
             text: completeResponse.data.reason,
             position: 'top-center',
-            title: 'Payment Error',
+            title: 'Payment Unsuccessful. Please try again',
             showConfirmButton: false,
             timerProgressBar: true,
             timer: 2000,
@@ -138,27 +114,51 @@ export default {
         })
       } finally {
         this.setIsLoading(false)
+
+        this.$pnPublish(
+          {
+            channel: this.getFortisPaymentViaUrl.channel + '-done',
+            message: Date.now()
+          },
+          (status, response) => {
+            console.log('publish>')
+            console.log(status, response)
+          }
+        )
+
+        // unsubsribe pubnub channel to freeup
         const pnInstance = this.$pnGetInstance()
-        pnInstance.unsubscribe({ channels: [this.fortisPaymentViaUrl.channel] })
+        pnInstance.unsubscribe({
+          channels: [this.getFortisPaymentViaUrl.channel]
+        })
       }
     }
   },
   async mounted() {
     // eslint-disable-next-line no-undef
-    var elements = new Commerce.elements(this.fortisPaymentViaUrl.clientToken)
+    var elements = new Commerce.elements(
+      this.getFortisPaymentViaUrl.clientToken
+    )
     elements.create({
       container: '#payment',
-      theme: 'default'
+      theme: 'default',
+      digitalWallets: [],
+      fields: {
+        billing: [
+          { name: 'address', required: true },
+          { name: 'postal_code', required: true }
+        ]
+      }
     })
     elements.on('done', async result => {
       console.log('payment>done')
       console.log('resul>', result)
       this.fortisPaymentResult = result
-      // Update transaction api Idd
+      // Update transaction api Id
       const updateTransactionId = await api.patient.request.UpdateFortisTransactionApiId(
         {
           facilityId: this.currentPatientAssociated.facilityID,
-          posId: this.fortisPaymentViaUrl.id,
+          posId: this.getFortisPaymentViaUrl.id,
           transactionId: result.data.id
         }
       )
@@ -177,17 +177,14 @@ export default {
         return
       }
 
-      // Register pubnub channel
-      const pnInstance = this.$pnGetInstance()
-
-      pnInstance.subscribe({ channels: [this.fortisPaymentViaUrl.channel] })
-
-      this.pubNubMsg.channel = this.fortisPaymentViaUrl.channel
+      this.pubNubMsg.channel = this.getFortisPaymentViaUrl.channel
 
       this.pubNubMsg.msg = this.$pnGetMessage(
-        this.fortisPaymentViaUrl.channel,
+        this.getFortisPaymentViaUrl.channel,
         this.newPubnubMsg
       )
+
+      this.close = true
     })
   }
 }

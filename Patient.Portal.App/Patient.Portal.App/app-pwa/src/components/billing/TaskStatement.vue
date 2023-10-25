@@ -33,16 +33,6 @@
                 />
               </div>
               <div class="form-group">
-                <!-- <label for="expDate">Exp Date</label>
-                <input
-                  required
-                  type="text"
-                  name="expDate"
-                  id="expDate"
-                  class="form-control"
-                  v-model="otherCardForm.expDate"
-                  placeholder="MM/YY"
-                /> -->
                 <div class="row form-group pb-3">
                   <div class="col-lg-6">
                     <div class="form-group">
@@ -144,7 +134,7 @@
       </div>
       <hr />
       <fieldset v-if="canProcess && !isFortisPaymentViaElements">
-        <form class="my-5 col-lg-7" @submit.prevent="makePayment">
+        <form class="my-2 col-lg-7" @submit.prevent="makePayment">
           <div class="form-group row" v-if="creditCardList.length > 0">
             <div class="col-lg-3">
               <label>Select Payment Method</label>
@@ -213,35 +203,59 @@
             </div>
           </div>
           <div
-            class="form-group row justify-content-start"
+            class="row justify-content-center mb-1"
             v-if="!isFortisPaymentViaElements"
           >
-            <div class="col-md-3 m-1">
+            <div class="col">
               <btn-saving
                 :is-saving="isSaving"
                 :loading-text="'Processing payment ...'"
                 :display-text="'Make Payment'"
               />
             </div>
-            <div class="col-md-4 m-1" v-if="creditCardList.length > 0">
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <hr />
+            </div>
+          </div>
+          <div
+            class="row justify-content-center"
+            v-if="!isFortisPaymentViaElements"
+          >
+            <div class="col">
               <button
                 class="btn btn-default"
                 type="reset"
                 @click="payWithDiffCard"
+                v-if="creditCardList.length > 0"
               >
                 {{ cardText }}
               </button>
             </div>
           </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group form-check mb-1">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  v-model="form.fortisSaveAlias"
+                />
+                <label class="form-check-label">Store Card for Future</label>
+              </div>
+              <div class="form-group" v-if="form.fortisSaveAlias">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Alias for the card"
+                  v-model="form.fortisAlias"
+                />
+              </div>
+            </div>
+          </div>
         </form>
       </fieldset>
-    </div>
-    <div class="col-lg-12 mb-5" v-if="isFortisPaymentViaElements">
-      <FortisCardPayment
-        :form="form"
-        :statement-info="statementInfo"
-        :fortis-payment-via-url="fortisPaymentViaUrl"
-      />
     </div>
   </div>
 </template>
@@ -251,11 +265,9 @@ import moment from 'moment'
 import { mapGetters, mapActions } from 'vuex'
 import api from '../../api/http-common.js'
 import BtnSaving from '../../components/button-saving.vue'
-import FortisCardPayment from './FortisCardPayment.vue'
 export default {
   components: {
-    BtnSaving,
-    FortisCardPayment
+    BtnSaving
   },
   data() {
     return {
@@ -272,7 +284,9 @@ export default {
         isManual: false,
         email: '',
         taskId: '',
-        saveAlias: false
+        saveAlias: false,
+        fortisSaveAlias: false,
+        fortisAlias: ''
       },
       otherCardForm: {
         nameOnCard: '',
@@ -323,7 +337,12 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['setFacilityInfo']),
+    ...mapActions([
+      'setFacilityInfo',
+      'setFortisPaymentForm',
+      'setFortisStatementInfo',
+      'setFortisPaymentUrl'
+    ]),
     // https://stackoverflow.com/questions/3108986/gaussian-bankers-rounding-in-javascript
     evenRound(num, decimalPlaces, hasFormat) {
       try {
@@ -417,6 +436,22 @@ export default {
         this.form.saveAlias = cardInfo.saveAlias
       }
     },
+    async paymentComplete(pubnubMsg) {
+      console.log('payment complete>', pubnubMsg)
+      this.$pnUnsubscribe({
+        channels: [this.fortisPaymentViaUrl.channel + '-done']
+      })
+      this.$swal({
+        text: 'Payment successful',
+        position: 'top-center',
+        title: 'Payment',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 5000,
+        icon: 'success'
+      })
+      this.$router.push('/task')
+    },
     async payWithDiffCard() {
       if (this.facilityInfo.openEdge) {
         this.otherCardForm = {
@@ -432,18 +467,39 @@ export default {
         })
       }
       if (this.facilityInfo.fortis) {
+        if (
+          this.form.fortisSaveAlias &&
+          (!this.form.fortisAlias || this.form.fortisAlias === '')
+        ) {
+          this.$swal({
+            text: 'Please specify the card alias',
+            position: 'top-center',
+            title: 'Store Card for Future use',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'error'
+          })
+          return
+        }
         const payload = {
           facilityId: this.currentPatientAssociated.facilityID,
           patientId: this.currentPatientAssociated.patientID,
           amount: this.form.totalDue,
           email: this.form.email,
           statementBatchID: this.statementInfo.StatementBatchID,
-          taskId: this.form.taskId
+          taskId: this.form.taskId,
+          saveAlias: false,
+          saveTitle: ''
         }
+        if (this.form.fortisAlias) {
+          payload.saveAlias = true
+          payload.saveTitle = this.form.fortisAlias
+        }
+
         var paymentUrlResponse = await api.patient.request.getFortisTransactionUrl(
           payload
         )
-
         if (!paymentUrlResponse.data) {
           this.$swal({
             text: 'Unable to acquire the payment setup',
@@ -469,10 +525,31 @@ export default {
           return
         }
 
-        this.fortisPaymentViaUrl = paymentUrlResponse.data
-        // console.log(paymentUrlResponse.data)
+        // set vuex objects for fortis payment
+        this.setFortisPaymentUrl(paymentUrlResponse.data)
+        this.setFortisPaymentForm(this.form)
+        this.setFortisStatementInfo(this.statementInfo)
 
-        this.isFortisPaymentViaElements = true
+        this.fortisPaymentViaUrl = paymentUrlResponse.data
+
+        const pnInstance = this.$pnGetInstance()
+
+        pnInstance.subscribe({
+          channels: [
+            this.fortisPaymentViaUrl.channel,
+            this.fortisPaymentViaUrl.channel + '-done'
+          ]
+        })
+
+        // Handle the payment completion
+        this.$pnGetMessage(
+          this.fortisPaymentViaUrl.channel + '-done',
+          this.paymentComplete
+        )
+
+        // this.isFortisPaymentViaElements = true
+        const routeData = this.$router.resolve('/statement/payment/new-card')
+        window.open(routeData.href, '_blank')
       }
     },
     diffCardPayment() {
