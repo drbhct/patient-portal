@@ -1,6 +1,6 @@
 <!-- eslint-disable no-undef -->
 <template>
-  <div class="mx-1">
+  <div>
     <div class="modal fade" tabindex="-1" role="dialog" id="newCardModal">
       <div class="modal-dialog" role="document">
         <form @submit.prevent="diffCardPayment">
@@ -114,66 +114,50 @@
       </h2>
       <div v-if="statementInfo" class="ml-3">
         <div class="row">
-          <div class="d-inline p-2"><strong>Statement Date:</strong></div>
-          <div class="d-inline p-2">
+          <div class="d-inline p-1"><strong>Statement Date:</strong></div>
+          <div class="d-inline p-1">
             {{ statementInfo.StatementDate }}
           </div>
         </div>
         <div class="row">
-          <div class="d-inline p-2"><strong>Due Date:</strong></div>
-          <div class="d-inline p-2">
-            {{ statementInfo.PmtDueDate }}
-          </div>
-        </div>
-        <div class="row">
-          <div class="d-inline p-2"><strong>Total Due:</strong></div>
-          <div class="d-inline p-2">
+          <div class="d-inline p-1"><strong>Total Due:</strong></div>
+          <div class="d-inline p-1">
             {{ evenRound(statementInfo.TotalDue, 2, 'money') }}
           </div>
         </div>
+        <div class="row"></div>
       </div>
       <hr />
       <fieldset v-if="canProcess && !isFortisPaymentViaElements">
-        <form class="my-2 col-lg-7" @submit.prevent="makePayment">
-          <div class="form-group row" v-if="creditCardList.length > 0">
-            <div class="col-lg-3">
-              <label>Select Payment Method</label>
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-lg-6 mx-1 my-1">
-              <ul class="list-group list-group-flush">
-                <li
-                  class="list-group-item text-dark"
-                  v-for="(cc, index) in creditCardList"
-                  :key="index"
-                  @click="selectCard(cc)"
-                >
-                  <div
-                    class="credit-card"
-                    :class="[
-                      setCardClass(cc.paymentMethod),
-                      { 'bg-success': cc.selected }
-                    ]"
-                  >
-                    <div class="credit-card-last4">
-                      {{ displayAcctNo(cc.accountNo) }}
-                    </div>
-                    <div class="credit-card-expiry mt-2">
-                      {{ displayCardExp(cc) }}
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="form-group row">
-            <div class="col-lg-3">
-              <label>Amount to Pay</label>
-            </div>
-          </div>
-          <div class="form-group row">
+        <form class="col-lg-7" @submit.prevent="makePayment">
+          <div class="row">
             <div class="col-lg-6">
+              <h5>Select Payment Method</h5>
+              <div
+                v-for="(cc, index) in creditCardList"
+                :key="index"
+                @click="selectCard(cc)"
+              >
+                <div
+                  class="credit-card"
+                  :class="[
+                    setCardClass(cc.paymentMethod),
+                    { 'bg-success': cc.selected }
+                  ]"
+                >
+                  <div class="credit-card-last4">
+                    {{ displayAcctNo(cc.accountNo) }}
+                  </div>
+                  <div class="credit-card-expiry mt-2">
+                    {{ displayCardExp(cc) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mb-1">
+            <div class="col-lg-6">
+              <label>Amount to Pay</label>
               <input
                 type="number"
                 step="0.01"
@@ -184,26 +168,25 @@
               />
             </div>
           </div>
-          <div class="mb-3">
-            <div class="form-group row">
-              <div class="col-lg-3">
-                <label>Email address for receipt</label>
-              </div>
+          <div class="row mb-1">
+            <div class="col-lg-6">
+              <label>Email address for receipt</label>
+              <input
+                type="email"
+                class="form-control"
+                placeholder="Enter Email"
+                required
+                v-model="form.email"
+              />
             </div>
-            <div class="form-group row">
-              <div class="col-lg-6">
-                <input
-                  type="email"
-                  class="form-control"
-                  placeholder="Enter Email"
-                  required
-                  v-model="form.email"
-                />
-              </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <hr />
             </div>
           </div>
           <div
-            class="row justify-content-center mb-1"
+            class="row justify-content-center mb-3"
             v-if="!isFortisPaymentViaElements"
           >
             <div class="col">
@@ -214,13 +197,8 @@
               />
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6 col-sm-12">
-              <hr />
-            </div>
-          </div>
           <div
-            class="row justify-content-center"
+            class="row justify-content-center mb-2"
             v-if="!isFortisPaymentViaElements"
           >
             <div class="col">
@@ -242,13 +220,15 @@
                   class="form-check-input"
                   v-model="form.fortisSaveAlias"
                 />
-                <label class="form-check-label">Store Card for Future</label>
+                <label class="form-check-label"
+                  >Store card for future use</label
+                >
               </div>
               <div class="form-group" v-if="form.fortisSaveAlias">
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Alias for the card"
+                  placeholder="Description of the card"
                   v-model="form.fortisAlias"
                 />
               </div>

@@ -1,7 +1,11 @@
 <template>
   <div class="inner-wrapper">
     <section role="main" class="content-body">
-      <header :class="checkMenuHeader" class="menu-header text-left" v-if="currentRouteName !== 'contact'">
+      <header
+        :class="checkMenuHeader"
+        class="menu-header text-left"
+        v-if="currentRouteName !== 'contact'"
+      >
         <div class="menu-header-title">
           <i :class="menuIcon" aria-hidden="true"></i>
           <span class="h-title">{{ title }}</span>
@@ -91,7 +95,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-user" aria-hidden="true"></i>
-                           <span>Profile</span>
+                          <span>Profile</span>
                         </router-link>
                       </li>
                       <li
@@ -106,7 +110,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-tasks" aria-hidden="true"></i>
-                           <span>Tasks</span>
+                          <span>Tasks</span>
                         </router-link>
                       </li>
                       <li
@@ -120,7 +124,7 @@
                           v-on:click.native="closeSidebar"
                         >
                           <i class="fas fa-home" aria-hidden="true"></i>
-                           <span>Home</span>
+                          <span>Home</span>
                         </router-link>
                       </li>
                       <li
@@ -135,7 +139,7 @@
                           title="Logout"
                         >
                           <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
-                           <span>Logout</span>
+                          <span>Logout</span>
                         </a>
                       </li>
                     </ul>
@@ -145,7 +149,7 @@
             </aside>
             <!-- end: sidebar -->
           </div>
-          <div class="col-lg-10 col-xl-10 col-md-8 content-custom mb-4">
+          <div class="col-lg-10 col-xl-10 col-md-8 mb-4">
             <!-- start: page -->
             <router-view></router-view>
             <!-- end: page -->
@@ -159,17 +163,17 @@
 import { mapActions } from 'vuex'
 export default {
   computed: {
-    isAuthenticated () {
+    isAuthenticated() {
       return this.$auth.isAuthenticated
     },
-    currentRouteName () {
+    currentRouteName() {
       let route = this.$route.name
       if (route) {
         route = route.toLowerCase()
       }
       return route
     },
-    title () {
+    title() {
       switch (this.currentRouteName) {
         case 'statement':
           return 'Patient Statement'
@@ -179,7 +183,7 @@ export default {
           return this.currentRouteName
       }
     },
-    checkMenuHeader: function () {
+    checkMenuHeader: function() {
       if (this.currentRouteName === 'messages') {
         // this.setCurrentMsgInfo({})
         // this.setMsgCurrentPage('List')
@@ -208,7 +212,7 @@ export default {
       }
       return ''
     },
-    menuIcon: function () {
+    menuIcon: function() {
       if (this.currentRouteName === 'messages') {
         return 'far fa-comment'
       }
@@ -238,13 +242,13 @@ export default {
   },
   methods: {
     ...mapActions(['logoutApp', 'setMsgCurrentPage', 'setCurrentMsgInfo']),
-    closeSidebar () {
+    closeSidebar() {
       // console.log('closing sidebar')
       document
         .getElementsByTagName('html')[0]
         .classList.remove('sidebar-left-opened')
     },
-    async logout () {
+    async logout() {
       this.$auth.logout()
       this.$router.push('/account/login')
     }
@@ -271,10 +275,10 @@ export default {
   border-color: black;
   z-index: 1;
 }
-.tooltip[x-placement^="top"] {
+.tooltip[x-placement^='top'] {
   margin-bottom: 5px;
 }
-.tooltip[x-placement^="top"] .tooltip-arrow {
+.tooltip[x-placement^='top'] .tooltip-arrow {
   border-width: 5px 5px 0 5px;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
@@ -284,10 +288,10 @@ export default {
   margin-top: 0;
   margin-bottom: 0;
 }
-.tooltip[x-placement^="bottom"] {
+.tooltip[x-placement^='bottom'] {
   margin-top: 5px;
 }
-.tooltip[x-placement^="bottom"] .tooltip-arrow {
+.tooltip[x-placement^='bottom'] .tooltip-arrow {
   border-width: 0 5px 5px 5px;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
@@ -297,10 +301,10 @@ export default {
   margin-top: 0;
   margin-bottom: 0;
 }
-.tooltip[x-placement^="right"] {
+.tooltip[x-placement^='right'] {
   margin-left: 5px;
 }
-.tooltip[x-placement^="right"] .tooltip-arrow {
+.tooltip[x-placement^='right'] .tooltip-arrow {
   border-width: 5px 5px 5px 0;
   border-left-color: transparent !important;
   border-top-color: transparent !important;
@@ -310,10 +314,10 @@ export default {
   margin-left: 0;
   margin-right: 0;
 }
-.tooltip[x-placement^="left"] {
+.tooltip[x-placement^='left'] {
   margin-right: 5px;
 }
-.tooltip[x-placement^="left"] .tooltip-arrow {
+.tooltip[x-placement^='left'] .tooltip-arrow {
   border-width: 5px 0 5px 5px;
   border-top-color: transparent !important;
   border-right-color: transparent !important;
@@ -333,12 +337,12 @@ export default {
 .tooltip.popover .popover-arrow {
   border-color: #f9f9f9;
 }
-.tooltip[aria-hidden="true"] {
+.tooltip[aria-hidden='true'] {
   visibility: hidden;
   opacity: 0;
   transition: opacity 0.15s, visibility 0.15s;
 }
-.tooltip[aria-hidden="false"] {
+.tooltip[aria-hidden='false'] {
   visibility: visible;
   opacity: 1;
   transition: opacity 0.15s;
@@ -362,7 +366,7 @@ export default {
 }
 
 .sidebar-w {
-  width:100%;
+  width: 100%;
   /* width: 60px;  */
 }
 
