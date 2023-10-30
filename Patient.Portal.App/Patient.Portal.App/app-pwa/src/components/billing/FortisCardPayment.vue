@@ -38,101 +38,7 @@ export default {
     ])
   },
   methods: {
-    ...mapActions(['setIsLoading']),
-    async newPubnubMsg(msg) {
-      try {
-        this.setIsLoading(true)
-        // const msgJson = JSON.parse(msg.message)
-        console.log('msgJson', msg)
-
-        // Check if can complete the transaction
-        var canCompleteTransactionResponse = await api.patient.request.CheckPosTransactionComplete(
-          {
-            facilityId: this.currentPatientAssociated.facilityID,
-            posId: this.getFortisPaymentViaUrl.id
-          }
-        )
-        if (!canCompleteTransactionResponse.data.value) {
-          this.$swal({
-            text: canCompleteTransactionResponse.data.reason,
-            position: 'top-center',
-            title: 'Payment',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-          return
-        }
-
-        var completeResponse = await api.patient.request.fortisTransactionComplete(
-          {
-            facilityId: this.currentPatientAssociated.facilityID,
-            email: this.getFortisPaymentForm.email,
-            posId: this.getFortisPaymentViaUrl.id,
-            transactionId: this.fortisPaymentResult.data.id,
-            taskId: this.getFortisPaymentForm.taskId,
-            patientId: this.currentPatientAssociated.patientID
-          }
-        )
-
-        if (completeResponse.data.value) {
-          this.$swal({
-            text: completeResponse.data.reason,
-            position: 'top-center',
-            title: 'Payment',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'success'
-          })
-          setTimeout(() => {
-            this.setIsLoading(false)
-            this.$router.push('/')
-          }, 1000)
-        } else {
-          this.$swal({
-            text: completeResponse.data.reason,
-            position: 'top-center',
-            title: 'Payment Unsuccessful. Please try again',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-        }
-      } catch (ex) {
-        console.error(ex)
-        this.$swal({
-          text: 'Error occured unable to complete transaction',
-          position: 'top-center',
-          title: 'Error',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
-      } finally {
-        this.setIsLoading(false)
-
-        this.$pnPublish(
-          {
-            channel: this.getFortisPaymentViaUrl.channel + '-done',
-            message: Date.now()
-          },
-          (status, response) => {
-            console.log('publish>')
-            console.log(status, response)
-          }
-        )
-
-        // unsubsribe pubnub channel to freeup
-        const pnInstance = this.$pnGetInstance()
-        pnInstance.unsubscribe({
-          channels: [this.getFortisPaymentViaUrl.channel]
-        })
-      }
-    }
+    ...mapActions(['setIsLoading'])
   },
   async mounted() {
     // eslint-disable-next-line no-undef
@@ -153,38 +59,68 @@ export default {
     elements.on('done', async result => {
       console.log('payment>done')
       console.log('resul>', result)
-      this.fortisPaymentResult = result
-      // Update transaction api Id
-      const updateTransactionId = await api.patient.request.UpdateFortisTransactionApiId(
-        {
+
+      try {
+        this.pubNubMsg.channel = this.getFortisPaymentViaUrl.channel
+
+        this.fortisPaymentResult = result
+
+        // Update transaction api Id
+        await api.patient.request.UpdateFortisTransactionApiId({
           facilityId: this.currentPatientAssociated.facilityID,
           posId: this.getFortisPaymentViaUrl.id,
           transactionId: result.data.id
-        }
-      )
+        })
 
-      console.log('updateTransactionId>', updateTransactionId)
-      if (!updateTransactionId.data.value) {
+        var completeResponse = await api.patient.request.fortisTransactionComplete(
+          {
+            facilityId: this.currentPatientAssociated.facilityID,
+            email: this.getFortisPaymentForm.email,
+            posId: this.getFortisPaymentViaUrl.id,
+            transactionId: this.fortisPaymentResult.data.id,
+            taskId: this.getFortisPaymentForm.taskId,
+            patientId: this.currentPatientAssociated.patientID
+          }
+        )
+
+        if (!completeResponse.data.value) {
+          this.$swal({
+            text: completeResponse.data.reason,
+            position: 'top-center',
+            title: 'Payment Unsuccessful. Please try again',
+            showConfirmButton: false,
+            timerProgressBar: true,
+            timer: 2000,
+            icon: 'error'
+          })
+          return
+        }
+
         this.$swal({
-          text: updateTransactionId.data.reason,
+          text: completeResponse.data.reason,
           position: 'top-center',
-          title: 'UpdateFortisTransactionApiId Failed',
+          title: 'Payment',
           showConfirmButton: false,
           timerProgressBar: true,
           timer: 2000,
-          icon: 'error'
+          icon: 'success'
         })
-        return
+        this.$pnPublish(
+          {
+            channel: this.getFortisPaymentViaUrl.channel + '-done',
+            message: Date.now()
+          },
+          (status, response) => {
+            console.log(
+              'publish>' + this.getFortisPaymentViaUrl.channel + '-done'
+            )
+            console.log(status, response)
+          }
+        )
+        this.close = true
+      } catch (ex) {
+      } finally {
       }
-
-      this.pubNubMsg.channel = this.getFortisPaymentViaUrl.channel
-
-      this.pubNubMsg.msg = this.$pnGetMessage(
-        this.getFortisPaymentViaUrl.channel,
-        this.newPubnubMsg
-      )
-
-      this.close = true
     })
   }
 }

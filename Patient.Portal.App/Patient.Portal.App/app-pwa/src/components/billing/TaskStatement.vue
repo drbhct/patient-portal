@@ -204,7 +204,7 @@
             <div class="col">
               <button
                 class="btn btn-default"
-                type="reset"
+                type="button"
                 @click="payWithDiffCard"
                 v-if="creditCardList.length > 0"
               >
@@ -515,10 +515,7 @@ export default {
         const pnInstance = this.$pnGetInstance()
 
         pnInstance.subscribe({
-          channels: [
-            this.fortisPaymentViaUrl.channel,
-            this.fortisPaymentViaUrl.channel + '-done'
-          ]
+          channels: [this.fortisPaymentViaUrl.channel + '-done']
         })
 
         // Handle the payment completion
