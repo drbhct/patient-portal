@@ -430,7 +430,7 @@ export default {
         timer: 5000,
         icon: 'success'
       })
-      this.$router.push('/task')
+      this.$router.push('/menu/tasks')
     },
     async payWithDiffCard() {
       if (this.facilityInfo.openEdge) {
@@ -648,7 +648,7 @@ export default {
           })
 
           setTimeout(() => {
-            this.$router.push('/')
+            this.$router.push('/menu/tasks')
           }, 1000)
         }
       } catch (ex) {
@@ -715,7 +715,7 @@ export default {
           })
 
           setTimeout(() => {
-            this.$router.push('/')
+            this.$router.push('/menu/tasks')
           }, 1000)
         }
       } catch (ex) {
