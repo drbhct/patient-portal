@@ -128,33 +128,8 @@
         <div class="row"></div>
       </div>
       <hr />
-      <fieldset v-if="canProcess && !isFortisPaymentViaElements">
+      <fieldset v-if="canProcess">
         <form class="col-lg-7" @submit.prevent="makePayment">
-          <div class="row">
-            <div class="col-lg-6">
-              <h5>Select Payment Method</h5>
-              <div
-                v-for="(cc, index) in creditCardList"
-                :key="index"
-                @click="selectCard(cc)"
-              >
-                <div
-                  class="credit-card"
-                  :class="[
-                    setCardClass(cc.paymentMethod),
-                    { 'bg-success': cc.selected }
-                  ]"
-                >
-                  <div class="credit-card-last4">
-                    {{ displayAcctNo(cc.accountNo) }}
-                  </div>
-                  <div class="credit-card-expiry mt-2">
-                    {{ displayCardExp(cc) }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="row mb-1">
             <div class="col-lg-6">
               <label>Amount to Pay</label>
@@ -181,13 +156,38 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-lg-6">
+              <h5 v-if="creditCardList.length > 0">Select Payment Method</h5>
+              <div
+                v-for="(cc, index) in creditCardList"
+                :key="index"
+                @click="selectCard(cc)"
+              >
+                <div
+                  class="credit-card"
+                  :class="[
+                    setCardClass(cc.paymentMethod),
+                    { 'bg-success': cc.selected }
+                  ]"
+                >
+                  <div class="credit-card-last4">
+                    {{ displayAcctNo(cc.accountNo) }}
+                  </div>
+                  <div class="credit-card-expiry mt-2">
+                    {{ displayCardExp(cc) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-md-6 col-sm-12">
               <hr />
             </div>
           </div>
           <div
             class="row justify-content-center mb-3"
-            v-if="!isFortisPaymentViaElements"
+            v-if="creditCardList.length >= 1"
           >
             <div class="col">
               <btn-saving
@@ -197,10 +197,37 @@
               />
             </div>
           </div>
-          <div
-            class="row justify-content-center mb-2"
-            v-if="!isFortisPaymentViaElements"
-          >
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div
+                class="form-group form-check mb-1"
+                v-if="creditCardList.length > 0"
+              >
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  v-model="form.fortisSaveAlias"
+                />
+                <label class="form-check-label">Pay with different card</label>
+              </div>
+              <div
+                class="form-group"
+                v-if="form.fortisSaveAlias || creditCardList.length === 0"
+              >
+                <label class="form-check-label"
+                  >Store card for future use</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Description of the card"
+                  v-model="form.fortisAlias"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+          <div class="row my-2">
             <div class="col">
               <button
                 class="btn btn-default"
@@ -208,30 +235,20 @@
                 @click="payWithDiffCard"
                 v-if="creditCardList.length > 0"
               >
-                {{ cardText }}
+                Enter Card Information
               </button>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6 col-sm-12">
-              <div class="form-group form-check mb-1">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  v-model="form.fortisSaveAlias"
-                />
-                <label class="form-check-label"
-                  >Store card for future use</label
-                >
-              </div>
-              <div class="form-group" v-if="form.fortisSaveAlias">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Description of the card"
-                  v-model="form.fortisAlias"
-                />
-              </div>
+          <div
+            class="row justify-content-center mb-3"
+            v-if="creditCardList.length === 0"
+          >
+            <div class="col">
+              <btn-saving
+                :is-saving="isSaving"
+                :loading-text="'Processing payment ...'"
+                :display-text="'Make Payment'"
+              />
             </div>
           </div>
         </form>
@@ -311,7 +328,7 @@ export default {
     },
     cardText() {
       if (this.creditCardList.length === 0 && !this.facilityInfo.fortis) {
-        return 'Add Credit Card'
+        return 'Enter Card Information'
       }
       return 'Pay with different card'
     }
