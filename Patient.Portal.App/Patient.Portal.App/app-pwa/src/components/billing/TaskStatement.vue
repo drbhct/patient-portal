@@ -191,6 +191,7 @@
           >
             <div class="col">
               <btn-saving
+                :is-disabled="isDisabledPayment"
                 :is-saving="isSaving"
                 :loading-text="'Processing payment ...'"
                 :display-text="'Make Payment'"
@@ -211,12 +212,19 @@
                 <label class="form-check-label">Pay with different card</label>
               </div>
               <div
-                class="form-group"
-                v-if="form.fortisSaveAlias || creditCardList.length === 0"
+                class="form-group form-check mb-1"
+                v-if="form.fortisSaveAlias"
               >
-                <label class="form-check-label"
-                  >Store card for future use</label
-                >
+                <label class="form-check-label">
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    v-model="form.storeCardForFutureUse"
+                  />
+                  Store card for future use
+                </label>
+              </div>
+              <div class="form-group" v-if="form.storeCardForFutureUse">
                 <input
                   type="text"
                   class="form-control"
@@ -227,7 +235,7 @@
               </div>
             </div>
           </div>
-          <div class="row my-2">
+          <div class="row my-2" v-if="form.fortisSaveAlias">
             <div class="col">
               <button
                 class="btn btn-default"
@@ -245,6 +253,7 @@
           >
             <div class="col">
               <btn-saving
+                :is-disabled="isDisabledPayment"
                 :is-saving="isSaving"
                 :loading-text="'Processing payment ...'"
                 :display-text="'Make Payment'"
@@ -301,7 +310,8 @@ export default {
         reason: '',
         value: false
       },
-      isFortisPaymentViaElements: false
+      isFortisPaymentViaElements: false,
+      storeCardForFutureUse: false
     }
   },
   computed: {
@@ -311,6 +321,12 @@ export default {
       'getProfileAuthInfo',
       'getFacilityInfo'
     ]),
+    isDisabledPayment() {
+      if (!this.form.cardInfo) {
+        return true
+      }
+      return false
+    },
     canProcess() {
       if (!this.facilityInfo) {
         return false
@@ -769,8 +785,6 @@ export default {
       if (this.facilityInfo.fortis) {
         if (this.creditCardList && this.creditCardList.length > 0) {
           await this.makePaymentFortis()
-        } else {
-          await this.payWithDiffCard()
         }
       }
     }

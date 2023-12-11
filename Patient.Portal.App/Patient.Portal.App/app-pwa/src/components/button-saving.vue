@@ -1,5 +1,5 @@
 <template>
-  <button class="btn btn-primary" type="submit">
+  <button class="btn btn-primary" type="submit" :disabled="isDisabled">
     <span
       class="spinner-border spinner-border-sm"
       role="status"
@@ -18,6 +18,11 @@
 <script>
 export default {
   props: {
+    isDisabled: {
+      type: Boolean,
+      required: false,
+      default: false
+    },
     isSaving: {
       type: Boolean,
       required: true,
