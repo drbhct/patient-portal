@@ -200,10 +200,7 @@
           </div>
           <div class="row">
             <div class="col-md-6 col-sm-12">
-              <div
-                class="form-group form-check mb-1"
-                v-if="creditCardList.length > 0"
-              >
+              <div class="form-group form-check mb-1">
                 <input
                   type="checkbox"
                   class="form-check-input"
@@ -224,7 +221,10 @@
                   Store card for future use
                 </label>
               </div>
-              <div class="form-group" v-if="form.storeCardForFutureUse">
+              <div
+                class="form-group"
+                v-if="form.storeCardForFutureUse && form.fortisSaveAlias"
+              >
                 <input
                   type="text"
                   class="form-control"
@@ -241,7 +241,6 @@
                 class="btn btn-default"
                 type="button"
                 @click="payWithDiffCard"
-                v-if="creditCardList.length > 0"
               >
                 Enter Card Information
               </button>
@@ -249,7 +248,7 @@
           </div>
           <div
             class="row justify-content-center mb-3"
-            v-if="creditCardList.length === 0"
+            v-if="creditCardList.length === 0 && !form.fortisSaveAlias"
           >
             <div class="col">
               <btn-saving
