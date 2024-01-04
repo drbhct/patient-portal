@@ -27,7 +27,7 @@
             class="btn btn-primary btn-w-160"
             @click="setProfilePaymentCurrentPage('PaymentForm')"
           >
-            ADD NEW 2
+            ADD NEW
           </button>
         </div>
       </div>

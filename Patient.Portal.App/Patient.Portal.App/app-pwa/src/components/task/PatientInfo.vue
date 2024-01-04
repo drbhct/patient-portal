@@ -188,6 +188,7 @@
                     :id="'dpicker'"
                     :required="true"
                     :typeable="false"
+                    :disabled-dates="disabledDates"
                   ></datepicker>
                 </div>
               </div>
@@ -426,7 +427,10 @@ export default {
         { id: 'M', value: 'Male' },
         { id: 'F', value: 'Female' },
         { id: 'X', value: 'Non-Binary' }
-      ]
+      ],
+      disabledDates: {
+        ranges: []
+      }
     }
   },
   computed: {
@@ -447,27 +451,38 @@ export default {
       // this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
       await this.$router.push({ path: '/' })
     },
-    async savePatientInfo () {
-      this.isSaving = true
-      await api.task.request.updatePatient(this.form)
-      let result = await api.task.request.findIncompleteCaseHistory({
-        facilityId: this.currentPatientAssociated.facilityID,
-        patientId: this.currentPatientAssociated.patientID
-      })
-      if (!result.data) {
-        result = await api.task.request.insertCaseHistory({
-          facilityId: this.currentPatientAssociated.facilityID,
-          patientId: this.currentPatientAssociated.patientID,
-          aa: this.isAutoAccident
-        })
-      }
+    async savePatientInfo() {
+      var givenDate = this.form.dob
+      var todaysDate = new Date()
 
-      await this.setTaskCurrentCaseHistoryId(result.data)
-      this.isSaving = false
-      if (this.isAutoAccident) {
-        this.setTaskCurrentTaskType('NphAutoAccident')
+      if (givenDate > todaysDate) {
+        this.$swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Invalid Date of Birth!'
+        })
       } else {
-        this.setTaskCurrentTaskType('NphComplaintLocation')
+        this.isSaving = true
+        await api.task.request.updatePatient(this.form)
+        let result = await api.task.request.findIncompleteCaseHistory({
+          facilityId: this.currentPatientAssociated.facilityID,
+          patientId: this.currentPatientAssociated.patientID
+        })
+        if (!result.data) {
+          result = await api.task.request.insertCaseHistory({
+            facilityId: this.currentPatientAssociated.facilityID,
+            patientId: this.currentPatientAssociated.patientID,
+            aa: this.isAutoAccident
+          })
+        }
+
+        await this.setTaskCurrentCaseHistoryId(result.data)
+        this.isSaving = false
+        if (this.isAutoAccident) {
+          this.setTaskCurrentTaskType('NphAutoAccident')
+        } else {
+          this.setTaskCurrentTaskType('NphComplaintLocation')
+        }
       }
     },
     async getPatientInfo (patientId) {
@@ -497,12 +512,17 @@ export default {
     await this.getPatientInfo()
     this.isLoading = false
     document.getElementById('dpicker').removeAttribute('readonly')
-    // document.getElementById('dpicker').addEventListener('keypress', (e) => {
-    //   e.preventDefault()
-    // })
-    // document.getElementById('dpicker').setAttribute('required')
-    // console.log(this.$refs.dpicker)
-    // this.$refs.dpicker.requried = true
+
+    var obj = {}
+
+    var fromDate = new Date()
+    var futureDate = new Date(new Date().getFullYear() + 50, 0, 1)
+
+    obj.from = fromDate
+    obj.to = futureDate
+
+    this.disabledDates.ranges.push(obj)
+    this.disabledDates.from = fromDate
   }
 }
 </script>
