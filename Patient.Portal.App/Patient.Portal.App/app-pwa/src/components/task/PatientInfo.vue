@@ -189,6 +189,7 @@
                     :required="true"
                     :typeable="false"
                     :disabled-dates="disabledDates"
+                    onkeydown="return false"
                   ></datepicker>
                 </div>
               </div>
