@@ -481,7 +481,8 @@ export default {
       if (this.facilityInfo.fortis) {
         if (
           this.form.fortisSaveAlias &&
-          (!this.form.fortisAlias || this.form.fortisAlias === '')
+          this.form.storeCardForFutureUse &&
+          !this.form.fortisAlias
         ) {
           this.$swal({
             text: 'Please specify the card alias',
