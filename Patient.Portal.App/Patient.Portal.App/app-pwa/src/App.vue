@@ -223,7 +223,7 @@ export default {
   },
   computed: {
     version() {
-      return '1.9.18' // Fortis payment integration
+      return '1.9.19' // Fortis payment integration
     },
     ...mapGetters([
       'getIsLoading',

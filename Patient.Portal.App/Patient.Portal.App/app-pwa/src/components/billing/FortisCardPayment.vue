@@ -47,6 +47,7 @@ export default {
     )
     elements.create({
       container: '#payment',
+      environment: this.getFortisPaymentViaUrl.environment,
       theme: 'default',
       digitalWallets: [],
       fields: {
