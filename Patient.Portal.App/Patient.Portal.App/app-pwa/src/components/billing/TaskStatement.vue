@@ -200,7 +200,10 @@
           </div>
           <div class="row">
             <div class="col-md-6 col-sm-12">
-              <div class="form-group form-check mb-1">
+              <div
+                class="form-group form-check mb-1"
+                v-if="creditCardList.length > 0"
+              >
                 <input
                   type="checkbox"
                   class="form-check-input"
@@ -210,7 +213,7 @@
               </div>
               <div
                 class="form-group form-check mb-1"
-                v-if="form.fortisSaveAlias"
+                v-if="form.fortisSaveAlias || creditCardList.length === 0"
               >
                 <label class="form-check-label">
                   <input
@@ -223,7 +226,10 @@
               </div>
               <div
                 class="form-group"
-                v-if="form.storeCardForFutureUse && form.fortisSaveAlias"
+                v-if="
+                  form.storeCardForFutureUse &&
+                    (form.fortisSaveAlias || creditCardList.length === 0)
+                "
               >
                 <input
                   type="text"
@@ -235,7 +241,10 @@
               </div>
             </div>
           </div>
-          <div class="row my-2" v-if="form.fortisSaveAlias">
+          <div
+            class="row my-2"
+            v-if="form.fortisSaveAlias || creditCardList.length === 0"
+          >
             <div class="col">
               <button
                 class="btn btn-default"
@@ -244,19 +253,6 @@
               >
                 Enter Card Information
               </button>
-            </div>
-          </div>
-          <div
-            class="row justify-content-center mb-3"
-            v-if="creditCardList.length === 0 && !form.fortisSaveAlias"
-          >
-            <div class="col">
-              <btn-saving
-                :is-disabled="isDisabledPayment"
-                :is-saving="isSaving"
-                :loading-text="'Processing payment ...'"
-                :display-text="'Make Payment'"
-              />
             </div>
           </div>
         </form>
@@ -479,11 +475,7 @@ export default {
         })
       }
       if (this.facilityInfo.fortis) {
-        if (
-          this.form.fortisSaveAlias &&
-          this.form.storeCardForFutureUse &&
-          !this.form.fortisAlias
-        ) {
+        if (this.form.storeCardForFutureUse && !this.form.fortisAlias) {
           this.$swal({
             text: 'Please specify the card alias',
             position: 'top-center',
