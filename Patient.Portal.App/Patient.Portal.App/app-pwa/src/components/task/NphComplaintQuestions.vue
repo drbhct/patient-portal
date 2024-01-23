@@ -74,7 +74,6 @@
                     :bootstrap-styling="true"
                     :clear-button="true"
                     :format="'MMMM dd, yyyy'"
-                    :disabled-dates="disabledDates"
                   ></datepicker>
                   <span class="help-block">Leave field empty if not sure</span>
                 </div>
@@ -324,7 +323,7 @@ export default {
     VueSlider,
     BtnSaving
   },
-  data () {
+  data() {
     return {
       isSaving: false,
       isLoading: false,
@@ -371,7 +370,7 @@ export default {
       'currentPatientAssociated',
       'getTaskCode'
     ]),
-    buttonText: function () {
+    buttonText: function() {
       if (
         this.currentProblemIndex !==
         this.getTaskCurrentCaseHistoryProblems.length - 1
@@ -381,7 +380,7 @@ export default {
         return 'Submit'
       }
     },
-    currentProblem: function () {
+    currentProblem: function() {
       if (this.getTaskCurrentCaseHistoryProblems.length === 0) {
         return null
       }
@@ -392,7 +391,7 @@ export default {
     //   const oat = this.getTaskCurrentCaseHistoryOats.find(el => el.caseHistoryProblemID === this.currentProblem.id)
     //   return oat
     // },
-    showSpecifyDescribe: function () {
+    showSpecifyDescribe: function() {
       const isOther = this.form.describe.find(el => el === 'Other')
       if (isOther) {
         return true
@@ -400,7 +399,7 @@ export default {
         return false
       }
     },
-    complaintLocations: function () {
+    complaintLocations: function() {
       switch (this.complaint) {
         case 'Ankle':
           return [
@@ -595,10 +594,10 @@ export default {
           return []
       }
     },
-    radiatesSelections: function () {
+    radiatesSelections: function() {
       return ['Left', 'Right', 'Both', 'None']
     },
-    expPains: function () {
+    expPains: function() {
       return [
         'Occasional pain (25% of the day)',
         'Intermittent pain (50% of the day)',
@@ -607,7 +606,7 @@ export default {
         'No pain'
       ]
     },
-    painQualitySelection: function () {
+    painQualitySelection: function() {
       return [
         'Inflexible',
         'Stiffness',
@@ -627,10 +626,10 @@ export default {
         'Stinging'
       ]
     },
-    painQualityImprovementSelection: function () {
+    painQualityImprovementSelection: function() {
       return ['Improving', 'Getting worse', 'About the same']
     },
-    painFactorSelection: function () {
+    painFactorSelection: function() {
       return [
         'Carrying',
         'Crawling',
@@ -656,7 +655,7 @@ export default {
         'None'
       ]
     },
-    painFactorImprovementSelection: function () {
+    painFactorImprovementSelection: function() {
       return [
         'Resting',
         'Shower',
@@ -670,7 +669,7 @@ export default {
         'None'
       ]
     },
-    painInterferenceSelection: function () {
+    painInterferenceSelection: function() {
       return [
         'Can do unlimited work',
         'Can do usual work but no extra',
@@ -679,7 +678,7 @@ export default {
         'Cannot work'
       ]
     },
-    painInterferenceHelpSelection: function () {
+    painInterferenceHelpSelection: function() {
       return [
         'Chiropractor',
         'ER Doctor',
@@ -698,16 +697,16 @@ export default {
       'setTaskCurrentTaskType',
       'setTaskCurrentCaseHistoryComplaintFormVal'
     ]),
-    selectChange (selected) {},
-    selectRemove (removed) {},
-    describeSelectChange (selected) {
+    selectChange(selected) {},
+    selectRemove(removed) {},
+    describeSelectChange(selected) {
       if (selected === 'Other') {
         this.form.describeSelectLimit = 1
       } else {
         this.form.describeSelectLimit = 4
       }
     },
-    validateForm () {
+    validateForm() {
       if (this.form.describe.length === 0) {
         return {
           result: false,
@@ -802,7 +801,7 @@ export default {
         reference: ''
       }
     },
-    async submit () {
+    async submit() {
       this.isSaving = true
 
       // Validation
@@ -1035,7 +1034,7 @@ export default {
           break
       }
     },
-    async previous () {
+    async previous() {
       if (this.currentProblemIndex === 0) {
         const currentIndex = this.getTaskPreviousTaskType.findIndex(
           c => c === this.getTaskCurrentTaskType
@@ -1071,7 +1070,7 @@ export default {
         }, 1000)
       }
     },
-    async initializeData () {
+    async initializeData() {
       this.isLoading = true
       // Force clear form fields
       this.form = {
@@ -1294,8 +1293,8 @@ export default {
       this.isLoading = false
     }
   },
-  async mounted () {},
-  async activated () {
+  async mounted() {},
+  async activated() {
     await this.initializeData()
     if (this.getTaskCurrentCaseHistoryFormValues) {
       // this.formHistory = this.getTaskCurrentCaseHistoryFormValues
