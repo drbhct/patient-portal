@@ -13,9 +13,9 @@
       </h1>
       <hr />
       <div id="printArea">
-        <pdf :src="file.fileObj" :page="1">
+        <!-- <pdf :src="file.fileObj" :page="1">
           <template slot="loading"> loading content here... </template>
-        </pdf>
+        </pdf> -->
       </div>
     </div>
   </div>
@@ -24,10 +24,10 @@
 <script>
 import { mapGetters } from 'vuex'
 import api from '../../api/http-common.js'
-import pdf from 'pdfvuer'
+// import pdf from 'pdfvuer'
 import printjs from 'print-js'
 export default {
-  data () {
+  data() {
     return {
       file: {
         fileName: '',
@@ -36,7 +36,7 @@ export default {
     }
   },
   components: {
-    pdf
+    // pdf
   },
   computed: {
     ...mapGetters([
@@ -44,7 +44,7 @@ export default {
       'getBillingTaskStatement',
       'getProfileAuthInfo'
     ]),
-    statementInfo () {
+    statementInfo() {
       if (!this.getBillingTaskStatement) {
         return null
       }
@@ -54,7 +54,7 @@ export default {
     }
   },
   methods: {
-    printStatement () {
+    printStatement() {
       // this.$htmlToPaper('printArea')
       printjs({
         printable: this.file.base64,
@@ -63,7 +63,7 @@ export default {
       })
     }
   },
-  async mounted () {
+  async mounted() {
     const fileResponse = await api.patient.request.downloadfilebase64({
       facilityId: this.currentPatientAssociated.facilityID,
       id: this.$route.query.fileId
@@ -76,5 +76,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>
