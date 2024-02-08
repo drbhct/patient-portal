@@ -228,7 +228,7 @@
                 class="form-group"
                 v-if="
                   form.storeCardForFutureUse &&
-                    (form.fortisSaveAlias || creditCardList.length === 0)
+                  (form.fortisSaveAlias || creditCardList.length === 0)
                 "
               >
                 <input
@@ -429,7 +429,7 @@ export default {
       }
     },
     selectCard(cardInfo) {
-      this.creditCardList.forEach(el => {
+      this.creditCardList.forEach((el) => {
         el.selected = false
       })
       cardInfo.selected = true
@@ -490,7 +490,7 @@ export default {
         const payload = {
           facilityId: this.currentPatientAssociated.facilityID,
           patientId: this.currentPatientAssociated.patientID,
-          amount: this.form.totalDue,
+          amount: parseFloat(this.form.totalDue),
           email: this.form.email,
           statementBatchID: this.statementInfo.StatementBatchID,
           taskId: this.form.taskId,
@@ -502,9 +502,8 @@ export default {
           payload.saveTitle = this.form.fortisAlias
         }
 
-        var paymentUrlResponse = await api.patient.request.getFortisTransactionUrl(
-          payload
-        )
+        var paymentUrlResponse =
+          await api.patient.request.getFortisTransactionUrl(payload)
         if (!paymentUrlResponse.data) {
           this.$swal({
             text: 'Unable to acquire the payment setup',
@@ -556,7 +555,7 @@ export default {
     },
     diffCardPayment() {
       this.form.cardInfo = this.otherCardForm
-      this.creditCardList.forEach(el => {
+      this.creditCardList.forEach((el) => {
         el.selected = false
       })
       this.form.cardInfo.paymentMethod = this.getCardType(
@@ -715,9 +714,8 @@ export default {
         }
 
         // console.log('payload>', payload)
-        const response = await api.patient.request.makeStatementPaymentViaFortis(
-          payload
-        )
+        const response =
+          await api.patient.request.makeStatementPaymentViaFortis(payload)
         if (!response.data.value) {
           this.$swal({
             text: response.data.reason,
@@ -804,7 +802,7 @@ export default {
     )
     this.setFacilityInfo(this.facilityInfo)
 
-    response.data.forEach(el => {
+    response.data.forEach((el) => {
       el.selected = false
     })
     this.creditCardList = response.data

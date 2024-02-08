@@ -1,6 +1,6 @@
 {
   "name": "app-pwa",
-  "version": "1.9.17",
+  "version": "1.9.18",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --host localhost",
