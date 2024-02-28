@@ -11,10 +11,10 @@
         <table class="w-100">
           <tbody>
             <tr v-for="(item, index) in taskslist" :key="item.taskID">
-              <td class="dash-task-col-title">{{(index + 1)}}) {{ setTitle(item.taskType )}}</td>
+              <td class="dash-task-col-title">{{(index + 1)}}) {{ setTitle(item.taskType, item )}}</td>
               <td class="dash-task-col-action">
                 <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn" @click="gotoTask(item)">
-                  {{ setButton(item.taskType )}}
+                  {{ setButton(item.taskType, item )}}
                 </button>
               </td>
             </tr>
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage', 'setTaskCode', 'setBillingStatementTask']),
-    setTitle (val) {
+    setTitle (val, item) {
       switch (val) {
         case 'NPH':
         case 'AANPH':
@@ -59,11 +59,14 @@ export default {
           return 'Message'
         case 'STMT':
           return 'Statement'
+        case 'FORM':
+          var info = JSON.parse(item.info)
+          return info.Action
         default:
           return ''
       }
     },
-    setButton (val) {
+    setButton (val, item) {
       switch (val) {
         case 'NPH':
         case 'AANPH':
@@ -74,6 +77,9 @@ export default {
           return 'GO TO MESSAGE'
         case 'STMT':
           return 'PAY STATEMENT'
+        case 'FORM':
+          var info = JSON.parse(item.info)
+          return info.FormName.toUpperCase()
         default:
           return ''
       }
@@ -104,6 +110,11 @@ export default {
           taskRes = await api.task.request.getSpecificTask(task.taskID)
           this.setBillingStatementTask(taskRes.data)
           this.$router.push({ path: '/menu/statement' })
+          break
+        case 'FORM':
+          var info = JSON.parse(task.info)
+          var routeData = this.$router.resolve({ name: 'HandlerForm', query: { i: info.FacilityFormID, t: info.FormName } })
+          window.open(routeData.href, '_blank')
           break
         default:
           break

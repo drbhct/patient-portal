@@ -1,9 +1,9 @@
 import axios from 'axios'
 // import Vue from 'vue'
 
-const prodApiEndpointDomain = 'https://hct-api-ncentral.healthcoretech.com'
-// const devApiEndpointDomain = 'https://hct-api-ncentral-dev.azurewebsites.net'
-const apiUrl = prodApiEndpointDomain
+// const prodApiEndpointDomain = 'https://hct-api-ncentral.healthcoretech.com'
+const devApiEndpointDomain = 'https://hct-api-ncentral-dev.azurewebsites.net'
+const apiUrl = devApiEndpointDomain
 
 const securedJsonRequest = axios.create({
   baseURL: apiUrl,
@@ -519,6 +519,13 @@ export default {
         '/patientportal/updatetaskcomplete',
         payload
       )
+    },
+    /**
+     * Get the task info via the taskId
+     * @param {Number} facilityformid ID of the task
+     */
+    async getFacilityFormJson (facilityformid) {
+      return await securedJsonRequest.get(`/form/getfacilityformjson/${facilityformid}`)
     }
   }
 }

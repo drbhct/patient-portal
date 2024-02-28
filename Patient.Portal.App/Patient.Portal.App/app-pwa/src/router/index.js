@@ -137,6 +137,11 @@ const routes = [
     component: () => import('../layouts/Task.vue')
   },
   {
+    path: '/handlerform',
+    name: 'HandlerForm',
+    component: () => import('../views/HandlerForm.vue')
+  },
+  {
     path: '*',
     name: 'PageNotFound',
     component: () => import('../layouts/PageNotFound.vue')

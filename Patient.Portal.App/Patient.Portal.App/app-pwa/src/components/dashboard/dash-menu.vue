@@ -106,7 +106,7 @@
 import api from '../../api/http-common.js'
 import { mapGetters } from 'vuex'
 export default {
-  data () {
+  data() {
     return {
       unReadMsgCount: 0
     }
@@ -116,7 +116,7 @@ export default {
       'currentPatientAssociated'
     ])
   },
-  async mounted () {
+  async mounted() {
     const result = await api.msg.request.getUnReadMessageCount({
       facilityId: this.currentPatientAssociated.facilityID,
       patientId: this.currentPatientAssociated.patientID
