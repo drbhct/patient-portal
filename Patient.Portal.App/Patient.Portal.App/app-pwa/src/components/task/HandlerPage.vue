@@ -10,7 +10,8 @@ import { Model } from 'survey-core'
 export default {
   data () {
     return {
-      survey: null
+      survey: null,
+      patientName: ''
     }
   },
   components: {
@@ -23,13 +24,22 @@ export default {
     },
     async loadData () {
       const queryData = this.$route.query
-      this.formTitle = queryData.t
-      var res = await api.task.request.getFacilityFormJson(queryData.i)
-      var obj = {
-        elements: res.data.pages[0].elements
+      if (queryData) {
+        var res = await api.task.request.getFacilityFormJson(queryData.i)
+        var el = res.data.pages[0].elements
+        var itemIndex = el.findIndex(x => x.name === 'patientName')
+        if (itemIndex) {
+          el[itemIndex].defaultValue = queryData.p
+        }
+        var obj = {
+          elements: el
+        }
+
+        this.surveyJson = obj
+        return obj
+      } else {
+        return null
       }
-      this.surveyJson = obj
-      return obj
     }
   },
   async mounted() {

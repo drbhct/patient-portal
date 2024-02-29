@@ -113,8 +113,15 @@ export default {
           break
         case 'FORM':
           var info = JSON.parse(task.info)
-          var routeData = this.$router.resolve({ name: 'HandlerForm', query: { i: info.FacilityFormID, t: info.FormName } })
-          window.open(routeData.href, '_blank')
+          var routeData = this.$router.resolve({ name: 'HandlerForm', query: { i: info.FacilityFormID, t: info.FormName, p: info.Data.PatientName } })
+          // window.open(routeData.href, '_blank')
+
+          var newWindow = window.open(routeData.href, '_blank')
+
+          setTimeout(function () {
+            newWindow.document.title = info.Action + ': ' + info.FormName
+          }, 100)
+
           break
         default:
           break
