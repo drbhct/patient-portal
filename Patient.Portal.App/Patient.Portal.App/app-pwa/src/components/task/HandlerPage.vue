@@ -6,12 +6,24 @@
 import 'survey-core/defaultV2.min.css'
 import api from '../../api/http-common.js'
 import { Survey } from 'survey-vue-ui'
-import { Model } from 'survey-core'
+import { Model, slk } from 'survey-core'
+import { SurveyPDF } from 'survey-pdf'
+
+slk(
+  'ZjI3MDkwMDYtNDkxNC00MmJkLTg4NDUtMjFhYjIyMDM5MWQxOzE9MjAyNS0wMy0wNCwyPTIwMjUtMDMtMDQsND0yMDI1LTAzLTA0'
+)
+
 export default {
   data () {
     return {
       survey: null,
-      patientName: ''
+      surveyJson: null,
+      patientName: '',
+      pdfFilename: '',
+      pdfDocOptions: {
+        fontSize: 12,
+        htmlRenderAs: 'image'
+      }
     }
   },
   components: {
@@ -31,22 +43,35 @@ export default {
         if (itemIndex) {
           el[itemIndex].defaultValue = queryData.p
         }
-        var obj = {
-          elements: el
-        }
-
-        this.surveyJson = obj
-        return obj
+        // var obj = {
+        //   elements: el
+        // }
+        // this.surveyJson = obj
+        this.surveyJson = res.data
+        this.pdfFilename = res.data.title
+        return res.data
       } else {
         return null
+      }
+    },
+    savePdf () {
+      console.log('savepdf')
+      const surveyPdf = new SurveyPDF(this.surveyJson, this.pdfDocOptions)
+      if (surveyPdf) {
+        surveyPdf.data = this.survey.data
+        surveyPdf.save(this.pdfFilename)
       }
     }
   },
   async mounted() {
     const x = await this.loadData()
-    const survey_ = new Model(x)
-    survey_.onComplete.add(this.alertResults)
-    this.survey = survey_
+    this.survey = new Model(x)
+    this.survey.onComplete.add(this.alertResults)
+    this.survey.addNavigationItem({
+      id: 'pdf-export',
+      title: 'Save as PDF',
+      action: () => this.savePdf(this.survey.data)
+    })
   }
 }
 </script>

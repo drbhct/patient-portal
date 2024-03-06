@@ -17,6 +17,7 @@
     "print-js": "^1.6.0",
     "pubnub-vue": "^1.0.1",
     "register-service-worker": "^1.7.1",
+    "survey-pdf": "^1.9.132",
     "survey-vue-ui": "^1.9.132",
     "vue": "^2.6.11",
     "vue-bootstrap-datetime-picker": "^1.0.4",
