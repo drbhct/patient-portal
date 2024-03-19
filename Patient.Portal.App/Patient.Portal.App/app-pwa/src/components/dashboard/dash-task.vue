@@ -113,7 +113,7 @@ export default {
           break
         case 'FORM':
           var info = JSON.parse(task.info)
-          var routeData = this.$router.resolve({ name: 'HandlerForm', query: { i: info.FacilityFormID, t: info.FormName, p: info.Data.PatientName } })
+          var routeData = this.$router.resolve({ name: 'HandlerForm', query: { i: info.FacilityFormID, t: info.FormName, p: info.Data.PatientName, pid: task.patientID, tid: task.taskID } })
           // window.open(routeData.href, '_blank')
 
           var newWindow = window.open(routeData.href, '_blank')
@@ -132,6 +132,7 @@ export default {
     }
   },
   async mounted () {
+    console.log('dash-task loaded')
     const res = await api.patient.request.gettasks({
       facilityId: this.currentPatientAssociated.facilityID,
       patientId: this.currentPatientAssociated.patientID

@@ -526,6 +526,19 @@ export default {
      */
     async getFacilityFormJson (facilityformid) {
       return await securedJsonRequest.get(`/form/getfacilityformjson/${facilityformid}`)
+    },
+    /**
+     *
+     * @param {Number} payload.facilityid Facility ID where the patient is assoicated
+     * @param {Number} payload.patientId ID  of the patient associated to the task
+     * @param {String} payload.description
+     * @param {String} payload.base64
+     */
+    async uploadPatientForm (payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/uploadpatientform',
+        payload
+      )
     }
   }
 }

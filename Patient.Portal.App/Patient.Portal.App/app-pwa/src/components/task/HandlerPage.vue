@@ -31,8 +31,42 @@ export default {
   },
   methods: {
     alertResults (sender) {
-      const results = JSON.stringify(sender.data)
-      alert(results)
+      // const results = JSON.stringify(sender.data)
+      setTimeout(() => {
+        window.opener.location.reload()
+        window.close()
+      }, 3000)
+    },
+    complete () {
+      const queryData = this.$route.query
+      const surveyPdf = new SurveyPDF(this.surveyJson, this.pdfDocOptions)
+      if (surveyPdf) {
+        surveyPdf.data = this.survey.data
+
+        surveyPdf.raw('dataurlstring').then(async (dataurlstring) => {
+          var base64 = dataurlstring.split('base64,')[1]
+          var fileID = await api.task.request.uploadPatientForm({
+            facilityId: queryData.i,
+            patientId: queryData.pid,
+            description: this.surveyJson.title,
+            base64: base64
+          })
+
+          if (fileID) {
+            await api.task.request.updateTaskComplete({
+              facilityId: queryData.i,
+              id: queryData.tid,
+              patientId: queryData.pid
+            })
+
+            window.opener.location.reload()
+
+            setTimeout(() => {
+              window.close()
+            }, 2000)
+          }
+        })
+      }
     },
     async loadData () {
       const queryData = this.$route.query
@@ -43,10 +77,6 @@ export default {
         if (itemIndex) {
           el[itemIndex].defaultValue = queryData.p
         }
-        // var obj = {
-        //   elements: el
-        // }
-        // this.surveyJson = obj
         this.surveyJson = res.data
         this.pdfFilename = res.data.title
         return res.data
@@ -55,7 +85,6 @@ export default {
       }
     },
     savePdf () {
-      console.log('savepdf')
       const surveyPdf = new SurveyPDF(this.surveyJson, this.pdfDocOptions)
       if (surveyPdf) {
         surveyPdf.data = this.survey.data
@@ -66,7 +95,7 @@ export default {
   async mounted() {
     const x = await this.loadData()
     this.survey = new Model(x)
-    this.survey.onComplete.add(this.alertResults)
+    this.survey.onCompleting.add(this.complete)
     this.survey.addNavigationItem({
       id: 'pdf-export',
       title: 'Save as PDF',
