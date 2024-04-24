@@ -5,6 +5,7 @@
 <script>
 import 'survey-core/defaultV2.min.css'
 import api from '../../api/http-common.js'
+import { mapGetters } from 'vuex'
 import { Survey } from 'survey-vue-ui'
 import { Model, slk } from 'survey-core'
 import { SurveyPDF } from 'survey-pdf'
@@ -29,6 +30,9 @@ export default {
   components: {
     Survey
   },
+  computed: {
+    ...mapGetters(['currentPatientAssociated'])
+  },
   methods: {
     alertResults (sender) {
       // const results = JSON.stringify(sender.data)
@@ -42,11 +46,10 @@ export default {
       const surveyPdf = new SurveyPDF(this.surveyJson, this.pdfDocOptions)
       if (surveyPdf) {
         surveyPdf.data = this.survey.data
-
         surveyPdf.raw('dataurlstring').then(async (dataurlstring) => {
           var base64 = dataurlstring.split('base64,')[1]
           var fileID = await api.task.request.uploadPatientForm({
-            facilityId: queryData.i,
+            facilityId: this.currentPatientAssociated.facilityID,
             patientId: queryData.pid,
             description: this.surveyJson.title,
             base64: base64
@@ -54,7 +57,7 @@ export default {
 
           if (fileID) {
             await api.task.request.updateTaskComplete({
-              facilityId: queryData.i,
+              facilityId: this.currentPatientAssociated.facilityID,
               id: queryData.tid,
               patientId: queryData.pid
             })
@@ -79,6 +82,7 @@ export default {
         }
         this.surveyJson = res.data
         this.pdfFilename = res.data.title
+        res.data.completedHtml = '<span style="font-size: 32px; font-weight: bolder">Thank you for completing the form</span>'
         return res.data
       } else {
         return null
@@ -105,5 +109,5 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 </style>
