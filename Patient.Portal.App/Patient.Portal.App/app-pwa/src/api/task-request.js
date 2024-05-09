@@ -524,8 +524,33 @@ export default {
      * Get the task info via the taskId
      * @param {Number} facilityformid ID of the task
      */
-    async getFacilityFormJson (facilityformid) {
+    async getFacilityFormJson (facilityformid, patientid) {
       return await securedJsonRequest.get(`/form/getfacilityformjson/${facilityformid}`)
+    },
+    /**
+     *
+     * @param {Object} Payload request object
+     * @param {Number} payload.facilityformid
+     * @param {Number} payload.patientid
+     */
+    async getFacilityFormJsonQueryObj (payload) {
+      return await securedJsonRequest.post(
+        '/form/GetFacilityFormJson',
+        payload
+      )
+    },
+    /**
+     *
+     * @param {Object} Payload request object
+     * @param {Number} payload.facilityformid
+     * @param {Number} payload.patientid
+     * @param {String} payload.data
+    */
+    async insertPatientForm (payload) {
+      return await securedJsonRequest.post(
+        '/form/insertPatientForm',
+        payload
+      )
     },
     /**
      *
