@@ -12,7 +12,8 @@ const state = {
   officeName: '',
   taskCode: '',
   isAccessOnly: false,
-  isAccessOnlyRoute: '/'
+  isAccessOnlyRoute: '/',
+  taskInfo: ''
 }
 
 const mutations = {
@@ -60,6 +61,9 @@ const mutations = {
   },
   [types.TASK_IS_ACCESS_ONLY_ROUTE] (state, payload) {
     state.isAccessOnlyRoute = payload
+  },
+  [types.TASK_INFO] (state, payload) {
+    state.taskInfo = payload
   }
 }
 

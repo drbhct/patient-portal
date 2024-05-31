@@ -30,6 +30,7 @@ export default {
       import('../components/task/NphPersonalHistory.vue'),
     NphFamilyHistory: () => import('../components/task/NphFamilyHistory.vue'),
     NphThankyou: () => import('../components/task/NphThankyou.vue'),
+    NphInsurance: () => import('../components/task/NphInsurance.vue'),
     ResetPassword: () => import('../components/task/ResetPassword.vue'),
     Statement: () => import('../components/billing/TaskStatement.vue')
   },

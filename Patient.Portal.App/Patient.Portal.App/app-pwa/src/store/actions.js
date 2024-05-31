@@ -115,3 +115,7 @@ export const setFortisStatementInfo = (store, payload) => {
 export const setFortisPaymentUrl = (store, payload) => {
   store.commit(types.FORTIS_PAYMENT_VIA_URL, payload)
 }
+
+export const setTaskInfo = async (store, payload) => {
+  await store.commit(types.TASK_INFO, payload)
+}

@@ -440,11 +440,15 @@ export default {
       'getTaskPreviousTaskType',
       'getTaskCurrentTaskType',
       'currentPatientAssociated',
-      'getTaskCode'
-    ])
+      'getTaskCode',
+      'getTaskInfo'
+    ]),
+    TaskInfo() {
+      return JSON.parse(this.getTaskInfo)
+    }
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryId']),
+    ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryId', 'setTaskInfo']),
     toggle (val) {
       this.isAutoAccident = val
     },
@@ -479,7 +483,12 @@ export default {
 
         await this.setTaskCurrentCaseHistoryId(result.data)
         this.isSaving = false
-        if (this.isAutoAccident) {
+        if (this.TaskInfo.Action === 'INSINFO') {
+          const taskinfo = this.TaskInfo
+          taskinfo.CurrentTaskType = this.isAutoAccident ? 'NphAutoAccident' : 'NphComplaintLocation'
+          this.setTaskInfo(JSON.stringify(taskinfo))
+          this.setTaskCurrentTaskType('NphInsurance')
+        } else if (this.isAutoAccident) {
           this.setTaskCurrentTaskType('NphAutoAccident')
         } else {
           this.setTaskCurrentTaskType('NphComplaintLocation')

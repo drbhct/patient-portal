@@ -564,6 +564,31 @@ export default {
         '/patientportal/uploadpatientform',
         payload
       )
+    },
+    /**
+     *
+     * @param {Number} payload.facilityid Facility ID where the patient is assoicated
+     * @param {Number} payload.patientId ID  of the patient associated to the task
+     * @param {String} payload.relation
+     * @param {String} payload.firstname
+     * @param {String} payload.mi
+     * @param {String} payload.dob
+     */
+    async insertInsuranceInfo (payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/InsertInsuranceInfo',
+        payload
+      )
+    },
+    /**
+     * @param {Number} payload.facilityid Facility ID where the patient is assoicated
+     * @param {String} payload.patientId Base64
+     */
+    async virusScan (payload) {
+      return await securedJsonRequest.post(
+        '/clam/VirusScan',
+        payload
+      )
     }
   }
 }

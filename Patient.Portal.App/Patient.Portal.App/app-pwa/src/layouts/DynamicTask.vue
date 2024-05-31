@@ -27,7 +27,8 @@ export default {
     NphQuestion: () => import('../components/task/NphQuestion.vue'),
     NphPersonalHistory: () => import('../components/task/NphPersonalHistory.vue'),
     NphFamilyHistory: () => import('../components/task/NphFamilyHistory.vue'),
-    NphThankyou: () => import('../components/task/NphThankyou.vue')
+    NphThankyou: () => import('../components/task/NphThankyou.vue'),
+    NphInsurance: () => import('../components/task/NphInsurance.vue')
   },
   data () {
     return {

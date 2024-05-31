@@ -47,7 +47,7 @@ export default {
     ...mapGetters(['getProfilePatientAssociated', 'currentPatientAssociated'])
   },
   methods: {
-    ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage', 'setTaskCode', 'setBillingStatementTask']),
+    ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage', 'setTaskCode', 'setBillingStatementTask', 'setTaskInfo']),
     setTitle (val, item) {
       switch (val) {
         case 'NPH':
@@ -92,6 +92,11 @@ export default {
         case 'AANPH':
         case 'CH':
         case 'AACH':
+          if (task.info !== '') {
+            this.setTaskInfo(task.info)
+          } else {
+            this.setTaskInfo('')
+          }
           await this.setTaskCurrentTaskType(task.taskType)
           await this.$router.push({ path: '/task' })
           break

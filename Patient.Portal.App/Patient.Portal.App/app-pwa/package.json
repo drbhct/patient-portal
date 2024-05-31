@@ -1,6 +1,6 @@
 {
   "name": "app-pwa",
-  "version": "1.9.23",
+  "version": "1.9.24",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --host localhost",
@@ -12,6 +12,7 @@
     "@sentry/vue": "^6.2.3",
     "@vue/composition-api": "^1.0.0-rc.6",
     "core-js": "^3.6.5",
+    "jspdf": "^2.5.1",
     "moment": "^2.29.1",
     "pdfvuer": "^1.9.2",
     "print-js": "^1.6.0",
