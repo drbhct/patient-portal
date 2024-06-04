@@ -1,9 +1,6 @@
 <template>
   <section role="main">
-    <form
-      @submit.prevent="savePatientInfo"
-      class="mt-5 mr-2 ml-2 justify-content-md-center"
-    >
+    <form @submit.prevent="savePatientInfo" class="mt-5 mr-2 ml-2 justify-content-md-center">
       <div class="col">
         <section class="card">
           <header class="card-header">
@@ -13,118 +10,66 @@
             <div v-if="!isLoading">
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >First Name <span style="color: red">*</span></label
-                >
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.firstName"
-                    required
-                  />
+                  <label class="label f-weight-550">First Name <span style="color: red">*</span></label>
+                  <input type="text" class="form-control" v-model="form.firstName" required />
                 </div>
 
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Last Name <span style="color: red">*</span></label
-                >
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.lastName"
-                    required
-                  />
+                  <label class="label f-weight-550">Last Name <span style="color: red">*</span></label>
+                  <input type="text" class="form-control" v-model="form.lastName" required />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Middle Initial</label
-                >
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.middleInitial"
-                  />
+                  <label class="label f-weight-550">Middle Initial</label>
+                  <input type="text" class="form-control" v-model="form.middleInitial" />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Nickname</label
-                >
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.nickName"
-                  />
+                  <label class="label f-weight-550">Nickname</label>
+                  <input type="text" class="form-control" v-model="form.nickName" />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Email <span style="color: red">*</span></label
-                >
-                <input
-                    type="email"
-                    class="form-control"
-                    v-model="form.email"
-                    required
-                  />
+                  <label class="label f-weight-550">Email <span style="color: red">*</span></label>
+                  <input type="email" class="form-control" v-model="form.email" required />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">Address 1 <span style="color: red">*</span> </label>
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.address"
-                    required
-                  />
+                  <input type="text" class="form-control" v-model="form.address" required />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Address 2</label
-                >
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.address2"
-                  />
+                  <label class="label f-weight-550">Address 2</label>
+                  <input type="text" class="form-control" v-model="form.address2" />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >City <span style="color: red">*</span> </label
-                >
-                <input type="text" class="form-control" v-model="form.city" required />
+                  <label class="label f-weight-550">City <span style="color: red">*</span> </label>
+                  <input type="text" class="form-control" v-model="form.city" required />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >State <span style="color: red">*</span> </label
-                >
-                <select v-model="form.state" class="form-control" required>
-                    <option
-                      v-for="state in usStates"
-                      :key="state.code"
-                      :value="state.code"
-                    >
+                  <label class="label f-weight-550">State <span style="color: red">*</span> </label>
+                  <select v-model="form.state" class="form-control" required>
+                    <option v-for="state in usStates" :key="state.code" :value="state.code">
                       {{ state.name }}
                     </option>
                   </select>
@@ -134,77 +79,43 @@
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Zip Code <span style="color: red">*</span> </label
-                >
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.zip"
-                    required
-                  />
+                  <label class="label f-weight-550">Zip Code <span style="color: red">*</span> </label>
+                  <input type="text" class="form-control" v-model="form.zip" required />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Home Phone <span v-show="form.cellPhone === ''" style="color: red">*</span></label
-                >
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.homePhone"
-                    :required ="form.cellPhone === ''"
-                    v-mask="'(###) ###-####'"
-                  />
+                  <label class="label f-weight-550">Home Phone <span v-show="form.cellPhone === ''"
+                      style="color: red">*</span></label>
+                  <input type="text" class="form-control" v-model="form.homePhone" :required="form.cellPhone === ''"
+                    v-mask="'(###) ###-####'" />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                   <label class="label f-weight-550"
-                  >Mobile Phone <span v-show="form.homePhone === ''" style="color: red">*</span></label
-                >
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.cellPhone"
-                    :required ="form.homePhone === ''"
-                    v-mask="'(###) ###-####'"
-                  />
+                  <label class="label f-weight-550">Mobile Phone <span v-show="form.homePhone === ''"
+                      style="color: red">*</span></label>
+                  <input type="text" class="form-control" v-model="form.cellPhone" :required="form.homePhone === ''"
+                    v-mask="'(###) ###-####'" />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Date of Birth <span style="color: red">*</span></label
-                >
-                <datepicker
-                    v-model="form.dob"
-                    :input-class="'form-control'"
-                    :format="'MMMM dd, yyyy'"
-                    :id="'dpicker'"
-                    :required="true"
-                    :typeable="false"
-                    :disabled-dates="disabledDates"
-                    onkeydown="return false"
-                  ></datepicker>
+                  <label class="label f-weight-550">Date of Birth <span style="color: red">*</span></label>
+                  <datepicker v-model="form.dob" :input-class="'form-control'" :format="'MMMM dd, yyyy'" :id="'dpicker'"
+                    :required="true" :typeable="false" :disabled-dates="disabledDates" onkeydown="return false">
+                  </datepicker>
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Gender <span style="color: red">*</span></label
-                >
-                <select class="form-control" v-model="form.sex">
-                    <option
-                      v-for="gender in genderList"
-                      :value="gender.id"
-                      :key="gender.value"
-                    >
+                  <label class="label f-weight-550">Gender <span style="color: red">*</span></label>
+                  <select class="form-control" v-model="form.sex">
+                    <option v-for="gender in genderList" :value="gender.id" :key="gender.value">
                       {{ gender.value }}
                     </option>
                   </select>
@@ -213,19 +124,9 @@
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Employment <span style="color: red">*</span></label
-                >
-                <select
-                    class="form-control"
-                    v-model="form.employStatID"
-                    required
-                  >
-                    <option
-                      v-for="employ in employmentList"
-                      :value="employ.id"
-                      :key="employ.value"
-                    >
+                  <label class="label f-weight-550">Employment <span style="color: red">*</span></label>
+                  <select class="form-control" v-model="form.employStatID" required>
+                    <option v-for="employ in employmentList" :value="employ.id" :key="employ.value">
                       {{ employ.value }}
                     </option>
                   </select>
@@ -234,15 +135,9 @@
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                   <label class="label f-weight-550"
-                  >Marital Status <span style="color: red">*</span></label
-                >
-                <select v-model="form.maritalStatID" class="form-control">
-                    <option
-                      v-for="marital in statusList"
-                      :key="marital.value"
-                      :value="marital.id"
-                    >
+                  <label class="label f-weight-550">Marital Status <span style="color: red">*</span></label>
+                  <select v-model="form.maritalStatID" class="form-control">
+                    <option v-for="marital in statusList" :key="marital.value" :value="marital.id">
                       {{ marital.value }}
                     </option>
                   </select>
@@ -251,28 +146,16 @@
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Emergency Contact</label
-                >
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.emerContact"
-                  />
+                  <label class="label f-weight-550">Emergency Contact</label>
+                  <input type="text" class="form-control" v-model="form.emerContact" />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Emergency Relation</label
-                >
-                <select class="form-control" v-model="form.emerRelation">
-                    <option
-                      v-for="relation in relationList"
-                      :value="relation"
-                      :key="relation"
-                    >
+                  <label class="label f-weight-550">Emergency Relation</label>
+                  <select class="form-control" v-model="form.emerRelation">
+                    <option v-for="relation in relationList" :value="relation" :key="relation">
                       {{ relation }}
                     </option>
                   </select>
@@ -281,41 +164,22 @@
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Emergency Phone</label
-                >
-                <input
-                    type="text"
-                    class="form-control"
-                    v-model="form.emerPhone"
-                    v-mask="'(###)-###-####'"
-                  />
+                  <label class="label f-weight-550">Emergency Phone</label>
+                  <input type="text" class="form-control" v-model="form.emerPhone" v-mask="'(###)-###-####'" />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550"
-                  >Is today's visit due to an auto accident?</label
-                >
-                <div class="form-check">
-                    <input
-                      type="radio"
-                      class="form-check-input"
-                      name="question"
-                      :checked="isAutoAccident"
-                      @click="toggle(true)"
-                    />
+                  <label class="label f-weight-550">Is today's visit due to an auto accident?</label>
+                  <div class="form-check">
+                    <input type="radio" class="form-check-input" name="question" :checked="isAutoAccident"
+                      @click="toggle(true)" />
                     <label class="form-check-label">Yes</label>
                   </div>
                   <div class="form-check">
-                    <input
-                      type="radio"
-                      class="form-check-input"
-                      name="question"
-                      :checked="!isAutoAccident"
-                      @click="toggle(false)"
-                    />
+                    <input type="radio" class="form-check-input" name="question" :checked="!isAutoAccident"
+                      @click="toggle(false)" />
                     <label class="form-check-label">No</label>
                   </div>
                 </div>
@@ -343,7 +207,7 @@
                 >
                   Back
                 </button> -->
-                <btn-saving :is-saving="isSaving"/>
+                <btn-saving :is-saving="isSaving" />
               </div>
             </div>
           </footer>
@@ -364,7 +228,7 @@ export default {
     Datepicker,
     btnSaving
   },
-  data () {
+  data() {
     return {
       isRequired: true,
       isLoading: true,
@@ -444,15 +308,19 @@ export default {
       'getTaskInfo'
     ]),
     TaskInfo() {
-      return JSON.parse(this.getTaskInfo)
+      if (this.getTaskInfo !== '') {
+        return JSON.parse(this.getTaskInfo)
+      } else {
+        return null
+      }
     }
   },
   methods: {
     ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryId', 'setTaskInfo']),
-    toggle (val) {
+    toggle(val) {
       this.isAutoAccident = val
     },
-    async previous () {
+    async previous() {
       // this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
       await this.$router.push({ path: '/' })
     },
@@ -483,11 +351,13 @@ export default {
 
         await this.setTaskCurrentCaseHistoryId(result.data)
         this.isSaving = false
-        if (this.TaskInfo.Action === 'INSINFO') {
-          const taskinfo = this.TaskInfo
-          taskinfo.CurrentTaskType = this.isAutoAccident ? 'NphAutoAccident' : 'NphComplaintLocation'
-          this.setTaskInfo(JSON.stringify(taskinfo))
-          this.setTaskCurrentTaskType('NphInsurance')
+        if (this.TaskInfo) {
+          if (this.TaskInfo.Action === 'INSINFO') {
+            const taskinfo = this.TaskInfo
+            taskinfo.CurrentTaskType = this.isAutoAccident ? 'NphAutoAccident' : 'NphComplaintLocation'
+            this.setTaskInfo(JSON.stringify(taskinfo))
+            this.setTaskCurrentTaskType('NphInsurance')
+          }
         } else if (this.isAutoAccident) {
           this.setTaskCurrentTaskType('NphAutoAccident')
         } else {
@@ -495,7 +365,7 @@ export default {
         }
       }
     },
-    async getPatientInfo (patientId) {
+    async getPatientInfo(patientId) {
       const patientInfo = await api.task.request.getPatient({
         facilityId: this.currentPatientAssociated.facilityID,
         patientId: this.currentPatientAssociated.patientID
@@ -512,12 +382,12 @@ export default {
       }
       this.isLoading = false
     },
-    async getUsStates () {
+    async getUsStates() {
       const result = await api.task.request.getUsStates()
       this.usStates = result.data
     }
   },
-  async mounted () {
+  async mounted() {
     await this.getUsStates()
     await this.getPatientInfo()
     this.isLoading = false

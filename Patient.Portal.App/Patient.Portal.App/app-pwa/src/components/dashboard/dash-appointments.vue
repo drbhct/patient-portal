@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row pb-4">
       <div class="col col-xl-8 col-xl-8">
         <!--<p class="dash-appt-title">Upcoming appointments</p>-->
         <div class="header-t-text d-block">
