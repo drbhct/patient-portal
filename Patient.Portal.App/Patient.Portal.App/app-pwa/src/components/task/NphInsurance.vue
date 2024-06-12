@@ -48,13 +48,17 @@
                           <div class="col-lg-12">
                             <label v-if="dataURLList.length === 0" class="label f-weight-550">Or Take a photo of the
                               document</label>
-                            <div class="camera-button">
-                              <button type="button" class="button is-rounded"
+                            <div v-if="!IsMobile" class="camera-button">
+                              <button type="button" class="capture-button"
                                 :class="{ 'is-primary': !isCameraOpen, 'is-danger': isCameraOpen }"
                                 @click="toggleCamera">
                                 <span v-if="!isCameraOpen">Open Camera</span>
                                 <span v-else>Close Camera</span>
                               </button>
+                            </div>
+                            <div v-else>
+                              <label for="photo" class="capture-button">Open Camera</label>
+                              <input type="file" id="photo" capture="environment" accept="image/*,video/*">
                             </div>
                           </div>
                         </div>
@@ -70,15 +74,16 @@
 
                             <div v-if="isCameraOpen" v-show="!isLoading2" class="camera-box"
                               :class="{ 'flash': isShotPhoto }">
+                              <div>
+                                <div class="camera-shutter" :class="{ 'flash': isShotPhoto }"></div>
+                                <video id="player" v-show="!isPhotoTaken" ref="camera" :width="450" :height="337.5"
+                                  autoplay>
+                                </video>
 
-                              <div class="camera-shutter" :class="{ 'flash': isShotPhoto }"></div>
-                              <video id="player" v-show="!isPhotoTaken" ref="camera" :width="450" :height="337.5" autoplay controls>
-                              </video>
-
-                              <canvas v-show="isPhotoTaken" id="photoTaken" ref="canvas" :width="450"
-                                :height="337.5"></canvas>
+                                <canvas v-show="isPhotoTaken" id="photoTaken" ref="canvas" :width="450"
+                                  :height="337.5"></canvas>
+                              </div>
                             </div>
-
                             <div class="mx-auto" v-if="isCameraOpen && !isLoading2"
                               style="display:flex; align-items: center;">
                               <div class="camera-shoot pr-2">
@@ -225,6 +230,9 @@ export default {
     ]),
     TaskInfo() {
       return JSON.parse(this.getTaskInfo)
+    },
+    IsMobile() {
+      return window.navigator.userAgent.toLowerCase().includes('mobi')
     }
   },
   methods: {
@@ -467,27 +475,25 @@ export default {
   async mounted() {
     this.isLoading = true
     this.isLoading = false
-    const player = document.getElementById('player')
-    const canvas = document.getElementById('photoTaken')
-    const context = canvas.getContext('2d')
-    const captureButton = document.getElementById('capture')
-
-    const constraints = {
-      video: true
-    }
-    captureButton.addEventListener('click', () => {
-    // Draw the video frame to the canvas.
-      context.drawImage(player, 0, 0, canvas.width, canvas.height)
-      // Stop all video streams.
-      player.srcObject.getVideoTracks().forEach(track => track.stop())
-    })
-    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
-      player.srcObject = stream
-    })
   }
 }
 </script>
 <style scoped>
+input[type="file"] {
+  display: none;
+}
+
+.capture-button {
+  padding: 5px 10px;
+  font-size: 16px;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+}
+
 .form-box {
   padding: 1.5rem;
   margin-right: 0;
