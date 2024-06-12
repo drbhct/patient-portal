@@ -57,12 +57,12 @@
                               </button>
                             </div>
                             <div v-else>
-                              <label for="photo" class="capture-button">Open Camera</label>
-                              <input type="file" id="photo" capture="environment" accept="image/*,video/*">
+                              <label for="photoFile" class="capture-button">Open Camera</label>
+                              <input type="file" style="display: none" id="photoFile" capture="environment" accept="image/*,video/*" @change="loadPhotoFileAsURL">
                             </div>
                           </div>
                         </div>
-                        <div class="row pt-2">
+                        <div class="row pt-2" v-if="!IsMobile">
                           <div class="mx-auto web-camera-container">
                             <div v-show="isCameraOpen && isLoading2" class="camera-loading">
                               <ul class="loader-circle">
@@ -408,6 +408,17 @@ export default {
       const res = await Promise.all(files)
       this.dataURLListUpload = res
     },
+    async loadPhotoFileAsURL() {
+      const files = Array.from(document.getElementById('photoFile').files).map(file => {
+        const reader = new FileReader()
+        return new Promise(resolve => {
+          reader.onload = () => resolve(reader.result)
+          reader.readAsDataURL(file)
+        })
+      })
+      const res = await Promise.all(files)
+      this.dataURLList.push(res)
+    },
     removeUploadedFile() {
       document.getElementById('formFile').value = null
       this.dataURLListUpload = []
@@ -422,7 +433,6 @@ export default {
             pdf.addPage()
           }
         }
-        console.log(pdf)
         base64String = pdf.output('datauri')
       }
       if (base64String !== '') {
@@ -454,6 +464,8 @@ export default {
       if (retData) {
         this.isSaving = false
         this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
+        this.dataURLList = []
+        this.dataURLListUpload = []
       }
     },
     checkFileType() {
@@ -479,10 +491,6 @@ export default {
 }
 </script>
 <style scoped>
-input[type="file"] {
-  display: none;
-}
-
 .capture-button {
   padding: 5px 10px;
   font-size: 16px;
