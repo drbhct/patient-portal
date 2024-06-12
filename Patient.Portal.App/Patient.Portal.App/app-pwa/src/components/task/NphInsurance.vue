@@ -72,7 +72,7 @@
                               :class="{ 'flash': isShotPhoto }">
 
                               <div class="camera-shutter" :class="{ 'flash': isShotPhoto }"></div>
-                              <video v-show="!isPhotoTaken" ref="camera" :width="450" :height="337.5" autoplay>
+                              <video id="player" v-show="!isPhotoTaken" ref="camera" :width="450" :height="337.5" autoplay controls>
                               </video>
 
                               <canvas v-show="isPhotoTaken" id="photoTaken" ref="canvas" :width="450"
@@ -82,7 +82,7 @@
                             <div class="mx-auto" v-if="isCameraOpen && !isLoading2"
                               style="display:flex; align-items: center;">
                               <div class="camera-shoot pr-2">
-                                <button type="button" class="button camera-shoot" @click="takePhoto">
+                                <button id="capture" type="button" class="button camera-shoot" @click="takePhoto">
                                   <img src="https://img.icons8.com/material-outlined/50/000000/camera--v2.png">
                                 </button>
                               </div>
@@ -467,6 +467,23 @@ export default {
   async mounted() {
     this.isLoading = true
     this.isLoading = false
+    const player = document.getElementById('player')
+    const canvas = document.getElementById('photoTaken')
+    const context = canvas.getContext('2d')
+    const captureButton = document.getElementById('capture')
+
+    const constraints = {
+      video: true
+    }
+    captureButton.addEventListener('click', () => {
+    // Draw the video frame to the canvas.
+      context.drawImage(player, 0, 0, canvas.width, canvas.height)
+      // Stop all video streams.
+      player.srcObject.getVideoTracks().forEach(track => track.stop())
+    })
+    navigator.mediaDevices.getUserMedia(constraints).then((stream) => {
+      player.srcObject = stream
+    })
   }
 }
 </script>

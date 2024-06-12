@@ -20,16 +20,16 @@ export default {
 </script>
 <style scoped>
   .task-w {
-    width: 90%;
+    width: 98%;
     padding-top: 2rem;
     margin-top: 2rem !important;
     margin-left: auto !important;
     margin-right: auto !important;
   }
 
-  @media only screen and (max-width: 767px) {
+  @media only screen and (max-width: 841px) {
     .task-w {
-      width: 80%;
+      width: 100%;
     }
   }
 </style>
