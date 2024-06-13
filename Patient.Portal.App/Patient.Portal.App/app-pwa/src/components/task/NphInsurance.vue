@@ -424,20 +424,18 @@ export default {
       this.dataURLListUpload = []
     },
     async uploadFile(listData) {
+      alert('upload file')
       let base64String = ''
       const pdf = new jsPDF()
       if (listData.length > 0) {
         for (let i = 0; i < listData.length; i++) {
-          console.log(listData[i])
           pdf.addImage(listData[i], 'JPEG', 15, 40, 180, 160)
-          console.log(pdf)
           if (i !== listData.length - 1) {
             pdf.addPage()
           }
         }
         base64String = pdf.output('datauri')
       }
-      console.log(base64String)
       if (base64String !== '') {
         const base64data = base64String.split('base64')[1]
         const retData = await api.task.request.virusScan({
@@ -458,6 +456,7 @@ export default {
       }
     },
     async uploadPatientForm(base64data) {
+      alert('upload patientform')
       const retData = await api.task.request.uploadPatientForm({
         facilityId: this.currentPatientAssociated.facilityID,
         patientId: this.currentPatientAssociated.patientID,
@@ -466,6 +465,7 @@ export default {
       })
       if (retData) {
         this.isSaving = false
+        alert(this.TaskInfo.CurrentTaskType)
         this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
         this.dataURLList = []
         this.dataURLListUpload = []
