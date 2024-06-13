@@ -438,10 +438,12 @@ export default {
       }
       if (base64String !== '') {
         const base64data = base64String.split('base64')[1]
+        alert('before virus scan')
         const retData = await api.task.request.virusScan({
           facilityId: this.currentPatientAssociated.facilityID,
           base64: base64data.replace(',', '').trim()
         })
+        alert(retData.data)
         if (retData.data) {
           if (retData.data.value) {
             this.uploadPatientForm(base64data.replace(',', '').trim())
