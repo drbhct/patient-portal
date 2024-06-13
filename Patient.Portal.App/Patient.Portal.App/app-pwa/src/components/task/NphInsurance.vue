@@ -152,7 +152,7 @@
                   <div class="col-lg-6 mx-auto">
                     <label class="label f-weight-550">Date of Birth <span style="color: red">*</span></label>
                     <datepicker v-model="form.dob" :input-class="'form-control bg-white'" :format="'MM/dd/yyyy'"
-                      :id="'dpicker'" :required="true" :typeable="false" onkeydown="return false">
+                      :id="'dpicker'" :required="true" :typeable="true" :initialView="'year'">
                     </datepicker>
                   </div>
                 </div>
@@ -417,7 +417,7 @@ export default {
         })
       })
       const res = await Promise.all(files)
-      this.dataURLList.push(res)
+      this.dataURLList = res
     },
     removeUploadedFile() {
       document.getElementById('formFile').value = null
@@ -428,13 +428,16 @@ export default {
       const pdf = new jsPDF()
       if (listData.length > 0) {
         for (let i = 0; i < listData.length; i++) {
+          console.log(listData[i])
           pdf.addImage(listData[i], 'JPEG', 15, 40, 180, 160)
+          console.log(pdf)
           if (i !== listData.length - 1) {
             pdf.addPage()
           }
         }
         base64String = pdf.output('datauri')
       }
+      console.log(base64String)
       if (base64String !== '') {
         const base64data = base64String.split('base64')[1]
         const retData = await api.task.request.virusScan({
