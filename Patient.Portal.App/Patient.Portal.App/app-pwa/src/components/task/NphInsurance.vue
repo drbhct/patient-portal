@@ -424,7 +424,6 @@ export default {
       this.dataURLListUpload = []
     },
     async uploadFile(listData) {
-      alert('upload file')
       let base64String = ''
       const pdf = new jsPDF()
       if (listData.length > 0) {
@@ -438,32 +437,30 @@ export default {
       }
       if (base64String !== '') {
         const base64data = base64String.split('base64')[1]
-        alert('before virus scan')
-        let retData = null
-        try {
-          retData = await api.task.request.virusScan({
-            facilityId: this.currentPatientAssociated.facilityID,
-            base64: base64data.replace(',', '').trim()
-          })
-        } catch (e) {
-          alert(e)
-        }
-        alert(retData)
-        if (retData.data) {
-          if (retData.data.value) {
-            this.uploadPatientForm(base64data.replace(',', '').trim())
-          } else {
-            this.$swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: retData.data.reason
-            })
-          }
-        }
+        this.uploadPatientForm(base64data.replace(',', '').trim())
+        // let retData = null
+        // try {
+        //   retData = await api.task.request.virusScan({
+        //     facilityId: this.currentPatientAssociated.facilityID,
+        //     base64: base64data.replace(',', '').trim()
+        //   })
+        // } catch (e) {
+        //   alert(e)
+        // }
+        // if (retData.data) {
+        //   if (retData.data.value) {
+        //     this.uploadPatientForm(base64data.replace(',', '').trim())
+        //   } else {
+        //     this.$swal.fire({
+        //       icon: 'error',
+        //       title: 'Oops...',
+        //       text: retData.data.reason
+        //     })
+        //   }
+        // }
       }
     },
     async uploadPatientForm(base64data) {
-      alert('upload patientform')
       const retData = await api.task.request.uploadPatientForm({
         facilityId: this.currentPatientAssociated.facilityID,
         patientId: this.currentPatientAssociated.patientID,
