@@ -436,28 +436,26 @@ export default {
         base64String = pdf.output('datauri')
       }
       if (base64String !== '') {
-        const base64data = base64String.split('base64')[1]
-        this.uploadPatientForm(base64data.replace(',', '').trim())
-        // let retData = null
-        // try {
-        //   retData = await api.task.request.virusScan({
-        //     facilityId: this.currentPatientAssociated.facilityID,
-        //     base64: base64data.replace(',', '').trim()
-        //   })
-        // } catch (e) {
-        //   alert(e)
-        // }
-        // if (retData.data) {
-        //   if (retData.data.value) {
-        //     this.uploadPatientForm(base64data.replace(',', '').trim())
-        //   } else {
-        //     this.$swal.fire({
-        //       icon: 'error',
-        //       title: 'Oops...',
-        //       text: retData.data.reason
-        //     })
-        //   }
-        // }
+        // this is temp
+        // const base64data = base64String.split('base64')[1]
+        const base64data = this.dataURLListUpload[0].split('base64')[1]
+        const retData = await api.task.request.virusScan({
+          facilityId: this.currentPatientAssociated.facilityID,
+          base64: base64data.replace(',', '').trim()
+        })
+
+        if (retData.data) {
+          if (retData.data.value) {
+            console.log('uploadPatientForm commented out')
+            // this.uploadPatientForm(base64data.replace(',', '').trim())
+          } else {
+            this.$swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: retData.data.reason
+            })
+          }
+        }
       }
     },
     async uploadPatientForm(base64data) {
@@ -470,7 +468,7 @@ export default {
       if (retData) {
         this.isSaving = false
         alert(this.TaskInfo.CurrentTaskType)
-        this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
+        // this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
         this.dataURLList = []
         this.dataURLListUpload = []
       }
