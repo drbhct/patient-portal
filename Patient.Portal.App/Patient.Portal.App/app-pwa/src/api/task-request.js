@@ -583,6 +583,7 @@ export default {
     /**
      * @param {Number} payload.facilityid Facility ID where the patient is assoicated
      * @param {String} payload.patientId Base64
+     * @param {String} payload.dataUri
      */
     async virusScan (payload) {
       return await securedJsonRequest.post(
