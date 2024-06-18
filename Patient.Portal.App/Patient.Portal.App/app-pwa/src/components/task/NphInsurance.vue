@@ -380,21 +380,14 @@ export default {
 
       // Save the PDF file
       pdf.save('output.pdf')
-      // var base64 = pdf.output('datauri')
-      // console.log(base64)
     },
     deleteItem(index) {
       this.dataURLList.splice(index, 1)
       const files = Array.from(document.getElementById('formFile').files)
       if (files) {
         files.splice(index, 1)
-        console.log('splice')
-        console.log(files)
         document.getElementById('formFile').files.length = files.length
       }
-      // var myFiles = Object.entries(document.getElementById('formFile').files)
-      // Object.entries(myFiles.splice(index - 1, 1))
-      // console.log(myFiles)
     },
     async loadFileAsURL() {
       this.checkFileType()
@@ -433,12 +426,20 @@ export default {
             pdf.addPage()
           }
         }
-        base64String = pdf.output('datauri')
+        base64String = pdf.output('datauristring')
+        // var iframe = document.createElement('iframe')
+        // iframe.src = pdf.output('datauri')
+        // console.log(iframe)
+        // base64String = iframe
+        // base64String = pdf.output('datauri')
+        // console.log(base64String)
+        // var iframe = '<"iframe">'
+        // base64String = pdf.output('datauri')
       }
       if (base64String !== '') {
         // this is temp
         // const base64data = base64String.split('base64')[1]
-        // const base64data = this.dataURLListUpload[0].split('base64')[1]
+
         const retData = await api.task.request.virusScan({
           facilityId: this.currentPatientAssociated.facilityID,
           base64: '',
