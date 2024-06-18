@@ -438,7 +438,7 @@ export default {
       if (base64String !== '') {
         // this is temp
         // const base64data = base64String.split('base64')[1]
-        const base64data = this.dataURLListUpload[0].split('base64')[1]
+        // const base64data = this.dataURLListUpload[0].split('base64')[1]
         const retData = await api.task.request.virusScan({
           facilityId: this.currentPatientAssociated.facilityID,
           base64: '',
