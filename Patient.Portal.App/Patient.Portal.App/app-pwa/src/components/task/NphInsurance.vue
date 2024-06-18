@@ -427,29 +427,19 @@ export default {
           }
         }
         base64String = pdf.output('datauristring')
-        // var iframe = document.createElement('iframe')
-        // iframe.src = pdf.output('datauri')
-        // console.log(iframe)
-        // base64String = iframe
-        // base64String = pdf.output('datauri')
-        // console.log(base64String)
-        // var iframe = '<"iframe">'
-        // base64String = pdf.output('datauri')
       }
       if (base64String !== '') {
-        // this is temp
-        // const base64data = base64String.split('base64')[1]
+        const base64data = base64String.split('base64')[1]
 
         const retData = await api.task.request.virusScan({
           facilityId: this.currentPatientAssociated.facilityID,
-          base64: '',
-          dataUri: base64String
+          base64: base64String,
+          dataUri: ''
         })
 
         if (retData.data) {
           if (retData.data.value) {
-            console.log('uploadPatientForm commented out')
-            // this.uploadPatientForm(base64data.replace(',', '').trim())
+            this.uploadPatientForm(base64data.replace(',', '').trim())
           } else {
             this.$swal.fire({
               icon: 'error',
