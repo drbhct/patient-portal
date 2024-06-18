@@ -433,7 +433,7 @@ export default {
 
         const retData = await api.task.request.virusScan({
           facilityId: this.currentPatientAssociated.facilityID,
-          base64: base64String,
+          base64: base64data.replace(',', '').trim(),
           dataUri: ''
         })
 
@@ -459,8 +459,7 @@ export default {
       })
       if (retData) {
         this.isSaving = false
-        alert(this.TaskInfo.CurrentTaskType)
-        // this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
+        this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
         this.dataURLList = []
         this.dataURLListUpload = []
       }
