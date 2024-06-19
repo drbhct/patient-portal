@@ -558,6 +558,7 @@ export default {
      * @param {Number} payload.patientId ID  of the patient associated to the task
      * @param {String} payload.description
      * @param {String} payload.base64
+     * @param {String} payload.folder
      */
     async uploadPatientForm (payload) {
       return await securedJsonRequest.post(

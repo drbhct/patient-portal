@@ -62,6 +62,8 @@ export default {
         case 'FORM':
           var info = JSON.parse(item.info)
           return info.Action
+        case 'INS':
+          return 'Insurance Information'
         default:
           return ''
       }
@@ -80,6 +82,9 @@ export default {
         case 'FORM':
           var info = JSON.parse(item.info)
           return info.FormName.toUpperCase()
+        case 'INS':
+          var info2 = JSON.parse(item.info)
+          return info2.Description.toUpperCase()
         default:
           return ''
       }
@@ -91,9 +96,13 @@ export default {
         case 'NPH':
         case 'AANPH':
         case 'CH':
+        case 'INS':
         case 'AACH':
           if (task.info !== '') {
-            this.setTaskInfo(task.info)
+            var taskinfo = JSON.parse(task.info)
+            taskinfo.TaskType = task.taskType
+            taskinfo.TaskID = task.taskID
+            this.setTaskInfo(JSON.stringify(taskinfo))
           } else {
             this.setTaskInfo('')
           }

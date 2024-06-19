@@ -455,7 +455,8 @@ export default {
         facilityId: this.currentPatientAssociated.facilityID,
         patientId: this.currentPatientAssociated.patientID,
         description: this.TaskInfo.Description + '|' + this.TaskInfo.Folder,
-        base64: base64data
+        base64: base64data,
+        folder: this.TaskInfo.Folder
       })
       if (retData) {
         this.isSaving = false

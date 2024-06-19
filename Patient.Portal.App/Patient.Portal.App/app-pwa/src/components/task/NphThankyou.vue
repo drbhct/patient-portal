@@ -1,9 +1,6 @@
 <template>
   <section role="main">
-    <form
-      @submit.prevent="submit"
-      class="mt-5 mr-2 ml-2 justify-content-md-center"
-    >
+    <form @submit.prevent="submit" class="mt-5 mr-2 ml-2 justify-content-md-center">
       <div class="col">
         <section class="card">
           <header class="card"></header>
@@ -52,15 +49,10 @@
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
-                <button
-                  type="reset"
-                  class="btn btn-default mr-2"
-                  @click="prev"
-                  v-if="getTaskPreviousTaskType"
-                >
+                <button type="reset" class="btn btn-default mr-2" @click="prev" v-if="getTaskPreviousTaskType">
                   Back
                 </button>
-                <btn-saving :is-saving="isSaving" :loading-text="'Completing...'" :display-text="'Continue'"/>
+                <btn-saving :is-saving="isSaving" :loading-text="'Completing...'" :display-text="'Continue'" />
               </div>
             </div>
           </footer>
@@ -81,7 +73,7 @@ export default {
     // Multiselect,
     BtnSaving
   },
-  data () {
+  data() {
     return {
       isSaving: false,
       isLoading: false,
@@ -109,15 +101,19 @@ export default {
       'getTaskCurrentCaseHistoryId',
       'getTaskPreviousTaskType',
       'getTaskCurrentTaskType',
-      'currentPatientAssociated'
+      'currentPatientAssociated',
+      'getTaskInfo'
     ]),
-    yesNoSelection () {
+    yesNoSelection() {
       return ['Yes', 'No']
+    },
+    TaskInfo() {
+      return JSON.parse(this.getTaskInfo)
     }
   },
   methods: {
     ...mapActions(['setTaskCurrentTaskType']),
-    async submit () {
+    async submit() {
       this.isSaving = true
       // const payload = {
       //   facilityId: this.currentPatientAssociated.facilityID,
@@ -132,24 +128,31 @@ export default {
       // })
       // // console.log('payload>', payload)
       // await api.task.request.updateCaseHistoryQuestions(payload)
-      await api.task.request.updateCaseHistoryComplete({
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId
-      })
-
-      // this.$swal({
-      //   text: 'New Patient History Complete.',
-      //   position: 'top-center',
-      //   title: 'Success',
-      //   showConfirmButton: false,
-      //   timerProgressBar: true,
-      //   timer: 2000,
-      //   icon: 'success'
-      // })
+      if (this.TaskInfo) {
+        if (this.TaskInfo.TaskType === 'INS') {
+          await api.task.request.updateTaskComplete({
+            facilityId: this.currentPatientAssociated.facilityID,
+            id: this.TaskInfo.TaskID,
+            patientId: this.currentPatientAssociated.patientID
+          })
+          this.isSaving = false
+          await this.$router.push({ path: '/' })
+        } else {
+          await api.task.request.updateCaseHistoryComplete({
+            facilityId: this.currentPatientAssociated.facilityID,
+            caseHistoryId: this.getTaskCurrentCaseHistoryId
+          })
+        }
+      } else {
+        await api.task.request.updateCaseHistoryComplete({
+          facilityId: this.currentPatientAssociated.facilityID,
+          caseHistoryId: this.getTaskCurrentCaseHistoryId
+        })
+      }
       this.isSaving = false
       await this.$router.push({ path: '/' })
     },
-    prev () {
+    prev() {
       const currentIndex = this.getTaskPreviousTaskType.findIndex(
         (c) => c === this.getTaskCurrentTaskType
       )
@@ -167,7 +170,7 @@ export default {
       })
     }
   },
-  async mounted () {
+  async mounted() {
     this.isLoading = true
     const caseHistoryQuestions = await api.task.request.getCaseHistoryQuestions(
       {
@@ -194,5 +197,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

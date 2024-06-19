@@ -354,7 +354,11 @@ export default {
         if (this.TaskInfo) {
           if (this.TaskInfo.Action === 'INSINFO') {
             const taskinfo = this.TaskInfo
-            taskinfo.CurrentTaskType = this.isAutoAccident ? 'NphAutoAccident' : 'NphComplaintLocation'
+            if (this.TaskInfo.TaskType !== 'INS') {
+              taskinfo.CurrentTaskType = this.isAutoAccident ? 'NphAutoAccident' : 'NphComplaintLocation'
+            } else {
+              taskinfo.CurrentTaskType = 'NphThankyou'
+            }
             this.setTaskInfo(JSON.stringify(taskinfo))
             this.setTaskCurrentTaskType('NphInsurance')
           }
