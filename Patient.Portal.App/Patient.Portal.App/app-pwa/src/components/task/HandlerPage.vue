@@ -52,7 +52,8 @@ export default {
             facilityId: this.currentPatientAssociated.facilityID,
             patientId: queryData.pid,
             description: this.surveyJson.title,
-            base64: base64
+            base64: base64,
+            facilityFormID: queryData.i
           })
 
           if (fileID) {
