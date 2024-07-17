@@ -22,6 +22,7 @@ const vuexLocalStorage = new VuexPersist({
     'profile.currentPatient',
     'task.currentCaseHistoryComplaintFormValues',
     'task.taskInfo',
+    'task.taskItem',
     'billing.taskStatement',
     'billing.fortisPaymentForm',
     'billing.fortisStatementInfo',

@@ -13,7 +13,8 @@ const state = {
   taskCode: '',
   isAccessOnly: false,
   isAccessOnlyRoute: '/',
-  taskInfo: ''
+  taskInfo: '',
+  taskItem: undefined
 }
 
 const mutations = {
@@ -64,6 +65,9 @@ const mutations = {
   },
   [types.TASK_INFO] (state, payload) {
     state.taskInfo = payload
+  },
+  [types.TASK_ITEM] (state, payload) {
+    state.taskItem = payload
   }
 }
 

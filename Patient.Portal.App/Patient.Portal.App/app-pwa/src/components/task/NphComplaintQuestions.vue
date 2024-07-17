@@ -369,8 +369,12 @@ export default {
       'getTaskCurrentCaseHistoryFormValues',
       'getTaskCurrentTaskType',
       'currentPatientAssociated',
-      'getTaskCode'
+      'getTaskCode',
+      'getTaskInfo'
     ]),
+    TaskInfo() {
+      return JSON.parse(this.getTaskInfo)
+    },
     buttonText: function () {
       if (
         this.currentProblemIndex !==

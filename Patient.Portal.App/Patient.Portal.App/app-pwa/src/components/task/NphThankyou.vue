@@ -1,6 +1,6 @@
 <template>
   <section role="main">
-    <form @submit.prevent="submit" class="mt-5 mr-2 ml-2 justify-content-md-center">
+    <form @submit.prevent="submit2" class="mt-5 mr-2 ml-2 justify-content-md-center">
       <div class="col">
         <section class="card">
           <header class="card"></header>
@@ -102,32 +102,26 @@ export default {
       'getTaskPreviousTaskType',
       'getTaskCurrentTaskType',
       'currentPatientAssociated',
-      'getTaskInfo'
+      'getTaskInfo',
+      'getTaskItem'
     ]),
     yesNoSelection() {
       return ['Yes', 'No']
     },
     TaskInfo() {
-      return JSON.parse(this.getTaskInfo)
+      if (this.getTaskInfo === '') {
+        return undefined
+      } else {
+        return JSON.parse(this.getTaskInfo)
+      }
+    },
+    TaskItem() {
+      return this.getTaskItem
     }
   },
   methods: {
     ...mapActions(['setTaskCurrentTaskType']),
     async submit() {
-      this.isSaving = true
-      // const payload = {
-      //   facilityId: this.currentPatientAssociated.facilityID,
-      //   caseHistoryId: this.getTaskCurrentCaseHistoryId,
-      //   questions: []
-      // }
-      // this.form.questions.forEach((c) => {
-      //   payload.questions.push({
-      //     description: c.code,
-      //     answer: c.answer
-      //   })
-      // })
-      // // console.log('payload>', payload)
-      // await api.task.request.updateCaseHistoryQuestions(payload)
       if (this.TaskInfo) {
         if (this.TaskInfo.TaskType === 'INS') {
           await api.task.request.updateTaskComplete({
@@ -136,7 +130,7 @@ export default {
             patientId: this.currentPatientAssociated.patientID
           })
           this.isSaving = false
-          await this.$router.push({ path: '/' })
+          // await this.$router.push({ path: '/' })
         } else {
           await api.task.request.updateCaseHistoryComplete({
             facilityId: this.currentPatientAssociated.facilityID,
@@ -144,12 +138,22 @@ export default {
           })
         }
       } else {
+        if (this.TaskItem) {
+          await api.task.request.updateTaskComplete({
+            facilityId: this.currentPatientAssociated.facilityID,
+            id: this.TaskItem.taskID,
+            patientId: this.currentPatientAssociated.patientID
+          })
+        }
         await api.task.request.updateCaseHistoryComplete({
           facilityId: this.currentPatientAssociated.facilityID,
           caseHistoryId: this.getTaskCurrentCaseHistoryId
         })
       }
       this.isSaving = false
+      // await this.$router.push({ path: '/' })
+    },
+    async submit2() {
       await this.$router.push({ path: '/' })
     },
     prev() {
@@ -172,6 +176,8 @@ export default {
   },
   async mounted() {
     this.isLoading = true
+    // complete the task without having submit button clicked - requested here https://sprints.zoho.com/workspace/healthcoretech#P7/itemdetails/I155/details
+    await this.submit()
     const caseHistoryQuestions = await api.task.request.getCaseHistoryQuestions(
       {
         facilityId: this.currentPatientAssociated.facilityID,

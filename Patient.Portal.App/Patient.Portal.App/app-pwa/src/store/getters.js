@@ -42,6 +42,7 @@ export const getTaskCode = state => state.task.taskCode
 export const getTaskIsAccessOnly = state => state.task.isAccessOnly
 export const getTaskIsAccessOnlyRoute = state => state.task.isAccessOnlyRoute
 export const getTaskInfo = state => state.task.taskInfo
+export const getTaskItem = state => state.task.taskItem
 
 // fortis payment
 export const getFortisPaymentForm = state => state.billing.fortisPaymentForm
