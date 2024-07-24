@@ -134,4 +134,11 @@ export default {
   font-size: 18px !important;
   font-weight: 550;
 }
+.sv-signaturepad {
+    border: 1px solid gray !important;
+}
+
+.sd-signaturepad {
+  border: 1px solid gray !important;
+}
 </style>

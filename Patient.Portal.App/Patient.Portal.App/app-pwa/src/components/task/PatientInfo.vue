@@ -171,16 +171,32 @@
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Is today's visit due to an auto accident?</label>
-                  <div class="form-check">
-                    <input type="radio" class="form-check-input" name="question" :checked="isAutoAccident"
-                      @click="toggle(true)" />
-                    <label class="form-check-label">Yes</label>
+                  <h5 class="h5">Is this a result of:</h5>
+                  <div class="pl-2">
+                    <label class="label fw-500 pr-2 text-right" style="width:120px">Auto Accident:</label>
+                    <div class="form-check form-check-inline">
+                      <input type="radio" class="form-check-input" name="aaquestion" :checked="isAutoAccident"
+                        @click="isAutoAccident = true" />
+                      <label class="form-check-label check-inline">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input type="radio" class="form-check-input" name="aaquestion" :checked="!isAutoAccident"
+                        @click="isAutoAccident = false" />
+                      <label class="form-check-label">No</label>
+                    </div>
                   </div>
-                  <div class="form-check">
-                    <input type="radio" class="form-check-input" name="question" :checked="!isAutoAccident"
-                      @click="toggle(false)" />
-                    <label class="form-check-label">No</label>
+                  <div class="pl-2">
+                    <label class="label fw-500 pr-2 text-right" style="width:120px">Work Injury:</label>
+                    <div class="form-check form-check-inline">
+                      <input type="radio" class="form-check-input" name="wiquestion" :checked="isWorkInjury"
+                        @click="isWorkInjury = true" />
+                      <label class="form-check-label check-inline">Yes</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input type="radio" class="form-check-input" name="wiquestion" :checked="!isWorkInjury"
+                        @click="isWorkInjury = false" />
+                      <label class="form-check-label">No</label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -257,6 +273,7 @@ export default {
         emerPhone: ''
       },
       isAutoAccident: false,
+      isWorkInjury: false,
       usStates: [],
       relationList: [
         'SPOUSE',
@@ -347,8 +364,8 @@ export default {
             patientId: this.currentPatientAssociated.patientID,
             aa: this.isAutoAccident
           })
+          this.updateCaseHistory(result.data)
         }
-
         await this.setTaskCurrentCaseHistoryId(result.data)
         this.isSaving = false
         if (this.TaskInfo) {
@@ -368,6 +385,14 @@ export default {
           this.setTaskCurrentTaskType('NphComplaintLocation')
         }
       }
+    },
+    async updateCaseHistory(caseId) {
+      await api.task.request.updateCaseHistory({
+        facilityId: this.currentPatientAssociated.facilityID,
+        id: caseId,
+        aa: this.isAutoAccident,
+        wc: this.isWorkInjury
+      })
     },
     async getPatientInfo(patientId) {
       const patientInfo = await api.task.request.getPatient({
@@ -410,3 +435,16 @@ export default {
   }
 }
 </script>
+<style scoped>
+.h5 {
+    font-size: 1.1em !important;
+    font-weight: 600;
+    letter-spacing: normal;
+    line-height: 18px;
+    color: black;
+}
+
+.fw-500 {
+  font-weight: 550;
+}
+</style>

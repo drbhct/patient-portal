@@ -591,6 +591,18 @@ export default {
         '/clam/VirusScan',
         payload
       )
+    },
+    /**
+     * @param {Number} payload.facilityId
+     * @param {Number} payload.id
+     * @param {Boolean} payload.aa
+     * @param {Boolean} payload.wc
+     */
+    async updateCaseHistory (payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/UpdateCaseHistory',
+        payload
+      )
     }
   }
 }
