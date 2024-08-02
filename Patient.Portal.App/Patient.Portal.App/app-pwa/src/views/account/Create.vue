@@ -292,12 +292,12 @@ export default {
       )
       this.setProfilePatientAssociated(patientAssosicated.data)
       this.setProfileCurrentPatient(patientAssosicated.data[0])
-
+      this.$auth.completeAuth()
       setTimeout(() => {
         this.isSaving = false
         // TODO: Need to soon set this to auth wrapper
         // localStorage.setItem('completeAuth', true)
-        sessionStorage.setItem('completeAuth', true)
+        // sessionStorage.setItem('completeAuth', true)
         if (this.getTaskIsAccessOnly) {
           this.$router.push(this.getTaskIsAccessOnlyRoute)
         } else {

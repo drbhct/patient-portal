@@ -35,7 +35,9 @@ import { mapGetters, mapActions } from 'vuex'
 export default {
   data () {
     return {
-      facilityInfo: null
+      facilityInfo: {
+        phone: ''
+      }
     }
   },
   computed: {
@@ -53,8 +55,10 @@ export default {
     }
   },
   async mounted () {
-    this.facilityInfo = await api.auth.request.getFacilityInfo(this.currentPatientAssociated.facilityID)
-    this.setFacilityInfo(this.facilityInfo)
+    if (this.currentPatientAssociated) {
+      this.facilityInfo = await api.auth.request.getFacilityInfo(this.currentPatientAssociated.facilityID)
+      this.setFacilityInfo(this.facilityInfo)
+    }
   }
 }
 </script>

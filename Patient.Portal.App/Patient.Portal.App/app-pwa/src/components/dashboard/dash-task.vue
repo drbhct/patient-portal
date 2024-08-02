@@ -11,10 +11,10 @@
         <table class="w-100">
           <tbody>
             <tr v-for="(item, index) in taskslist" :key="item.taskID">
-              <td class="dash-task-col-title">{{(index + 1)}}) {{ setTitle(item.taskType, item )}}</td>
+              <td class="dash-task-col-title">{{ (index + 1) }}) {{ setTitle(item.taskType, item) }}</td>
               <td class="dash-task-col-action">
                 <button class="mb-1 mt-1 mr-1 btn btn-sm btn-primary dash-task-btn" @click="gotoTask(item)">
-                  {{ setButton(item.taskType, item )}}
+                  {{ setButton(item.taskType, item) }}
                 </button>
               </td>
             </tr>
@@ -37,10 +37,10 @@ import { mapGetters, mapActions } from 'vuex'
 import moment from 'moment'
 
 export default {
-  data () {
+  data() {
     return {
-      taskslist: null,
-      dt: null
+      taskslist: [],
+      dt: []
     }
   },
   computed: {
@@ -48,7 +48,7 @@ export default {
   },
   methods: {
     ...mapActions(['setTaskCurrentTaskType', 'setCurrentMsgInfo', 'setMsgCurrentPage', 'setTaskCode', 'setBillingStatementTask', 'setTaskInfo', 'setTaskItem']),
-    setTitle (val, item) {
+    setTitle(val, item) {
       switch (val) {
         case 'NPH':
         case 'AANPH':
@@ -68,7 +68,7 @@ export default {
           return ''
       }
     },
-    setButton (val, item) {
+    setButton(val, item) {
       switch (val) {
         case 'NPH':
         case 'AANPH':
@@ -89,7 +89,7 @@ export default {
           return ''
       }
     },
-    async gotoTask (task) {
+    async gotoTask(task) {
       let taskRes
       this.setTaskCode(task.taskType)
       switch (task.taskType) {
@@ -150,72 +150,81 @@ export default {
       return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')
     }
   },
-  async mounted () {
+  async mounted() {
     console.log('dash-task loaded')
-    const res = await api.patient.request.gettasks({
-      facilityId: this.currentPatientAssociated.facilityID,
-      patientId: this.currentPatientAssociated.patientID
-    })
-    this.taskslist = res.data
+    if (this.currentPatientAssociated) {
+      const res = await api.patient.request.gettasks({
+        facilityId: this.currentPatientAssociated.facilityID,
+        patientId: this.currentPatientAssociated.patientID
+      })
+      this.taskslist = res.data
+    }
   }
 }
 </script>
 <style scoped>
-  .dash-divider {
-    height: 4px;
-    margin-bottom: 10px;
-    width: 70%;
-  }
-  /* IPAD */
+.dash-divider {
+  height: 4px;
+  margin-bottom: 10px;
+  width: 70%;
+}
+
+/* IPAD */
 @media only screen and (max-width: 768px) {
   .dash-divider {
     width: 100%;
   }
 }
-  /* ----------- iPhone 6, 7, 8 ----------- */
-  @media only screen and (max-device-width: 375px) and (orientation: portrait) {
-    .dash-divider {
-      width: 100%;
-    }
-  }
-  @media only screen and (max-device-width: 667px) and (orientation: landscape) {
-    .dash-divider {
-      width: 100%;
-    }
-  }
-  /* ----------- iPhone Plus ----------- */
-  @media only screen and (max-device-width: 414px) and (orientation: portrait) {
-    .dash-divider {
-      width: 100%;
-    }
-  }
-  @media only screen and (device-width: 736px) and (orientation: landscape) {
-    .dash-divider {
-      width: 100%;
-    }
-  }
 
-  /*IPHONE X */
-  @media only screen and (max-device-width: 375px) and (orientation: portrait) {
-    .dash-divider {
-      width: 100%;
-    }
+/* ----------- iPhone 6, 7, 8 ----------- */
+@media only screen and (max-device-width: 375px) and (orientation: portrait) {
+  .dash-divider {
+    width: 100%;
   }
-  @media only screen and (device-width: 812px) and (orientation: landscape) {
-    .dash-divider {
-      width: 100%;
-    }
-  }
-  /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
-  @media only screen and (max-device-width: 320px) and (orientation: portrait) {
-    .dash-divider {
-      width: 100%;
-    }
-  }
+}
 
-  @media only screen and (max-device-width: 568px) and (orientation: landscape) {
-    .dash-divider {
-      width: 100% !important;
-    }
+@media only screen and (max-device-width: 667px) and (orientation: landscape) {
+  .dash-divider {
+    width: 100%;
   }
+}
+
+/* ----------- iPhone Plus ----------- */
+@media only screen and (max-device-width: 414px) and (orientation: portrait) {
+  .dash-divider {
+    width: 100%;
+  }
+}
+
+@media only screen and (device-width: 736px) and (orientation: landscape) {
+  .dash-divider {
+    width: 100%;
+  }
+}
+
+/*IPHONE X */
+@media only screen and (max-device-width: 375px) and (orientation: portrait) {
+  .dash-divider {
+    width: 100%;
+  }
+}
+
+@media only screen and (device-width: 812px) and (orientation: landscape) {
+  .dash-divider {
+    width: 100%;
+  }
+}
+
+/* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
+@media only screen and (max-device-width: 320px) and (orientation: portrait) {
+  .dash-divider {
+    width: 100%;
+  }
+}
+
+@media only screen and (max-device-width: 568px) and (orientation: landscape) {
+  .dash-divider {
+    width: 100% !important;
+  }
+}
 </style>

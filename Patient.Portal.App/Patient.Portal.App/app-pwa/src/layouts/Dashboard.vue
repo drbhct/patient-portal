@@ -3,13 +3,12 @@
     <section role="main" class="content-body">
       <header class="card-header text-center">
         <div class="d-none d-sm-block">
-          <h3 v-if="currentPatientAssociated">{{ currentPatientAssociated.firstName }} {{ currentPatientAssociated.lastName }}</h3>
+          <h3 v-if="currentPatientAssociated">{{ currentPatientAssociated.firstName }} {{
+            currentPatientAssociated.lastName }}</h3>
         </div>
         <div class="pb-3 d-lg-none d-md-none d-sm-none">
-          <select v-model="selectedPatient" @change="selectPatient()" class="form-control">
-            <option v-for="patient in getProfilePatientAssociated"
-                    :value="patient"
-                    :key="patient.id">
+          <select id="patient-sel" v-model="selectedPatient" @change="selectPatient()" class="form-control">
+            <option v-for="patient in getProfilePatientAssociated" :value="patient" :key="patient.id">
               {{ patient.firstName }} {{ patient.lastName }}
             </option>
           </select>
@@ -20,7 +19,7 @@
         </div> -->
 
         <!-- start: page DASHBOARD MENU-->
-          <dash-menu></dash-menu>
+        <dash-menu></dash-menu>
         <!-- end: page -->
       </header>
 
@@ -28,7 +27,7 @@
 
       <div class="container d-lg-flex d-md-flex pt-4">
         <div class="col-12 col-md-6 col-lg-6 col-xl-6">
-          <dash-task v-if="getProfilePatientAssociated.length>0"></dash-task>
+          <dash-task v-if="getProfilePatientAssociated.length > 0"></dash-task>
           <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
           <dash-appointments v-if="getProfilePatientAssociated.length>0"></dash-appointments>
         </div>
@@ -65,7 +64,7 @@ export default {
     DashWelcome,
     DashMenu
   },
-  data () {
+  data() {
     return {
       selectedPatient: null
     }
@@ -75,26 +74,27 @@ export default {
   },
   methods: {
     ...mapActions(['setProfilePatientAssociated', 'setProfileCurrentPatient', 'setIsLoading']),
-    async selectPatient () {
-      const me = this
-      this.setIsLoading(true)
-      console.log(this.selectedPatient)
-      await this.setProfileCurrentPatient(this.selectedPatient)
-      setTimeout(function () {
-        me.setIsLoading(false)
-        if (me.$route.path !== '/') {
-          me.$router.push('/')
-        } else {
-          me.$router.go(0)
-        }
-      }, 500)
+    async selectPatient() {
+      if (this.selectedPatient) {
+        console.log('selectPatient triggered')
+        const me = this
+        this.setIsLoading(true)
+        await this.setProfileCurrentPatient(this.selectedPatient)
+        setTimeout(function () {
+          me.setIsLoading(false)
+          if (me.$route.path !== '/') {
+            me.$router.push('/')
+          } else {
+            me.$router.go(0)
+          }
+        }, 500)
+      }
     }
   },
-  async mounted () {
+  async mounted() {
     const patientAssosicated = await api.auth.request.getUserPatient(this.getProfileAuthInfo.id)
     this.setProfilePatientAssociated(patientAssosicated.data)
     this.selectedPatient = this.currentPatientAssociated
-
     // // TODO: Set pubnub subcription on home page.
     // if(this.currentPatientAssociated){
     //   let channel = `ch-portal-msg-${}-${}`
@@ -120,6 +120,7 @@ export default {
   height: 4px;
   margin-bottom: 10px;
 }
+
 /* Header Mobile */
 @media only screen and (max-width: 767px) {
   .container {
@@ -171,8 +172,10 @@ export default {
 
   html.dark .header .header-right,
   html.header-dark .header .header-right {
-    background: #0c529c; /*modified by Rizza Herrero*/
-    font-size: 10px; /* added by Rizza Herrero */
+    background: #0c529c;
+    /*modified by Rizza Herrero*/
+    font-size: 10px;
+    /* added by Rizza Herrero */
   }
 
   .header .logo-container {
@@ -207,34 +210,38 @@ export default {
     border-color: black;
   }
 }
+
 /* IPAD */
 @media only screen and (max-width: 768px) {
   .dash-divider {
     width: 100%;
   }
 }
+
 /* ----------- iPhone 5, 5S, 5C and 5SE ----------- */
 @media only screen and (max-device-width: 320px) {
   .dash-divider {
     width: 100%;
   }
+
   .btn.btn-lg {
     font-size: 1rem;
     padding: 1rem 2rem;
     font-weight: 600;
   }
 }
-  /* ----------- iPhone Plus ----------- */
-  @media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) {
-    .dash-divider {
-      width: 100%;
-    }
-  }
 
-  /* Landscape IPHONE X */
-  @media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
-    .dash-divider {
-      width: 100%;
-    }
+/* ----------- iPhone Plus ----------- */
+@media only screen and (min-device-width: 414px) and (max-device-width: 736px) and (-webkit-min-device-pixel-ratio: 3) {
+  .dash-divider {
+    width: 100%;
   }
+}
+
+/* Landscape IPHONE X */
+@media only screen and (min-device-width: 375px) and (max-device-width: 812px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
+  .dash-divider {
+    width: 100%;
+  }
+}
 </style>

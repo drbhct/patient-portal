@@ -20,8 +20,8 @@ import moment from 'moment'
 export default {
   data () {
     return {
-      applist: null,
-      dt: null
+      applist: [],
+      dt: []
     }
   },
   computed: {
@@ -33,11 +33,13 @@ export default {
     }
   },
   async mounted () {
-    const res = await api.patient.request.getpatientfutureappts({
-      facilityId: this.currentPatientAssociated.facilityID,
-      patientId: this.currentPatientAssociated.patientID
-    })
-    this.applist = res.data
+    if (this.currentPatientAssociated) {
+      const res = await api.patient.request.getpatientfutureappts({
+        facilityId: this.currentPatientAssociated.facilityID,
+        patientId: this.currentPatientAssociated.patientID
+      })
+      this.applist = res.data
+    }
   }
 }
 </script>
