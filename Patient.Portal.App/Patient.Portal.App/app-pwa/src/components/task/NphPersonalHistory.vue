@@ -523,7 +523,7 @@ export default {
     let dobYear = moment(this.patientInfo.dob).year()
     const medicineYearSelection = []
     const currentYear = new Date().getFullYear()
-    while (dobYear < currentYear) {
+    while (dobYear <= currentYear) {
       medicineYearSelection.push(dobYear)
       dobYear += 1
     }
