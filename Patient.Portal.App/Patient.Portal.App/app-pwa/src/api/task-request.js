@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const prodApiEndpointDomain = 'https://hct-api-ncentral.healthcoretech.com'
 // const devApiEndpointDomain = 'https://hct-api-ncentral-dev.azurewebsites.net'
-const apiUrl = devApiEndpointDomain
+const apiUrl = prodApiEndpointDomain
 
 const securedJsonRequest = axios.create({
   baseURL: apiUrl,
