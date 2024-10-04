@@ -21,81 +21,113 @@
                   </div>
                 </div>
                 <div class="col-lg-12 pt-4 mt-4" v-if="!isPortionCare">
-                <div class="form-group mx-auto row f-weight-550 pt-2">
-                  <div class="col-lg-6 mx-auto">
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div class="row">
-                          <div class="col-lg-12">
-                            <label class="label f-weight-550 pr-2">Take a picture of your Driver's License or State Issued Identification.</label>
-                            <div v-if="!IsMobile">
-                              <button type="button" class="btn btn-sm btn-outline-primary" @click="toggleCamera2">
-                                <span v-if="!isCamera2Open"><i class="fa-solid fa-camera"></i> Open Camera</span>
-                                <span v-else><i class="fa-solid fa-camera"></i> Close Camera</span>
-                              </button>
+                  <div class="form-group mx-auto row f-weight-550 pt-2">
+                    <div class="col-lg-6 mx-auto">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <label class="label f-weight-550 pr-2">Take a picture of your Driver's License or State
+                                Issued Identification.</label>
+                              <div class="row">
+                                <div class="col-6 text-right">
+                                  <div v-if="!IsMobile">
+                                    <button type="button" class="btn btn-sm btn-outline-primary"
+                                      @click="toggleCamera2(), isFrontID = true" :disabled="isCamera2Open">
+                                      <span>Capture front
+                                        ID <i class="fa-solid fa-camera"></i></span>
+                                      <!-- <span v-else><i class="fa-solid fa-camera"></i> Close Camera</span> -->
+                                    </button>
+                                  </div>
+                                  <div v-else>
+                                    <label for="licenseFile" class="btn btn-sm btn-primary"><i
+                                        class="fa-solid fa-camera mr-2"></i>Open Camera</label>
+                                    <input type="file" style="display: none" id="licenseFile" capture="environment"
+                                      accept="image/*,video/*" @change="loadLicenseFileAsURL">
+                                  </div>
+                                </div>
+                                <div class="col-6 text-left" style="display: flex; align-items: center;">
+                                  <div v-if="base64String2Front !== ''">
+                                    <span class="pr-2">CAPTURED FRONT ID</span>
+                                    <a href="javascript: void(0)" @click="base64String2Front = ''">
+                                      <i class="fa-solid fa-circle-minus" style="color:red"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="row pt-2">
+                                <div class="col-6 text-right">
+                                  <div v-if="!IsMobile">
+                                    <button type="button" class="btn btn-sm btn-outline-primary"
+                                      @click="toggleCamera2(), isFrontID = false" :disabled="isCamera2Open">
+                                      <span>Capture back
+                                        ID <i class="fa-solid fa-camera"></i></span>
+                                      <!-- <span v-else><i class="fa-solid fa-camera"></i> Close Camera</span> -->
+                                    </button>
+                                  </div>
+                                  <div v-else>
+                                    <label for="licenseFile2" class="btn btn-sm btn-primary"><i
+                                        class="fa-solid fa-camera mr-2"></i>Open Camera</label>
+                                    <input type="file" style="display: none" id="licenseFile2" capture="environment"
+                                      accept="image/*,video/*" @change="loadLicenseFileAsURL">
+                                  </div>
+                                </div>
+                                <div class="col-6 text-left" style="display: flex; align-items: center;">
+                                  <div v-if="base64String2Back !== ''">
+                                    <span class="pr-2">CAPTURED BACK ID</span>
+                                    <a href="javascript: void(0)" @click="base64String2Back = ''">
+                                      <i class="fa-solid fa-circle-minus" style="color:red"></i>
+                                    </a>
+                                  </div>
+                                </div>
+                              </div>
                             </div>
-                            <div v-else>
-                              <label for="licenseFile" class="btn btn-sm btn-primary"><i class="fa-solid fa-camera mr-2"></i>Open Camera</label>
-                              <input type="file" style="display: none" id="licenseFile" capture="environment" accept="image/*,video/*" @change="loadLicenseFileAsURL">
+                          </div>
+                          <div class="row pt-2" v-if="!IsMobile">
+                            <div class="mx-auto web-camera-container">
+                              <div v-show="isCamera2Open && isLoading3" class="camera-loading">
+                                <ul class="loader-circle">
+                                  <li></li>
+                                  <li></li>
+                                  <li></li>
+                                </ul>
+                              </div>
+
+                              <div v-if="isCamera2Open" v-show="!isLoading2" class="camera-box"
+                                :class="{ 'flash': isShotPhoto2 }">
+                                <div>
+                                  <div class="camera-shutter" :class="{ 'flash': isShotPhoto2 }"></div>
+                                  <video id="player2" v-show="!isPhotoTaken2" ref="camera2" :width="450" :height="337.5"
+                                    autoplay>
+                                  </video>
+
+                                  <canvas v-show="isPhotoTaken2" id="photoTaken2" ref="canvas2" :width="450"
+                                    :height="337.5"></canvas>
+                                </div>
+                              </div>
+                              <div class="mx-auto" v-if="isCamera2Open && !isLoading3"
+                                style="display:flex; align-items: center;">
+                                <div class="camera-shoot pr-2">
+                                  <button id="captureLicense" type="button" class="button camera-shoot"
+                                    @click="takePhoto2">
+                                    <img src="https://img.icons8.com/material-outlined/50/000000/camera--v2.png">
+                                  </button>
+                                </div>
+                                <div class="camera-button">
+                                  <button type="button" class="button is-rounded"
+                                    :class="{ 'is-primary': !isCamera2Open, 'is-danger': isCamera2Open }"
+                                    @click="toggleCamera2">
+                                    <span>Close Camera</span>
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <div class="row pt-2" v-if="!IsMobile">
-                          <div class="mx-auto web-camera-container">
-                            <div v-show="isCamera2Open && isLoading3" class="camera-loading">
-                              <ul class="loader-circle">
-                                <li></li>
-                                <li></li>
-                                <li></li>
-                              </ul>
-                            </div>
-
-                            <div v-if="isCamera2Open" v-show="!isLoading2" class="camera-box"
-                              :class="{ 'flash': isShotPhoto2 }">
-                              <div>
-                                <div class="camera-shutter" :class="{ 'flash': isShotPhoto2 }"></div>
-                                <video id="player2" v-show="!isPhotoTaken2" ref="camera2" :width="450" :height="337.5"
-                                  autoplay>
-                                </video>
-
-                                <canvas v-show="isPhotoTaken2" id="photoTaken2" ref="canvas2" :width="450"
-                                  :height="337.5"></canvas>
-                              </div>
-                            </div>
-                            <div class="mx-auto" v-if="isCamera2Open && !isLoading3"
-                              style="display:flex; align-items: center;">
-                              <div class="camera-shoot pr-2">
-                                <button id="captureLicense" type="button" class="button camera-shoot" @click="takePhoto2">
-                                  <img src="https://img.icons8.com/material-outlined/50/000000/camera--v2.png">
-                                </button>
-                              </div>
-                              <div class="camera-button">
-                                <button type="button" class="button is-rounded"
-                                  :class="{ 'is-primary': !isCamera2Open, 'is-danger': isCamera2Open }"
-                                  @click="toggleCamera2">
-                                  <span>Close Camera</span>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-12 pt-4">
-                        <ul>
-                          <li class="pt-2" v-for="(item, index) in dataURLList2" :key="index">
-                            <span class="pr-2">IMAGE CAPTURE {{ index + 1 }}</span>
-                            <a href="javascript: void(0)" @click="deleteItem2(index)">
-                              <i class="fa-solid fa-circle-minus" style="color:red"></i>
-                            </a>
-                          </li>
-                        </ul>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
               </div>
               <div v-if="isPortionCareSaved && isPortionCare">
                 <div class="form-group mx-auto text-center row f-weight-550 pt-4">
@@ -131,8 +163,10 @@
                               </button>
                             </div>
                             <div v-else>
-                              <label for="photoFile" class="btn btn-sm btn-primary"><i class="fa-solid fa-camera"></i> Open Camera</label>
-                              <input type="file" style="display: none" id="photoFile" capture="environment" accept="image/*,video/*" @change="loadPhotoFileAsURL">
+                              <label for="photoFile" class="btn btn-sm btn-primary"><i class="fa-solid fa-camera"></i>
+                                Open Camera</label>
+                              <input type="file" style="display: none" id="photoFile" capture="environment"
+                                accept="image/*,video/*" @change="loadPhotoFileAsURL">
                             </div>
                           </div>
                         </div>
@@ -238,16 +272,60 @@
                       <div class="col-lg-12">
                         <div class="row">
                           <div class="col-lg-12">
-                            <label class="label f-weight-550 pr-2">Take a picture of your Driver's License or State Issued Identification.</label>
-                            <div v-if="!IsMobile">
-                              <button type="button" class="btn btn-sm btn-outline-primary" @click="toggleCamera2">
-                                <span v-if="!isCamera2Open"><i class="fa-solid fa-camera"></i> Open Camera</span>
-                                <span v-else><i class="fa-solid fa-camera"></i> Close Camera</span>
-                              </button>
+                            <label class="label f-weight-550 pr-2">Take a picture of your Driver's License or State
+                              Issued Identification.</label>
+
+                            <div class="row">
+                              <div class="col-6 text-right">
+                                <div v-if="!IsMobile">
+                                  <button type="button" class="btn btn-sm btn-outline-primary"
+                                    @click="toggleCamera2(), isFrontID = true" :disabled="isCamera2Open">
+                                    <span>Capture front
+                                      ID <i class="fa-solid fa-camera"></i></span>
+                                    <!-- <span v-else><i class="fa-solid fa-camera"></i> Close Camera</span> -->
+                                  </button>
+                                </div>
+                                <div v-else>
+                                  <label for="licenseFile" class="btn btn-sm btn-primary"><i
+                                      class="fa-solid fa-camera mr-2"></i>Open Camera</label>
+                                  <input type="file" style="display: none" id="licenseFile" capture="environment"
+                                    accept="image/*,video/*" @change="loadLicenseFileAsURL">
+                                </div>
+                              </div>
+                              <div class="col-6 text-left" style="display: flex; align-items: center;">
+                                <div v-if="base64String2Front !== ''">
+                                  <span class="pr-2">CAPTURED FRONT ID</span>
+                                  <a href="javascript: void(0)" @click="base64String2Front = ''">
+                                    <i class="fa-solid fa-circle-minus" style="color:red"></i>
+                                  </a>
+                                </div>
+                              </div>
                             </div>
-                            <div v-else>
-                              <label for="licenseFile" class="btn btn-sm btn-primary"><i class="fa-solid fa-camera"></i> Open Camera</label>
-                              <input type="file" style="display: none" id="licenseFile" capture="environment" accept="image/*,video/*" @change="loadLicenseFileAsURL">
+                            <div class="row pt-2">
+                              <div class="col-6 text-right">
+                                <div v-if="!IsMobile">
+                                  <button type="button" class="btn btn-sm btn-outline-primary"
+                                    @click="toggleCamera2(), isFrontID = false" :disabled="isCamera2Open">
+                                    <span>Capture back
+                                      ID <i class="fa-solid fa-camera"></i></span>
+                                    <!-- <span v-else><i class="fa-solid fa-camera"></i> Close Camera</span> -->
+                                  </button>
+                                </div>
+                                <div v-else>
+                                  <label for="licenseFile2" class="btn btn-sm btn-primary"><i
+                                      class="fa-solid fa-camera mr-2"></i>Open Camera</label>
+                                  <input type="file" style="display: none" id="licenseFile2" capture="environment"
+                                    accept="image/*,video/*" @change="loadLicenseFileAsURL">
+                                </div>
+                              </div>
+                              <div class="col-6 text-left" style="display: flex; align-items: center;">
+                                <div v-if="base64String2Back !== ''">
+                                  <span class="pr-2">CAPTURED BACK ID</span>
+                                  <a href="javascript: void(0)" @click="base64String2Back = ''">
+                                    <i class="fa-solid fa-circle-minus" style="color:red"></i>
+                                  </a>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -276,7 +354,8 @@
                             <div class="mx-auto" v-if="isCamera2Open && !isLoading3"
                               style="display:flex; align-items: center;">
                               <div class="camera-shoot pr-2">
-                                <button id="captureLicense" type="button" class="button camera-shoot" @click="takePhoto2">
+                                <button id="captureLicense" type="button" class="button camera-shoot"
+                                  @click="takePhoto2">
                                   <img src="https://img.icons8.com/material-outlined/50/000000/camera--v2.png">
                                 </button>
                               </div>
@@ -362,10 +441,13 @@ export default {
       link: '#',
       isPortionCare: false,
       isPortionCareSaved: false,
+      isFrontID: true,
       base64Image1: '',
       base64Image2: '',
       dataURLList: [],
       dataURLList2: [],
+      base64String2Front: '',
+      base64String2Back: '',
       dataURLListUpload: [],
       policyHolderList: ['Myself', 'My Spouse/Partner', 'My Parent/Guardian'],
       selectedPolicyHolder: '',
@@ -408,39 +490,56 @@ export default {
             this.stopCameraStream2()
           }
           if (this.selectedPolicyHolder !== '') {
-            var givenDate = this.form.dob
-            var todaysDate = new Date()
-
-            if (givenDate > todaysDate) {
+            if (this.base64String2Front !== '' && this.base64String2Back === '') {
               this.$swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Invalid Date of Birth!'
+                text: 'Cannot proceed, Please capture the back of your License ID'
+              })
+            } else if (this.base64String2Front === '' && this.base64String2Back !== '') {
+              this.$swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Cannot proceed, Please capture the front of your License ID'
               })
             } else {
-              this.isSaving = true
+              await this.uploadFile2(true)
+              var givenDate = this.form.dob
+              var todaysDate = new Date()
 
-              await api.task.request.insertInsuranceInfo({
-                facilityId: this.currentPatientAssociated.facilityID,
-                patientId: this.currentPatientAssociated.patientID,
-                relation: this.selectedPolicyHolder,
-                firstname: this.form.firstName,
-                mi: this.form.middleInitial.substring(0, 1),
-                lastname: this.form.lastName,
-                dob: this.form.dob
-              })
-
-              // uploading images
-              if (this.dataURLList2.length > 0) {
-                await this.uploadFile(this.dataURLList2, true)
-              }
-              if (this.dataURLList.length > 0) {
-                await this.uploadFile(this.dataURLList, false)
-              } else if (this.dataURLListUpload.length > 0) {
-                await this.uploadFile(this.dataURLListUpload, false)
+              if (givenDate > todaysDate) {
+                this.$swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: 'Invalid Date of Birth!'
+                })
               } else {
-                this.isSaving = false
-                this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
+                this.isSaving = true
+
+                await api.task.request.insertInsuranceInfo({
+                  facilityId: this.currentPatientAssociated.facilityID,
+                  patientId: this.currentPatientAssociated.patientID,
+                  relation: this.selectedPolicyHolder,
+                  firstname: this.form.firstName,
+                  mi: this.form.middleInitial.substring(0, 1),
+                  lastname: this.form.lastName,
+                  dob: this.form.dob
+                })
+
+                // uploading license images
+                // if (this.dataURLList2.length > 0) {
+                //   await this.uploadFile(this.dataURLList2, true)
+                // }
+
+                // end
+                if (this.dataURLList.length > 0) {
+                  await this.uploadFile(this.dataURLList, false)
+                } else if (this.dataURLListUpload.length > 0) {
+                  await this.uploadFile(this.dataURLListUpload, false)
+                } else {
+                  this.isSaving = false
+                  this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
+                }
               }
             }
           }
@@ -455,15 +554,32 @@ export default {
           this.stopCameraStream2()
         }
 
-        if (this.dataURLList2.length > 0) {
-          await this.uploadFile(this.dataURLList2, true)
-          this.dataURLList2 = []
+        // if (this.dataURLList2.length > 0) {
+        //   await this.uploadFile(this.dataURLList2, true)
+        //   this.dataURLList2 = []
+        // }
+        if (this.base64String2Front !== '' && this.base64String2Back === '') {
+          this.$swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Cannot proceed, Please capture the back of your License ID'
+          })
+        } else if (this.base64String2Front === '' && this.base64String2Back !== '') {
+          this.$swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Cannot proceed, Please capture the front of your License ID'
+          })
+        } else {
+          await this.uploadFile2(true)
+          this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
         }
-        this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
       }
     },
     toggle(val) {
       this.isPortionCare = val
+      this.base64String2Front = ''
+      this.base64String2Back = ''
     },
 
     prev() {
@@ -531,7 +647,7 @@ export default {
         /* eslint handle-callback-err: "warn" */
         .catch(error => {
           this.isLoading3 = false
-          alert("May the browser didn't support or there is some errors.")
+          alert("The browser didn't support or there is some errors.")
         })
     },
     stopCameraStream() {
@@ -583,17 +699,23 @@ export default {
         }, FLASH_TIMEOUT)
       }
       this.isPhotoTaken2 = !this.isPhotoTaken2
-      console.log(this.isPhotoTaken2)
       const context = this.$refs.canvas2.getContext('2d')
       context.drawImage(this.$refs.camera2, 0, 0, 450, 337.5)
 
       // save image to arraylist
       const canvas = document.getElementById('photoTaken2').toDataURL('image/jpeg')
         .replace('image/jpeg', 'image/octet-stream')
-      this.dataURLList2.push(canvas)
+      // this.dataURLList2.push(canvas)
+      if (this.isFrontID) {
+        this.base64String2Front = canvas
+      } else {
+        this.base64String2Back = canvas
+      }
+
       setTimeout(() => {
-        this.anotherPhoto2()
-      }, 2500)
+        // this.anotherPhoto2()
+        this.toggleCamera2()
+      }, 1500)
     },
     anotherPhoto() {
       if (this.isCameraOpen) {
@@ -714,10 +836,45 @@ export default {
         }
       }
     },
+
+    async uploadFile2(isInsurance) {
+      let base64String = ''
+      const pdf = new jsPDF()
+      if (this.base64String2Front !== '' && this.base64String2Back !== '') {
+        pdf.addImage(this.base64String2Front, 'JPEG', 15, 40, 180, 160)
+        pdf.addPage()
+        pdf.addImage(this.base64String2Back, 'JPEG', 15, 40, 180, 160)
+        base64String = pdf.output('datauristring')
+      }
+
+      if (base64String !== '') {
+        const base64data = base64String.split('base64')[1]
+
+        const retData = await api.task.request.virusScan({
+          facilityId: this.currentPatientAssociated.facilityID,
+          base64: base64data.replace(',', '').trim(),
+          dataUri: ''
+        })
+
+        if (retData.data) {
+          if (retData.data.value) {
+            await this.uploadPatientForm(base64data.replace(',', '').trim(), isInsurance)
+            this.base64String2Front = ''
+            this.base64String2Back = ''
+          } else {
+            this.$swal.fire({
+              icon: 'error',
+              title: 'Oops...',
+              text: retData.data.reason
+            })
+          }
+        }
+      }
+    },
     async uploadPatientForm(base64data, isInsurance) {
       let desc = this.TaskInfo.Description
       if (isInsurance) {
-        desc = 'Indentification'
+        desc = 'Identification'
       }
       const retData = await api.task.request.uploadPatientForm({
         facilityId: this.currentPatientAssociated.facilityID,
@@ -731,7 +888,9 @@ export default {
         this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
         this.dataURLList = []
         this.dataURLListUpload = []
-        this.dataURLList2 = []
+        // this.dataURLList2 = []
+        this.base64String2Front = ''
+        this.base64String2Back = ''
       }
     },
     checkFileType() {
@@ -760,6 +919,7 @@ export default {
 ul {
   list-style-type: none;
 }
+
 .capture-button {
   padding: 5px 10px;
   font-size: 16px;
