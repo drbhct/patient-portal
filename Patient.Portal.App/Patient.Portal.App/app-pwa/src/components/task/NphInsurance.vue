@@ -495,19 +495,19 @@ export default {
                 text: 'Cannot proceed, Please capture the front of your License ID'
               })
             } else {
+              this.isSaving = true
               await this.uploadFile2(true)
               var givenDate = this.form.dob
               var todaysDate = new Date()
 
               if (givenDate > todaysDate) {
+                this.isSaving = false
                 this.$swal.fire({
                   icon: 'error',
                   title: 'Oops...',
                   text: 'Invalid Date of Birth!'
                 })
               } else {
-                this.isSaving = true
-
                 await api.task.request.insertInsuranceInfo({
                   facilityId: this.currentPatientAssociated.facilityID,
                   patientId: this.currentPatientAssociated.patientID,
@@ -563,8 +563,10 @@ export default {
             text: 'Cannot proceed, Please capture the front of your License ID'
           })
         } else {
+          this.isSaving = true
           await this.uploadFile2(true)
           this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
+          this.isSaving = false
         }
       }
     },
