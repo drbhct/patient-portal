@@ -40,10 +40,11 @@
                                     </button>
                                   </div>
                                   <div v-else>
-                                    <label for="licenseFile" class="btn btn-sm btn-primary"><i
-                                        class="fa-solid fa-camera mr-2"></i>Open Camera</label>
-                                    <input type="file" style="display: none" id="licenseFile" capture="environment"
-                                      accept="image/*,video/*" @change="loadLicenseFileAsURL">
+                                    <label for="licenseFileFront" class="btn btn-sm btn-primary">Capture front
+                                      ID <i
+                                        class="fa-solid fa-camera mr-2"></i></label>
+                                    <input type="file" style="display: none" id="licenseFileFront" capture="environment"
+                                      accept="image/*,video/*" @change="loadLicenseFileAsURLFront">
                                   </div>
                                 </div>
                                 <div class="col-6 text-left" style="display: flex; align-items: center;">
@@ -66,10 +67,11 @@
                                     </button>
                                   </div>
                                   <div v-else>
-                                    <label for="licenseFile2" class="btn btn-sm btn-primary"><i
-                                        class="fa-solid fa-camera mr-2"></i>Open Camera</label>
-                                    <input type="file" style="display: none" id="licenseFile2" capture="environment"
-                                      accept="image/*,video/*" @change="loadLicenseFileAsURL">
+                                    <label for="licenseFileBack" class="btn btn-sm btn-primary">Capture back
+                                      ID <i
+                                        class="fa-solid fa-camera mr-2"></i></label>
+                                    <input type="file" style="display: none" id="licenseFileBack" capture="environment"
+                                      accept="image/*,video/*" @change="loadLicenseFileAsURLBack">
                                   </div>
                                 </div>
                                 <div class="col-6 text-left" style="display: flex; align-items: center;">
@@ -286,10 +288,11 @@
                                   </button>
                                 </div>
                                 <div v-else>
-                                  <label for="licenseFile" class="btn btn-sm btn-primary"><i
-                                      class="fa-solid fa-camera mr-2"></i>Open Camera</label>
-                                  <input type="file" style="display: none" id="licenseFile" capture="environment"
-                                    accept="image/*,video/*" @change="loadLicenseFileAsURL">
+                                  <label for="licenseFileFront" class="btn btn-sm btn-primary">Capture front
+                                    ID <i
+                                      class="fa-solid fa-camera mr-2"></i></label>
+                                  <input type="file" style="display: none" id="licenseFileFront" capture="environment"
+                                    accept="image/*,video/*" @change="loadLicenseFileAsURLFront">
                                 </div>
                               </div>
                               <div class="col-6 text-left" style="display: flex; align-items: center;">
@@ -312,10 +315,11 @@
                                   </button>
                                 </div>
                                 <div v-else>
-                                  <label for="licenseFile2" class="btn btn-sm btn-primary"><i
-                                      class="fa-solid fa-camera mr-2"></i>Open Camera</label>
-                                  <input type="file" style="display: none" id="licenseFile2" capture="environment"
-                                    accept="image/*,video/*" @change="loadLicenseFileAsURL">
+                                  <label for="licenseFileBack" class="btn btn-sm btn-primary">Capture back
+                                    ID <i
+                                      class="fa-solid fa-camera mr-2"></i></label>
+                                  <input type="file" style="display: none" id="licenseFileBack" capture="environment"
+                                    accept="image/*,video/*" @change="loadLicenseFileAsURLBack">
                                 </div>
                               </div>
                               <div class="col-6 text-left" style="display: flex; align-items: center;">
@@ -369,18 +373,6 @@
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-lg-12 pt-4">
-                        <ul>
-                          <li class="pt-2" v-for="(item, index) in dataURLList2" :key="index">
-                            <span class="pr-2">IMAGE CAPTURE {{ index + 1 }}</span>
-                            <a href="javascript: void(0)" @click="deleteItem2(index)">
-                              <i class="fa-solid fa-circle-minus" style="color:red"></i>
-                            </a>
-                          </li>
-                        </ul>
                       </div>
                     </div>
                   </div>
@@ -787,8 +779,8 @@ export default {
       const res = await Promise.all(files)
       this.dataURLList = res
     },
-    async loadLicenseFileAsURL() {
-      const files = Array.from(document.getElementById('licenseFile').files).map(file => {
+    async loadLicenseFileAsURLFront() {
+      const files = Array.from(document.getElementById('licenseFileFront').files).map(file => {
         const reader = new FileReader()
         return new Promise(resolve => {
           reader.onload = () => resolve(reader.result)
@@ -796,7 +788,20 @@ export default {
         })
       })
       const res = await Promise.all(files)
-      this.dataURLList2 = res
+      // this.dataURLList2 = res
+      this.base64String2Front = res[0]
+    },
+    async loadLicenseFileAsURLBack() {
+      const files = Array.from(document.getElementById('licenseFileBack').files).map(file => {
+        const reader = new FileReader()
+        return new Promise(resolve => {
+          reader.onload = () => resolve(reader.result)
+          reader.readAsDataURL(file)
+        })
+      })
+      const res = await Promise.all(files)
+      // this.dataURLList2 = res
+      this.base64String2Back = res[0]
     },
     removeUploadedFile() {
       document.getElementById('formFile').value = null
