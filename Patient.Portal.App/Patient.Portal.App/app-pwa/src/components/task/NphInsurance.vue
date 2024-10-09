@@ -158,17 +158,56 @@
                           <div class="col-lg-12">
                             <label v-if="dataURLList.length === 0" class="label f-weight-550">Or Take a photo of the
                               document</label>
-                            <div v-if="!IsMobile">
-                              <button type="button" class="btn btn-sm btn-outline-primary" @click="toggleCamera">
-                                <span v-if="!isCameraOpen"><i class="fa-solid fa-camera"></i> Open Camera</span>
-                                <span v-else><i class="fa-solid fa-camera"></i> Close Camera</span>
-                              </button>
+
+                              <div class="row">
+                              <div class="col-6 text-right">
+                                <div v-if="!IsMobile">
+                                  <button type="button" class="btn btn-sm btn-outline-primary"
+                                    @click="toggleCamera(), isFrontDoc = true" :disabled="isCameraOpen">
+                                    <span>Capture front Doc <i class="fa-solid fa-camera"></i></span>
+                                    <!-- <span v-else><i class="fa-solid fa-camera"></i> Close Camera</span> -->
+                                  </button>
+                                </div>
+                                <div v-else>
+                                  <label for="photoFile" class="btn btn-sm btn-primary">Capture front Doc <i
+                                      class="fa-solid fa-camera mr-2"></i></label>
+                                  <input type="file" style="display: none" id="photoFile" capture="environment"
+                                    accept="image/*,video/*" @change="loadPhotoFileAsURLFront">
+                                </div>
+                              </div>
+                              <div class="col-6 text-left" style="display: flex; align-items: center;">
+                                <div v-if="base64StringFront !== ''">
+                                  <span class="pr-2">CAPTURED FRONT DOC</span>
+                                  <a href="javascript: void(0)" @click="base64StringFront = ''">
+                                    <i class="fa-solid fa-circle-minus" style="color:red"></i>
+                                  </a>
+                                </div>
+                              </div>
                             </div>
-                            <div v-else>
-                              <label for="photoFile" class="btn btn-sm btn-primary"><i class="fa-solid fa-camera"></i>
-                                Open Camera</label>
-                              <input type="file" style="display: none" id="photoFile" capture="environment"
-                                accept="image/*,video/*" @change="loadPhotoFileAsURL">
+                            <div class="row pt-2">
+                              <div class="col-6 text-right">
+                                <div v-if="!IsMobile">
+                                  <button type="button" class="btn btn-sm btn-outline-primary"
+                                    @click="toggleCamera(), isFrontDoc = false" :disabled="isCameraOpen">
+                                    <span>Capture back Doc <i class="fa-solid fa-camera"></i></span>
+                                    <!-- <span v-else><i class="fa-solid fa-camera"></i> Close Camera</span> -->
+                                  </button>
+                                </div>
+                                <div v-else>
+                                  <label for="photoFileBack" class="btn btn-sm btn-primary">Capture back Doc <i
+                                      class="fa-solid fa-camera mr-2"></i></label>
+                                  <input type="file" style="display: none" id="photoFileBack" capture="environment"
+                                    accept="image/*,video/*" @change="loadPhotoFileAsURLBack">
+                                </div>
+                              </div>
+                              <div class="col-6 text-left" style="display: flex; align-items: center;">
+                                <div v-if="base64StringBack !== ''">
+                                  <span class="pr-2">CAPTURED BACK DOC</span>
+                                  <a href="javascript: void(0)" @click="base64StringBack = ''">
+                                    <i class="fa-solid fa-circle-minus" style="color:red"></i>
+                                  </a>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -211,18 +250,6 @@
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="row" v-if="dataURLList.length > 0">
-                      <div class="col-lg-12 pt-4">
-                        <ul>
-                          <li class="pt-2" v-for="(item, index) in dataURLList" :key="index">
-                            <span class="pr-2">IMAGE CAPTURE {{ index + 1 }}</span>
-                            <a href="javascript: void(0)" @click="deleteItem(index)">
-                              <i class="fa-solid fa-circle-minus" style="color:red"></i>
-                            </a>
-                          </li>
-                        </ul>
                       </div>
                     </div>
                   </div>
@@ -434,10 +461,13 @@ export default {
       isPortionCare: false,
       isPortionCareSaved: false,
       isFrontID: true,
+      isFrontDoc: true,
       base64Image1: '',
       base64Image2: '',
       dataURLList: [],
       dataURLList2: [],
+      base64StringFront: '',
+      base64StringBack: '',
       base64String2Front: '',
       base64String2Back: '',
       dataURLListUpload: [],
@@ -524,6 +554,7 @@ export default {
                 // }
 
                 // end
+                await this.uploadFile(true)
                 if (this.dataURLList.length > 0) {
                   await this.uploadFile(this.dataURLList, false)
                 } else if (this.dataURLListUpload.length > 0) {
@@ -545,11 +576,6 @@ export default {
           this.isShotPhoto2 = false
           this.stopCameraStream2()
         }
-
-        // if (this.dataURLList2.length > 0) {
-        //   await this.uploadFile(this.dataURLList2, true)
-        //   this.dataURLList2 = []
-        // }
         if (this.base64String2Front !== '' && this.base64String2Back === '') {
           this.$swal.fire({
             icon: 'error',
@@ -659,7 +685,6 @@ export default {
       })
     },
     takePhoto() {
-      this.dataURLListUpload = []
       if (!this.isPhotoTaken) {
         this.isShotPhoto = true
 
@@ -677,10 +702,16 @@ export default {
       // save image to arraylist
       const canvas = document.getElementById('photoTaken').toDataURL('image/jpeg')
         .replace('image/jpeg', 'image/octet-stream')
-      this.dataURLList.push(canvas)
+      // this.dataURLList.push(canvas)
+      if (this.isFrontDoc) {
+        this.base64StringFront = canvas
+      } else {
+        this.base64StringBack = canvas
+      }
       setTimeout(() => {
-        this.anotherPhoto()
-      }, 2500)
+        // this.anotherPhoto()
+        this.toggleCamera()
+      }, 1500)
     },
     takePhoto2() {
       if (!this.isPhotoTaken2) {
@@ -770,7 +801,7 @@ export default {
       const res = await Promise.all(files)
       this.dataURLListUpload = res
     },
-    async loadPhotoFileAsURL() {
+    async loadPhotoFileAsURLFront() {
       const files = Array.from(document.getElementById('photoFile').files).map(file => {
         const reader = new FileReader()
         return new Promise(resolve => {
@@ -779,7 +810,20 @@ export default {
         })
       })
       const res = await Promise.all(files)
-      this.dataURLList = res
+      // this.dataURLList = res
+      this.base64StringFront = res[0]
+    },
+    async loadPhotoFileAsURLBack() {
+      const files = Array.from(document.getElementById('photoFile').files).map(file => {
+        const reader = new FileReader()
+        return new Promise(resolve => {
+          reader.onload = () => resolve(reader.result)
+          reader.readAsDataURL(file)
+        })
+      })
+      const res = await Promise.all(files)
+      // this.dataURLList = res
+      this.base64StringBack = res[0]
     },
     async loadLicenseFileAsURLFront() {
       const files = Array.from(document.getElementById('licenseFileFront').files).map(file => {
@@ -809,18 +853,20 @@ export default {
       document.getElementById('formFile').value = null
       this.dataURLListUpload = []
     },
-    async uploadFile(listData, isInsurance) {
+    async uploadFile(isInsurance) {
       let base64String = ''
       const pdf = new jsPDF()
-      if (listData.length > 0) {
-        for (let i = 0; i < listData.length; i++) {
-          pdf.addImage(listData[i], 'JPEG', 15, 40, 180, 160)
-          if (i !== listData.length - 1) {
-            pdf.addPage()
-          }
-        }
-        base64String = pdf.output('datauristring')
+
+      if (this.base64StringFront !== '') {
+        pdf.addImage(this.base64StringFront, 'JPEG', 15, 40, 180, 160)
       }
+
+      if (this.base64StringBack !== '') {
+        pdf.addPage()
+        pdf.addImage(this.base64StringBack, 'JPEG', 15, 40, 180, 160)
+      }
+      base64String = pdf.output('datauristring')
+
       if (base64String !== '') {
         const base64data = base64String.split('base64')[1]
 
@@ -833,6 +879,8 @@ export default {
         if (retData.data) {
           if (retData.data.value) {
             this.uploadPatientForm(base64data.replace(',', '').trim(), isInsurance)
+            this.base64StringFront = ''
+            this.base64StringBack = ''
           } else {
             this.$swal.fire({
               icon: 'error',
@@ -893,7 +941,9 @@ export default {
       if (retData && !isInsurance) {
         this.isSaving = false
         this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
-        this.dataURLList = []
+        // this.dataURLList = []
+        this.base64StringFront = ''
+        this.base64StringBack = ''
         this.dataURLListUpload = []
         // this.dataURLList2 = []
         this.base64String2Front = ''

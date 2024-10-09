@@ -34,7 +34,7 @@ export default {
     ResetPassword: () => import('../components/task/ResetPassword.vue'),
     Statement: () => import('../components/billing/TaskStatement.vue')
   },
-  data () {
+  data() {
     return {
       initialize: false,
       linkInfo: null,
@@ -46,10 +46,10 @@ export default {
   },
   computed: {
     ...mapGetters(['getTaskCurrentTaskType']),
-    key () {
+    key() {
       return this.$route.query.key
     },
-    message () {
+    message() {
       if (this.keyExpired && this.initialize) {
         return 'Link key expired. Redirecting to login page...'
       }
@@ -66,10 +66,12 @@ export default {
       'setTaskCode',
       'setTaskIsAccessOnly',
       'setBillingStatementTask',
-      'setFacilityInfo'
+      'setFacilityInfo',
+      'setTaskInfo'
     ])
   },
-  async mounted () {
+  async mounted() {
+    console.log('task.vue mounted')
     const apiRes = await api.auth.request.apiLogin()
     // NOTE: Temporary will be move to cookies soon!
     // localStorage.setItem('config', apiRes.data.token)
@@ -160,6 +162,21 @@ export default {
           break
         case 'RESETPWD':
           this.setTaskCurrentTaskType('ResetPassword')
+          break
+        case 'INS':
+          console.log(this.task)
+          if (this.task.info !== '') {
+            var taskinfo = JSON.parse(this.task.info)
+            taskinfo.TaskType = this.task.taskType
+            taskinfo.TaskID = this.task.taskID
+            this.setTaskInfo(JSON.stringify(taskinfo))
+          } else {
+            this.setTaskInfo('')
+          }
+          await this.setTaskCurrentTaskType(this.task.taskType)
+          // await this.$router.push({ path: '/task' })
+          // await this.$router.refresh()
+          await this.$router.replace('/task').then(() => this.$router.reload())
           break
         default:
           console.warn('Unable to recognise task type ' + this.task.taskType)
