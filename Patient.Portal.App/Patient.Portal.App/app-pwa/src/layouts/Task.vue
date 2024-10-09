@@ -106,6 +106,19 @@ export default {
         patientId: this.linkInfo.patientID
       })
       this.task = taskRes.data.find((el) => el.taskID === this.linkInfo.taskID)
+      // added by Rizza Herrero 10/10/2024
+      if (this.task.taskType === 'INS') {
+        if (this.task.info !== '') {
+          var taskinfo = JSON.parse(this.task.info)
+          taskinfo.TaskType = this.task.taskType
+          taskinfo.TaskID = this.task.taskID
+          this.setTaskInfo(JSON.stringify(taskinfo))
+        } else {
+          this.setTaskInfo('')
+        }
+        await this.setTaskCurrentTaskType(this.task.taskType)
+      }
+      // added by Rizza Herrero 10/10/2024 end
     } else {
       taskRes = await api.task.request.getSpecificTask(this.linkInfo.taskID)
       this.task = taskRes.data
@@ -164,19 +177,7 @@ export default {
           this.setTaskCurrentTaskType('ResetPassword')
           break
         case 'INS':
-          console.log(this.task)
-          if (this.task.info !== '') {
-            var taskinfo = JSON.parse(this.task.info)
-            taskinfo.TaskType = this.task.taskType
-            taskinfo.TaskID = this.task.taskID
-            this.setTaskInfo(JSON.stringify(taskinfo))
-          } else {
-            this.setTaskInfo('')
-          }
-          await this.setTaskCurrentTaskType(this.task.taskType)
-          // await this.$router.push({ path: '/task' })
-          // await this.$router.refresh()
-          await this.$router.replace('/task').then(() => this.$router.reload())
+          this.$router.push({ path: '/account/login' })
           break
         default:
           console.warn('Unable to recognise task type ' + this.task.taskType)
