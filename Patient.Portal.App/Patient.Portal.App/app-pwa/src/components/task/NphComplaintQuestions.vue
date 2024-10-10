@@ -49,6 +49,7 @@
               <div class="form-group row" v-if="showSpecifyDescribe">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550" id="firstQuestion"
+                    ><strong style="color: red; margin-right: 5px">*</strong
                     >Please specify best describes where your
                     <strong style="color: red">{{
                       currentProblem.region
@@ -66,6 +67,7 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550"
+                    ><strong style="color: red; margin-right: 5px">*</strong
                     >Please indicate the date your symptoms first
                     occurred.</label
                   >
@@ -76,7 +78,17 @@
                     :format="'MMMM dd, yyyy'"
                     :disabled-dates="disabledDates"
                   ></datepicker>
-                  <span class="help-block">Leave field empty if not sure</span>
+                  <span class="help-block"
+                    ><button
+                      class="btn btn-default"
+                      type="button"
+                      @click="
+                        form.dateOccuredNotSure = !form.dateOccuredNotSure
+                      "
+                    >
+                      Not sure
+                    </button></span
+                  >
                 </div>
               </div>
 
@@ -719,6 +731,13 @@ export default {
           reference: 'refDescribe'
         }
       }
+      if (!this.form.dateOccured && !this.form.dateOccuredNotSure) {
+        return {
+          result: false,
+          msg: `Please indicate the date your symptoms for ${this.currentProblem.region} pain occur?`,
+          reference: 'refExpPain'
+        }
+      }
       if (!this.form.expPain) {
         return {
           result: false,
@@ -726,7 +745,6 @@ export default {
           reference: 'refExpPain'
         }
       }
-
       const hasAnswerRadiates = this.form.radiatesQuestionsAndAnswer.filter(
         (el) => el.answer !== ''
       )
@@ -1083,6 +1101,7 @@ export default {
         describeOther: '',
         describeSelectLimit: 4,
         dateOccured: null,
+        dateOccuredNotSure: false,
         expPain: '',
         paintIntensity: 0,
         radiatesQuestionsAndAnswer: [],
