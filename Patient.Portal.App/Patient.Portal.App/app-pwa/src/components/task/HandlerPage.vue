@@ -1,5 +1,5 @@
 ﻿<template>
-  <Survey :survey='survey'/>
+  <Survey :survey='survey' />
 </template>
 
 <script>
@@ -8,14 +8,14 @@ import api from '../../api/http-common.js'
 import { mapGetters } from 'vuex'
 import { Survey } from 'survey-vue-ui'
 import { Model, slk } from 'survey-core'
-import { SurveyPDF } from 'survey-pdf'
+import { SurveyPDF, HTMLBrick } from 'survey-pdf'
 
 slk(
-  'ZjI3MDkwMDYtNDkxNC00MmJkLTg4NDUtMjFhYjIyMDM5MWQxOzE9MjAyNS0wMy0wNCwyPTIwMjUtMDMtMDQsND0yMDI1LTAzLTA0'
+  'ZjI3MDkwMDYtNDkxNC00MmJkLTg4NDUtMjFhYjIyMDM5MWQxJmRvbWFpbnM6bW9iaWxlLmhzd29yeC5jb20sbW9iaWxlLmhlYWx0aGNvcmV0ZWNoLmNvbSxoY3QtcHAtZGV2LmF6dXJld2Vic2l0ZXMubmV0LGxvY2FsaG9zdDsxPTIwMjUtMDMtMDQsMj0yMDI1LTAzLTA0LDQ9MjAyNS0wMy0wNA'
 )
 
 export default {
-  data () {
+  data() {
     return {
       survey: null,
       surveyJson: null,
@@ -34,14 +34,14 @@ export default {
     ...mapGetters(['currentPatientAssociated'])
   },
   methods: {
-    alertResults (sender) {
+    alertResults(sender) {
       // const results = JSON.stringify(sender.data)
       setTimeout(() => {
         window.opener.location.reload()
         window.close()
       }, 3000)
     },
-    complete () {
+    complete() {
       const queryData = this.$route.query
       const surveyPdf = new SurveyPDF(this.surveyJson, this.pdfDocOptions)
       if (surveyPdf) {
@@ -79,7 +79,7 @@ export default {
         })
       }
     },
-    async loadData () {
+    async loadData() {
       const queryData = this.$route.query
       if (queryData) {
         var res = await api.task.request.getFacilityFormJsonQueryObj({
@@ -100,12 +100,115 @@ export default {
         return null
       }
     },
-    savePdf () {
+    savePdf() {
       const surveyPdf = new SurveyPDF(this.surveyJson, this.pdfDocOptions)
       if (surveyPdf) {
         surveyPdf.data = this.survey.data
         surveyPdf.save(this.pdfFilename)
       }
+    },
+    savePdf2(surveyModel) {
+      const pdfWidth = !!surveyModel && surveyModel.pdfWidth ? surveyModel.pdfWidth : 225 // 210 orig
+      const pdfHeight = !!surveyModel && surveyModel.pdfHeight ? surveyModel.pdfHeight : 319 // original 297
+      const options = {
+        fontSize: 12,
+        format: [pdfWidth, pdfHeight],
+        htmlRenderAs: 'image'
+      }
+      const surveyPDF = new SurveyPDF(this.surveyJson, options)
+      if (surveyModel) {
+        surveyPDF.data = surveyModel.data
+      }
+
+      // Draw a portion of an image
+      function drawPart(brickHeight, multiplier, shift, canvas, img,
+        firstBrickHeight, fullPagesCnt, onePageSize, htmlBrick, controller) {
+        canvas.height = brickHeight
+        const ctx = canvas.getContext('2d')
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.drawImage(img, 0, shift, img.width, brickHeight, 0, 0, img.width, brickHeight)
+
+        const currImageBase64 = canvas.toDataURL('image/jpeg')
+        const brickHtml = `
+                <img src='${currImageBase64}' width='${img.width * multiplier}' height='${brickHeight * multiplier}' />`
+        const brickRect = {
+          xLeft: htmlBrick.xLeft,
+          xRight: htmlBrick.xRight,
+          yTop: htmlBrick.yTop + multiplier * (firstBrickHeight + fullPagesCnt * onePageSize),
+          yBot: htmlBrick.yTop + multiplier * (firstBrickHeight + fullPagesCnt * onePageSize + brickHeight)
+        }
+        return new HTMLBrick(null, controller, brickRect, brickHtml, true)
+      }
+
+      async function getImage(htmlBrick) {
+        const html = htmlBrick.html
+        let start = html.indexOf('data')
+
+        let imageBase64 = ''
+        while (html[start] !== "'") {
+          imageBase64 += html[start]
+          start++
+        }
+        const img = new Image()
+        img.src = imageBase64
+        await new Promise((resolve, reject) => {
+          img.onload = () => resolve(img)
+          img.onerror = reject
+        })
+
+        return img
+      }
+
+      surveyPDF.onRenderQuestion.add(async (survey, options) => {
+        // Split only HTML elements
+        if (options.question.getType() === 'html') {
+          // Get the HTML brick
+          const htmlBrick = options.bricks[0]
+          if (!htmlBrick || !htmlBrick.html) return
+
+          options.bricks = []
+
+          // Extract image from the HTML brick
+          const img = await getImage(htmlBrick)
+
+          // Calculate the available page height and the coordinate at which to start drawing
+          const fullPageHeight = options.controller.paperHeight - options.controller.margins.top - options.controller.margins.bot
+          const currY = htmlBrick.yTop - fullPageHeight * Math.floor(htmlBrick.yTop / fullPageHeight)
+
+          const canvas = document.createElement('canvas')
+          canvas.width = img.width
+
+          // A multiplier is used to decrease the original image width if it exceeds the available page width
+          let multiplier = 1
+          if (htmlBrick.width < img.width) {
+            multiplier = htmlBrick.width / img.width
+          }
+
+          // Calculate what portion of the original image would fit onto one page
+          const onePageSize = fullPageHeight / multiplier
+          // Calculate the height of the first brick
+          const firstBrickHeight = Math.min(img.height, (fullPageHeight - currY) / multiplier)
+
+          // Draw the first brick
+          const firstBrick = drawPart(firstBrickHeight, multiplier, 0, canvas, img,
+            0, 0, onePageSize, htmlBrick, options.controller)
+          options.bricks.push(firstBrick)
+
+          // Page counter
+          let cnt = 0
+          // Draw the rest of the bricks
+          for (let i = firstBrickHeight; i < img.height; i += onePageSize) {
+            const brickHeight = Math.min(img.height - i, onePageSize)
+
+            const currBrick = drawPart(brickHeight, multiplier, i, canvas, img,
+              firstBrickHeight, cnt, onePageSize, htmlBrick, options.controller)
+
+            cnt += 1
+            options.bricks.push(currBrick)
+          }
+        }
+      })
+      surveyPDF.save(this.pdfFilename)
     }
   },
   async mounted() {
@@ -115,7 +218,8 @@ export default {
     this.survey.addNavigationItem({
       id: 'pdf-export',
       title: 'Save as PDF',
-      action: () => this.savePdf(this.survey.data)
+      // action: () => this.savePdf(this.survey.data)
+      action: () => this.savePdf2(this.survey)
     })
     this.survey.onUpdateQuestionCssClasses.add(function (_, options) {
       if (options.question.name === 'patientTypedSignature') {
@@ -134,8 +238,9 @@ export default {
   font-size: 18px !important;
   font-weight: 550;
 }
+
 .sv-signaturepad {
-    border: 1px solid gray !important;
+  border: 1px solid gray !important;
 }
 
 .sd-signaturepad {
