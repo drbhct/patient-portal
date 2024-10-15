@@ -11,7 +11,7 @@ import { Model, slk } from 'survey-core'
 import { SurveyPDF, HTMLBrick } from 'survey-pdf'
 
 slk(
-  'ZjI3MDkwMDYtNDkxNC00MmJkLTg4NDUtMjFhYjIyMDM5MWQxJmRvbWFpbnM6bW9iaWxlLmhzd29yeC5jb20sbW9iaWxlLmhlYWx0aGNvcmV0ZWNoLmNvbSxoY3QtcHAtZGV2LmF6dXJld2Vic2l0ZXMubmV0LGxvY2FsaG9zdDsxPTIwMjUtMDMtMDQsMj0yMDI1LTAzLTA0LDQ9MjAyNS0wMy0wNA'
+  'ZjI3MDkwMDYtNDkxNC00MmJkLTg4NDUtMjFhYjIyMDM5MWQxOzE9MjAyNS0wMy0wNCwyPTIwMjUtMDMtMDQsND0yMDI1LTAzLTA0'
 )
 
 export default {
@@ -113,6 +113,7 @@ export default {
       const pdfHeight = !!surveyModel && surveyModel.pdfHeight ? surveyModel.pdfHeight : 319 // original 297
       const options = {
         fontSize: 12,
+        compress: true,
         format: [pdfWidth, pdfHeight],
         htmlRenderAs: 'image'
       }
