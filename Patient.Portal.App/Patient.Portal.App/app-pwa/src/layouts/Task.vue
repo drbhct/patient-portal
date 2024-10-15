@@ -67,7 +67,8 @@ export default {
       'setTaskIsAccessOnly',
       'setBillingStatementTask',
       'setFacilityInfo',
-      'setTaskInfo'
+      'setTaskInfo',
+      'setUrlLinkInfo'
     ])
   },
   async mounted() {
@@ -96,8 +97,9 @@ export default {
       setTimeout(() => {
         this.$router.push({ path: '/account/login' })
       }, 5000)
+    } else {
+      this.setUrlLinkInfo(resp.data)
     }
-
     // Get Task
     let taskRes
     if (this.linkInfo.patientID > 0) {
@@ -137,7 +139,6 @@ export default {
     } else {
       this.initialize = true
 
-      // console.log('this.task.taskType', this.task.taskType)
       const facilityInfo = await api.auth.request.getFacilityInfo(
         this.linkInfo.facilityID
       )
@@ -150,7 +151,6 @@ export default {
         this.setTaskCurrentTaskType('CreateAccount')
         return
       }
-
       console.log('this.task.taskType>', this.task.taskType)
       console.log('task>', this.task.taskType === 'NPH')
       this.setTaskCode(this.task.taskType)
@@ -177,6 +177,7 @@ export default {
           this.setTaskCurrentTaskType('ResetPassword')
           break
         case 'INS':
+          
           this.$router.push({ path: '/account/login' })
           break
         default:

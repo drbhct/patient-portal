@@ -28,24 +28,14 @@
               </div>
               <div class="form-group">
                 <div class="form-check">
-                  <input
-                    type="checkbox"
-                    class="form-check-input"
-                    v-model="confirmLink"
-                  />
-                  <label class="form-check-label"
-                    >Confirm link patient to account</label
-                  >
+                  <input type="checkbox" class="form-check-input" v-model="confirmLink" />
+                  <label class="form-check-label">Confirm link patient to account</label>
                 </div>
               </div>
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary">Submit</button>
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-              >
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">
                 Close
               </button>
             </div>
@@ -60,26 +50,14 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title label">Multiple Patients</h5>
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-label="Close"
-              >
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <label class="label f-weight-550"
-                >Select the patient record you would like to manage</label
-              >
-              <button
-                type="button"
-                class="mb-1 mt-1 mr-1 btn btn-default btn-lg btn-block"
-                v-for="patient in patientList"
-                :key="patient.id"
-                @click="patientSelect(patient)"
-              >
+              <label class="label f-weight-550">Select the patient record you would like to manage</label>
+              <button type="button" class="mb-1 mt-1 mr-1 btn btn-default btn-lg btn-block"
+                v-for="patient in patientList" :key="patient.id" @click="patientSelect(patient)">
                 {{ patient.firstName }} {{ patient.lastName }}
                 <h6>
                   {{ patient.officeName }}
@@ -125,28 +103,14 @@
               <!-- to error: add class "has-danger" -->
               <div class="form-group">
                 <label class="label f-weight-550">Email Address</label>
-                <input
-                  type="email"
-                  class="form-control form-control-sm"
-                  required
-                  v-model="loginForm.userName"
-                />
+                <input type="email" class="form-control form-control-sm" required v-model="loginForm.userName" />
               </div>
               <div class="form-group mb-4">
                 <label class="label f-weight-550">Password</label>
                 <!-- <a href="#" style="float:right;font-size:12px;">Forgot password?</a> -->
-                <input
-                  type="password"
-                  class="form-control form-control-sm"
-                  required
-                  v-model="loginForm.password"
-                />
+                <input type="password" class="form-control form-control-sm" required v-model="loginForm.password" />
               </div>
-              <btn-saving
-                :is-saving="isSaving"
-                :loading-text="'Validating...'"
-                :display-text="'Login'"
-              />
+              <btn-saving :is-saving="isSaving" :loading-text="'Validating...'" :display-text="'Login'" />
               <!-- <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">
                 Login
               </button> -->
@@ -173,7 +137,7 @@ export default {
   components: {
     BtnSaving
   },
-  data () {
+  data() {
     return {
       isSaving: false,
       loginForm: {
@@ -189,7 +153,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['currentPatientAssociated'])
+    ...mapGetters(['currentPatientAssociated', 'getUrlLinkInfo', 'getTaskInfo'])
   },
   methods: {
     ...mapActions([
@@ -202,7 +166,7 @@ export default {
       'setCurrentMsgInfo',
       'setBillingStatementTask'
     ]),
-    async login () {
+    async login() {
       this.isSaving = true
       const userData = await this.$auth.login(
         this.loginForm.userName,
@@ -220,6 +184,31 @@ export default {
         })
         this.isSaving = false
         return
+      }
+      // get url link info
+      if (this.getUrlLinkInfo) {
+        const pLookup = await api.task.request.patientLookup({
+          facilityId: this.getUrlLinkInfo.facilityID,
+          patientId: this.getUrlLinkInfo.patientID
+        })
+        if (!pLookup.data) {
+          // get patient info
+          const patientInfo_ = await api.task.request.getPatient({
+            facilityId: this.getUrlLinkInfo.facilityID,
+            patientId: this.getUrlLinkInfo.patientID
+          })
+
+          // insert patient info
+          if (patientInfo_.data) {
+            await api.auth.request.insertUserPatient({
+              patientPortalUserID: userData.id,
+              facilityId: this.getUrlLinkInfo.facilityID,
+              patientId: this.getUrlLinkInfo.patientID,
+              firstName: patientInfo_.data.firstName,
+              lastName: patientInfo_.data.lastName
+            })
+          }
+        }
       }
 
       const resp = await api.auth.request.getLink(this.$route.query.key)
@@ -279,7 +268,7 @@ export default {
         // this.$router.push('/') commented out by Rizza Herrero 05/05/2021
       }
     },
-    async patientSelect (patient) {
+    async patientSelect(patient) {
       if (patient) {
         this.selectedPatient = patient
       }
@@ -293,7 +282,7 @@ export default {
       this.gotoTask() // added by Rizza Herrero 05/05/2021
       // this.$router.push('/') commented out by Rizza Herrero 05/05/2021
     },
-    async patientAttach () {
+    async patientAttach() {
       if (this.confirmLink) {
         await api.auth.request.insertUserPatient({
           patientPortalUserID: this.profileAuthInfo.id,
@@ -327,7 +316,7 @@ export default {
         // this.$router.push('/') commented out by Rizza Herrero 05/05/2021
       }
     },
-    async gotoTask () {
+    async gotoTask() {
       const res = await api.patient.request.gettasks({
         facilityId: this.currentPatientAssociated.facilityID,
         patientId: this.currentPatientAssociated.patientID
@@ -364,8 +353,21 @@ export default {
         this.$router.push('/')
       }
     }
+    // async insertUserPatient() {
+    //   let urllinkInfo = this.getUrlLinkInfo
+    //   if (urllinkInfo) {
+    //     // Insert User Patient
+    //     await api.auth.request.insertUserPatient({
+    //       patientPortalUserID: this.profileAuthInfo.id,
+    //       facilityId: urllinkInfo.facilityID,
+    //       patientId: urllinkInfo.patientID,
+    //       firstName: this.attachPatientInfo.firstName,
+    //       lastName: this.attachPatientInfo.lastName
+    //     })
+    //   }
+    // }
   },
-  mounted () {
+  mounted() {
     // Check if already login
     // if (this.$auth.isAuthenticated()) {
     //   this.gotoTask()

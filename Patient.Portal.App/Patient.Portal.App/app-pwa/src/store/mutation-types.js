@@ -36,6 +36,7 @@ export const TASK_IS_ACCESS_ONLY = 'TASK_IS_ACCESS_ONLY'
 export const TASK_IS_ACCESS_ONLY_ROUTE = 'TASK_IS_ACCESS_ONLY_ROUTE'
 export const TASK_INFO = 'TASK_INFO'
 export const TASK_ITEM = 'TASK_ITEM'
+export const URL_LINK_INFO = 'URL_LINK_INFO'
 
 // billing module
 export const BILLING_TASK_STATEMENT = 'BILLING_TASK_STATEMENT'

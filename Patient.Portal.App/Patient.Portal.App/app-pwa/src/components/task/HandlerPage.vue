@@ -22,8 +22,9 @@ export default {
       patientName: '',
       pdfFilename: '',
       pdfDocOptions: {
+        compress: true,
         fontSize: 12,
-        htmlRenderAs: 'image'
+        htmlRenderAs: 'image' // or "image" | "auto"
       }
     }
   },
@@ -208,7 +209,11 @@ export default {
           }
         }
       })
-      surveyPDF.save(this.pdfFilename)
+      try {
+        surveyPDF.save(this.pdfFilename)
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
   async mounted() {
@@ -218,7 +223,7 @@ export default {
     this.survey.addNavigationItem({
       id: 'pdf-export',
       title: 'Save as PDF',
-      // action: () => this.savePdf(this.survey.data)
+      // action: () => this.savePdf()
       action: () => this.savePdf2(this.survey)
     })
     this.survey.onUpdateQuestionCssClasses.add(function (_, options) {

@@ -123,3 +123,7 @@ export const setTaskInfo = async (store, payload) => {
 export const setTaskItem = async (store, payload) => {
   await store.commit(types.TASK_ITEM, payload)
 }
+
+export const setUrlLinkInfo = async (store, payload) => {
+  await store.commit(types.URL_LINK_INFO, payload)
+}
