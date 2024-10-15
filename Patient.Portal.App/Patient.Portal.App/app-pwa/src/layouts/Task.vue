@@ -177,7 +177,6 @@ export default {
           this.setTaskCurrentTaskType('ResetPassword')
           break
         case 'INS':
-          
           this.$router.push({ path: '/account/login' })
           break
         default:
