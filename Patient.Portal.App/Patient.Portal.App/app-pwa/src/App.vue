@@ -436,4 +436,20 @@ html.header-dark .header .separator {
   opacity: 0.5;
   text-decoration: none;
 }
+
+@media (min-width: 424px) and (max-width: 448px) {
+.office-name-m {
+  font-size: 1.4rem;
+}
+}
+@media (min-width: 399px) and (max-width: 423px) {
+.office-name-m {
+  font-size: 1.3rem;
+}
+}
+@media (min-width: 374px) and (max-width: 398px) {
+.office-name-m {
+  font-size: 1.2rem;
+}
+}
 </style>

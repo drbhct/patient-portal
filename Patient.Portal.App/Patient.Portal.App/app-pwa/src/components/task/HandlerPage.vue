@@ -75,7 +75,7 @@ export default {
 
             setTimeout(() => {
               window.close()
-            }, 2000)
+            }, 1000)
           }
         })
       }
@@ -251,5 +251,15 @@ export default {
 
 .sd-signaturepad {
   border: 1px solid gray !important;
+}
+@media (min-width: 449px) and (max-width: 495px) {
+.sd-title.sd-container-modern__title .sd-logo__image {
+    width: 25rem;
+}
+}
+@media (min-width: 496px) and (max-width: 497px) {
+.sd-title.sd-container-modern__title .sd-logo__image {
+    width: 28rem;
+}
 }
 </style>
