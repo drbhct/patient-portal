@@ -136,6 +136,7 @@ export default {
           // window.open(routeData.href, '_blank')
 
           var newWindow = window.open(routeData.href, '_blank')
+          newWindow.addEventListener('beforeunload', this.refreshParentWindow)
 
           setTimeout(function () {
             newWindow.document.title = info.Action + ': ' + info.FormName
@@ -148,23 +149,25 @@ export default {
     },
     date: function (date) {
       return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')
-    }
-  },
-  async mounted() {
-    console.log('dash-task loaded')
-    alert('task component mounted')
-    try {
+    },
+    async loadTasks() {
       if (this.currentPatientAssociated) {
+        alert('loading task list')
         const res = await api.patient.request.gettasks({
           facilityId: this.currentPatientAssociated.facilityID,
           patientId: this.currentPatientAssociated.patientID
         })
         this.taskslist = res.data
-        alert('task list reloaded')
       }
-    } catch (e) {
-      alert('error--' + e)
+    },
+    async refreshParentWindow() {
+      alert('refreshParentWindow')
+      window.location.reload()
     }
+  },
+  async mounted() {
+    console.log('dash-task mounted')
+    this.loadTasks()
   }
 }
 </script>
