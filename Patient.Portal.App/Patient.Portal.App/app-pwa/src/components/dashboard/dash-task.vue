@@ -153,7 +153,6 @@ export default {
       return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')
     },
     async loadTaskList() {
-      alert('loading task list...')
       if (this.currentPatientAssociated) {
         const res = await api.patient.request.gettasks({
           facilityId: this.currentPatientAssociated.facilityID,

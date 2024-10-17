@@ -79,7 +79,7 @@ export default {
               window.opener.location.reload()
               setTimeout(() => {
                 window.close()
-              }, 1000)
+              }, 500)
             }
           }
         })
