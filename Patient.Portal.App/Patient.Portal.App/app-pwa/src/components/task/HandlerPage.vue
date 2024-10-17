@@ -71,7 +71,6 @@ export default {
               patientId: queryData.pid
             })
 
-            // window.opener.location.reload(true)
             setTimeout(() => {
               window.close()
             }, 1000)
