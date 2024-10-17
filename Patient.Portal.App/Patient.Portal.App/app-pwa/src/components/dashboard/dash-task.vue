@@ -152,12 +152,18 @@ export default {
   },
   async mounted() {
     console.log('dash-task loaded')
-    if (this.currentPatientAssociated) {
-      const res = await api.patient.request.gettasks({
-        facilityId: this.currentPatientAssociated.facilityID,
-        patientId: this.currentPatientAssociated.patientID
-      })
-      this.taskslist = res.data
+    alert('task component mounted')
+    try {
+      if (this.currentPatientAssociated) {
+        const res = await api.patient.request.gettasks({
+          facilityId: this.currentPatientAssociated.facilityID,
+          patientId: this.currentPatientAssociated.patientID
+        })
+        this.taskslist = res.data
+        alert('task list reloaded')
+      }
+    } catch (e) {
+      alert('error--' + e)
     }
   }
 }
