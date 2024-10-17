@@ -42,7 +42,7 @@ export default {
         window.close()
       }, 3000)
     },
-    complete() {
+    complete2() {
       const queryData = this.$route.query
       const surveyPdf = new SurveyPDF(this.surveyJson, this.pdfDocOptions)
       if (surveyPdf) {
@@ -71,11 +71,24 @@ export default {
               patientId: queryData.pid
             })
 
+            window.opener.location.reload()
+
             setTimeout(() => {
               window.close()
             }, 1000)
           }
         })
+      }
+    },
+    complete() {
+      var isMobileDevice = window.navigator.userAgent.toLowerCase().includes('mobi')
+      if (isMobileDevice) {
+        document.referrer ? (window.location = document.referrer) : history.back()
+      } else {
+        window.opener.location.reload()
+        setTimeout(() => {
+          window.close()
+        }, 1000)
       }
     },
     async loadData() {

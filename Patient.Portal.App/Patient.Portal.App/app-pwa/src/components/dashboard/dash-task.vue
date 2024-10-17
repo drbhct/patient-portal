@@ -134,15 +134,15 @@ export default {
           var info = JSON.parse(task.info)
           var routeData = this.$router.resolve({ name: 'HandlerForm', query: { i: info.FacilityFormID, t: info.FormName, p: info.Data.PatientName, pid: task.patientID, tid: task.taskID } })
           // window.open(routeData.href, '_blank')
-
-          var newWindow = window.open(routeData.href, '_blank')
-          newWindow.onbeforeunload = function () {
-            window.location.reload()
+          var isMobileDevice = window.navigator.userAgent.toLowerCase().includes('mobi')
+          if (isMobileDevice) {
+            window.location.href = routeData.href
+          } else {
+            var newWindow = window.open(routeData.href, '_blank')
+            setTimeout(function () {
+              newWindow.document.title = info.Action + ': ' + info.FormName
+            }, 100)
           }
-
-          setTimeout(function () {
-            newWindow.document.title = info.Action + ': ' + info.FormName
-          }, 100)
 
           break
         default:
@@ -151,9 +151,6 @@ export default {
     },
     date: function (date) {
       return moment(date).format('dddd  MM/DD/YYYY @ h:mm:ss a')
-    },
-    refreshParent: function() {
-      this.loadTaskList()
     },
     async loadTaskList() {
       alert('loading task list...')
