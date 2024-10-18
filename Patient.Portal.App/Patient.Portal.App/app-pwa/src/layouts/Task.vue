@@ -6,7 +6,11 @@
         <h2 v-if="initialize && (hasAccount || keyExpired)">{{ message }}</h2>
       </div>
       <keep-alive>
-        <component v-bind:is="getTaskCurrentTaskType" v-if="initialize" :link-info="linkInfo"></component>
+        <component
+          v-bind:is="getTaskCurrentTaskType"
+          v-if="initialize"
+          :link-info="linkInfo"
+        ></component>
       </keep-alive>
     </div>
   </div>
@@ -109,7 +113,7 @@ export default {
       })
       this.task = taskRes.data.find((el) => el.taskID === this.linkInfo.taskID)
       // added by Rizza Herrero 10/10/2024
-      if (this.task.taskType === 'INS') {
+      if (this.task && this.task.taskType === 'INS') {
         if (this.task.info !== '') {
           var taskinfo = JSON.parse(this.task.info)
           taskinfo.TaskType = this.task.taskType
@@ -145,7 +149,7 @@ export default {
       this.setFacilityInfo(facilityInfo)
       await this.setTaskOfficeName(facilityInfo.officeName)
 
-      if (!this.task) {
+      if (!this.task || taskRes.data.taskID === 0) {
         this.hasAccount = false
         this.setTaskIsAccessOnly(true)
         this.setTaskCurrentTaskType('CreateAccount')
