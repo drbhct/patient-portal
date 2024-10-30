@@ -47,6 +47,17 @@ export default {
       const surveyPdf = new SurveyPDF(this.surveyJson, this.pdfDocOptions)
       if (surveyPdf) {
         surveyPdf.data = this.survey.data
+        // change date format
+        surveyPdf.getAllQuestions().forEach(q => {
+          if (q.getType() === 'text' && q.inputType === 'date') {
+            if (!q.isEmpty()) {
+              const d = new Date(q.value)
+              const newVal = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear()
+              q.value = newVal
+            }
+          }
+        })
+
         surveyPdf.raw('dataurlstring').then(async (dataurlstring) => {
           var base64 = dataurlstring.split('base64,')[1]
           var fileID = await api.task.request.uploadPatientForm({
@@ -125,6 +136,15 @@ export default {
       const surveyPDF = new SurveyPDF(this.surveyJson, options)
       if (surveyModel) {
         surveyPDF.data = surveyModel.data
+        surveyPDF.getAllQuestions().forEach(q => {
+          if (q.getType() === 'text' && q.inputType === 'date') {
+            if (!q.isEmpty()) {
+              const d = new Date(q.value)
+              const newVal = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear()
+              q.value = newVal
+            }
+          }
+        })
       }
 
       // Draw a portion of an image
