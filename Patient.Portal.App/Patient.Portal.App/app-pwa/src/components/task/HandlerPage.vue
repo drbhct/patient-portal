@@ -52,8 +52,25 @@ export default {
           if (q.getType() === 'text' && q.inputType === 'date') {
             if (!q.isEmpty()) {
               const d = new Date(q.value)
-              const newVal = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear()
+              const newVal = (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear()
               q.value = newVal
+            }
+          }
+        })
+
+        surveyPdf.onRenderQuestion.add(async (survey, options) => {
+          // change the css of checkbox
+          if (options.question.getType() === 'checkbox') {
+            for (var i = 0; i < options.bricks.length; i++) {
+              var unfoldBricks = options.bricks[i].unfold()
+              for (var j = 0; j < unfoldBricks.length; j++) {
+                if (unfoldBricks[j] instanceof options.module.CheckboxItemBrick) {
+                  if (unfoldBricks[j].context.checked) {
+                    unfoldBricks[j].formBorderColor = 'black'
+                  }
+                  unfoldBricks[j].textColor = 'black'
+                }
+              }
             }
           }
         })
@@ -140,7 +157,7 @@ export default {
           if (q.getType() === 'text' && q.inputType === 'date') {
             if (!q.isEmpty()) {
               const d = new Date(q.value)
-              const newVal = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear()
+              const newVal = (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear()
               q.value = newVal
             }
           }
@@ -187,6 +204,20 @@ export default {
       }
 
       surveyPDF.onRenderQuestion.add(async (survey, options) => {
+        // change the css of checkbox
+        if (options.question.getType() === 'checkbox') {
+          for (var i = 0; i < options.bricks.length; i++) {
+            var unfoldBricks = options.bricks[i].unfold()
+            for (var j = 0; j < unfoldBricks.length; j++) {
+              if (unfoldBricks[j] instanceof options.module.CheckboxItemBrick) {
+                if (unfoldBricks[j].context.checked) {
+                  unfoldBricks[j].formBorderColor = 'black'
+                }
+                unfoldBricks[j].textColor = 'black'
+              }
+            }
+          }
+        }
         // Split only HTML elements
         if (options.question.getType() === 'html') {
           // Get the HTML brick
