@@ -344,6 +344,25 @@ export default {
             this.setBillingStatementTask(taskRes.data)
             this.$router.push({ path: '/menu/statement' })
             break
+          case 'FORM':
+            if (taskList[0].taskID > 0) {
+              var info = JSON.parse(taskList[0].info)
+              var routeData = this.$router.resolve({ name: 'HandlerForm', query: { i: info.FacilityFormID, t: info.FormName, p: info.Data.PatientName, pid: taskList[0].patientID, tid: taskList[0].taskID } })
+              // window.open(routeData.href, '_blank')
+              var isMobileDevice = window.navigator.userAgent.toLowerCase().includes('mobi')
+              if (isMobileDevice) {
+                window.location.href = routeData.href
+              } else {
+                var newWindow = window.open(routeData.href, '_blank')
+                setTimeout(function () {
+                  newWindow.document.title = info.Action + ': ' + info.FormName
+                }, 100)
+              }
+            } else {
+              await this.setTaskCurrentTaskType(taskList[0].taskType)
+              await this.$router.push({ path: '/task' })
+            }
+            break
           default:
             await this.setTaskCurrentTaskType(taskList[0].taskType)
             await this.$router.push({ path: '/task' })
