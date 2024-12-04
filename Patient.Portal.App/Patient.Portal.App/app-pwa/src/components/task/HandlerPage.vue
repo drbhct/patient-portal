@@ -86,7 +86,6 @@ export default {
           })
 
           if (fileID) {
-            console.log(fileID)
             await api.task.request.insertPatientForm({
               facilityformId: queryData.i,
               patientid: queryData.pid,
@@ -102,12 +101,30 @@ export default {
             var isMobileDevice = window.navigator.userAgent.toLowerCase().includes('mobi')
 
             if (isMobileDevice) {
-              document.referrer ? (window.location = document.referrer) : history.back()
+              var pathname = document.referrer
+              var pgeName = pathname.split('/').pop()
+              if (pgeName === 'login') {
+                setTimeout(() => {
+                  this.$router.push('/')
+                }, 1000)
+              } else {
+                setTimeout(() => {
+                  document.referrer ? (window.location = document.referrer) : history.back()
+                }, 1000)
+              }
             } else {
-              window.opener.location.reload()
-              setTimeout(() => {
-                window.close()
-              }, 500)
+              var URLpathName = window.opener.location.pathname
+              var pageName = URLpathName.split('/').pop()
+              if (pageName === 'login') {
+                setTimeout(() => {
+                  this.$router.push('/')
+                }, 1000)
+              } else {
+                window.opener.location.reload()
+                setTimeout(() => {
+                  window.close()
+                }, 1000)
+              }
             }
           }
         })
