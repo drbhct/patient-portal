@@ -41,8 +41,7 @@
                                   </div>
                                   <div v-else>
                                     <label for="licenseFileFront" class="btn btn-sm btn-primary">Capture front
-                                      ID <i
-                                        class="fa-solid fa-camera mr-2"></i></label>
+                                      ID <i class="fa-solid fa-camera mr-2"></i></label>
                                     <input type="file" style="display: none" id="licenseFileFront" capture="environment"
                                       accept="image/*,video/*" @change="loadLicenseFileAsURLFront">
                                   </div>
@@ -68,8 +67,7 @@
                                   </div>
                                   <div v-else>
                                     <label for="licenseFileBack" class="btn btn-sm btn-primary">Capture back
-                                      ID <i
-                                        class="fa-solid fa-camera mr-2"></i></label>
+                                      ID <i class="fa-solid fa-camera mr-2"></i></label>
                                     <input type="file" style="display: none" id="licenseFileBack" capture="environment"
                                       accept="image/*,video/*" @change="loadLicenseFileAsURLBack">
                                   </div>
@@ -131,6 +129,7 @@
                   </div>
                 </div>
               </div>
+              <!-- Upload File from your computer or ake a photo of the document -->
               <div v-if="isPortionCareSaved && isPortionCare">
                 <div class="form-group mx-auto text-center row f-weight-550 pt-4">
                   <div class="col-lg-12">
@@ -159,7 +158,7 @@
                             <label v-if="dataURLList.length === 0" class="label f-weight-550">Or Take a photo of the
                               document</label>
 
-                              <div class="row">
+                            <div class="row">
                               <div class="col-6 text-right">
                                 <div v-if="!IsMobile">
                                   <button type="button" class="btn btn-sm btn-outline-primary"
@@ -316,8 +315,7 @@
                                 </div>
                                 <div v-else>
                                   <label for="licenseFileFront" class="btn btn-sm btn-primary">Capture front
-                                    ID <i
-                                      class="fa-solid fa-camera mr-2"></i></label>
+                                    ID <i class="fa-solid fa-camera mr-2"></i></label>
                                   <input type="file" style="display: none" id="licenseFileFront" capture="environment"
                                     accept="image/*,video/*" @change="loadLicenseFileAsURLFront">
                                 </div>
@@ -343,8 +341,7 @@
                                 </div>
                                 <div v-else>
                                   <label for="licenseFileBack" class="btn btn-sm btn-primary">Capture back
-                                    ID <i
-                                      class="fa-solid fa-camera mr-2"></i></label>
+                                    ID <i class="fa-solid fa-camera mr-2"></i></label>
                                   <input type="file" style="display: none" id="licenseFileBack" capture="environment"
                                     accept="image/*,video/*" @change="loadLicenseFileAsURLBack">
                                 </div>
@@ -447,6 +444,7 @@ export default {
   data() {
     return {
       files: {},
+      hasError: false,
       isSaving: false,
       isLoading: false,
       isCameraOpen: false,
@@ -518,58 +516,38 @@ export default {
                 title: 'Oops...',
                 text: 'Cannot proceed, Please capture the back of your License ID'
               })
+              this.hasError = true
             } else if (this.base64String2Front === '' && this.base64String2Back !== '') {
               this.$swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Cannot proceed, Please capture the front of your License ID'
               })
+              this.hasError = true
             } else {
               this.isSaving = true
-              await this.uploadFile2(true)
-              var givenDate = this.form.dob
-              var todaysDate = new Date()
 
-              if (givenDate > todaysDate) {
-                this.isSaving = false
-                this.$swal.fire({
-                  icon: 'error',
-                  title: 'Oops...',
-                  text: 'Invalid Date of Birth!'
-                })
-              } else {
-                await api.task.request.insertInsuranceInfo({
-                  facilityId: this.currentPatientAssociated.facilityID,
-                  patientId: this.currentPatientAssociated.patientID,
-                  relation: this.selectedPolicyHolder,
-                  firstname: this.form.firstName,
-                  mi: this.form.middleInitial.substring(0, 1),
-                  lastname: this.form.lastName,
-                  dob: this.form.dob
-                })
-
-                // uploading license images
-                // if (this.dataURLList2.length > 0) {
-                //   await this.uploadFile(this.dataURLList2, true)
-                // }
-
-                // end
-                await this.uploadFile(true)
-                if (this.dataURLList.length > 0) {
-                  await this.uploadFile(this.dataURLList, false)
-                } else if (this.dataURLListUpload.length > 0) {
-                  await this.uploadFile(this.dataURLListUpload, false)
-                } else {
-                  this.isSaving = false
-                  this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
-                }
+              // uploadfile2 is uploading for insurance front and back
+              // uploadfile is for uploading of document
+              if (this.base64String2Front !== '' && this.base64String2Back !== '') {
+                await this.uploadFile2(true)
               }
+              await this.uploadFile(true)
+              if (this.selectedPolicyHolder !== 'Myself') {
+                await this.insertPolicyHolderInformation()
+              }
+              if (!this.hasError) {
+                this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
+              }
+              this.isSaving = false
+              this.hasError = false
             }
           }
         } else {
           this.isPortionCareSaved = true
         }
       } else {
+        // driver's license only
         if (this.isCameraOpen2) {
           this.isCamera2Open = false
           this.isPhotoTaken2 = false
@@ -596,12 +574,42 @@ export default {
         }
       }
     },
+    async insertPolicyHolderInformation() {
+      var givenDate = this.form.dob
+      var todaysDate = new Date()
+
+      if (givenDate > todaysDate) {
+        this.isSaving = false
+        this.$swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Invalid Date of Birth!'
+        })
+        this.hasError = true
+      } else if (!this.form.firstName && !this.form.middleInitial && !this.lastname) {
+        this.$swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Cannot proceed, Please enter required fields on Policy Holder Information'
+        })
+        this.hasError = true
+      } else {
+        await api.task.request.insertInsuranceInfo({
+          facilityId: this.currentPatientAssociated.facilityID,
+          patientId: this.currentPatientAssociated.patientID,
+          relation: this.selectedPolicyHolder,
+          firstname: this.form.firstName,
+          mi: this.form.middleInitial.substring(0, 1),
+          lastname: this.form.lastName,
+          dob: this.form.dob
+        })
+      }
+    },
     toggle(val) {
       this.isPortionCare = val
       this.base64String2Front = ''
       this.base64String2Back = ''
     },
-
     prev() {
       if (this.isPortionCareSaved) {
         this.isPortionCare = true
@@ -855,18 +863,25 @@ export default {
     },
     async uploadFile(isInsurance) {
       let base64String = ''
-      const pdf = new jsPDF()
-
-      if (this.base64StringFront !== '') {
-        pdf.addImage(this.base64StringFront, 'JPEG', 15, 40, 180, 160)
+      if (this.dataURLListUpload.length > 0) {
+        // from uploaded file
+        base64String = this.dataURLListUpload[0]
+      } else {
+        // take a photo of document
+        const pdf = new jsPDF()
+        if (this.base64StringFront !== '') {
+          pdf.addImage(this.base64StringFront, 'JPEG', 15, 40, 180, 160)
+        }
+        if (this.base64StringBack !== '') {
+          pdf.addPage()
+          pdf.addImage(this.base64StringBack, 'JPEG', 15, 40, 180, 160)
+        }
+        if (this.base64StringFront === '' && this.base64StringBack === '') {
+          base64String = ''
+        } else {
+          base64String = pdf.output('datauristring')
+        }
       }
-
-      if (this.base64StringBack !== '') {
-        pdf.addPage()
-        pdf.addImage(this.base64StringBack, 'JPEG', 15, 40, 180, 160)
-      }
-      base64String = pdf.output('datauristring')
-
       if (base64String !== '') {
         const base64data = base64String.split('base64')[1]
 
@@ -887,12 +902,14 @@ export default {
               title: 'Oops...',
               text: retData.data.reason
             })
+            this.hasError = true
           }
         }
       }
     },
 
     async uploadFile2(isInsurance) {
+      // uploading of front and back license only
       let base64String = ''
       const pdf = new jsPDF()
       if (this.base64String2Front !== '' && this.base64String2Back !== '') {
@@ -901,7 +918,6 @@ export default {
         pdf.addImage(this.base64String2Back, 'JPEG', 15, 40, 180, 160)
         base64String = pdf.output('datauristring')
       }
-
       if (base64String !== '') {
         const base64data = base64String.split('base64')[1]
 
@@ -922,6 +938,7 @@ export default {
               title: 'Oops...',
               text: retData.data.reason
             })
+            this.hasError = true
           }
         }
       }
