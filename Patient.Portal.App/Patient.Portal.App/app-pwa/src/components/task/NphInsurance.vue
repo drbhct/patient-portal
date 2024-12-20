@@ -864,12 +864,14 @@ export default {
     },
     async uploadFile(isInsurance) {
       let base64String = ''
+      const pdf = new jsPDF()
       if (this.dataURLListUpload.length > 0) {
         // from uploaded file
-        base64String = this.dataURLListUpload[0]
+        const base64 = this.dataURLListUpload[0]
+        pdf.addImage(base64, 'JPEG', 15, 40, 180, 160)
+        base64String = pdf.output('datauristring')
       } else {
         // take a photo of document
-        const pdf = new jsPDF()
         if (this.base64StringFront !== '') {
           pdf.addImage(this.base64StringFront, 'JPEG', 15, 40, 180, 160)
         }
