@@ -496,6 +496,7 @@ export default {
     ...mapActions(['setTaskCurrentTaskType']),
     async submit() {
       if (this.isPortionCare) {
+        // insurance part
         if (this.isPortionCareSaved) {
           if (this.isCameraOpen) {
             this.isCameraOpen = false
@@ -527,7 +528,7 @@ export default {
             } else {
               this.isSaving = true
 
-              // uploadfile2 is uploading for insurance front and back
+              // uploadfile2 is uploading for drivers license front and back
               // uploadfile is for uploading of document
               if (this.base64String2Front !== '' && this.base64String2Back !== '') {
                 await this.uploadFile2(true)
@@ -568,7 +569,7 @@ export default {
           })
         } else {
           this.isSaving = true
-          await this.uploadFile2(true)
+          await this.uploadFile2(false)
           this.setTaskCurrentTaskType(this.TaskInfo.CurrentTaskType)
           this.isSaving = false
         }
@@ -945,7 +946,7 @@ export default {
     },
     async uploadPatientForm(base64data, isInsurance) {
       let desc = this.TaskInfo.Description
-      if (isInsurance) {
+      if (!isInsurance) {
         desc = 'Identification'
       }
       const retData = await api.task.request.uploadPatientForm({
@@ -984,8 +985,6 @@ export default {
     }
   },
   async mounted() {
-    this.isLoading = true
-    this.isLoading = false
   }
 }
 </script>
