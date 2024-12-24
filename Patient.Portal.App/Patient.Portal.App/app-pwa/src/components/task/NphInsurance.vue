@@ -866,9 +866,13 @@ export default {
       let base64String = ''
       const pdf = new jsPDF()
       if (this.dataURLListUpload.length > 0) {
-        // from uploaded file
-        const base64 = this.dataURLListUpload[0]
-        pdf.addImage(base64, 'JPEG', 15, 40, 180, 160)
+        for (let i = 0; i < this.dataURLListUpload.length; i++) {
+          const base64 = this.dataURLListUpload[i]
+          pdf.addImage(base64, 'JPEG', 15, 40, 180, 160)
+          if (i < (this.dataURLListUpload.length - 1)) {
+            pdf.addPage()
+          }
+        }
         base64String = pdf.output('datauristring')
       } else {
         // take a photo of document
@@ -896,7 +900,7 @@ export default {
 
         if (retData.data) {
           if (retData.data.value) {
-            this.uploadPatientForm(base64data.replace(',', '').trim(), isInsurance)
+            this.uploadPatientForm(base64data.replace(',', '').trim(), isInsurance, this.TaskInfo.Description)
             this.base64StringFront = ''
             this.base64StringBack = ''
           } else {
@@ -932,7 +936,7 @@ export default {
 
         if (retData.data) {
           if (retData.data.value) {
-            await this.uploadPatientForm(base64data.replace(',', '').trim(), isInsurance)
+            await this.uploadPatientForm(base64data.replace(',', '').trim(), isInsurance, 'Identification')
             this.base64String2Front = ''
             this.base64String2Back = ''
           } else {
@@ -946,11 +950,7 @@ export default {
         }
       }
     },
-    async uploadPatientForm(base64data, isInsurance) {
-      let desc = this.TaskInfo.Description
-      if (!isInsurance) {
-        desc = 'Identification'
-      }
+    async uploadPatientForm(base64data, isInsurance, desc) {
       const retData = await api.task.request.uploadPatientForm({
         facilityId: this.currentPatientAssociated.facilityID,
         patientId: this.currentPatientAssociated.patientID,
