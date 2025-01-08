@@ -9,6 +9,7 @@ import { mapGetters } from 'vuex'
 import { Survey } from 'survey-vue-ui'
 import { Model, slk } from 'survey-core'
 import { SurveyPDF, HTMLBrick } from 'survey-pdf'
+import moment from 'moment'
 
 slk(
   'ZjI3MDkwMDYtNDkxNC00MmJkLTg4NDUtMjFhYjIyMDM5MWQxOzE9MjAyNS0wMy0wNCwyPTIwMjUtMDMtMDQsND0yMDI1LTAzLTA0'
@@ -51,8 +52,10 @@ export default {
         surveyPdf.getAllQuestions().forEach(q => {
           if (q.getType() === 'text' && q.inputType === 'date') {
             if (!q.isEmpty()) {
-              const d = new Date(q.value)
-              const newVal = (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear()
+              // const d = new Date(q.value)
+              // const newVal = (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear()
+              // q.value = newVal
+              const newVal = moment(q.value).format('MM/DD/YYYY')
               q.value = newVal
             }
           }
@@ -170,11 +173,11 @@ export default {
       const surveyPDF = new SurveyPDF(this.surveyJson, options)
       if (surveyModel) {
         surveyPDF.data = surveyModel.data
+        // add date format
         surveyPDF.getAllQuestions().forEach(q => {
           if (q.getType() === 'text' && q.inputType === 'date') {
             if (!q.isEmpty()) {
-              const d = new Date(q.value)
-              const newVal = (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear()
+              const newVal = moment(q.value).format('MM/DD/YYYY')
               q.value = newVal
             }
           }
