@@ -165,7 +165,8 @@ export default {
       'setMsgCurrentPage',
       'setCurrentMsgInfo',
       'setBillingStatementTask',
-      'setTaskInfo'
+      'setTaskInfo',
+      'setTaskItem'
     ]),
     async login() {
       this.isSaving = true
@@ -369,6 +370,12 @@ export default {
             taskinfo.TaskType = taskList[0].taskType
             taskinfo.TaskID = taskList[0].taskID
             this.setTaskInfo(JSON.stringify(taskinfo))
+            await this.setTaskCurrentTaskType(taskList[0].taskType)
+            await this.$router.push({ path: '/task' })
+            break
+          case 'CH':
+            this.setTaskInfo('')
+            this.setTaskItem(taskList[0])
             await this.setTaskCurrentTaskType(taskList[0].taskType)
             await this.$router.push({ path: '/task' })
             break
