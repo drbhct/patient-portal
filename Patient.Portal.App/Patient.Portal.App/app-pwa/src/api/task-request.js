@@ -603,6 +603,13 @@ export default {
         '/patientportal/UpdateCaseHistory',
         payload
       )
+    },
+    /**
+     * Delete Patient Form
+     * @param {Number} id
+     */
+    async deletePatientForm (id) {
+      return await securedJsonRequest.get(`/form/DeletePatientForm/${id}`)
     }
   }
 }

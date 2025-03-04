@@ -44,8 +44,20 @@ export default {
       }, 3000)
     },
     complete() {
+      // const surveyModel = this.survey
       const queryData = this.$route.query
-      const surveyPdf = new SurveyPDF(this.surveyJson, this.pdfDocOptions)
+
+      // const pdfWidth = !!surveyModel && surveyModel.pdfWidth ? surveyModel.pdfWidth : 225 // 210 orig
+      // const pdfHeight = !!surveyModel && surveyModel.pdfHeight ? surveyModel.pdfHeight : 319 // original 297
+
+      const options = {
+        fontSize: 12,
+        compress: true,
+        format: 'a4',
+        htmlRenderAs: 'image',
+        orientation: 'p'
+      }
+      const surveyPdf = new SurveyPDF(this.surveyJson, options)
       if (surveyPdf) {
         surveyPdf.data = this.survey.data
         // change date format
@@ -76,57 +88,119 @@ export default {
               }
             }
           }
+
+          // Split only HTML elements
+          if (options.question.getType() === 'html') {
+            // Get the HTML brick
+            const htmlBrick = options.bricks[0]
+            if (!htmlBrick || !htmlBrick.html) return
+
+            options.bricks = []
+
+            // Extract image from the HTML brick
+            const img = await this.getImage(htmlBrick)
+
+            // Calculate the available page height and the coordinate at which to start drawing
+            const fullPageHeight = options.controller.paperHeight - options.controller.margins.top - options.controller.margins.bot
+            const currY = htmlBrick.yTop - fullPageHeight * Math.floor(htmlBrick.yTop / fullPageHeight)
+
+            const canvas = document.createElement('canvas')
+            canvas.width = img.width
+
+            // A multiplier is used to decrease the original image width if it exceeds the available page width
+            let multiplier = 1
+            if (htmlBrick.width < img.width) {
+              multiplier = htmlBrick.width / img.width
+            }
+
+            // Calculate what portion of the original image would fit onto one page
+            const onePageSize = fullPageHeight / multiplier
+            // Calculate the height of the first brick
+            const firstBrickHeight = Math.min(img.height, (fullPageHeight - currY) / multiplier)
+
+            // Draw the first brick
+            const firstBrick = this.drawPart(firstBrickHeight, multiplier, 0, canvas, img,
+              0, 0, onePageSize, htmlBrick, options.controller)
+            options.bricks.push(firstBrick)
+
+            // Page counter
+            let cnt = 0
+            // Draw the rest of the bricks
+            for (let i = firstBrickHeight; i < img.height; i += onePageSize) {
+              const brickHeight = Math.min(img.height - i, onePageSize)
+
+              const currBrick = this.drawPart(brickHeight, multiplier, i, canvas, img,
+                firstBrickHeight, cnt, onePageSize, htmlBrick, options.controller)
+
+              cnt += 1
+              options.bricks.push(currBrick)
+            }
+          }
         })
 
         surveyPdf.raw('dataurlstring').then(async (dataurlstring) => {
           var base64 = dataurlstring.split('base64,')[1]
-          var fileID = await api.task.request.uploadPatientForm({
-            facilityId: this.currentPatientAssociated.facilityID,
-            patientId: queryData.pid,
-            description: this.surveyJson.title,
-            base64: base64,
-            facilityFormID: queryData.i
+
+          var patientFormID = await api.task.request.insertPatientForm({
+            facilityformId: queryData.i,
+            patientid: queryData.pid,
+            data: JSON.stringify(surveyPdf.data)
           })
 
-          if (fileID) {
-            await api.task.request.insertPatientForm({
-              facilityformId: queryData.i,
-              patientid: queryData.pid,
-              data: JSON.stringify(surveyPdf.data)
-            })
+          if (patientFormID) {
+            if (patientFormID.data > 0) {
+              const retStat = await api.task.request.uploadPatientForm({
+                facilityId: this.currentPatientAssociated.facilityID,
+                patientId: queryData.pid,
+                description: this.surveyJson.title,
+                base64: base64,
+                facilityFormID: queryData.i,
+                patientFormID: patientFormID.data
+              })
 
-            await api.task.request.updateTaskComplete({
-              facilityId: this.currentPatientAssociated.facilityID,
-              id: queryData.tid,
-              patientId: queryData.pid
-            })
+              if (retStat.data) {
+                const retStat2 = await api.task.request.updateTaskComplete({
+                  facilityId: this.currentPatientAssociated.facilityID,
+                  id: queryData.tid,
+                  patientId: queryData.pid
+                })
 
-            var isMobileDevice = window.navigator.userAgent.toLowerCase().includes('mobi')
-
-            if (isMobileDevice) {
-              var pathname = document.referrer
-              var pgeName = pathname.split('/').pop()
-              if (pgeName === 'login') {
-                setTimeout(() => {
-                  this.$router.push('/')
-                }, 1000)
+                if (!retStat2.data) {
+                  // delete
+                  await api.task.request.deletePatientForm(patientFormID.data)
+                }
               } else {
-                setTimeout(() => {
-                  document.referrer ? (window.location = document.referrer) : history.back()
-                }, 1000)
+                // delete
+                await api.task.request.deletePatientForm(patientFormID.data)
               }
-            } else {
-              var URLpathName = window.opener.location.pathname
-              var pageName = URLpathName.split('/').pop()
-              if (pageName === 'login') {
-                setTimeout(() => {
-                  this.$router.push('/')
-                }, 1000)
+
+              var isMobileDevice = window.navigator.userAgent.toLowerCase().includes('mobi')
+
+              if (isMobileDevice) {
+                var pathname = document.referrer
+                var pgeName = pathname.split('/').pop()
+                if (pgeName === 'login') {
+                  setTimeout(() => {
+                    this.$router.push('/')
+                  }, 1000)
+                } else {
+                  setTimeout(() => {
+                    document.referrer ? (window.location = document.referrer) : history.back()
+                  }, 1000)
+                }
               } else {
-                window.opener.location.reload()
-                setTimeout(() => {
-                  window.close()
-                }, 1000)
+                var URLpathName = window.opener.location.pathname
+                var pageName = URLpathName.split('/').pop()
+                if (pageName === 'login') {
+                  setTimeout(() => {
+                    this.$router.push('/')
+                  }, 1000)
+                } else {
+                  window.opener.location.reload()
+                  setTimeout(() => {
+                    window.close()
+                  }, 1000)
+                }
               }
             }
           }
@@ -162,13 +236,14 @@ export default {
       }
     },
     savePdf2(surveyModel) {
-      const pdfWidth = !!surveyModel && surveyModel.pdfWidth ? surveyModel.pdfWidth : 225 // 210 orig
-      const pdfHeight = !!surveyModel && surveyModel.pdfHeight ? surveyModel.pdfHeight : 319 // original 297
+      // const pdfWidth = !!surveyModel && surveyModel.pdfWidth ? surveyModel.pdfWidth : 225 // 210 orig
+      // const pdfHeight = !!surveyModel && surveyModel.pdfHeight ? surveyModel.pdfHeight : 319 // original 297
       const options = {
         fontSize: 12,
         compress: true,
-        format: [pdfWidth, pdfHeight],
-        htmlRenderAs: 'image'
+        format: 'a4',
+        htmlRenderAs: 'image',
+        orientation: 'p'
       }
       const surveyPDF = new SurveyPDF(this.surveyJson, options)
       if (surveyModel) {
@@ -291,6 +366,43 @@ export default {
       } catch (e) {
         console.log(e)
       }
+    },
+    // Draw a portion of an image
+    drawPart(brickHeight, multiplier, shift, canvas, img,
+      firstBrickHeight, fullPagesCnt, onePageSize, htmlBrick, controller) {
+      canvas.height = brickHeight
+      const ctx = canvas.getContext('2d')
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(img, 0, shift, img.width, brickHeight, 0, 0, img.width, brickHeight)
+
+      const currImageBase64 = canvas.toDataURL('image/jpeg')
+      const brickHtml = `
+                <img src='${currImageBase64}' width='${img.width * multiplier}' height='${brickHeight * multiplier}' />`
+      const brickRect = {
+        xLeft: htmlBrick.xLeft,
+        xRight: htmlBrick.xRight,
+        yTop: htmlBrick.yTop + multiplier * (firstBrickHeight + fullPagesCnt * onePageSize),
+        yBot: htmlBrick.yTop + multiplier * (firstBrickHeight + fullPagesCnt * onePageSize + brickHeight)
+      }
+      return new HTMLBrick(null, controller, brickRect, brickHtml, true)
+    },
+    async getImage(htmlBrick) {
+      const html = htmlBrick.html
+      let start = html.indexOf('data')
+
+      let imageBase64 = ''
+      while (html[start] !== "'") {
+        imageBase64 += html[start]
+        start++
+      }
+      const img = new Image()
+      img.src = imageBase64
+      await new Promise((resolve, reject) => {
+        img.onload = () => resolve(img)
+        img.onerror = reject
+      })
+
+      return img
     }
   },
   async mounted() {
