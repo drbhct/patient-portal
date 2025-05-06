@@ -16,10 +16,16 @@
   </div>
 </template>
 <script>
+import { ref, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import api from '../api/http-common.js'
-import { mapGetters, mapActions } from 'vuex'
+import { useTaskStore } from '@/stores/task'
+import { useConfigStore } from '@/stores/config'
+import { useAuthStore } from '@/stores/auth'
 import '../assets/FormLayout.css'
+
 export default {
+  name: 'TaskLayout',
   components: {
     // Lazy Loading components
     CreateAccount: () => import('../views/account/Create.vue'),
@@ -38,155 +44,153 @@ export default {
     ResetPassword: () => import('../components/task/ResetPassword.vue'),
     Statement: () => import('../components/billing/TaskStatement.vue')
   },
-  data() {
-    return {
-      initialize: false,
-      linkInfo: null,
-      task: null,
-      module: null,
-      hasAccount: false,
-      keyExpired: false
-    }
-  },
-  computed: {
-    ...mapGetters(['getTaskCurrentTaskType']),
-    key() {
-      return this.$route.query.key
-    },
-    message() {
-      if (this.keyExpired && this.initialize) {
+  setup() {
+    const router = useRouter()
+    const route = useRoute()
+    const taskStore = useTaskStore()
+    const configStore = useConfigStore()
+    const authStore = useAuthStore()
+
+    const initialize = ref(false)
+    const linkInfo = ref(null)
+    const task = ref(null)
+    const module = ref(null)
+    const hasAccount = ref(false)
+    const keyExpired = ref(false)
+
+    const key = computed(() => route.query.key)
+    const message = computed(() => {
+      if (keyExpired.value && initialize.value) {
         return 'Link key expired. Redirecting to login page...'
       }
-      if (this.initialize && this.hasAccount) {
+      if (initialize.value && hasAccount.value) {
         return 'Patient Link Account found. Redirecting to login page ...'
       }
       return ''
-    }
-  },
-  methods: {
-    ...mapActions([
-      'setTaskCurrentTaskType',
-      'setTaskOfficeName',
-      'setTaskCode',
-      'setTaskIsAccessOnly',
-      'setBillingStatementTask',
-      'setFacilityInfo',
-      'setTaskInfo',
-      'setUrlLinkInfo'
-    ])
-  },
-  async mounted() {
-    console.log('task.vue mounted')
-    const apiRes = await api.auth.request.apiLogin()
-    // NOTE: Temporary will be move to cookies soon!
-    // localStorage.setItem('config', apiRes.data.token)
-    sessionStorage.setItem('config', apiRes.data.token)
-    if (!this.key) {
-      if (this.$auth.isAuthenticated()) {
-        this.setTaskCurrentTaskType('PatientInfo')
-        this.initialize = true
-        return
-      } else {
-        this.$router.push({ path: '/account/login' })
-      }
-    }
-
-    // NOTE: This is via task key>account>task type
-    const resp = await api.auth.request.getLink(this.key)
-    this.linkInfo = resp.data
-    if (!this.linkInfo) {
-      this.initialize = true
-      this.keyExpired = true
-
-      setTimeout(() => {
-        this.$router.push({ path: '/account/login' })
-      }, 5000)
-    } else {
-      this.setUrlLinkInfo(resp.data)
-    }
-    // Get Task
-    let taskRes
-    if (this.linkInfo.patientID > 0) {
-      taskRes = await api.task.request.gettask({
-        facilityId: this.linkInfo.facilityID,
-        patientId: this.linkInfo.patientID
-      })
-      this.task = taskRes.data.find((el) => el.taskID === this.linkInfo.taskID)
-      // added by Rizza Herrero 10/10/2024
-      if (this.task && this.task.taskType === 'INS') {
-        if (this.task.info !== '') {
-          var taskinfo = JSON.parse(this.task.info)
-          taskinfo.TaskType = this.task.taskType
-          taskinfo.TaskID = this.task.taskID
-          this.setTaskInfo(JSON.stringify(taskinfo))
-        } else {
-          this.setTaskInfo('')
-        }
-        await this.setTaskCurrentTaskType(this.task.taskType)
-      }
-      // added by Rizza Herrero 10/10/2024 end
-    } else {
-      taskRes = await api.task.request.getSpecificTask(this.linkInfo.taskID)
-      this.task = taskRes.data
-    }
-
-    const pLookup = await api.task.request.patientLookup({
-      facilityId: this.linkInfo.facilityID,
-      patientId: this.linkInfo.patientID
     })
-    if (pLookup.data) {
-      this.initialize = true
-      this.hasAccount = true
-      setTimeout(() => {
-        this.$router.push({ path: '/account/login' })
-      }, 5000)
-    } else {
-      this.initialize = true
 
-      const facilityInfo = await api.auth.request.getFacilityInfo(
-        this.linkInfo.facilityID
-      )
-      this.setFacilityInfo(facilityInfo)
-      await this.setTaskOfficeName(facilityInfo.officeName)
+    const getTaskCurrentTaskType = computed(() => taskStore.currentTaskType)
 
-      if (!this.task || taskRes.data.taskID === 0) {
-        this.hasAccount = false
-        this.setTaskIsAccessOnly(true)
-        this.setTaskCurrentTaskType('CreateAccount')
-        return
+    async function initializeTask() {
+      console.log('task.vue mounted')
+      const apiRes = await api.auth.request.apiLogin()
+      sessionStorage.setItem('config', apiRes.data.token)
+
+      if (!key.value) {
+        if (authStore.isAuthenticated()) {
+          taskStore.setCurrentTaskType('PatientInfo')
+          initialize.value = true
+          return
+        } else {
+          router.push({ path: '/account/login' })
+        }
       }
-      console.log('this.task.taskType>', this.task.taskType)
-      console.log('task>', this.task.taskType === 'NPH')
-      this.setTaskCode(this.task.taskType)
-      switch (this.task.taskType) {
-        case 'NPH':
-        case 'AANPH':
-        case 'CH':
-        case 'AACH':
-          console.log('it is nph')
-          this.setTaskCurrentTaskType('CreateAccount')
-          break
-        case 'STMT':
-          this.hasAccount = false
-          this.setTaskIsAccessOnly(true)
-          this.setTaskIsAccessOnly('/menu/statement')
-          this.setBillingStatementTask(taskRes.data)
-          this.setTaskCurrentTaskType('CreateAccount')
-          // taskRes = await api.task.request.getSpecificTask(this.task.taskID)
-          // this.setBillingStatementTask(taskRes.data)
-          // this.setTaskCurrentTaskType('Statement')
-          // this.$router.push({ path: '/menu/statement' })
-          break
-        case 'RESETPWD':
-          this.setTaskCurrentTaskType('ResetPassword')
-          break
-        case 'INS':
-          this.$router.push({ path: '/account/login' })
-          break
-        default:
-          console.warn('Unable to recognise task type ' + this.task.taskType)
-          break
+
+      const resp = await api.auth.request.getLink(key.value)
+      linkInfo.value = resp.data
+      if (!linkInfo.value) {
+        initialize.value = true
+        keyExpired.value = true
+
+        setTimeout(() => {
+          router.push({ path: '/account/login' })
+        }, 5000)
+      } else {
+        taskStore.setUrlLinkInfo(resp.data)
       }
+
+      let taskRes
+      if (linkInfo.value.patientID > 0) {
+        taskRes = await api.task.request.gettask({
+          facilityId: linkInfo.value.facilityID,
+          patientId: linkInfo.value.patientID
+        })
+        task.value = taskRes.data.find(
+          (el) => el.taskID === linkInfo.value.taskID
+        )
+        if (task.value && task.value.taskType === 'INS') {
+          if (task.value.info !== '') {
+            const taskinfo = JSON.parse(task.value.info)
+            taskinfo.TaskType = task.value.taskType
+            taskinfo.TaskID = task.value.taskID
+            taskStore.setTaskInfo(JSON.stringify(taskinfo))
+          } else {
+            taskStore.setTaskInfo('')
+          }
+          await taskStore.setCurrentTaskType(task.value.taskType)
+        }
+      } else {
+        taskRes = await api.task.request.getSpecificTask(linkInfo.value.taskID)
+        task.value = taskRes.data
+      }
+
+      const pLookup = await api.task.request.patientLookup({
+        facilityId: linkInfo.value.facilityID,
+        patientId: linkInfo.value.patientID
+      })
+      if (pLookup.data) {
+        initialize.value = true
+        hasAccount.value = true
+        setTimeout(() => {
+          router.push({ path: '/account/login' })
+        }, 5000)
+      } else {
+        initialize.value = true
+
+        const facilityInfo = await api.auth.request.getFacilityInfo(
+          linkInfo.value.facilityID
+        )
+        taskStore.setFacilityInfo(facilityInfo)
+        await taskStore.setOfficeName(facilityInfo.officeName)
+
+        if (!task.value || taskRes.data.taskID === 0) {
+          hasAccount.value = false
+          taskStore.setIsAccessOnly(true)
+          taskStore.setCurrentTaskType('CreateAccount')
+          return
+        }
+        console.log('this.task.taskType>', task.value.taskType)
+        console.log('task>', task.value.taskType === 'NPH')
+        taskStore.setTaskCode(task.value.taskType)
+        switch (task.value.taskType) {
+          case 'NPH':
+          case 'AANPH':
+          case 'CH':
+          case 'AACH':
+            console.log('it is nph')
+            taskStore.setCurrentTaskType('CreateAccount')
+            break
+          case 'STMT':
+            hasAccount.value = false
+            taskStore.setIsAccessOnly(true)
+            taskStore.setIsAccessOnly('/menu/statement')
+            taskStore.setBillingStatementTask(taskRes.data)
+            taskStore.setCurrentTaskType('CreateAccount')
+            break
+          case 'RESETPWD':
+            taskStore.setCurrentTaskType('ResetPassword')
+            break
+          case 'INS':
+            router.push({ path: '/account/login' })
+            break
+          default:
+            console.warn('Unable to recognise task type ' + task.value.taskType)
+            break
+        }
+      }
+    }
+
+    return {
+      initialize,
+      linkInfo,
+      task,
+      module,
+      hasAccount,
+      keyExpired,
+      key,
+      message,
+      getTaskCurrentTaskType,
+      initializeTask
     }
   }
 }

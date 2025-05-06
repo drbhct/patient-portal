@@ -1,6 +1,9 @@
 <template>
   <section role="main">
-    <form @submit.prevent="submit2" class="mt-5 mr-2 ml-2 justify-content-md-center">
+    <form
+      @submit.prevent="submit2"
+      class="mt-5 mr-2 ml-2 justify-content-md-center"
+    >
       <div class="col">
         <section class="card">
           <header class="card"></header>
@@ -11,7 +14,9 @@
                   <h3 class="label f-weight-550">
                     Thank you! We look forward to seeing you.
                   </h3>
-                  <h4 class="label f-weight-550">{{ currentPatientAssociated.officeName }}</h4>
+                  <h4 class="label f-weight-550">
+                    {{ currentPatientAssociated.officeName }}
+                  </h4>
                 </div>
               </div>
               <!-- <div
@@ -49,10 +54,19 @@
           <footer class="card-footer">
             <div class="row justify-content-end">
               <div class="col-sm-9">
-                <button type="reset" class="btn btn-default mr-2" @click="prev" v-if="getTaskPreviousTaskType">
+                <button
+                  type="reset"
+                  class="btn btn-default mr-2"
+                  @click="prev"
+                  v-if="getTaskPreviousTaskType"
+                >
                   Back
                 </button>
-                <btn-saving :is-saving="isSaving" :loading-text="'Completing...'" :display-text="'Continue'" />
+                <btn-saving
+                  :is-saving="isSaving"
+                  :loading-text="'Completing...'"
+                  :display-text="'Continue'"
+                />
               </div>
             </div>
           </footer>
@@ -62,145 +76,94 @@
   </section>
 </template>
 
-<script>
-// import Multiselect from 'vue-multiselect'
-import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
-import api from '../../api/http-common.js'
-import { mapGetters, mapActions } from 'vuex'
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useTaskStore } from '@/stores/task'
 import BtnSaving from '../button-saving.vue'
-export default {
-  components: {
-    // Multiselect,
-    BtnSaving
-  },
-  data() {
-    return {
-      isSaving: false,
-      isLoading: false,
-      form: {
-        questions: [
-          {
-            code: 'SeenChiropractor',
-            question: 'Have you ever seen a chiropractor before?',
-            answer: ''
-          },
-          {
-            code: 'DoctorToKnow',
-            question: 'Is there anything else you want the doctor to know?',
-            answer: ''
-          }
-        ],
-        seenChiro: null,
-        otherInquiry: null
-      }
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'getProfilePatientAssociated',
-      'getTaskCurrentCaseHistoryId',
-      'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType',
-      'currentPatientAssociated',
-      'getTaskInfo',
-      'getTaskItem'
-    ]),
-    yesNoSelection() {
-      return ['Yes', 'No']
-    },
-    TaskInfo() {
-      if (this.getTaskInfo === '') {
-        return undefined
-      } else {
-        return JSON.parse(this.getTaskInfo)
-      }
-    },
-    TaskItem() {
-      return this.getTaskItem
-    }
-  },
-  methods: {
-    ...mapActions(['setTaskCurrentTaskType']),
-    async submit() {
-      if (this.TaskInfo) {
-        if (this.TaskInfo.TaskType === 'INS') {
-          await api.task.request.updateTaskComplete({
-            facilityId: this.currentPatientAssociated.facilityID,
-            id: this.TaskInfo.TaskID,
-            patientId: this.currentPatientAssociated.patientID
-          })
-          this.isSaving = false
-          // await this.$router.push({ path: '/' })
-        } else {
-          await api.task.request.updateCaseHistoryComplete({
-            facilityId: this.currentPatientAssociated.facilityID,
-            caseHistoryId: this.getTaskCurrentCaseHistoryId
-          })
-        }
-      } else {
-        if (this.TaskItem) {
-          await api.task.request.updateTaskComplete({
-            facilityId: this.currentPatientAssociated.facilityID,
-            id: this.TaskItem.taskID,
-            patientId: this.currentPatientAssociated.patientID
-          })
-        }
-        await api.task.request.updateCaseHistoryComplete({
-          facilityId: this.currentPatientAssociated.facilityID,
-          caseHistoryId: this.getTaskCurrentCaseHistoryId
-        })
-      }
-      this.isSaving = false
-      // await this.$router.push({ path: '/' })
-    },
-    async submit2() {
-      await this.$router.push({ path: '/' })
-    },
-    prev() {
-      const currentIndex = this.getTaskPreviousTaskType.findIndex(
-        (c) => c === this.getTaskCurrentTaskType
-      )
-      let prevPage = ''
-      if (currentIndex === -1) {
-        prevPage =
-          this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
-      } else {
-        prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
-      }
-      this.setTaskCurrentTaskType({
-        back: true,
-        page: prevPage,
-        removePage: this.getTaskCurrentTaskType
+import api from '../../api/http-common.js'
+
+const router = useRouter()
+const taskStore = useTaskStore()
+
+const isLoading = ref(false)
+const isSaving = ref(false)
+
+// Computed properties
+const currentPatientAssociated = computed(
+  () => taskStore.currentPatientAssociated
+)
+const getTaskCurrentCaseHistoryId = computed(
+  () => taskStore.currentCaseHistoryId
+)
+const getTaskCurrentTaskType = computed(() => taskStore.currentTaskType)
+const getTaskPreviousTaskType = computed(() => taskStore.previousTaskType)
+const TaskInfo = computed(() => {
+  const taskInfo = taskStore.taskInfo
+  return taskInfo ? JSON.parse(taskInfo) : undefined
+})
+const TaskItem = computed(() => taskStore.taskItem)
+const yesNoSelection = computed(() => ['Yes', 'No'])
+
+// Methods
+const submit = async () => {
+  if (TaskInfo.value) {
+    if (TaskInfo.value.TaskType === 'INS') {
+      await api.task.request.updateTaskComplete({
+        facilityId: currentPatientAssociated.value.facilityID,
+        id: TaskInfo.value.TaskID,
+        patientId: currentPatientAssociated.value.patientID
+      })
+      isSaving.value = false
+    } else {
+      await api.task.request.updateCaseHistoryComplete({
+        facilityId: currentPatientAssociated.value.facilityID,
+        caseHistoryId: getTaskCurrentCaseHistoryId.value
       })
     }
-  },
-  async mounted() {
-    this.isLoading = true
-    // complete the task without having submit button clicked - requested here https://sprints.zoho.com/workspace/healthcoretech#P7/itemdetails/I155/details
-    await this.submit()
-    const caseHistoryQuestions = await api.task.request.getCaseHistoryQuestions(
-      {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId
-      }
-    )
-
-    const record = caseHistoryQuestions.data.filter(
-      (c) =>
-        c.description === 'SeenChiropractor' || c.description === 'DoctorToKnow'
-    )
-    // console.log('record', record)
-    record.forEach((c) => {
-      const update = this.form.questions.find((x) => x.code === c.description)
-      // console.log('update', update)
-      if (update) {
-        update.answer = c.answer
-      }
+  } else {
+    if (TaskItem.value) {
+      await api.task.request.updateTaskComplete({
+        facilityId: currentPatientAssociated.value.facilityID,
+        id: TaskItem.value.taskID,
+        patientId: currentPatientAssociated.value.patientID
+      })
+    }
+    await api.task.request.updateCaseHistoryComplete({
+      facilityId: currentPatientAssociated.value.facilityID,
+      caseHistoryId: getTaskCurrentCaseHistoryId.value
     })
-
-    this.isLoading = false
   }
+  isSaving.value = false
 }
+
+const submit2 = async () => {
+  await router.push({ path: '/' })
+}
+
+const prev = () => {
+  const currentIndex = getTaskPreviousTaskType.value.findIndex(
+    (c) => c === getTaskCurrentTaskType.value
+  )
+  let prevPage = ''
+  if (currentIndex === -1) {
+    prevPage =
+      getTaskPreviousTaskType.value[getTaskPreviousTaskType.value.length - 1]
+  } else {
+    prevPage = getTaskPreviousTaskType.value[currentIndex - 1]
+  }
+  taskStore.setTaskCurrentTaskType({
+    back: true,
+    page: prevPage,
+    removePage: getTaskCurrentTaskType.value
+  })
+}
+
+onMounted(async () => {
+  isLoading.value = true
+  // Complete the task without having submit button clicked
+  await submit()
+})
 </script>
 
 <style></style>

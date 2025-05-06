@@ -42,52 +42,74 @@
     <div class="col-12 col-lg-12 col-xl-12">
       <img
         class="dash-divider"
-        src="img/line-divider-transparent-1_edited.png"
+        src="/img/line-divider-transparent-1_edited.png"
       />
       <component v-bind:is="getProfileCurrentPage"></component>
     </div>
   </div>
 </template>
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useToast } from 'vue-toastification'
 import MyInfo from '../components/profile/ProfileInfo.vue'
 import LoginInfo from '../components/profile/LoginInfo.vue'
 import CommInfo from '../components/profile/CommInfo.vue'
 import PaymentInfo from '../components/profile/PaymentInfo.vue'
-import { mapGetters, mapActions } from 'vuex'
+import { useProfileStore } from '@/stores/profile'
+import { useAuthStore } from '@/stores/auth'
 import api from '../api/http-common.js'
 
-export default {
-  components: {
-    MyInfo,
-    LoginInfo,
-    CommInfo,
-    PaymentInfo
-  },
-  data () {
-    return {
-      profileInfo: null,
-      facilityInfo: null
-    }
-  },
-  computed: {
-    ...mapGetters(['currentPatientAssociated', 'getProfileCurrentPage']),
-    canProcess () {
-      if (!this.facilityInfo) {
-        return false
-      }
+// Component name is defined through the filename in Vue 3
 
-      return this.facilityInfo.openEdge || this.facilityInfo.fortis
-    }
-  },
-  methods: {
-    ...mapActions(['setProfileCurrentPage'])
-  },
-  async mounted () {
-    this.facilityInfo = await api.auth.request.getFacilityInfo(
-      this.currentPatientAssociated.facilityID
-    )
+// State
+const profileInfo = ref(null)
+const facilityInfo = ref(null)
+const toast = useToast()
+
+// Store access
+const profileStore = useProfileStore()
+const authStore = useAuthStore()
+
+// Computed properties
+const canProcess = computed(() => {
+  if (!facilityInfo.value) {
+    return false
+  }
+
+  return facilityInfo.value.openEdge || facilityInfo.value.fortis
+})
+
+const getProfileCurrentPage = computed(() => profileStore.getCurrentView)
+
+// Methods
+function setProfileCurrentPage(page) {
+  profileStore.setCurrentView(page)
+}
+
+async function getPatient() {
+  try {
+    await profileStore.getPatient()
+  } catch (error) {
+    console.error('Error fetching patient:', error)
   }
 }
+
+async function updatePatient() {
+  try {
+    await profileStore.updatePatient(profileStore.currentPatient)
+    toast.success('Profile updated successfully')
+  } catch (error) {
+    console.error('Error updating patient:', error)
+    toast.error('Failed to update profile')
+  }
+}
+
+// Lifecycle hooks
+onMounted(async () => {
+  facilityInfo.value = await api.auth.request.getFacilityInfo(
+    profileStore.patientAssociated?.facilityID
+  )
+})
 </script>
 <style scoped>
 .btn-w-65 {

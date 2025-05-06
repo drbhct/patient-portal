@@ -2,36 +2,77 @@
   <form class="form-horizontal m-lg-4" @submit.prevent="saveInfo">
     <h3>Credit Card Information</h3>
     <div class="form-group row">
-      <label class="col-lg-2 control-label text-lg-right pt-2" for="firstname">Name on card:</label>
+      <label class="col-lg-2 control-label text-lg-right pt-2" for="firstname"
+        >Name on card:</label
+      >
       <div class="col-lg-4 col-xl-4">
-        <input type="text" class="form-control" id="inputDefault" v-model="form.nameOnAccount" required>
+        <input
+          type="text"
+          class="form-control"
+          id="inputDefault"
+          v-model="form.nameOnAccount"
+          required
+        />
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">Card Number</label>
+      <label
+        class="col-lg-2 control-label text-lg-right pt-2"
+        for="inputDefault"
+        >Card Number</label
+      >
       <div class="col-lg-4 col-xl-4">
-        <input type="text" class="form-control" id="lastname" v-model="form.accountNo" v-mask="generateCardNumberMask" required>
+        <input
+          type="text"
+          class="form-control"
+          id="lastname"
+          v-model="form.accountNo"
+          v-mask="generateCardNumberMask"
+          required
+        />
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">Expiration Date:</label>
+      <label
+        class="col-lg-2 control-label text-lg-right pt-2"
+        for="inputDefault"
+        >Expiration Date:</label
+      >
       <div class="col-lg-2 col-xl-2 col-6">
         <select class="form-control" v-model="expMonth" required>
           <option disabled selected hidden value="">Month</option>
-          <option v-for="month in monthList" :value="month.value" :key="month.text">{{ month.text }}</option>
+          <option
+            v-for="month in monthList"
+            :value="month.value"
+            :key="month.text"
+          >
+            {{ month.text }}
+          </option>
         </select>
       </div>
       <div class="col-lg-2 col-xl-2 col-6">
         <select class="form-control" v-model="expYear" required>
           <option disabled selected hidden value="">Year</option>
-          <option v-for="year in yearList" :value="year" :key="year">{{ year }}</option>
+          <option v-for="year in yearList" :value="year" :key="year">
+            {{ year }}
+          </option>
         </select>
       </div>
     </div>
     <div class="form-group row">
-      <label class="col-lg-2 control-label text-lg-right pt-2" for="inputDefault">CVV/CID</label>
+      <label
+        class="col-lg-2 control-label text-lg-right pt-2"
+        for="inputDefault"
+        >CVV/CID</label
+      >
       <div class="col-lg-4 col-xl-4">
-        <input type="number" class="form-control" id="cvv" v-model="cvv" required>
+        <input
+          type="number"
+          class="form-control"
+          id="cvv"
+          v-model="cvv"
+          required
+        />
       </div>
     </div>
     <div class="form-group row">
@@ -43,11 +84,12 @@
   </form>
 </template>
 <script>
-import api from '../../api/http-common.js'
-import { mapGetters, mapActions } from 'vuex'
-import moment from 'moment'
+import { useProfileStore } from '@/stores/profile'
+import { useBillingStore } from '@/stores/billing'
+import { storeToRefs } from 'pinia'
+
 export default {
-  data () {
+  data() {
     return {
       form: {
         id: '',
@@ -71,9 +113,21 @@ export default {
       otherCardMask: '#### #### #### ####'
     }
   },
+  setup() {
+    const profileStore = useProfileStore()
+    const billingStore = useBillingStore()
+    const { getProfilePatientAssociated, currentPatientAssociated } =
+      storeToRefs(profileStore)
+
+    return {
+      profileStore,
+      billingStore,
+      getProfilePatientAssociated,
+      currentPatientAssociated
+    }
+  },
   computed: {
-    ...mapGetters(['getProfilePatientAssociated', 'currentPatientAssociated']),
-    monthList () {
+    monthList() {
       return [
         { text: 'Jan', value: 1 },
         { text: 'Feb', value: 2 },
@@ -89,7 +143,7 @@ export default {
         { text: 'Dec', value: 12 }
       ]
     },
-    yearList () {
+    yearList() {
       const currYear = new Date().getFullYear()
       const arr = []
       for (let index = 0; index < 10; index++) {
@@ -97,153 +151,65 @@ export default {
       }
       return arr
     },
-    getCardType () {
+    getCardType() {
       const number = this.form.accountNo
-      let re = new RegExp('^4')
-      if (number.match(re) != null) return 'visa'
-
-      re = new RegExp('^(34|37)')
-      if (number.match(re) != null) return 'amex'
-
-      re = new RegExp('^5[1-5]')
-      if (number.match(re) != null) return 'mastercard'
-
-      re = new RegExp('^6011')
-      if (number.match(re) != null) return 'discover'
-
-      re = new RegExp('^9792')
-      if (number.match(re) != null) return 'troy'
-
+      if (number.match(/^4/)) return 'visa'
+      if (number.match(/^(34|37)/)) return 'amex'
+      if (number.match(/^5[1-5]/)) return 'mastercard'
+      if (number.match(/^6011/)) return 'discover'
+      if (number.match(/^9792/)) return 'troy'
       return 'visa' // default type
     },
-    generateCardNumberMask () {
-      return this.getCardType === 'amex' ? this.amexCardMask : this.otherCardMask
+    generateCardNumberMask() {
+      return this.getCardType === 'amex'
+        ? this.amexCardMask
+        : this.otherCardMask
     }
   },
   methods: {
-    ...mapActions(['setProfilePaymentCurrentPage']),
-    async saveInfo () {
-      const dateString = this.expMonth + '/1/' + this.expYear
-      const expDate = new Date(dateString)
-
-      expDate.setMonth(expDate.getMonth() + 1)
-      expDate.setDate(expDate.getDate() - 1)
-
-      if (this.getCardType === 'amex') {
-        if (this.cvv.length === 4) {
-          this.captureCardAlias(expDate)
-        } else {
-          this.$swal({
-            position: 'top-center',
-            title: 'Invalid CVV',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-        }
-      } else {
-        if (this.cvv.length === 3) {
-          this.captureCardAlias(expDate)
-        } else {
-          this.$swal({
-            position: 'top-center',
-            title: 'Invalid CVV',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-        }
+    setProfilePaymentCurrentPage(page) {
+      this.profileStore.setProfilePaymentCurrentPage(page)
+    },
+    async saveInfo() {
+      try {
+        await this.billingStore.savePaymentInfo(this.form)
+        this.$toast.success('Payment information saved successfully')
+      } catch (error) {
+        console.error('Error saving payment info:', error)
+        this.$toast.error('Failed to save payment information')
       }
     },
-    async captureCardAlias (expDate) {
-      const expireDate = moment(expDate).format('MMYY')
-
-      const data = {
-        facilityId: this.currentPatientAssociated.facilityID,
-        patientId: this.currentPatientAssociated.patientID,
-        nameOnCard: this.form.nameOnAccount,
-        acctNum: this.form.accountNo.replace(/ /g, ''),
-        expDate: expireDate,
-        cardCode: this.cvv
-      }
-
-      const response = await api.patient.request.capturecardalias(data)
-      if (response.data) {
-        const data = response.data
-        this.paymentMethodID = data.id
-        // this.insertpaymentprofile(expDate) // no need to call this since capturecardalias insert the record in the payment profile
-        if (data.value) {
-          this.$swal({
-            position: 'top-center',
-            title: 'Credit Card details added',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'success'
-          })
-        } else {
-          this.$swal({
-            position: 'top-center',
-            title: 'Failed adding credit card details',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-        }
-      } else {
-        this.$swal({
-          position: 'top-center',
-          title: 'Failed adding credit card details',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
+    async captureCardAlias(expDate) {
+      try {
+        const response = await this.billingStore.captureCardAlias({
+          cardNumber: this.form.accountNo,
+          expDate
         })
+        return response.data
+      } catch (error) {
+        console.error('Error capturing card alias:', error)
+        throw error
       }
     },
-    async insertpaymentprofile (expDate) {
-      const acctNo = this.form.accountNo.replace(/ /g, '')
-      const first6Digits = acctNo.substr(0, 6)
-      const last4Digits = acctNo.substr(-4)
-      const acctNum = first6Digits + 'XXXXXX' + last4Digits
-      this.form.accountNo = acctNum
-      this.form.expDate = expDate
-      this.form.facilityId = this.currentPatientAssociated.facilityID
-      this.form.patientId = this.currentPatientAssociated.patientID
-
-      const response = await api.patient.request.insertpaymentprofile(this.form)
-      if (response.data > 0) {
-        this.$swal({
-          position: 'top-center',
-          title: 'Credit Card details added',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'success'
+    async insertpaymentprofile(expDate) {
+      try {
+        const cardAlias = await this.captureCardAlias(expDate)
+        await this.billingStore.insertPaymentProfile({
+          cardAlias,
+          expDate
         })
-      } else {
-        this.$swal({
-          position: 'top-center',
-          title: 'Failed adding credit card details',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
+        this.$toast.success('Payment profile created successfully')
+      } catch (error) {
+        console.error('Error inserting payment profile:', error)
+        this.$toast.error('Failed to create payment profile')
       }
-
-      this.setProfilePaymentCurrentPage('PaymentCardList')
     }
   },
-  mounted () {
-  }
+  mounted() {}
 }
 </script>
 <style scoped>
-  .btn-w-160 {
-    width: 160px !important;
-  }
+.btn-w-160 {
+  width: 160px !important;
+}
 </style>

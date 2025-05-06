@@ -1,427 +1,262 @@
-﻿<template>
-  <Survey :survey='survey' />
+<template>
+  <Survey :survey="survey" />
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import 'survey-core/defaultV2.min.css'
 import api from '../../api/http-common.js'
-import { mapGetters } from 'vuex'
 import { Survey } from 'survey-vue-ui'
 import { Model, slk } from 'survey-core'
 import { SurveyPDF, HTMLBrick } from 'survey-pdf'
 import moment from 'moment'
+import { useTaskStore } from '@/stores/task'
 
 slk(
   'ZjI3MDkwMDYtNDkxNC00MmJkLTg4NDUtMjFhYjIyMDM5MWQxOzE9MjAyNS0wMy0wNCwyPTIwMjUtMDMtMDQsND0yMDI1LTAzLTA0'
 )
 
-export default {
-  data() {
-    return {
-      survey: null,
-      surveyJson: null,
-      patientName: '',
-      pdfFilename: '',
-      pdfDocOptions: {
-        compress: true,
-        fontSize: 12,
-        htmlRenderAs: 'image' // or "image" | "auto"
-      }
-    }
-  },
-  components: {
-    Survey
-  },
-  computed: {
-    ...mapGetters(['currentPatientAssociated'])
-  },
-  methods: {
-    alertResults(sender) {
-      // const results = JSON.stringify(sender.data)
-      setTimeout(() => {
-        window.opener.location.reload()
-        window.close()
-      }, 3000)
-    },
-    complete() {
-      // const surveyModel = this.survey
-      const queryData = this.$route.query
+const route = useRoute()
+const router = useRouter()
+const taskStore = useTaskStore()
 
-      // const pdfWidth = !!surveyModel && surveyModel.pdfWidth ? surveyModel.pdfWidth : 225 // 210 orig
-      // const pdfHeight = !!surveyModel && surveyModel.pdfHeight ? surveyModel.pdfHeight : 319 // original 297
+const survey = ref(null)
+const surveyJson = ref(null)
+const pdfFilename = ref('')
+const pdfDocOptions = ref({
+  compress: true,
+  fontSize: 12,
+  htmlRenderAs: 'image'
+})
 
-      const options = {
-        fontSize: 12,
-        compress: true,
-        format: 'a4',
-        htmlRenderAs: 'image',
-        orientation: 'p'
-      }
-      const surveyPdf = new SurveyPDF(this.surveyJson, options)
-      if (surveyPdf) {
-        surveyPdf.data = this.survey.data
-        // change date format
-        surveyPdf.getAllQuestions().forEach(q => {
-          if (q.getType() === 'text' && q.inputType === 'date') {
-            if (!q.isEmpty()) {
-              // const d = new Date(q.value)
-              // const newVal = (d.getMonth() + 1) + '-' + d.getDate() + '-' + d.getFullYear()
-              // q.value = newVal
-              const newVal = moment(q.value).format('MM/DD/YYYY')
-              q.value = newVal
-            }
-          }
-        })
+const currentPatientAssociated = computed(
+  () => taskStore.currentPatientAssociated
+)
 
-        surveyPdf.onRenderQuestion.add(async (survey, options) => {
-          // change the css of checkbox
-          if (options.question.getType() === 'checkbox') {
-            for (var i = 0; i < options.bricks.length; i++) {
-              var unfoldBricks = options.bricks[i].unfold()
-              for (var j = 0; j < unfoldBricks.length; j++) {
-                if (unfoldBricks[j] instanceof options.module.CheckboxItemBrick) {
-                  if (unfoldBricks[j].context.checked) {
-                    unfoldBricks[j].formBorderColor = 'black'
-                  }
-                  unfoldBricks[j].textColor = 'black'
-                }
-              }
-            }
-          }
+const alertResults = (sender) => {
+  setTimeout(() => {
+    window.opener.location.reload()
+    window.close()
+  }, 3000)
+}
 
-          // Split only HTML elements
-          if (options.question.getType() === 'html') {
-            // Get the HTML brick
-            const htmlBrick = options.bricks[0]
-            if (!htmlBrick || !htmlBrick.html) return
-
-            options.bricks = []
-
-            // Extract image from the HTML brick
-            const img = await this.getImage(htmlBrick)
-
-            // Calculate the available page height and the coordinate at which to start drawing
-            const fullPageHeight = options.controller.paperHeight - options.controller.margins.top - options.controller.margins.bot
-            const currY = htmlBrick.yTop - fullPageHeight * Math.floor(htmlBrick.yTop / fullPageHeight)
-
-            const canvas = document.createElement('canvas')
-            canvas.width = img.width
-
-            // A multiplier is used to decrease the original image width if it exceeds the available page width
-            let multiplier = 1
-            if (htmlBrick.width < img.width) {
-              multiplier = htmlBrick.width / img.width
-            }
-
-            // Calculate what portion of the original image would fit onto one page
-            const onePageSize = fullPageHeight / multiplier
-            // Calculate the height of the first brick
-            const firstBrickHeight = Math.min(img.height, (fullPageHeight - currY) / multiplier)
-
-            // Draw the first brick
-            const firstBrick = this.drawPart(firstBrickHeight, multiplier, 0, canvas, img,
-              0, 0, onePageSize, htmlBrick, options.controller)
-            options.bricks.push(firstBrick)
-
-            // Page counter
-            let cnt = 0
-            // Draw the rest of the bricks
-            for (let i = firstBrickHeight; i < img.height; i += onePageSize) {
-              const brickHeight = Math.min(img.height - i, onePageSize)
-
-              const currBrick = this.drawPart(brickHeight, multiplier, i, canvas, img,
-                firstBrickHeight, cnt, onePageSize, htmlBrick, options.controller)
-
-              cnt += 1
-              options.bricks.push(currBrick)
-            }
-          }
-        })
-
-        surveyPdf.raw('dataurlstring').then(async (dataurlstring) => {
-          var base64 = dataurlstring.split('base64,')[1]
-
-          var patientFormID = await api.task.request.insertPatientForm({
-            facilityformId: queryData.i,
-            patientid: queryData.pid,
-            data: JSON.stringify(surveyPdf.data)
-          })
-
-          if (patientFormID) {
-            if (patientFormID.data > 0) {
-              const retStat = await api.task.request.uploadPatientForm({
-                facilityId: this.currentPatientAssociated.facilityID,
-                patientId: queryData.pid,
-                description: this.surveyJson.title,
-                base64: base64,
-                facilityFormID: queryData.i,
-                patientFormID: patientFormID.data
-              })
-
-              if (retStat.data) {
-                const retStat2 = await api.task.request.updateTaskComplete({
-                  facilityId: this.currentPatientAssociated.facilityID,
-                  id: queryData.tid,
-                  patientId: queryData.pid
-                })
-
-                if (!retStat2.data) {
-                  // delete
-                  await api.task.request.deletePatientForm(patientFormID.data)
-                }
-              } else {
-                // delete
-                await api.task.request.deletePatientForm(patientFormID.data)
-              }
-
-              var isMobileDevice = window.navigator.userAgent.toLowerCase().includes('mobi')
-
-              if (isMobileDevice) {
-                var pathname = document.referrer
-                var pgeName = pathname.split('/').pop()
-                if (pgeName === 'login') {
-                  setTimeout(() => {
-                    this.$router.push('/')
-                  }, 1000)
-                } else {
-                  setTimeout(() => {
-                    document.referrer ? (window.location = document.referrer) : history.back()
-                  }, 1000)
-                }
-              } else {
-                var URLpathName = window.opener.location.pathname
-                var pageName = URLpathName.split('/').pop()
-                if (pageName === 'login') {
-                  setTimeout(() => {
-                    this.$router.push('/')
-                  }, 1000)
-                } else {
-                  window.opener.location.reload()
-                  setTimeout(() => {
-                    window.close()
-                  }, 1000)
-                }
-              }
-            }
-          }
-        })
-      }
-    },
-    async loadData() {
-      const queryData = this.$route.query
-      if (queryData) {
-        var res = await api.task.request.getFacilityFormJsonQueryObj({
-          facilityformid: queryData.i,
-          patientId: queryData.pid
-        })
-        var objData = JSON.parse(res.data.data)
-        var el = objData.pages[0].elements
-        var itemIndex = el.findIndex(x => x.name === 'patientName')
-        if (itemIndex) {
-          el[itemIndex].defaultValue = queryData.p
-        }
-        this.surveyJson = objData
-        this.pdfFilename = objData.title
-        objData.completedHtml = '<span style="font-size: 32px; font-weight: bolder">Thank you for completing the form</span>'
-        return objData
-      } else {
-        return null
-      }
-    },
-    savePdf() {
-      const surveyPdf = new SurveyPDF(this.surveyJson, this.pdfDocOptions)
-      if (surveyPdf) {
-        surveyPdf.data = this.survey.data
-        surveyPdf.save(this.pdfFilename)
-      }
-    },
-    savePdf2(surveyModel) {
-      // const pdfWidth = !!surveyModel && surveyModel.pdfWidth ? surveyModel.pdfWidth : 225 // 210 orig
-      // const pdfHeight = !!surveyModel && surveyModel.pdfHeight ? surveyModel.pdfHeight : 319 // original 297
-      const options = {
-        fontSize: 12,
-        compress: true,
-        format: 'a4',
-        htmlRenderAs: 'image',
-        orientation: 'p'
-      }
-      const surveyPDF = new SurveyPDF(this.surveyJson, options)
-      if (surveyModel) {
-        surveyPDF.data = surveyModel.data
-        // add date format
-        surveyPDF.getAllQuestions().forEach(q => {
-          if (q.getType() === 'text' && q.inputType === 'date') {
-            if (!q.isEmpty()) {
-              const newVal = moment(q.value).format('MM/DD/YYYY')
-              q.value = newVal
-            }
-          }
-        })
-      }
-
-      // Draw a portion of an image
-      function drawPart(brickHeight, multiplier, shift, canvas, img,
-        firstBrickHeight, fullPagesCnt, onePageSize, htmlBrick, controller) {
-        canvas.height = brickHeight
-        const ctx = canvas.getContext('2d')
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.drawImage(img, 0, shift, img.width, brickHeight, 0, 0, img.width, brickHeight)
-
-        const currImageBase64 = canvas.toDataURL('image/jpeg')
-        const brickHtml = `
-                <img src='${currImageBase64}' width='${img.width * multiplier}' height='${brickHeight * multiplier}' />`
-        const brickRect = {
-          xLeft: htmlBrick.xLeft,
-          xRight: htmlBrick.xRight,
-          yTop: htmlBrick.yTop + multiplier * (firstBrickHeight + fullPagesCnt * onePageSize),
-          yBot: htmlBrick.yTop + multiplier * (firstBrickHeight + fullPagesCnt * onePageSize + brickHeight)
-        }
-        return new HTMLBrick(null, controller, brickRect, brickHtml, true)
-      }
-
-      async function getImage(htmlBrick) {
-        const html = htmlBrick.html
-        let start = html.indexOf('data')
-
-        let imageBase64 = ''
-        while (html[start] !== "'") {
-          imageBase64 += html[start]
-          start++
-        }
-        const img = new Image()
-        img.src = imageBase64
-        await new Promise((resolve, reject) => {
-          img.onload = () => resolve(img)
-          img.onerror = reject
-        })
-
-        return img
-      }
-
-      surveyPDF.onRenderQuestion.add(async (survey, options) => {
-        // change the css of checkbox
-        if (options.question.getType() === 'checkbox') {
-          for (var i = 0; i < options.bricks.length; i++) {
-            var unfoldBricks = options.bricks[i].unfold()
-            for (var j = 0; j < unfoldBricks.length; j++) {
-              if (unfoldBricks[j] instanceof options.module.CheckboxItemBrick) {
-                if (unfoldBricks[j].context.checked) {
-                  unfoldBricks[j].formBorderColor = 'black'
-                }
-                unfoldBricks[j].textColor = 'black'
-              }
-            }
-          }
-        }
-        // Split only HTML elements
-        if (options.question.getType() === 'html') {
-          // Get the HTML brick
-          const htmlBrick = options.bricks[0]
-          if (!htmlBrick || !htmlBrick.html) return
-
-          options.bricks = []
-
-          // Extract image from the HTML brick
-          const img = await getImage(htmlBrick)
-
-          // Calculate the available page height and the coordinate at which to start drawing
-          const fullPageHeight = options.controller.paperHeight - options.controller.margins.top - options.controller.margins.bot
-          const currY = htmlBrick.yTop - fullPageHeight * Math.floor(htmlBrick.yTop / fullPageHeight)
-
-          const canvas = document.createElement('canvas')
-          canvas.width = img.width
-
-          // A multiplier is used to decrease the original image width if it exceeds the available page width
-          let multiplier = 1
-          if (htmlBrick.width < img.width) {
-            multiplier = htmlBrick.width / img.width
-          }
-
-          // Calculate what portion of the original image would fit onto one page
-          const onePageSize = fullPageHeight / multiplier
-          // Calculate the height of the first brick
-          const firstBrickHeight = Math.min(img.height, (fullPageHeight - currY) / multiplier)
-
-          // Draw the first brick
-          const firstBrick = drawPart(firstBrickHeight, multiplier, 0, canvas, img,
-            0, 0, onePageSize, htmlBrick, options.controller)
-          options.bricks.push(firstBrick)
-
-          // Page counter
-          let cnt = 0
-          // Draw the rest of the bricks
-          for (let i = firstBrickHeight; i < img.height; i += onePageSize) {
-            const brickHeight = Math.min(img.height - i, onePageSize)
-
-            const currBrick = drawPart(brickHeight, multiplier, i, canvas, img,
-              firstBrickHeight, cnt, onePageSize, htmlBrick, options.controller)
-
-            cnt += 1
-            options.bricks.push(currBrick)
-          }
-        }
-      })
-      try {
-        surveyPDF.save(this.pdfFilename)
-      } catch (e) {
-        console.log(e)
-      }
-    },
-    // Draw a portion of an image
-    drawPart(brickHeight, multiplier, shift, canvas, img,
-      firstBrickHeight, fullPagesCnt, onePageSize, htmlBrick, controller) {
-      canvas.height = brickHeight
-      const ctx = canvas.getContext('2d')
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      ctx.drawImage(img, 0, shift, img.width, brickHeight, 0, 0, img.width, brickHeight)
-
-      const currImageBase64 = canvas.toDataURL('image/jpeg')
-      const brickHtml = `
-                <img src='${currImageBase64}' width='${img.width * multiplier}' height='${brickHeight * multiplier}' />`
-      const brickRect = {
-        xLeft: htmlBrick.xLeft,
-        xRight: htmlBrick.xRight,
-        yTop: htmlBrick.yTop + multiplier * (firstBrickHeight + fullPagesCnt * onePageSize),
-        yBot: htmlBrick.yTop + multiplier * (firstBrickHeight + fullPagesCnt * onePageSize + brickHeight)
-      }
-      return new HTMLBrick(null, controller, brickRect, brickHtml, true)
-    },
-    async getImage(htmlBrick) {
-      const html = htmlBrick.html
-      let start = html.indexOf('data')
-
-      let imageBase64 = ''
-      while (html[start] !== "'") {
-        imageBase64 += html[start]
-        start++
-      }
-      const img = new Image()
-      img.src = imageBase64
-      await new Promise((resolve, reject) => {
-        img.onload = () => resolve(img)
-        img.onerror = reject
-      })
-
-      return img
-    }
-  },
-  async mounted() {
-    const x = await this.loadData()
-    this.survey = new Model(x)
-    this.survey.onCompleting.add(this.complete)
-    this.survey.addNavigationItem({
-      id: 'pdf-export',
-      title: 'Save as PDF',
-      // action: () => this.savePdf()
-      action: () => this.savePdf2(this.survey)
+const loadData = async () => {
+  const queryData = route.query
+  if (queryData) {
+    const res = await api.task.request.getFacilityFormJsonQueryObj({
+      facilityformid: queryData.i,
+      patientId: queryData.pid
     })
-    this.survey.onUpdateQuestionCssClasses.add(function (_, options) {
-      if (options.question.name === 'patientTypedSignature') {
-        options.cssClasses.root += ' scriptedSignatureInput'
+    const objData = JSON.parse(res.data.data)
+    const el = objData.pages[0].elements
+    const itemIndex = el.findIndex((x) => x.name === 'patientName')
+    if (itemIndex) {
+      el[itemIndex].defaultValue = queryData.p
+    }
+    surveyJson.value = objData
+    pdfFilename.value = objData.title
+    objData.completedHtml =
+      '<span style="font-size: 32px; font-weight: bolder">Thank you for completing the form</span>'
+    return objData
+  } else {
+    return null
+  }
+}
+
+const savePdf = () => {
+  const surveyPdf = new SurveyPDF(surveyJson.value, pdfDocOptions.value)
+  if (surveyPdf) {
+    surveyPdf.data = survey.value.data
+    surveyPdf.save(pdfFilename.value)
+  }
+}
+
+const savePdf2 = (surveyModel) => {
+  const options = {
+    fontSize: 12,
+    compress: true,
+    format: 'a4',
+    htmlRenderAs: 'image',
+    orientation: 'p'
+  }
+  const surveyPDF = new SurveyPDF(surveyJson.value, options)
+  if (surveyModel) {
+    surveyPDF.data = surveyModel.data
+    surveyPDF.getAllQuestions().forEach((q) => {
+      if (q.getType() === 'text' && q.inputType === 'date') {
+        if (!q.isEmpty()) {
+          const newVal = moment(q.value).format('MM/DD/YYYY')
+          q.value = newVal
+        }
       }
     })
   }
+
+  surveyPDF.onRenderQuestion.add(async (survey, options) => {
+    if (options.question.getType() === 'checkbox') {
+      for (let i = 0; i < options.bricks.length; i++) {
+        const unfoldBricks = options.bricks[i].unfold()
+        for (let j = 0; j < unfoldBricks.length; j++) {
+          if (unfoldBricks[j] instanceof options.module.CheckboxItemBrick) {
+            if (unfoldBricks[j].context.checked) {
+              unfoldBricks[j].formBorderColor = 'black'
+            }
+            unfoldBricks[j].textColor = 'black'
+          }
+        }
+      }
+    }
+
+    if (options.question.getType() === 'html') {
+      const htmlBrick = options.bricks[0]
+      if (!htmlBrick || !htmlBrick.html) return
+
+      options.bricks = []
+      const img = await getImage(htmlBrick)
+      const fullPageHeight =
+        options.controller.paperHeight -
+        options.controller.margins.top -
+        options.controller.margins.bot
+      const currY =
+        htmlBrick.yTop -
+        fullPageHeight * Math.floor(htmlBrick.yTop / fullPageHeight)
+
+      const canvas = document.createElement('canvas')
+      canvas.width = img.width
+
+      let multiplier = 1
+      if (htmlBrick.width < img.width) {
+        multiplier = htmlBrick.width / img.width
+      }
+
+      const onePageSize = fullPageHeight / multiplier
+      const firstBrickHeight = Math.min(
+        img.height,
+        (fullPageHeight - currY) / multiplier
+      )
+
+      const firstBrick = drawPart(
+        firstBrickHeight,
+        multiplier,
+        0,
+        canvas,
+        img,
+        0,
+        0,
+        onePageSize,
+        htmlBrick,
+        options.controller
+      )
+      options.bricks.push(firstBrick)
+
+      let cnt = 0
+      for (let i = firstBrickHeight; i < img.height; i += onePageSize) {
+        const brickHeight = Math.min(img.height - i, onePageSize)
+        const currBrick = drawPart(
+          brickHeight,
+          multiplier,
+          i,
+          canvas,
+          img,
+          firstBrickHeight,
+          cnt,
+          onePageSize,
+          htmlBrick,
+          options.controller
+        )
+        cnt += 1
+        options.bricks.push(currBrick)
+      }
+    }
+  })
+
+  try {
+    surveyPDF.save(pdfFilename.value)
+  } catch (e) {
+    console.log(e)
+  }
 }
+
+const drawPart = (
+  brickHeight,
+  multiplier,
+  shift,
+  canvas,
+  img,
+  firstBrickHeight,
+  fullPagesCnt,
+  onePageSize,
+  htmlBrick,
+  controller
+) => {
+  canvas.height = brickHeight
+  const ctx = canvas.getContext('2d')
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  ctx.drawImage(
+    img,
+    0,
+    shift,
+    img.width,
+    brickHeight,
+    0,
+    0,
+    img.width,
+    brickHeight
+  )
+
+  const currImageBase64 = canvas.toDataURL('image/jpeg')
+  const brickHtml = `
+            <img src='${currImageBase64}' width='${
+    img.width * multiplier
+  }' height='${brickHeight * multiplier}' />`
+  const brickRect = {
+    xLeft: htmlBrick.xLeft,
+    xRight: htmlBrick.xRight,
+    yTop:
+      htmlBrick.yTop +
+      multiplier * (firstBrickHeight + fullPagesCnt * onePageSize),
+    yBot:
+      htmlBrick.yTop +
+      multiplier * (firstBrickHeight + fullPagesCnt * onePageSize + brickHeight)
+  }
+  return new HTMLBrick(null, controller, brickRect, brickHtml, true)
+}
+
+const getImage = async (htmlBrick) => {
+  const html = htmlBrick.html
+  let start = html.indexOf('data')
+
+  let imageBase64 = ''
+  while (html[start] !== "'") {
+    imageBase64 += html[start]
+    start++
+  }
+  const img = new Image()
+  img.src = imageBase64
+  await new Promise((resolve, reject) => {
+    img.onload = () => resolve(img)
+    img.onerror = reject
+  })
+
+  return img
+}
+
+onMounted(async () => {
+  const x = await loadData()
+  survey.value = new Model(x)
+  survey.value.onComplete.add(alertResults)
+  survey.value.addNavigationItem({
+    id: 'pdf-export',
+    title: 'Save as PDF',
+    action: () => savePdf2(survey.value)
+  })
+  survey.value.onUpdateQuestionCssClasses.add(function (_, options) {
+    if (options.question.name === 'patientTypedSignature') {
+      options.cssClasses.root += ' scriptedSignatureInput'
+    }
+  })
+})
 </script>
 
 <style>

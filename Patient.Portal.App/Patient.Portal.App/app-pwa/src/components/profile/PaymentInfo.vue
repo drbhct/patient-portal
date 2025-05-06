@@ -19,8 +19,8 @@
           class="float-right"
           v-if="
             getProfilePaymentCurrentPage === 'PaymentCardList' &&
-              facilityInfo &&
-              !facilityInfo.fortis
+            facilityInfo &&
+            !facilityInfo.fortis
           "
         >
           <button
@@ -41,8 +41,8 @@
       class="col-12 col-lg-6 col-xl-6 d-lg-none"
       v-if="
         getProfilePaymentCurrentPage === 'PaymentCardList' &&
-          facilityInfo &&
-          !facilityInfo.fortis
+        facilityInfo &&
+        !facilityInfo.fortis
       "
     >
       <button
@@ -55,10 +55,12 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from 'vuex'
 import PaymentForm from './PaymentForm.vue'
 import PaymentCardList from './PaymentCardList.vue'
 import api from '../../api/http-common.js'
+import { useProfileStore } from '@/stores/profile'
+import { storeToRefs } from 'pinia'
+
 export default {
   data() {
     return {
@@ -69,11 +71,24 @@ export default {
     PaymentForm,
     PaymentCardList
   },
-  computed: {
-    ...mapGetters(['getProfilePaymentCurrentPage', 'currentPatientAssociated'])
+  setup() {
+    const profileStore = useProfileStore()
+    const { getProfilePaymentCurrentPage, currentPatientAssociated } =
+      storeToRefs(profileStore)
+
+    return {
+      profileStore,
+      getProfilePaymentCurrentPage,
+      currentPatientAssociated
+    }
   },
   methods: {
-    ...mapActions(['setProfilePaymentCurrentPage', 'setFacilityInfo'])
+    setProfilePaymentCurrentPage(page) {
+      this.profileStore.setProfilePaymentCurrentPage(page)
+    },
+    setFacilityInfo(info) {
+      this.profileStore.setFacilityInfo(info)
+    }
   },
   async mounted() {
     console.log('PaymentInfo mounted>')

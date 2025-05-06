@@ -13,7 +13,7 @@ const securedJsonRequest = axios.create({
 })
 
 securedJsonRequest.interceptors.request.use(
-  config => {
+  (config) => {
     // const token = localStorage.getItem('config')
     const token = sessionStorage.getItem('config')
     if (token) {
@@ -21,14 +21,14 @@ securedJsonRequest.interceptors.request.use(
     }
     return config
   },
-  error => {
+  (error) => {
     return Promise.reject(error)
   }
 )
 
 securedJsonRequest.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     // whatever you want to do with the error
     console.log('intercep error', error)
     if (error.response) {
@@ -72,16 +72,16 @@ export default {
      * @param {String} payload.facilityid
      * @param {String} payload.patientid
      */
-    async gettask (payload) {
-      return await securedJsonRequest.post('/patientportal/gettasks', payload)
+    async gettask(payload) {
+      return await securedJsonRequest.post('/patientportal/gettask', payload)
     },
     /**
      * Get the task info via the taskId
      * @param {Number} taskId ID of the task
      * @returns {{ taskID: Number,userID:Number,facilityID:Number,patientID:Number,taskTypeID:Number,taskType:String, info}}
      */
-    async getSpecificTask (taskId) {
-      return await securedJsonRequest.get(`/patientportal/gettask/${taskId}`)
+    async getSpecificTask(taskId) {
+      return await securedJsonRequest.get('/patientportal/gettask/' + taskId)
     },
     /**
      * Method to check if patient has existing user account
@@ -89,7 +89,7 @@ export default {
      * @param {String} payload.facilityid
      * @param {String} payload.patientid
      */
-    async patientLookup (payload) {
+    async patientLookup(payload) {
       return await securedJsonRequest.post(
         '/patientportal/patientlookup',
         payload
@@ -101,11 +101,8 @@ export default {
      * @param {String} payload.facilityid
      * @param {String} payload.patientid
      */
-    async getPatient (payload) {
-      return await securedJsonRequest.post(
-        '/patientportal/getpatient',
-        payload
-      )
+    async getPatient(payload) {
+      return await securedJsonRequest.post('/patientportal/getpatient', payload)
     },
     /**
      * Method to get patient incomeplete case history
@@ -113,7 +110,7 @@ export default {
      * @param {String} payload.facilityId
      * @param {String} payload.patientId
      */
-    async findIncompleteCaseHistory (payload) {
+    async findIncompleteCaseHistory(payload) {
       return await securedJsonRequest.post(
         '/patientportal/findincompletecasehistory',
         payload
@@ -126,9 +123,9 @@ export default {
      * @param {String} payload.patientId
      * @param {String} payload.aa boolean value if nph is auto accident or not
      */
-    async insertCaseHistory (payload) {
+    async insertCaseHistory(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/insertCaseHistory',
+        '/patientportal/insertcasehistory',
         payload
       )
     },
@@ -138,9 +135,9 @@ export default {
      * @param {String} payload.facilityid
      * @param {String} payload.caseHistoryId
      */
-    async getCaseHistoryProblems (payload) {
+    async getCaseHistoryProblems(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/GetCaseHistoryProblems',
+        '/patientportal/getcasehistoryproblems',
         payload
       )
     },
@@ -153,7 +150,7 @@ export default {
      * @param {String} payload.region
      * @param {String} payload.name
      */
-    async insertCaseHistoryProblem (payload) {
+    async insertCaseHistoryProblem(payload) {
       return await securedJsonRequest.post(
         '/patientportal/insertcasehistoryproblem',
         payload
@@ -165,7 +162,7 @@ export default {
      * @param {String} payload.facilityId
      * @param {String} payload.caseHistoryProblemID
      */
-    async deleteCaseHistoryProblem (payload) {
+    async deleteCaseHistoryProblem(payload) {
       return await securedJsonRequest.post(
         '/patientportal/deletecasehistoryproblem',
         payload
@@ -179,7 +176,7 @@ export default {
      * @param {String} payload.fieldName
      * @param {String} payload.value
      */
-    async updateCaseHistoryProblemValue (payload) {
+    async updateCaseHistoryProblemValue(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatecasehistoryproblemvalue',
         payload
@@ -191,7 +188,7 @@ export default {
      * @param {Number} payload.facilityId
      * @param {Number} payload.caseHistoryId
      */
-    async getCaseHistoryConditions (payload) {
+    async getCaseHistoryConditions(payload) {
       return await securedJsonRequest.post(
         '/patientportal/getcasehistoryconditions',
         payload
@@ -204,7 +201,7 @@ export default {
      * @param {String} payload.caseHistoryId
      * @param {Array.<{ description: String, present: Boolean, notPresent: Boolean, past: Boolean }} conditions
      */
-    async updateCaseHistoryConditions (payload) {
+    async updateCaseHistoryConditions(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatecasehistoryconditions',
         payload
@@ -216,7 +213,7 @@ export default {
      * @param {String} payload.facilityId
      * @param {String} payload.caseHistoryId
      */
-    async clearCaseHistoryConditions (payload) {
+    async clearCaseHistoryConditions(payload) {
       return await securedJsonRequest.post(
         '/patientportal/clearcasehistoryconditions',
         payload
@@ -228,7 +225,7 @@ export default {
      * @param {String} payload.facilityId
      * @param {String} payload.caseHistoryId
      */
-    async getCaseHistoryFamilyHealthHistory (payload) {
+    async getCaseHistoryFamilyHealthHistory(payload) {
       return await securedJsonRequest.post(
         '/patientportal/getcasehistoryfamilyhealthhistory',
         payload
@@ -240,9 +237,9 @@ export default {
      * @param {String} payload.facilityId
      * @param {String} payload.id the id of the record
      */
-    async deleteCaseHistoryFamilyHealthHistory (payload) {
+    async deleteCaseHistoryFamilyHealthHistory(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/DeleteCaseHistoryFamilyHealthHistory',
+        '/patientportal/deletecasehistoryfamilyhealthhistory',
         payload
       )
     },
@@ -259,9 +256,9 @@ export default {
      * @param {Boolean} payload.past
      * @param {Boolean} payload.unknown
      */
-    async updateCaseHistoryFamilyHealthHistory (payload) {
+    async updateCaseHistoryFamilyHealthHistory(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/UpdateCaseHistoryFamilyHealthHistory',
+        '/patientportal/updatecasehistoryfamilyhealthhistory',
         payload
       )
     },
@@ -271,14 +268,17 @@ export default {
      * @param {Number} payload.caseHistoryId
      * @param {Object} payload.histories
      */
-    async insertCaseHistoryFamilyHealthHistory (payload) {
+    async insertCaseHistoryFamilyHealthHistory(payload) {
       return await securedJsonRequest.post(
         '/patientportal/insertcasehistoryfamilyhealthhistory',
         payload
       )
     },
-    async getUsStates (payload) {
-      return await securedJsonRequest.get('/common/getusstates')
+    async getUsStates(payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/getusstates',
+        payload
+      )
     },
     /**
      *
@@ -304,7 +304,7 @@ export default {
      * @param {String} payload.emerRelation
      * @param {String} payload.emerPhone
      */
-    async updatePatient (payload) {
+    async updatePatient(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatepatient',
         payload
@@ -316,7 +316,7 @@ export default {
      * @param {String} payload.field
      * @param {String} payload.value
      */
-    async updatePatientField (payload) {
+    async updatePatientField(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatepatientfield',
         payload
@@ -330,7 +330,7 @@ export default {
      * @param {String} payload.code
      * @param {String} payload.value
      */
-    async updateCaseHistoryAaValue (payload) {
+    async updateCaseHistoryAaValue(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatecasehistoryaavalue',
         payload
@@ -343,7 +343,7 @@ export default {
      * @param {String} payload.caseHistoryId
      * @param {Object} payload.values
      */
-    async updateCaseHistoryAaValues (payload) {
+    async updateCaseHistoryAaValues(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatecasehistoryaavalues',
         payload
@@ -356,9 +356,9 @@ export default {
      * @param {String} payload.caseHistoryId
      * @param {Object} payload.values
      */
-    async getOatAnswerList (payload) {
+    async getOatAnswerList(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/GetOatAnswerList',
+        '/patientportal/getoatanswerlist',
         payload
       )
     },
@@ -368,9 +368,9 @@ export default {
      * @param {String} payload.facilityid
      * @param {String} payload.caseHistoryId
      */
-    async getCaseHistoryOats (payload) {
+    async getCaseHistoryOats(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/GetCaseHistoryOats',
+        '/patientportal/getcasehistoryoats',
         payload
       )
     },
@@ -382,9 +382,9 @@ export default {
      * @param {Number} payload.oadId
      * @param {Number} payload.caseHistoryProblemId
      */
-    async getCaseHistoryOatQuestions (payload) {
+    async getCaseHistoryOatQuestions(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/GetCaseHistoryOatQuestions',
+        '/patientportal/getcasehistoryoatquestions',
         payload
       )
     },
@@ -395,9 +395,9 @@ export default {
      * @param {Number} payload.caseHistoryProblemId
      * @param {Object} payload.questionList
      */
-    async updateCaseHistoryProblemOats (payload) {
+    async updateCaseHistoryProblemOats(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/UpdateCaseHistoryProblemOats',
+        '/patientportal/updatecasehistoryproblemoats',
         payload
       )
     },
@@ -405,27 +405,30 @@ export default {
      *
      * @param {Number} facilityId facilityid
      */
-    async getEthnicityList (payload) {
-      return await securedJsonRequest.get(
-        '/patientportal/getEthnicityList/' + payload
+    async getEthnicityList(payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/getethnicitylist',
+        payload
       )
     },
     /**
      *
      * @param {Number} facilityId facilityid
      */
-    async getRaceList (payload) {
-      return await securedJsonRequest.get(
-        '/patientportal/GetRaceList/' + payload
+    async getRaceList(payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/getracelist',
+        payload
       )
     },
     /**
      *
      * @param {Number} facilityId facilityid
      */
-    async getLanguageList (payload) {
-      return await securedJsonRequest.get(
-        '/patientportal/GetLanguageList/' + payload
+    async getLanguageList(payload) {
+      return await securedJsonRequest.post(
+        '/patientportal/getlanguagelist',
+        payload
       )
     },
     /**
@@ -440,9 +443,9 @@ export default {
      * @param {String} payload.declineRace
      * @param {String} payload.declineLanguage
      */
-    async updateCaseHistoryDemographic (payload) {
+    async updateCaseHistoryDemographic(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/UpdateCaseHistoryDemographic',
+        '/patientportal/updatecasehistorydemographic',
         payload
       )
     },
@@ -453,9 +456,9 @@ export default {
      * @param {Number} payload.caseHistoryId
      * @param {Array.<{ description: String, answer: String }} questions
      */
-    async updateCaseHistoryQuestions (payload) {
+    async updateCaseHistoryQuestions(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/UpdateCaseHistoryQuestions',
+        '/patientportal/updatecasehistoryquestions',
         payload
       )
     },
@@ -465,9 +468,9 @@ export default {
      * @param {Number} payload.facilityid
      * @param {Number} payload.caseHistoryId
      */
-    async getCaseHistoryQuestions (payload) {
+    async getCaseHistoryQuestions(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/GetCaseHistoryQuestions',
+        '/patientportal/getcasehistoryquestions',
         payload
       )
     },
@@ -477,9 +480,9 @@ export default {
      * @param {Number} payload.facilityid
      * @param {Number} payload.caseHistoryId
      */
-    async getCaseHistoryDemographic (payload) {
+    async getCaseHistoryDemographic(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/GetCaseHistoryDemographic',
+        '/patientportal/getcasehistorydemographic',
         payload
       )
     },
@@ -489,9 +492,9 @@ export default {
      * @param {Number} payload.facilityid
      * @param {Number} payload.caseHistoryId
      */
-    async updateCaseHistoryComplete (payload) {
+    async updateCaseHistoryComplete(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/UpdateCaseHistoryComplete',
+        '/patientportal/updatecasehistorycomplete',
         payload
       )
     },
@@ -501,9 +504,9 @@ export default {
      * @param {Number} payload.facilityid
      * @param {Number} payload.caseHistoryId
      */
-    async getCaseHistoryAaValues (payload) {
+    async getCaseHistoryAaValues(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/GetCaseHistoryAaValues',
+        '/patientportal/getcasehistoryaavalues',
         payload
       )
     },
@@ -514,7 +517,7 @@ export default {
      * @param {Number} payload.id ID of the task to tag as complete
      * @param {Number} payload.patientId ID  of the patient associated to the task
      */
-    async updateTaskComplete (payload) {
+    async updateTaskComplete(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatetaskcomplete',
         payload
@@ -524,8 +527,10 @@ export default {
      * Get the task info via the taskId
      * @param {Number} facilityformid ID of the task
      */
-    async getFacilityFormJson (facilityformid, patientid) {
-      return await securedJsonRequest.get(`/form/getfacilityformjson/${facilityformid}`)
+    async getFacilityFormJson(facilityformid, patientid) {
+      return await securedJsonRequest.get(
+        '/patientportal/getfacilityformjson/' + facilityformid + '/' + patientid
+      )
     },
     /**
      *
@@ -533,9 +538,9 @@ export default {
      * @param {Number} payload.facilityformid
      * @param {Number} payload.patientid
      */
-    async getFacilityFormJsonQueryObj (payload) {
+    async getFacilityFormJsonQueryObj(payload) {
       return await securedJsonRequest.post(
-        '/form/GetFacilityFormJson',
+        '/patientportal/getfacilityformjsonqueryobj',
         payload
       )
     },
@@ -545,10 +550,10 @@ export default {
      * @param {Number} payload.facilityformid
      * @param {Number} payload.patientid
      * @param {String} payload.data
-    */
-    async insertPatientForm (payload) {
+     */
+    async insertPatientForm(payload) {
       return await securedJsonRequest.post(
-        '/form/insertPatientForm',
+        '/patientportal/insertpatientform',
         payload
       )
     },
@@ -560,7 +565,7 @@ export default {
      * @param {String} payload.base64
      * @param {String} payload.folder
      */
-    async uploadPatientForm (payload) {
+    async uploadPatientForm(payload) {
       return await securedJsonRequest.post(
         '/patientportal/uploadpatientform',
         payload
@@ -575,9 +580,9 @@ export default {
      * @param {String} payload.mi
      * @param {String} payload.dob
      */
-    async insertInsuranceInfo (payload) {
+    async insertInsuranceInfo(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/InsertInsuranceInfo',
+        '/patientportal/insertinsuranceinfo',
         payload
       )
     },
@@ -586,11 +591,8 @@ export default {
      * @param {String} payload.patientId Base64
      * @param {String} payload.dataUri
      */
-    async virusScan (payload) {
-      return await securedJsonRequest.post(
-        '/clam/VirusScan',
-        payload
-      )
+    async virusScan(payload) {
+      return await securedJsonRequest.post('/patientportal/virusscan', payload)
     },
     /**
      * @param {Number} payload.facilityId
@@ -598,9 +600,9 @@ export default {
      * @param {Boolean} payload.aa
      * @param {Boolean} payload.wc
      */
-    async updateCaseHistory (payload) {
+    async updateCaseHistory(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/UpdateCaseHistory',
+        '/patientportal/updatecasehistory',
         payload
       )
     },
@@ -608,8 +610,10 @@ export default {
      * Delete Patient Form
      * @param {Number} id
      */
-    async deletePatientForm (id) {
-      return await securedJsonRequest.get(`/form/DeletePatientForm/${id}`)
+    async deletePatientForm(id) {
+      return await securedJsonRequest.delete(
+        '/patientportal/deletepatientform/' + id
+      )
     }
   }
 }

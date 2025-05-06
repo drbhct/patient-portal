@@ -1,6 +1,9 @@
 <template>
   <section role="main">
-    <form @submit.prevent="savePatientInfo" class="mt-5 mr-2 ml-2 justify-content-md-center">
+    <form
+      @submit.prevent="savePatientInfo"
+      class="mt-5 mr-2 ml-2 justify-content-md-center"
+    >
       <div class="col">
         <section class="card">
           <header class="card-header">
@@ -10,112 +13,204 @@
             <div v-if="!isLoading">
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">First Name <span style="color: red">*</span></label>
-                  <input type="text" class="form-control" v-model="form.firstName" required />
+                  <label class="label f-weight-550"
+                    >First Name <span style="color: red">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.firstName"
+                    required
+                  />
                 </div>
-
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Last Name <span style="color: red">*</span></label>
-                  <input type="text" class="form-control" v-model="form.lastName" required />
+                  <label class="label f-weight-550"
+                    >Last Name <span style="color: red">*</span></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.lastName"
+                    required
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">Middle Initial</label>
-                  <input type="text" class="form-control" v-model="form.middleInitial" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.middleInitial"
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">Nickname</label>
-                  <input type="text" class="form-control" v-model="form.nickName" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.nickName"
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Email <span style="color: red">*</span></label>
-                  <input type="email" class="form-control" v-model="form.email" required />
+                  <label class="label f-weight-550"
+                    >Email <span style="color: red">*</span></label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    v-model="form.email"
+                    required
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Address 1 <span style="color: red">*</span> </label>
-                  <input type="text" class="form-control" v-model="form.address" required />
+                  <label class="label f-weight-550"
+                    >Address 1 <span style="color: red">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.address"
+                    required
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">Address 2</label>
-                  <input type="text" class="form-control" v-model="form.address2" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.address2"
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">City <span style="color: red">*</span> </label>
-                  <input type="text" class="form-control" v-model="form.city" required />
+                  <label class="label f-weight-550"
+                    >City <span style="color: red">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.city"
+                    required
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">State <span style="color: red">*</span> </label>
+                  <label class="label f-weight-550"
+                    >State <span style="color: red">*</span>
+                  </label>
                   <select v-model="form.state" class="form-control" required>
-                    <option v-for="state in usStates" :key="state.code" :value="state.code">
+                    <option
+                      v-for="state in usStates"
+                      :key="state.code"
+                      :value="state.code"
+                    >
                       {{ state.name }}
                     </option>
                   </select>
                 </div>
-
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Zip Code <span style="color: red">*</span> </label>
-                  <input type="text" class="form-control" v-model="form.zip" required />
+                  <label class="label f-weight-550"
+                    >Zip Code <span style="color: red">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.zip"
+                    required
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Home Phone <span v-show="form.cellPhone === ''"
-                      style="color: red">*</span></label>
-                  <input type="text" class="form-control" v-model="form.homePhone" :required="form.cellPhone === ''"
-                    v-mask="'(###) ###-####'" />
+                  <label class="label f-weight-550"
+                    >Home Phone
+                    <span v-show="form.cellPhone === ''" style="color: red"
+                      >*</span
+                    ></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.homePhone"
+                    :required="form.cellPhone === ''"
+                    v-mask="'(###) ###-####'"
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Mobile Phone <span v-show="form.homePhone === ''"
-                      style="color: red">*</span></label>
-                  <input type="text" class="form-control" v-model="form.cellPhone" :required="form.homePhone === ''"
-                    v-mask="'(###) ###-####'" />
+                  <label class="label f-weight-550"
+                    >Mobile Phone
+                    <span v-show="form.homePhone === ''" style="color: red"
+                      >*</span
+                    ></label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.cellPhone"
+                    :required="form.homePhone === ''"
+                    v-mask="'(###) ###-####'"
+                  />
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Date of Birth <span style="color: red">*</span></label>
-                  <datepicker v-model="form.dob" :input-class="'form-control'" :format="'MMMM dd, yyyy'" :id="'dpicker'"
-                    :required="true" :typeable="false" :disabled-dates="disabledDates" onkeydown="return false">
+                  <label class="label f-weight-550"
+                    >Date of Birth <span style="color: red">*</span></label
+                  >
+                  <datepicker
+                    v-model="form.dob"
+                    :input-class="'form-control'"
+                    :format="'MMMM dd, yyyy'"
+                    :id="'dpicker'"
+                    :required="true"
+                    :typeable="false"
+                    :disabled-dates="disabledDates"
+                    onkeydown="return false"
+                  >
                   </datepicker>
                 </div>
               </div>
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Gender <span style="color: red">*</span></label>
+                  <label class="label f-weight-550"
+                    >Gender <span style="color: red">*</span></label
+                  >
                   <select class="form-control" v-model="form.sex">
-                    <option v-for="gender in genderList" :value="gender.id" :key="gender.value">
+                    <option
+                      v-for="gender in genderList"
+                      :value="gender.id"
+                      :key="gender.value"
+                    >
                       {{ gender.value }}
                     </option>
                   </select>
@@ -124,9 +219,19 @@
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Employment <span style="color: red">*</span></label>
-                  <select class="form-control" v-model="form.employStatID" required>
-                    <option v-for="employ in employmentList" :value="employ.id" :key="employ.value">
+                  <label class="label f-weight-550"
+                    >Employment <span style="color: red">*</span></label
+                  >
+                  <select
+                    class="form-control"
+                    v-model="form.employStatID"
+                    required
+                  >
+                    <option
+                      v-for="employ in employmentList"
+                      :value="employ.id"
+                      :key="employ.value"
+                    >
                       {{ employ.value }}
                     </option>
                   </select>
@@ -135,9 +240,15 @@
 
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
-                  <label class="label f-weight-550">Marital Status <span style="color: red">*</span></label>
+                  <label class="label f-weight-550"
+                    >Marital Status <span style="color: red">*</span></label
+                  >
                   <select v-model="form.maritalStatID" class="form-control">
-                    <option v-for="marital in statusList" :key="marital.value" :value="marital.id">
+                    <option
+                      v-for="marital in statusList"
+                      :key="marital.value"
+                      :value="marital.id"
+                    >
                       {{ marital.value }}
                     </option>
                   </select>
@@ -147,7 +258,11 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">Emergency Contact</label>
-                  <input type="text" class="form-control" v-model="form.emerContact" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.emerContact"
+                  />
                 </div>
               </div>
 
@@ -155,7 +270,11 @@
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">Emergency Relation</label>
                   <select class="form-control" v-model="form.emerRelation">
-                    <option v-for="relation in relationList" :value="relation" :key="relation">
+                    <option
+                      v-for="relation in relationList"
+                      :value="relation"
+                      :key="relation"
+                    >
                       {{ relation }}
                     </option>
                   </select>
@@ -165,7 +284,12 @@
               <div class="form-group row">
                 <div class="col-lg-6 mx-auto">
                   <label class="label f-weight-550">Emergency Phone</label>
-                  <input type="text" class="form-control" v-model="form.emerPhone" v-mask="'(###)-###-####'" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    v-model="form.emerPhone"
+                    v-mask="'(###)-###-####'"
+                  />
                 </div>
               </div>
 
@@ -173,28 +297,56 @@
                 <div class="col-lg-6 mx-auto">
                   <h5 class="h5">Is this a result of:</h5>
                   <div class="pl-2">
-                    <label class="label fw-500 pr-2 text-right" style="width:120px">Auto Accident:</label>
+                    <label
+                      class="label fw-500 pr-2 text-right"
+                      style="width: 120px"
+                      >Auto Accident:</label
+                    >
                     <div class="form-check form-check-inline">
-                      <input type="radio" class="form-check-input" name="aaquestion" :checked="isAutoAccident"
-                        @click="isAutoAccident = true" />
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="aaquestion"
+                        :checked="isAutoAccident"
+                        @click="isAutoAccident = true"
+                      />
                       <label class="form-check-label check-inline">Yes</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input type="radio" class="form-check-input" name="aaquestion" :checked="!isAutoAccident"
-                        @click="isAutoAccident = false" />
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="aaquestion"
+                        :checked="!isAutoAccident"
+                        @click="isAutoAccident = false"
+                      />
                       <label class="form-check-label">No</label>
                     </div>
                   </div>
                   <div class="pl-2">
-                    <label class="label fw-500 pr-2 text-right" style="width:120px">Work Injury:</label>
+                    <label
+                      class="label fw-500 pr-2 text-right"
+                      style="width: 120px"
+                      >Work Injury:</label
+                    >
                     <div class="form-check form-check-inline">
-                      <input type="radio" class="form-check-input" name="wiquestion" :checked="isWorkInjury"
-                        @click="isWorkInjury = true" />
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="wiquestion"
+                        :checked="isWorkInjury"
+                        @click="isWorkInjury = true"
+                      />
                       <label class="form-check-label check-inline">Yes</label>
                     </div>
                     <div class="form-check form-check-inline">
-                      <input type="radio" class="form-check-input" name="wiquestion" :checked="!isWorkInjury"
-                        @click="isWorkInjury = false" />
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="wiquestion"
+                        :checked="!isWorkInjury"
+                        @click="isWorkInjury = false"
+                      />
                       <label class="form-check-label">No</label>
                     </div>
                   </div>
@@ -233,215 +385,112 @@
   </section>
 </template>
 
-<script>
-// import moment from 'moment'
-import api from '../../api/http-common.js'
-import Datepicker from 'vuejs-datepicker'
-import { mapGetters, mapActions } from 'vuex'
-import btnSaving from '../button-saving.vue'
-export default {
-  components: {
-    Datepicker,
-    btnSaving
-  },
-  data() {
-    return {
-      isRequired: true,
-      isLoading: true,
-      isSaving: false,
-      portalId: null,
-      caseHistoryId: null,
-      form: {
-        firstName: '',
-        lastName: '',
-        middleInitial: '',
-        nickName: '',
-        email: '',
-        address: '',
-        address2: '',
-        city: '',
-        state: '',
-        zip: '',
-        homePhone: '',
-        cellPhone: '',
-        dob: '',
-        sex: '',
-        employment: '',
-        maritalStatID: '',
-        emerContact: '',
-        emerRelation: '',
-        emerPhone: ''
-      },
-      isAutoAccident: false,
-      isWorkInjury: false,
-      usStates: [],
-      relationList: [
-        'SPOUSE',
-        'CHILD',
-        'MOTHER',
-        'FATHER',
-        'BROTHER',
-        'SISTER',
-        'AUNT',
-        'UNCLE',
-        'COUSIN',
-        'FRIEND',
-        'OTHER'
-      ],
-      employmentList: [
-        { id: 0, value: '' },
-        { id: 1, value: 'Employed' },
-        { id: 2, value: 'Full Time Student' },
-        { id: 3, value: 'Part Time Student' },
-        { id: 4, value: 'Retired' },
-        { id: 5, value: 'Other' }
-      ],
-      statusList: [
-        { id: 0, value: '' },
-        { id: 1, value: 'Single' },
-        { id: 2, value: 'Married' },
-        { id: 3, value: 'Other' },
-        { id: 4, value: 'Divorced' },
-        { id: 5, value: 'Widowed' },
-        { id: 6, value: 'Child' }
-      ],
-      genderList: [
-        { id: 'M', value: 'Male' },
-        { id: 'F', value: 'Female' },
-        { id: 'X', value: 'Non-Binary' }
-      ],
-      disabledDates: {
-        ranges: []
-      }
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'getProfilePatientAssociated',
-      'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType',
-      'currentPatientAssociated',
-      'getTaskCode',
-      'getTaskInfo'
-    ]),
-    TaskInfo() {
-      if (this.getTaskInfo !== '') {
-        return JSON.parse(this.getTaskInfo)
-      } else {
-        return null
-      }
-    }
-  },
-  methods: {
-    ...mapActions(['setTaskCurrentTaskType', 'setTaskCurrentCaseHistoryId', 'setTaskInfo']),
-    toggle(val) {
-      this.isAutoAccident = val
-    },
-    async previous() {
-      // this.setTaskCurrentTaskType(this.getTaskPreviousTaskType)
-      await this.$router.push({ path: '/' })
-    },
-    async savePatientInfo() {
-      var givenDate = this.form.dob
-      var todaysDate = new Date()
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import '@vuepic/vue-datepicker/dist/main.css'
+import Datepicker from '@vuepic/vue-datepicker'
+import { useTaskStore } from '@/stores/task'
+import { useProfileStore } from '@/stores/profile'
+import BtnSaving from '../button-saving.vue'
 
-      if (givenDate > todaysDate) {
-        this.$swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Invalid Date of Birth!'
-        })
-      } else {
-        this.isSaving = true
-        await api.task.request.updatePatient(this.form)
-        let result = await api.task.request.findIncompleteCaseHistory({
-          facilityId: this.currentPatientAssociated.facilityID,
-          patientId: this.currentPatientAssociated.patientID
-        })
-        if (!result.data) {
-          result = await api.task.request.insertCaseHistory({
-            facilityId: this.currentPatientAssociated.facilityID,
-            patientId: this.currentPatientAssociated.patientID,
-            aa: this.isAutoAccident
-          })
-          this.updateCaseHistory(result.data)
-        }
-        await this.setTaskCurrentCaseHistoryId(result.data)
-        this.isSaving = false
-        if (this.TaskInfo) {
-          if (this.TaskInfo.Action === 'INSINFO') {
-            const taskinfo = this.TaskInfo
-            if (this.TaskInfo.TaskType !== 'INS') {
-              taskinfo.CurrentTaskType = this.isAutoAccident ? 'NphAutoAccident' : 'NphComplaintLocation'
-            } else {
-              taskinfo.CurrentTaskType = 'NphThankyou'
-            }
-            this.setTaskInfo(JSON.stringify(taskinfo))
-            this.setTaskCurrentTaskType('NphInsurance')
-          }
-        } else if (this.isAutoAccident) {
-          this.setTaskCurrentTaskType('NphAutoAccident')
-        } else {
-          this.setTaskCurrentTaskType('NphComplaintLocation')
-        }
-      }
-    },
-    async updateCaseHistory(caseId) {
-      await api.task.request.updateCaseHistory({
-        facilityId: this.currentPatientAssociated.facilityID,
-        id: caseId,
-        aa: this.isAutoAccident,
-        wc: this.isWorkInjury
-      })
-    },
-    async getPatientInfo(patientId) {
-      const patientInfo = await api.task.request.getPatient({
-        facilityId: this.currentPatientAssociated.facilityID,
-        patientId: this.currentPatientAssociated.patientID
-      })
+const router = useRouter()
+const taskStore = useTaskStore()
+const profileStore = useProfileStore()
 
-      this.form = patientInfo.data
-      this.form.facilityId = this.currentPatientAssociated.facilityID
-      this.form.patientId = this.form.id
-      switch (this.getTaskCode) {
-        case 'AANPH':
-        case 'AACH':
-          this.isAutoAccident = true
-          break
-      }
-      this.isLoading = false
-    },
-    async getUsStates() {
-      const result = await api.task.request.getUsStates()
-      this.usStates = result.data
-    }
-  },
-  async mounted() {
-    await this.getUsStates()
-    await this.getPatientInfo()
-    this.isLoading = false
-    document.getElementById('dpicker').removeAttribute('readonly')
+const isLoading = ref(false)
+const isSaving = ref(false)
+const isAutoAccident = ref(false)
+const isWorkInjury = ref(false)
+const form = ref({
+  firstName: '',
+  lastName: '',
+  middleInitial: '',
+  nickName: '',
+  email: '',
+  address: '',
+  address2: '',
+  city: '',
+  state: '',
+  zip: '',
+  homePhone: '',
+  cellPhone: '',
+  dob: null,
+  sex: '',
+  employStatID: '',
+  maritalStatID: '',
+  emerContact: '',
+  emerRelation: '',
+  emerPhone: ''
+})
 
-    var obj = {}
+// Computed properties
+const currentPatientAssociated = computed(
+  () => profileStore.currentPatientAssociated
+)
+const getTaskPreviousTaskType = computed(() => taskStore.previousTaskType)
+const getTaskCurrentTaskType = computed(() => taskStore.currentTaskType)
+const getTaskCode = computed(() => taskStore.taskCode)
+const TaskInfo = computed(() => {
+  const taskInfo = taskStore.taskInfo
+  return taskInfo ? JSON.parse(taskInfo) : null
+})
 
-    var fromDate = new Date()
-    var futureDate = new Date(new Date().getFullYear() + 50, 0, 1)
+// Methods
+const toggle = (val) => {
+  isAutoAccident.value = val
+}
 
-    obj.from = fromDate
-    obj.to = futureDate
+const previous = async () => {
+  await router.push({ path: '/' })
+}
 
-    this.disabledDates.ranges.push(obj)
-    this.disabledDates.from = fromDate
+const savePatientInfo = async () => {
+  const givenDate = form.value.dob
+  const todaysDate = new Date()
+
+  if (givenDate > todaysDate) {
+    alert('Date of birth cannot be in the future')
+    return
+  }
+
+  isSaving.value = true
+  try {
+    await taskStore.savePatientInfo({
+      ...form.value,
+      isAutoAccident: isAutoAccident.value,
+      isWorkInjury: isWorkInjury.value
+    })
+    router.push('/task/insurance')
+  } catch (error) {
+    console.error('Error saving patient info:', error)
+  } finally {
+    isSaving.value = false
   }
 }
+
+onMounted(async () => {
+  isLoading.value = true
+  try {
+    const response = await taskStore.getPatientInfo()
+    form.value = response.data
+    isAutoAccident.value = response.data.aa
+    isWorkInjury.value = response.data.wc
+  } catch (error) {
+    console.error('Error loading patient info:', error)
+  } finally {
+    isLoading.value = false
+  }
+})
 </script>
+
 <style scoped>
 .h5 {
-    font-size: 1.1em !important;
-    font-weight: 600;
-    letter-spacing: normal;
-    line-height: 18px;
-    color: black;
+  font-size: 1.1em !important;
+  font-weight: 600;
+  letter-spacing: normal;
+  line-height: 18px;
+  color: black;
 }
 
 .fw-500 {

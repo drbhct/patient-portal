@@ -1,64 +1,72 @@
-import Vue from 'vue'
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
-import store from './store'
 import VueCookies from 'vue-cookies'
 import VueSweetalert2 from 'vue-sweetalert2'
-import VueMask from 'v-mask'
+import Toast from 'vue-toastification'
+import { vMask } from 'vue-input-mask'
 import VueContentPlaceholders from 'vue-content-placeholders'
-// eslint-disable-next-line no-unused-vars
 import * as Sentry from '@sentry/vue'
-// eslint-disable-next-line no-unused-vars
-import { Integrations } from '@sentry/tracing'
-// import auth from './auth/auth.js'
-import PubNubVue from 'pubnub-vue'
+import { BrowserTracing } from '@sentry/tracing'
 import { AuthSimplePlugin } from './auth/auth-simple.js'
-import VueHtmlToPaper from 'vue-html-to-paper'
 
-const options = {
-  name: '_blank',
-  specs: ['fullscreen=yes', 'titlebar=yes', 'scrollbars=yes'],
-  styles: [
-    'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css',
-    'https://unpkg.com/kidlat-css/css/kidlat.css'
-  ],
-  timeout: 1000, // default timeout before the print window appears
-  autoClose: true, // if false, the window will not close after printing
-  windowTitle: window.document.title // override the window title
+// Import the CSS file for toastification
+import 'vue-toastification/dist/index.css'
+
+const app = createApp(App)
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
+// Toast configuration
+const toastOptions = {
+  position: 'top-right',
+  timeout: 5000,
+  closeOnClick: true,
+  pauseOnFocusLoss: true,
+  pauseOnHover: true,
+  draggable: true,
+  draggablePercent: 0.6,
+  showCloseButtonOnHover: false,
+  hideProgressBar: true,
+  closeButton: 'button',
+  icon: true,
+  rtl: false
 }
 
-Vue.use(VueHtmlToPaper, options)
-Vue.use(PubNubVue, {
-  subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
-  publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY,
-  uuid: window.Login,
-  ssl: true,
-  presenceTimeout: 130
-})
+// Only initialize Sentry in production to avoid rate limiting during development
+if (import.meta.env.PROD) {
+  Sentry.init({
+    app,
+    dsn: 'https://baff50e5a05944ca933adaeb43c960ca@o1202081.ingest.sentry.io/6455112',
+    integrations: [new BrowserTracing()],
+    tracesSampleRate: 1.0
+  })
+} else {
+  console.log('Sentry disabled in development mode')
+}
 
-Sentry.init({
-  Vue,
-  dsn:
-    'https://baff50e5a05944ca933adaeb43c960ca@o1202081.ingest.sentry.io/6455112',
-  integrations: [new Integrations.BrowserTracing()],
+// Register plugins
+app.use(pinia)
+app.use(router)
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 1.0
-})
+// Use Vue 3 compatible plugins
+app.use(VueSweetalert2)
+app.use(Toast, toastOptions)
+app.use(VueContentPlaceholders)
 
-Vue.use(new AuthSimplePlugin())
-// Vue.use(auth)
-Vue.use(VueContentPlaceholders)
-Vue.use(VueSweetalert2)
-Vue.use(VueMask)
-Vue.use(VueCookies)
-Vue.config.productionTip = false
+// Use VueCookies in a Vue 3 compatible way
+app.config.globalProperties.$cookies = VueCookies
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+// Configure Auth plugin in a Vue 3 compatible way
+const authPlugin = new AuthSimplePlugin()
+app.config.globalProperties.$auth = authPlugin
+app.provide('auth', authPlugin)
+
+// Register directives
+app.directive('mask', vMask)
+
+// Mount the app
+app.mount('#app')

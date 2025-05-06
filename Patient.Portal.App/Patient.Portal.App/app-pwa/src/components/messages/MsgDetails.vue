@@ -1,160 +1,182 @@
 <template>
-  <div>
-    <a href="javascript:void(0)" @click="setMsgCurrentPage('List')">
-      <i class="fas fa-angle-left"></i>
-      Back to Messages
-    </a>
-    <div class="content-with-menu-container" data-mailbox data-mailbox-view="email">
-      <div class="inner-body mailbox-email">
-        <div class="mailbox-email-header mb-2">
-          <h3 class="mailbox-email-subject m-0 font-weight-semibold">
-            {{ getMsgInfo.subject }}
-          </h3>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2>Message Details</h2>
+          <button class="btn btn-secondary" @click="goBack">
+            Back to Messages
+          </button>
         </div>
-        <div class="mailbox-email-container">
-          <div class="mailbox-email-screen pt-2">
-            <div v-for="(msg, index) in msgThread" :key="msg.id" class="card mb-2">
-              <div class="card-header" :class="{ collapsed:  index !== msgThread.length - 1 }" data-toggle="collapse" :data-target="'#collapse-'+ index">
-                <div class="card-actions float-right">
-                  <a href="#" class="card-action card-action-toggle" :class="{ collapsed:  index !== msgThread.length - 1 }" data-toggle="collapse" :data-target="'#collapse-'+ index"></a>
-                  <a v-if="!msg.fromPatient" href="javascript:void(0)" @click="reply" class="fas fa-reply modal-basic"></a>
+
+        <div v-if="isLoading" class="text-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+        <div v-else-if="!message" class="alert alert-info">
+          Message not found.
+        </div>
+        <div v-else>
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">{{ message.subject }}</h5>
+              <div class="message-meta mb-4">
+                <div class="row">
+                  <div class="col-md-6">
+                    <strong>From:</strong> {{ message.from }}
+                  </div>
+                  <div class="col-md-6">
+                    <strong>Date:</strong> {{ formatDate(message.date) }}
+                  </div>
                 </div>
-                <p class="card-title"> {{ getFromName(msg) }} <i class="fas fa-angle-right fa-fw"></i> {{ getToName(msg) }} </p>
-                <span class="m-0"><small>{{ date(msg.entryDate) }}</small></span>
               </div>
-              <div :id="'collapse-'+ index" class="card-body collapse" :class="{ show:  index == msgThread.length - 1 }">
-                <p>{{msg.messageText}}</p>
+              <div class="message-content">
+                {{ message.content }}
               </div>
+            </div>
+          </div>
+
+          <div
+            v-if="message.replies && message.replies.length > 0"
+            class="card"
+          >
+            <div class="card-body">
+              <h5 class="card-title">Replies</h5>
+              <div
+                v-for="reply in message.replies"
+                :key="reply.id"
+                class="reply-item mb-4"
+              >
+                <div class="message-meta mb-2">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <strong>From:</strong> {{ reply.from }}
+                    </div>
+                    <div class="col-md-6">
+                      <strong>Date:</strong> {{ formatDate(reply.date) }}
+                    </div>
+                  </div>
+                </div>
+                <div class="message-content">
+                  {{ reply.content }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mt-4">
+            <div class="card-body">
+              <h5 class="card-title">Reply to Message</h5>
+              <form @submit.prevent="sendReply">
+                <div class="form-group">
+                  <textarea
+                    class="form-control"
+                    v-model="replyContent"
+                    rows="5"
+                    required
+                    maxlength="8000"
+                    placeholder="Type your reply here..."
+                    style="resize: none"
+                  ></textarea>
+                </div>
+                <div class="text-center">
+                  <button
+                    type="submit"
+                    class="btn btn-primary btn-lg"
+                    :disabled="isSending"
+                  >
+                    {{ isSending ? 'Sending...' : 'Send Reply' }}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div id="modalReply" class="modal fade" tabindex="-1" role="dialog">
-      <form @submit.prevent="send">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h2 class="card-title">Re: {{ getMsgInfo.subject }}</h2>
-            </div>
-            <div class="modal-body">
-              <div class="form-group row pt-2">
-                <label class="col-lg-12 control-label" for="textareaDefault">Message</label>
-                <div class="col-lg-12">
-                  <textarea required maxlength="8000" class="form-control" rows="10" id="textareaAutosize" v-model="form.message" data-plugin-textarea-autosize="" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 150px;"></textarea>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <div class="col-md-12 text-right">
-                <button class="btn btn-primary modal-confirm mr-2" type="submit">Send</button>
-                <button class="btn btn-default" type="reset" @click="cancel">Cancel</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
   </div>
 </template>
 
-<script>
-import api from '../../api/http-common.js'
-import { mapActions, mapGetters } from 'vuex'
-import moment from 'moment'
-export default {
-  data () {
-    return {
-      msgThread: [],
-      form: {
-        message: ''
-      }
-    }
-  },
-  methods: {
-    ...mapActions(['setMsgCurrentPage']),
-    async loadMessages () {
-      const response = await api.msg.request.getMessageThread({
-        facilityId: this.currentPatientAssociated.facilityID,
-        patientId: this.currentPatientAssociated.patientID,
-        parentId: this.getMsgInfo.id
-      })
-      this.msgThread = response.data
-      this.msgThread.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0))
-      this.updateMsgRead()
-    },
-    async updateMsgRead () {
-      const response = await api.msg.request.updateMessageRead({
-        facilityId: this.currentPatientAssociated.facilityID,
-        id: this.getMsgInfo.id,
-        read: true
-      })
-      console.log(response)
-    },
-    getFromName (msgInfo) {
-      if (msgInfo.fromPatient) {
-        return msgInfo.fromName
-      } else {
-        return this.currentPatientAssociated.officeName
-      }
-    },
-    getToName (msgInfo) {
-      if (msgInfo.fromPatient) {
-        return this.currentPatientAssociated.officeName
-      } else {
-        return msgInfo.fromName
-      }
-    },
-    date: function (date) {
-      return moment(date).format('MMMM DD, YYYY @ h:mm a')
-    },
-    reply () {
-      // eslint-disable-next-line no-undef
-      $('#modalReply').modal({
-        show: true,
-        backdrop: 'static'
-      })
-    },
-    cancel () {
-      // eslint-disable-next-line no-undef
-      $('#modalReply').modal('hide')
-    },
-    async send () {
-      const params = {
-        facilityId: this.currentPatientAssociated.facilityID,
-        patientId: this.currentPatientAssociated.patientID,
-        parentId: this.getMsgInfo.id,
-        message: this.form.message
-      }
-      await api.msg.request.insertMessageReply(params)
-      this.loadMessages()
-      this.cancel()
-    }
-  },
-  computed: {
-    ...mapGetters(['getMsgInfo', 'getProfilePatientAssociated', 'currentPatientAssociated'])
-  },
-  async mounted () {
-    this.loadMessages()
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
+import { useMessageStore } from '@/stores/message'
+
+const route = useRoute()
+const router = useRouter()
+const toast = useToast()
+const messageStore = useMessageStore()
+
+const isLoading = ref(false)
+const isSending = ref(false)
+const message = ref(null)
+const replyContent = ref('')
+
+const loadMessage = async () => {
+  isLoading.value = true
+  try {
+    const result = await messageStore.getMessageDetails(route.params.id)
+    message.value = result
+  } catch (error) {
+    console.error('Error loading message:', error)
+    toast.error('Failed to load message details')
+  } finally {
+    isLoading.value = false
   }
 }
+
+const formatDate = (date) => {
+  return new Date(date).toLocaleDateString()
+}
+
+const sendReply = async () => {
+  if (!replyContent.value.trim()) {
+    toast.error('Please enter a reply message')
+    return
+  }
+
+  isSending.value = true
+  try {
+    await messageStore.replyToMessage({
+      messageId: message.value.id,
+      content: replyContent.value
+    })
+    toast.success('Reply sent successfully')
+    replyContent.value = ''
+    await loadMessage()
+  } catch (error) {
+    console.error('Error sending reply:', error)
+    toast.error('Failed to send reply')
+  } finally {
+    isSending.value = false
+  }
+}
+
+const goBack = () => {
+  router.push('/messages')
+}
+
+onMounted(() => {
+  loadMessage()
+})
 </script>
 
 <style scoped>
-  .btn-w-120 {
-    width: 120px !important;
-    margin-right:5px;
-    margin-left: 5px;
-  }
-  .card-action-toggle:before {
-    content: "\f0d7";
-  }
-
-  .collapsed .card-action-toggle:before {
-    content: "\f0d8";
-  }
-  .card-header {
-    padding: 12px !important;
-  }
-
+.message-meta {
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+.message-content {
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+.reply-item {
+  padding: 1rem;
+  border-left: 3px solid #e9ecef;
+}
+.form-group {
+  margin-bottom: 1.5rem;
+}
 </style>

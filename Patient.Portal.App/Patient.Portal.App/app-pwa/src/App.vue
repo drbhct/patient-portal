@@ -1,33 +1,25 @@
 <template>
   <div>
-    <loading :active.sync="getIsLoading" :can-cancel="false"></loading>
+    <loading v-model:active="getIsLoading" :can-cancel="false"></loading>
     <section class="body">
       <!-- start: header -->
       <header class="header">
         <div class="logo-container d-inline">
-          <!-- <a href="/" class="logo" v-if="!$auth.isAuthenticated()">
-            <img src="img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
+          <!-- <a href="/" class="logo" v-if="!isAuthenticated">
+            <img src="/img/Healthcore Logo White (Transparent).png" height="35" alt="Porto Admin" />
           </a> -->
-          <div class="d-none d-sm-inline-block" v-if="$auth.isAuthenticated()">
-            <span class="office-name" v-if="currentPatientAssociated">{{
-              currentPatientAssociated.officeName
-            }}</span>
+          <div class="d-none d-sm-inline-block" v-if="isAuthenticated && currentPatientAssociated">
+            <span class="office-name">{{ currentPatientAssociated.officeName }}</span>
           </div>
-          <div class="d-sm-none d-inline" v-if="$auth.isAuthenticated()">
-            <span class="office-name-m" v-if="currentPatientAssociated">{{
-              currentPatientAssociated.officeName
-            }}</span>
+          <div class="d-sm-none d-inline" v-if="isAuthenticated && currentPatientAssociated">
+            <span class="office-name-m">{{ currentPatientAssociated.officeName }}</span>
           </div>
           <!-- Begin: Task Office Name -->
-          <div class="d-none d-sm-inline-block" v-if="showTaskOfficeName">
-            <span class="office-name" v-if="getTaskOfficeName">{{
-              getTaskOfficeName
-            }}</span>
+          <div class="d-none d-sm-inline-block" v-if="showTaskOfficeName && getTaskOfficeName">
+            <span class="office-name">{{ getTaskOfficeName }}</span>
           </div>
-          <div class="d-sm-none d-inline" v-if="showTaskOfficeName">
-            <span class="office-name-m" v-if="getTaskOfficeName">{{
-              getTaskOfficeName
-            }}</span>
+          <div class="d-sm-none d-inline" v-if="showTaskOfficeName && getTaskOfficeName">
+            <span class="office-name-m">{{ getTaskOfficeName }}</span>
           </div>
           <!-- End: Task Office Name -->
           <div
@@ -43,7 +35,7 @@
 
         <div
           class="header-right d-sm-block d-md-block d-lg-block"
-          v-if="$auth.isAuthenticated()"
+          v-if="isAuthenticated"
         >
           <!-- <div class="logged-info d-none d-sm-block" v-if="getProfileAuthInfo">
             <span>Signed in as {{ getProfileAuthInfo.firstName }} {{ getProfileAuthInfo.lastName }}</span>
@@ -61,7 +53,7 @@
               <i class="fa custom-caret"></i>
             </a>
             <div
-              v-if="getProfilePatientAssociated.length > 0"
+              v-if="getProfilePatientAssociated && getProfilePatientAssociated.length > 0"
               class="dropdown-menu"
               x-placement="bottom-start"
               style="
@@ -77,7 +69,7 @@
                 <li
                   v-for="patient in getProfilePatientAssociated"
                   :key="patient.id"
-                  v-on:click="selectPatient(patient)"
+                  @click="selectPatient(patient)"
                 >
                   <a
                     class="font-weight-600 text-white"
@@ -133,9 +125,11 @@
         </div>
       </header>
       <!-- end: header -->
-      <transition name="fade" mode="out-in">
-        <router-view></router-view>
-      </transition>
+      <router-view v-slot="{ Component }">
+        <transition name="fade" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
       <!-- <a class="scroll-to-top hidden-mobile visible" href="javascript:void(0)">
         <i class="fas fa-chevron-up"></i>
       </a> -->
@@ -158,199 +152,159 @@
     </section>
   </div>
 </template>
-<script>
+
+<script setup>
+import { ref, computed, watch } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useProfileStore } from '@/stores/profile'
+import { useConfigStore } from '@/stores/config'
+import { useRoute, useRouter } from 'vue-router'
+// Vue-loading-overlay v6.x is Vue 3 compatible
 import Loading from 'vue-loading-overlay'
-import 'vue-loading-overlay/dist/vue-loading.css'
-import { mapGetters, mapActions } from 'vuex'
-export default {
-  components: {
-    Loading
-  },
-  data() {
-    return {
-      currentChannel: '',
-      pubNubMsg: {
-        channel: '',
-        msg: []
-      }
-    }
-  },
-  watch: {
-    currentPatientAssociated: function(val, oldVal) {
-      if (!this.$auth.isAuthenticated()) {
-        return
-      }
-      if (oldVal) {
-        this.currentChannel = `ch-portal-msg-${oldVal.facilityID}-${oldVal.patientID}`
-        const pnInstance = this.$pnGetInstance()
-        pnInstance.unsubscribe({ channels: [this.currentChannel] })
-      }
-      if (val) {
-        const pnInstance = this.$pnGetInstance()
+import 'vue-loading-overlay/dist/css/index.css'
+import { useMessageStore } from '@/stores/message'
 
-        this.currentChannel = `ch-portal-msg-${val.facilityID}-${val.patientID}`
-        pnInstance.subscribe({ channels: [this.currentChannel] })
+// App name is defined through the filename in Vue 3
+const route = useRoute()
+const router = useRouter()
+const authStore = useAuthStore()
+const profileStore = useProfileStore()
+const configStore = useConfigStore()
+const messageStore = useMessageStore()
 
-        this.pubNubMsg.channel = this.currentChannel
+// Create refs for component state
+const currentChannel = ref('')
+const pubNubMsg = ref({
+  channel: '',
+  msg: []
+})
 
-        this.pubNubMsg.msg = this.$pnGetMessage(
-          this.currentChannel,
-          this.newPubnubMsg
-        )
-      }
-    },
-    isAuth: function(val, oldVal) {
-      if (val && this.$auth.isAuthenticated()) {
-        const pnInstance = this.$pnGetInstance()
+const version = computed(() => '1.9.21') // Fortis payment integration
 
-        this.currentChannel = `ch-portal-msg-${this.currentPatientAssociated.facilityID}-${this.currentPatientAssociated.patientID}`
+const getIsLoading = computed(() => configStore.isLoading)
+const getProfileAuthInfo = computed(() => profileStore.getProfileAuthInfo)
+const getProfilePatientAssociated = computed(
+  () => profileStore.getProfilePatientAssociated
+)
+const currentPatientAssociated = computed(
+  () => profileStore.currentPatientAssociated
+)
+const getTaskOfficeName = computed(() => configStore.getTaskOfficeName)
 
-        pnInstance.subscribe({ channels: [this.currentChannel] })
+const currentRouteName = computed(() => {
+  let routeName = route.name
+  if (routeName) {
+    routeName = routeName.toLowerCase()
+  }
+  return routeName
+})
 
-        this.pubNubMsg.channel = this.currentChannel
+const newPubnubMsg = async (msg) => {
+  const msgJson = JSON.parse(msg.message)
+  const result = await configStore.showSwalToast({
+    toast: true,
+    text: 'Click ok to view',
+    position: 'top-end',
+    title: 'New Message',
+    timerProgressBar: true,
+    timer: 10000,
+    icon: 'info'
+  })
 
-        this.pubNubMsg.msg = this.$pnGetMessage(
-          this.currentChannel,
-          this.newPubnubMsg
-        )
-      }
-      if (!val && !this.$auth.isAuthenticated()) {
-        this.currentChannel = `ch-portal-msg-${this.currentPatientAssociated.facilityID}-${this.currentPatientAssociated.patientID}`
-        const pnInstance = this.$pnGetInstance()
-        pnInstance.unsubscribe({ channels: [this.currentChannel] })
-      }
-    }
-  },
-  computed: {
-    version() {
-      return '1.9.21' // Fortis payment integration
-    },
-    ...mapGetters([
-      'getIsLoading',
-      'getProfileAuthInfo',
-      'getProfilePatientAssociated',
-      'currentPatientAssociated',
-      'getTaskOfficeName'
-    ]),
-    currentRouteName() {
-      let route = this.$route.name
-      if (route) {
-        route = route.toLowerCase()
-      }
-      return route
-    },
-    showHeader() {
-      switch (this.currentRouteName) {
-        case 'landing':
-        case 'account':
-        case 'createaccount':
-        case 'task':
-          return false
-        default:
-          return true
-      }
-    },
-    showMobileMenu() {
-      switch (this.$route.path.toLowerCase()) {
-        case '/account/create':
-        case '/account/landing':
-        case '/account/login':
-        case '/account/requestpin':
-        case '/account/forgotpassword':
-        case '/account/forgotusername':
-        case '/task':
-          return false
-        default:
-          return true
-      }
-    },
-    showTaskOfficeName() {
-      if (this.$route.path.toLowerCase() !== '/task') {
-        return false
-      }
-      if (this.$auth.isAuthenticated()) {
-        return false
-      }
-      return true
-    },
-    isAuth() {
-      return this.$auth.logged
-    },
-    showFooterMenu() {
-      switch (this.$route.path.toLowerCase()) {
-        case '/task':
-          return false
-        default:
-          return true
-      }
-    }
-  },
-  methods: {
-    ...mapActions([
-      'logoutApp',
-      'setProfileCurrentPatient',
-      'setIsLoading',
-      'setCurrentMsgInfo',
-      'setMsgCurrentPage'
-    ]),
-    async newPubnubMsg(msg) {
-      // console.log('newPubnubMsg>', msg)
-      const msgJson = JSON.parse(msg.message)
-      // console.log('newPubnubMsg>actual msg>', msgJson)
-      const result = await this.$swal({
-        toast: true,
-        text: 'Click ok to view',
-        position: 'top-end',
-        title: 'New Message',
-        // showConfirmButton: false,
-        timerProgressBar: true,
-        timer: 10000,
-        icon: 'info'
-      })
-
-      // console.log('swal>result>', result)
-      if (result.isConfirmed) {
-        this.setCurrentMsgInfo({
-          id: parseInt(msgJson.messageId),
-          subject: ''
-        })
-        this.setMsgCurrentPage('Detail')
-        this.$router.push({ path: '/menu/messages' })
-      }
-    },
-    newPubnubPresence(ps) {
-      // console.log('ps>', ps)
-    },
-    async logout() {
-      this.$auth.logout()
-      this.$router.push('/account/login')
-    },
-    async selectPatient(patient) {
-      const me = this
-      this.setIsLoading(true)
-      await this.setProfileCurrentPatient(patient)
-      setTimeout(function() {
-        me.setIsLoading(false)
-        if (me.$route.path !== '/') {
-          me.$router.push('/')
-        } else {
-          me.$router.go(0)
-        }
-      }, 500)
-    }
-  },
-  created() {
-    console.info('%c Patient Portal v' + this.version, 'background:green')
-    // console.log('this.$auth', this.$auth.isAuthenticated())
-    // if (this.$auth.isAthenticated()) {
-    //   if (this.$route.path === '/account/login') {
-    //     this.$auth.logout()
-    //     console.log('isAut', this.$auth.isAthenticated())
-    //   }
-    // }
+  if (result.isConfirmed) {
+    messageStore.setCurrentMsgInfo({
+      id: parseInt(msgJson.messageId),
+      subject: ''
+    })
+    messageStore.setCurrentPage('Detail')
+    router.push({ path: '/menu/messages' })
   }
 }
+
+watch(currentPatientAssociated, (val, oldVal) => {
+  // Use isAuthenticated as a property, not a method
+  if (!authStore.isAuthenticated) {
+    return
+  }
+  if (oldVal) {
+    currentChannel.value = `ch-portal-msg-${oldVal.facilityID}-${oldVal.patientID}`
+    const pnInstance = configStore.pnGetInstance()
+    pnInstance.unsubscribe({ channels: [currentChannel.value] })
+  }
+  if (val) {
+    const pnInstance = configStore.pnGetInstance()
+    currentChannel.value = `ch-portal-msg-${val.facilityID}-${val.patientID}`
+    pnInstance.subscribe({ channels: [currentChannel.value] })
+    pubNubMsg.value.channel = currentChannel.value
+    pubNubMsg.value.msg = configStore.pnGetMessage(
+      currentChannel.value,
+      newPubnubMsg
+    )
+  }
+})
+
+const selectPatient = (patient) => {
+  profileStore.setCurrentPatient(patient)
+}
+
+const logout = () => {
+  authStore.logout()
+}
+
+// This was previously unused, now removed
+// const showHeader = computed(() => {
+//   switch (currentRouteName.value) {
+//     case 'landing':
+//     case 'account':
+//     case 'createaccount':
+//     case 'task':
+//       return false
+//     default:
+//       return true
+//   }
+// })
+
+const showMobileMenu = computed(() => {
+  switch (route.path.toLowerCase()) {
+    case '/account/create':
+    case '/account/landing':
+    case '/account/login':
+    case '/account/requestpin':
+    case '/account/forgotpassword':
+    case '/account/forgotusername':
+    case '/task':
+      return false
+    default:
+      return true
+  }
+})
+
+const showTaskOfficeName = computed(() => {
+  if (route.path.toLowerCase() !== '/task') {
+    return false
+  }
+  if (authStore.isAuthenticated) {
+    return false
+  }
+  return true
+})
+
+// Renamed from isAuth to more clearly indicate its purpose
+const isAuthenticated = computed(() => authStore.isAuthenticated)
+
+const showFooterMenu = computed(() => {
+  switch (route.path.toLowerCase()) {
+    case '/task':
+      return false
+    default:
+      return true
+  }
+})
+
+// Log version info on startup
+console.info('%c Patient Portal v' + version.value, 'background:green')
 </script>
+
 <style scoped>
 .fade-enter {
   opacity: 0;
@@ -438,18 +392,18 @@ html.header-dark .header .separator {
 }
 
 @media (min-width: 424px) and (max-width: 448px) {
-.office-name-m {
-  font-size: 1.4rem;
-}
+  .office-name-m {
+    font-size: 1.4rem;
+  }
 }
 @media (min-width: 399px) and (max-width: 423px) {
-.office-name-m {
-  font-size: 1.3rem;
-}
+  .office-name-m {
+    font-size: 1.3rem;
+  }
 }
 @media (min-width: 374px) and (max-width: 398px) {
-.office-name-m {
-  font-size: 1.2rem;
-}
+  .office-name-m {
+    font-size: 1.2rem;
+  }
 }
 </style>

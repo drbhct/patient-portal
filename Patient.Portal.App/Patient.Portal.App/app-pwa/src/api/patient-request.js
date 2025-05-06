@@ -19,7 +19,7 @@ const securedJsonRequest = axios.create({
 })
 
 securedJsonRequest.interceptors.request.use(
-  config => {
+  (config) => {
     // const token = localStorage.getItem('config')
     const token = sessionStorage.getItem('config')
     if (token) {
@@ -27,14 +27,14 @@ securedJsonRequest.interceptors.request.use(
     }
     return config
   },
-  error => {
+  (error) => {
     return Promise.reject(error)
   }
 )
 
 securedJsonRequest.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     // whatever you want to do with the error
     console.log('intercep error', error)
     if (error.response) {

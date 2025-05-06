@@ -13,7 +13,7 @@ const securedJsonRequest = axios.create({
 })
 
 securedJsonRequest.interceptors.request.use(
-  config => {
+  (config) => {
     // const token = localStorage.getItem('config')
     const token = sessionStorage.getItem('config')
     if (token) {
@@ -21,14 +21,14 @@ securedJsonRequest.interceptors.request.use(
     }
     return config
   },
-  error => {
+  (error) => {
     return Promise.reject(error)
   }
 )
 
 securedJsonRequest.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     // whatever you want to do with the error
     console.log('intercep error', error)
     if (error.response) {
@@ -73,9 +73,9 @@ export default {
      * @param {String} payload.patientId
      * @param {Boolean} payload.includeArchived
      */
-    async getMessageList (payload) {
+    async getMessageList(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/GetMessageList',
+        '/patientportal/getmessagelist',
         payload
       )
     },
@@ -85,9 +85,9 @@ export default {
      * @param {String} payload.facilityId
      * @param {String} payload.id message id
      */
-    async setMessageAsRead (payload) {
+    async setMessageAsRead(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/UpdateMessageRead',
+        '/patientportal/setmessageasread',
         payload
       )
     },
@@ -98,9 +98,9 @@ export default {
      * @param {String} payload.patiendId
      * @param {String} payload.parentId
      */
-    async getMessageThread (payload) {
+    async getMessageThread(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/GetMessageThread',
+        '/patientportal/getmessagethread',
         payload
       )
     },
@@ -112,9 +112,9 @@ export default {
      * @param {String} payload.parentId
      * @param {String} payload.message
      */
-    async insertMessageReply (payload) {
+    async insertMessageReply(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/InsertMessageReply',
+        '/patientportal/insertmessagereply',
         payload
       )
     },
@@ -124,7 +124,7 @@ export default {
      * @param {String} payload.facilityId
      * @param {String} payload.id
      */
-    async archiveMessage (payload) {
+    async archiveMessage(payload) {
       return await securedJsonRequest.post(
         '/patientportal/archivemessage',
         payload
@@ -136,7 +136,7 @@ export default {
      * @param {String} payload.facilityId
      * @param {String} payload.patientId
      */
-    async getArchivedMessageCount (payload) {
+    async getArchivedMessageCount(payload) {
       return await securedJsonRequest.post(
         '/patientportal/getarchivedmessagecount',
         payload
@@ -150,7 +150,7 @@ export default {
      * @param {String} payload.subject
      * @param {String} payload.message
      */
-    async insertMessage (payload) {
+    async insertMessage(payload) {
       return await securedJsonRequest.post(
         '/patientportal/insertmessage',
         payload
@@ -162,9 +162,9 @@ export default {
      * @param {String} payload.facilityId
      * @param {String} payload.patiendId
      */
-    async getUnReadMessageCount (payload) {
+    async getUnReadMessageCount(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/getunreadmessagecount ',
+        '/patientportal/getunreadmessagecount',
         payload
       )
     },
@@ -175,9 +175,9 @@ export default {
      * @param {String} payload.id
      * @param {Boolean} payload.read
      */
-    async updateMessageRead (payload) {
+    async updateMessageRead(payload) {
       return await securedJsonRequest.post(
-        '/patientportal/updatemessageread ',
+        '/patientportal/updatemessageread',
         payload
       )
     }

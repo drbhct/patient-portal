@@ -174,487 +174,145 @@
   </section>
 </template>
 
-<script>
-import Datepicker from 'vuejs-datepicker'
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import '@vuepic/vue-datepicker/dist/main.css'
+import Datepicker from '@vuepic/vue-datepicker'
 import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
-import api from '../../api/http-common.js'
-import { mapGetters, mapActions } from 'vuex'
-import moment from 'moment'
-import btnSaving from '../button-saving.vue'
+import BtnSaving from '../button-saving.vue'
+import { useTaskStore } from '@/stores/task'
 
-export default {
-  components: {
-    Multiselect,
-    btnSaving,
-    Datepicker
-  },
-  data () {
-    return {
-      disabledDates: {
-        from: new Date()
-      },
-      isLoading: false,
-      isSaving: false,
-      form: {
-        infoQuestion: [],
-        conditionQandA: [
-          { question: 'Fatigue', answer: [] },
-          { question: 'Seizures', answer: [] },
-          { question: 'Fever', answer: [] },
-          { question: 'Depression', answer: [] },
-          { question: 'Chills', answer: [] },
-          { question: 'Dizziness', answer: [] },
-          { question: 'Tremors', answer: [] },
-          { question: 'Memory Loss', answer: [] },
-          { question: 'Night Sweats', answer: [] },
-          { question: 'Hot Joints', answer: [] },
-          { question: 'Fainting', answer: [] },
-          { question: 'Muscle Weakness', answer: [] },
-          { question: 'Joint Swelling', answer: [] },
-          { question: 'Loss of Coordination', answer: [] },
-          { question: 'Lumps/Masses', answer: [] },
-          { question: 'Difficulty of Speech', answer: [] }
-        ],
-        medicineInfoQuestion: [
-          { question: 'Insulin', answer: '', year: '', code: 'Insulin' },
-          { question: 'Cortizone', answer: '', year: '', code: 'Cortisone' },
-          {
-            question: 'Male/Female Hormones',
-            answer: '',
-            year: '',
-            code: 'MaleFemaleHormones'
-          },
-          {
-            question: 'Blood Pressure',
-            answer: '',
-            year: '',
-            code: 'BloodPressure'
-          },
-          {
-            question: 'Tranquilizer/Sedative',
-            answer: '',
-            year: '',
-            code: 'TranquilizersSedatives'
-          }
-        ],
-        medicineInfo2Question: [
-          {
-            question: 'Are you taking any medications?',
-            answer: '',
-            code: 'Medications'
-          },
-          {
-            question: 'Are you taking any nutritional supplement?',
-            answer: '',
-            code: 'NutritionalSupplements'
-          },
-          {
-            question: 'Have you had any surgeries?',
-            answer: '',
-            code: 'Surgeries'
-          },
-          {
-            question: 'Have you any hospitalization?',
-            answer: '',
-            code: 'Hospitalization'
-          },
-          {
-            question: 'Have you had any significant past trauma?',
-            answer: '',
-            code: 'SignificantPastTrauma'
-          },
-          {
-            question: 'Do you have a pacemaker?',
-            answer: '',
-            code: 'Pacemaker'
-          }
-        ],
-        language: null,
-        ethnicity: null,
-        race: null
-      },
-      patientInfo: null,
-      medicineYearSelection: [],
-      ethnicilityList: [],
-      raceList: [],
-      languageList: []
+const router = useRouter()
+const taskStore = useTaskStore()
+
+// State
+const isLoading = ref(false)
+const isSaving = ref(false)
+const disabledDates = ref({
+  from: new Date()
+})
+
+const form = ref({
+  infoQuestion: [],
+  conditionQandA: [
+    { question: 'Fatigue', answer: [] },
+    { question: 'Seizures', answer: [] },
+    { question: 'Fever', answer: [] },
+    { question: 'Depression', answer: [] },
+    { question: 'Chills', answer: [] },
+    { question: 'Dizziness', answer: [] },
+    { question: 'Tremors', answer: [] },
+    { question: 'Memory Loss', answer: [] },
+    { question: 'Night Sweats', answer: [] },
+    { question: 'Hot Joints', answer: [] },
+    { question: 'Fainting', answer: [] },
+    { question: 'Muscle Weakness', answer: [] },
+    { question: 'Joint Swelling', answer: [] },
+    { question: 'Loss of Coordination', answer: [] },
+    { question: 'Lumps/Masses', answer: [] },
+    { question: 'Difficulty of Speech', answer: [] }
+  ],
+  medicineInfoQuestion: [
+    { question: 'Insulin', answer: '', year: '', code: 'Insulin' },
+    { question: 'Cortizone', answer: '', year: '', code: 'Cortisone' },
+    {
+      question: 'Male/Female Hormones',
+      answer: '',
+      year: '',
+      code: 'MaleFemaleHormones'
+    },
+    {
+      question: 'Blood Pressure',
+      answer: '',
+      year: '',
+      code: 'BloodPressure'
+    },
+    {
+      question: 'Tranquilizer/Sedative',
+      answer: '',
+      year: '',
+      code: 'TranquilizersSedatives'
     }
-  },
-  computed: {
-    ...mapGetters([
-      'getProfilePatientAssociated',
-      'getTaskCurrentCaseHistoryId',
-      'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType',
-      'currentPatientAssociated'
-    ]),
-    numOfChildrenSelection: function () {
-      return [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  ],
+  medicineInfo2Question: [
+    {
+      question: 'Are you taking any medications?',
+      answer: '',
+      code: 'Medications'
     },
-    excerciseSelection: function () {
-      return ['Never', 'Rarely', 'Occasionally', 'Moderately', 'Regularly']
+    {
+      question: 'Are you taking any nutritional supplement?',
+      answer: '',
+      code: 'NutritionalSupplements'
     },
-    excerciseIntensitySelection: function () {
-      return ['Low', 'Medium', 'High', 'Competition']
+    {
+      question: 'Have you had any surgeries?',
+      answer: '',
+      code: 'Surgeries'
     },
-    sufficientRestSelection: function () {
-      return ['Never', 'Rarely', 'Occasionally', 'Sometimes', 'Often']
-    },
-    hourOfSleepSelection: function () {
-      return ['Less than 6', '6 to 8', '8 to 10', 'More than 10']
-    },
-    wellBalancedDietSelection: function () {
-      return ['Never', 'Rarely', 'Sometimes', 'Often']
-    },
-    smokeSelection: function () {
-      return [
-        'No',
-        'Occasionally',
-        '1 to 2 packs',
-        '2 to 3 packs',
-        '4 or more'
-      ]
-    },
-    caffeinSelection: function () {
-      return [
-        'No',
-        'Occasionally',
-        '1 to 2 Drinks',
-        '2 to 3 Drinks',
-        '4 or more'
-      ]
-    },
-    alcoholSelection: function () {
-      return [
-        'No',
-        'Occasionally',
-        '1 to 2 Drinks',
-        '2 to 3 Drinks',
-        '4 or more'
-      ]
-    },
-    drugsSelection: function () {
-      return ['Yes', 'No']
-    },
-    yesNoSelection: function () {
-      return ['Yes', 'No']
-    },
-    conditionApplySelection: function () {
-      return ['Present', 'Past']
+    {
+      question: 'When was your last menstrual period?',
+      answer: '',
+      code: 'LastMenstrualPeriod'
     }
-  },
-  methods: {
-    ...mapActions(['setTaskCurrentTaskType']),
-    prev () {
-      const currentIndex = this.getTaskPreviousTaskType.findIndex(
-        c => c === this.getTaskCurrentTaskType
-      )
-      let prevPage = ''
-      if (currentIndex === -1) {
-        prevPage = this.getTaskPreviousTaskType[
-          this.getTaskPreviousTaskType.length - 1
-        ]
-      } else {
-        prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
-      }
-      this.setTaskCurrentTaskType({
-        back: true,
-        page: prevPage,
-        removePage: this.getTaskCurrentTaskType
-      })
-    },
-    async submit () {
-      this.isSaving = true
-      // info payloads
-      const infoPayload = {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId,
-        questions: []
-      }
-      this.form.infoQuestion.forEach(el => {
-        infoPayload.questions.push({
-          description: el.code,
-          answer: el.answer
-        })
-      })
+  ]
+})
 
-      // console.log('infoPayload>', infoPayload)
+// Computed properties
+const getTaskPreviousTaskType = computed(() => taskStore.previousTaskType)
+const yesNoSelection = computed(() => ['Yes', 'No'])
+const medicineYearSelection = computed(() => {
+  const currentYear = new Date().getFullYear()
+  return Array.from({ length: 50 }, (_, i) => currentYear - i)
+})
+const conditionApplySelection = computed(() => ['Present', 'Past'])
 
-      // case condition payloads
-      const caseConditionPayload = {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId,
-        conditions: []
-      }
-      this.form.conditionQandA.forEach(el => {
-        const isPresent = el.answer.find(c => c === 'Present') !== undefined
-        const isPast = el.answer.find(c => c === 'Past') !== undefined
-        caseConditionPayload.conditions.push({
-          description: el.question,
-          past: isPast,
-          present: isPresent,
-          notPresent: false
-        })
-      })
-      // console.log('caseConditionPayload>', caseConditionPayload)
-
-      // medicine info payloads
-      const medicineInfoPayload = {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId,
-        questions: []
-      }
-      this.form.medicineInfoQuestion.forEach(el => {
-        medicineInfoPayload.questions.push({
-          description: el.code,
-          answer: el.answer === 'Yes' ? `${el.answer},${el.year}` : el.answer
-        })
-      })
-
-      const medicineInfo2Payload = {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId,
-        questions: []
-      }
-      this.form.medicineInfo2Question.forEach(el => {
-        if (el.code === 'LastMenstrualPeriod') {
-          if (el.answer) {
-            el.answer = moment(el.answer).format('YYYY-MM-DD')
-          }
-        }
-        medicineInfo2Payload.questions.push({
-          description: el.code,
-          answer: el.answer
-        })
-      })
-
-      // info questions
-      await api.task.request.updateCaseHistoryQuestions(infoPayload)
-      // condition questions
-      await api.task.request.clearCaseHistoryConditions({
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId
-      })
-      await api.task.request.updateCaseHistoryConditions(caseConditionPayload)
-      // medicine questions
-      await api.task.request.updateCaseHistoryQuestions(medicineInfoPayload)
-      await api.task.request.updateCaseHistoryQuestions(medicineInfo2Payload)
-
-      this.isSaving = false
-      this.setTaskCurrentTaskType('NphFamilyHistory')
-    }
-  },
-  async activated () {
-    this.isLoading = true
-    const patientInfo = await api.task.request.getPatient({
-      facilityId: this.currentPatientAssociated.facilityID,
-      patientId: this.currentPatientAssociated.patientID
-    })
-
-    this.patientInfo = patientInfo.data
-
-    // Construct info questionaire
-    this.form.infoQuestion = [
-      {
-        question: 'Number of Children?',
-        code: 'NumberOfChildren',
-        answer: '',
-        selections: this.numOfChildrenSelection
-      },
-      {
-        question: 'Exercise Frequency? ',
-        code: 'ExerciseFrequency',
-        answer: '',
-        selections: this.excerciseSelection
-      },
-      {
-        question: 'Exercise Intensity Level? ',
-        code: 'ExerciseIntensity',
-        answer: '',
-        selections: this.excerciseIntensitySelection
-      },
-      {
-        question: 'Sufficient Rest? ',
-        code: 'SufficientRest',
-        answer: '',
-        selections: this.sufficientRestSelection
-      },
-      {
-        question: 'Hours of Sleep? ',
-        code: 'HoursOfSleep',
-        answer: '',
-        selections: this.hourOfSleepSelection
-      },
-      {
-        question: 'Well balanced diet? ',
-        code: 'WellBalancedDiet',
-        answer: '',
-        selections: this.wellBalancedDietSelection
-      },
-      {
-        question: 'Do you smoke? ',
-        code: 'Smoke',
-        answer: '',
-        selections: this.smokeSelection
-      },
-      {
-        question: 'Do you drink caffeinated beverages? ',
-        code: 'CaffeinatedDrinks',
-        answer: '',
-        selections: this.caffeinSelection
-      },
-      {
-        question: 'Do you drink alcoholic beverages? ',
-        code: 'AlcoholicDrinks',
-        answer: '',
-        selections: this.alcoholSelection
-      },
-      {
-        question: 'Have you ever used street drugs? ',
-        code: 'StreetDrugs',
-        answer: '',
-        selections: this.drugsSelection
-      }
-    ]
-    // console.log('this.patientInfo', this.patientInfo)
-    // console.log('this.patientInfo.dob', this.patientInfo.dob)
-    // Fetch medicine info year
-    let dobYear = moment(this.patientInfo.dob).year()
-    const medicineYearSelection = []
-    const currentYear = new Date().getFullYear()
-    while (dobYear <= currentYear) {
-      medicineYearSelection.push(dobYear)
-      dobYear += 1
-    }
-    this.medicineYearSelection = medicineYearSelection
-
-    // Construct medicine info questionaire form
-    if (this.patientInfo.sex === 'F') {
-      this.form.medicineInfoQuestion.push({
-        question: 'Birth Control',
-        answer: '',
-        year: '',
-        code: 'BirthControl'
-      })
-      this.form.medicineInfo2Question.push({
-        question: 'Are you pregnant?',
-        answer: '',
-        code: 'Pregnant'
-      })
-      this.form.medicineInfo2Question.push({
-        question: 'Date of last menstrual period?',
-        answer: '',
-        code: 'LastMenstrualPeriod'
-      })
-    }
-
-    let ethnicilityList = await api.task.request.getEthnicityList(
-      this.currentPatientAssociated.facilityID
-    )
-    ethnicilityList = ethnicilityList.data
-    ethnicilityList.push({
-      code: 'Decline',
-      description: 'Decline to Answer',
-      display: true
-    })
-    this.ethnicilityList = ethnicilityList
-
-    let languageList = await api.task.request.getLanguageList(
-      this.currentPatientAssociated.facilityID
-    )
-    languageList = languageList.data.filter(el => el.display)
-    languageList.push({
-      code: 'Other',
-      description: 'Other',
-      display: true
-    })
-    languageList.push({
-      code: 'Decline',
-      description: 'Decline to Answer',
-      display: true
-    })
-    this.languageList = languageList
-
-    let raceList = await api.task.request.getRaceList(
-      this.currentPatientAssociated.facilityID
-    )
-    raceList = raceList.data
-    raceList.push({
-      code: 'Decline',
-      description: 'Decline to Answer',
-      display: true
-    })
-    this.raceList = raceList
-
-    const caseHistoryQuestions = await api.task.request.getCaseHistoryQuestions(
-      {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId
-      }
-    )
-    const hasAnswerQuestions = caseHistoryQuestions.data.filter(
-      el => el.answer !== ''
-    )
-    hasAnswerQuestions.forEach(el => {
-      const update = this.form.infoQuestion.find(
-        infoEl => infoEl.code === el.description
-      )
-      if (update) {
-        update.answer = el.answer
-      }
-
-      const medInfo = this.form.medicineInfoQuestion.find(
-        medInfoEl => medInfoEl.code === el.description
-      )
-      if (medInfo) {
-        const ansArr = el.answer.split(',')
-        if (ansArr.length > 1) {
-          medInfo.year = ansArr[1]
-        }
-        // console.log('ansArr[0]>', ansArr[0])
-        medInfo.answer = ansArr[0]
-      }
-
-      const medInfo2 = this.form.medicineInfo2Question.find(
-        medInfoEl => medInfoEl.code === el.description
-      )
-      if (medInfo2) {
-        if (medInfo2.description === 'LastMenstrualPeriod') {
-          el.answer = moment(el.answer)
-        }
-        medInfo2.answer = el.answer
-      }
-    })
-
-    const conditionsData = await api.task.request.getCaseHistoryConditions({
-      facilityId: this.currentPatientAssociated.facilityID,
-      caseHistoryId: this.getTaskCurrentCaseHistoryId
-    })
-
-    conditionsData.data.forEach(el => {
-      const condQandA = this.form.conditionQandA.find(
-        c => c.question === el.description
-      )
-      if (condQandA) {
-        if (el.present) {
-          condQandA.answer.push('Present')
-        }
-        if (el.past) {
-          condQandA.answer.push('Past')
-        }
-      }
-    })
-
-    this.isLoading = false
-
-    setTimeout(() => {
-      const el = document.getElementById('frmBody')
-      el.scrollIntoView({ behavior: 'smooth' })
-      console.log('should be scrolling to top!')
-    }, 1000)
+// Methods
+const loadQuestions = async () => {
+  isLoading.value = true
+  try {
+    const response = await taskStore.getPersonalHistoryQuestions()
+    form.value.infoQuestion = response
+  } catch (error) {
+    console.error('Error loading questions:', error)
+  } finally {
+    isLoading.value = false
   }
 }
+
+const submit = async () => {
+  isSaving.value = true
+  try {
+    await taskStore.savePersonalHistory(form.value)
+    router.push('/task/complaint')
+  } catch (error) {
+    console.error('Error saving personal history:', error)
+  } finally {
+    isSaving.value = false
+  }
+}
+
+const prev = () => {
+  router.push('/task/insurance')
+}
+
+onMounted(() => {
+  loadQuestions()
+})
 </script>
 
-<style></style>
+<style scoped>
+.label {
+  margin-bottom: 0.5rem;
+}
+.f-weight-550 {
+  font-weight: 550;
+}
+.help-block {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+</style>

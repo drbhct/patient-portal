@@ -8,23 +8,28 @@
 import Default from '../components/billing/BillingDefault.vue'
 import MakePayment from '../components/billing/MakePayment.vue'
 import MakePaymentSuccess from '../components/billing/MakePaymentSuccess.vue'
-import { mapGetters, mapActions } from 'vuex'
+import { useBillingStore } from '@/stores/billing'
 
 export default {
+  name: 'BillingView',
   components: {
     Default,
     MakePayment,
     MakePaymentSuccess
   },
   computed: {
-    ...mapGetters(['getBillingCurrentPage'])
+    billingStore() {
+      return useBillingStore()
+    }
   },
   methods: {
-    ...mapActions(['setBillingCurrentPage'])
+    billingStore: {
+      setCurrentPage(page) {
+        // Implementation of setCurrentPage method
+      }
+    }
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

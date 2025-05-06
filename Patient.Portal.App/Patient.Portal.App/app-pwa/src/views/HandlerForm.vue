@@ -11,7 +11,7 @@ export default {
     HandlerForm
   },
   computed: {
-    FormTitle () {
+    FormTitle() {
       const queryData = this.$route.query
       return queryData.t
     }

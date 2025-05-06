@@ -31,7 +31,7 @@
                         <i
                           :class="{
                             'far fa-eye': !showPassword,
-                            'far fa-eye-slash': showPassword,
+                            'far fa-eye-slash': showPassword
                           }"
                         ></i>
                       </span>
@@ -74,7 +74,7 @@
                         <i
                           :class="{
                             'far fa-eye': !showConfirmPassword,
-                            'far fa-eye-slash': showConfirmPassword,
+                            'far fa-eye-slash': showConfirmPassword
                           }"
                         ></i>
                       </span>
@@ -107,13 +107,20 @@
 </template>
 
 <script>
-import api from '../../api/http-common.js'
 import BtnSaving from '../../components/button-saving.vue'
+import { useAuthStore } from '@/stores/auth'
+
 export default {
   components: {
     BtnSaving
   },
-  data () {
+  setup() {
+    const authStore = useAuthStore()
+    return {
+      authStore
+    }
+  },
+  data() {
     return {
       linkInfo: null,
       isSaving: false,
@@ -133,12 +140,12 @@ export default {
     }
   },
   computed: {
-    key () {
+    key() {
       return this.$route.query.key
     }
   },
   methods: {
-    checkPassword () {
+    checkPassword() {
       this.password_length = this.form.password.length
       const format = /[ !@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/
 
@@ -163,103 +170,28 @@ export default {
         this.valid_password = false
       }
     },
-    async submit () {
-      if (!this.valid_password) {
-        let error = ''
-        if (!this.contains_eight_characters) {
-          error = 'Password should have a minimum length of 8 characters.'
-        }
-        if (!this.contains_number) {
-          error = 'Password should contain at least 1 number.'
-        }
-        if (!this.contains_uppercase) {
-          error = 'Password should contain at least 1 upper case.'
-        }
-        if (!this.contains_special_character) {
-          error = 'Password should contain at least 1 special character.'
-        }
-        this.$swal({
-          position: 'top',
-          title: 'Password error',
-          text: error,
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
-        return
-      }
-
-      if (this.form.password !== this.form.confirmPassword) {
-        this.$swal({
-          position: 'top',
-          title: 'Password error',
-          text: 'Confirm password doest not match.',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
-        return
-      }
-
-      const payload = {
-        id: this.task.userID,
-        pwd: this.form.password
-      }
-
+    async submit() {
       try {
-        const response = await api.auth.request.updateUserPwd(payload)
-
-        if (!response.data) {
-          this.$swal({
-            position: 'top',
-            title: 'Password update failed.',
-            text: 'Unable to update the user password. Please try again.',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-          return
-        }
-
-        this.$swal({
-          position: 'top',
-          title: 'Password update successful.',
-          text: 'Successfully updated the password. Redirecting now to login.',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 5000,
-          icon: 'success'
+        await this.authStore.resetPassword({
+          key: this.key,
+          password: this.form.password
         })
-
-        await this.$router.push({ path: '/account/login' })
-      } catch (ex) {
-        this.$swal({
-          position: 'top',
-          title: 'Exception Error',
-          text: 'Error has occured while updating password.',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
+        this.$toast.success('Password reset successfully')
+        this.$router.push('/account/login')
+      } catch (error) {
+        console.error('Error resetting password:', error)
+        this.$toast.error('Failed to reset password')
       }
     }
   },
-  async mounted () {
-    const resp = await api.auth.request.getLink(this.key)
-    this.linkInfo = resp.data
-    if (!this.linkInfo) {
-      setTimeout(() => {
-        this.$router.push({ path: '/account/login' })
-      }, 5000)
+  async mounted() {
+    try {
+      await this.authStore.validateResetKey(this.key)
+    } catch (error) {
+      console.error('Error validating reset key:', error)
+      this.$toast.error('Invalid or expired reset link')
+      this.$router.push('/account/login')
     }
-    const response = await api.task.request.getSpecificTask(
-      this.linkInfo.taskID
-    )
-    this.task = response.data
   }
 }
 </script>

@@ -3,12 +3,24 @@
     <section role="main" class="content-body">
       <header class="card-header text-center">
         <div class="d-none d-sm-block">
-          <h3 v-if="currentPatientAssociated">{{ currentPatientAssociated.firstName }} {{
-            currentPatientAssociated.lastName }}</h3>
+          <h3 v-if="currentPatientAssociated">
+            {{ currentPatientAssociated.firstName }}
+            {{ currentPatientAssociated.lastName }}
+          </h3>
         </div>
         <div class="pb-3 d-lg-none d-md-none d-sm-none">
-          <select id="patient-sel" v-model="selectedPatient" @change="selectPatient()" class="form-control">
-            <option v-for="patient in getProfilePatientAssociated" :value="patient" :key="patient.id">
+          <select
+            id="patient-sel"
+            v-model="selectedPatient"
+            @change="selectPatient"
+            class="form-control"
+            v-if="getProfilePatientAssociated && getProfilePatientAssociated.length > 0"
+          >
+            <option
+              v-for="patient in getProfilePatientAssociated"
+              :value="patient"
+              :key="patient.id"
+            >
               {{ patient.firstName }} {{ patient.lastName }}
             </option>
           </select>
@@ -27,13 +39,21 @@
 
       <div class="container d-lg-flex d-md-flex pt-4">
         <div class="col-12 col-md-6 col-lg-6 col-xl-6">
-          <dash-task v-if="getProfilePatientAssociated.length > 0"></dash-task>
-          <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
-          <dash-appointments v-if="getProfilePatientAssociated.length>0"></dash-appointments>
+          <dash-task v-if="getProfilePatientAssociated && getProfilePatientAssociated.length > 0"></dash-task>
+          <img
+            class="dash-divider"
+            src="/img/line-divider-transparent-1_edited.png"
+          />
+          <dash-appointments
+            v-if="getProfilePatientAssociated && getProfilePatientAssociated.length > 0"
+          ></dash-appointments>
         </div>
         <div class="col-12 col-md-6 col-lg-6 col-xl-6 offset-lg-2 offset-xl-2">
           <div class="d-block d-sm-none">
-            <img class="dash-divider" src="img/line-divider-transparent-1_edited.png" />
+            <img
+              class="dash-divider"
+              src="/img/line-divider-transparent-1_edited.png"
+            />
           </div>
           <!-- <div class="col-12 d-none d-sm-block">
             <button type="button" class="mb-1 mt-1 mr-1 btn btn-new">MAKE NEW APPOINTMENT</button>
@@ -49,59 +69,87 @@
 </template>
 
 <script>
+import { ref, computed, onMounted } from 'vue'
 import DashTask from '@/components/dashboard/dash-task.vue'
 import DashAppointments from '@/components/dashboard/dash-appointments.vue'
 import DashWelcome from '@/components/dashboard/dash-welcome.vue'
 import DashMenu from '@/components/dashboard/dash-menu.vue'
-import { mapGetters, mapActions } from 'vuex'
-// eslint-disable-next-line no-unused-vars
+import { useAuthStore } from '@/stores/auth'
+import { useProfileStore } from '@/stores/profile'
+import { useConfigStore } from '@/stores/config'
+import { useMessageStore } from '@/stores/message'
+import { useRouter } from 'vue-router'
 import api from '../api/http-common.js'
+
 export default {
-  name: 'Dashboard',
+  name: 'DashboardLayout',
   components: {
     DashTask,
     DashAppointments,
     DashWelcome,
     DashMenu
   },
-  data() {
-    return {
-      selectedPatient: null
-    }
-  },
-  computed: {
-    ...mapGetters(['getProfileAuthInfo', 'getProfilePatientAssociated', 'currentPatientAssociated'])
-  },
-  methods: {
-    ...mapActions(['setProfilePatientAssociated', 'setProfileCurrentPatient', 'setIsLoading']),
-    async selectPatient() {
-      if (this.selectedPatient) {
+  setup() {
+    const router = useRouter()
+    const authStore = useAuthStore()
+    const profileStore = useProfileStore()
+    const configStore = useConfigStore()
+    const messageStore = useMessageStore()
+
+    const selectedPatient = ref(null)
+
+    const currentPatientAssociated = computed(
+      () => profileStore.currentPatientAssociated
+    )
+    const getProfileCurrentPage = computed(() => profileStore.currentPage)
+    const getMsgCurrentPage = computed(() => messageStore.currentPage)
+    const getCurrentMsgInfo = computed(() => messageStore.currentMsgInfo)
+    const getProfileAuthInfo = computed(() => profileStore.getProfileAuthInfo)
+    const getProfilePatientAssociated = computed(
+      () => profileStore.getProfilePatientAssociated
+    )
+
+    async function selectPatient() {
+      if (selectedPatient.value) {
         console.log('selectPatient triggered')
-        const me = this
-        this.setIsLoading(true)
-        await this.setProfileCurrentPatient(this.selectedPatient)
+        configStore.setIsLoading(true)
+        await profileStore.setCurrentPatient(selectedPatient.value)
         setTimeout(function () {
-          me.setIsLoading(false)
-          if (me.$route.path !== '/') {
-            me.$router.push('/')
+          configStore.setIsLoading(false)
+          if (router.currentRoute.value.path !== '/') {
+            router.push('/')
           } else {
-            me.$router.go(0)
+            router.go(0)
           }
         }, 500)
       }
     }
-  },
-  async mounted() {
-    const patientAssosicated = await api.auth.request.getUserPatient(this.getProfileAuthInfo.id)
-    this.setProfilePatientAssociated(patientAssosicated.data)
-    this.selectedPatient = this.currentPatientAssociated
-    // // TODO: Set pubnub subcription on home page.
-    // if(this.currentPatientAssociated){
-    //   let channel = `ch-portal-msg-${}-${}`
-    //   // this.$pnSubsribe({})
-    // }else{
 
-    // }
+    onMounted(async () => {
+      // Add null check for getProfileAuthInfo.value
+      if (getProfileAuthInfo.value && getProfileAuthInfo.value.id) {
+        try {
+          const patientAssosicated = await api.auth.request.getUserPatient(
+            getProfileAuthInfo.value.id
+          )
+          profileStore.setProfilePatientAssociated(patientAssosicated.data)
+          selectedPatient.value = currentPatientAssociated.value
+        } catch (error) {
+          console.error('Error fetching patient data:', error)
+        }
+      }
+    })
+
+    return {
+      selectedPatient,
+      currentPatientAssociated,
+      getProfileCurrentPage,
+      getMsgCurrentPage,
+      getCurrentMsgInfo,
+      getProfileAuthInfo,
+      getProfilePatientAssociated,
+      selectPatient
+    }
   }
 }
 </script>

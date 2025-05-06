@@ -28,14 +28,24 @@
               </div>
               <div class="form-group">
                 <div class="form-check">
-                  <input type="checkbox" class="form-check-input" v-model="confirmLink" />
-                  <label class="form-check-label">Confirm link patient to account</label>
+                  <input
+                    type="checkbox"
+                    class="form-check-input"
+                    v-model="confirmLink"
+                  />
+                  <label class="form-check-label"
+                    >Confirm link patient to account</label
+                  >
                 </div>
               </div>
             </div>
             <div class="modal-footer">
               <button type="submit" class="btn btn-primary">Submit</button>
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+              >
                 Close
               </button>
             </div>
@@ -50,14 +60,26 @@
           <div class="modal-content">
             <div class="modal-header">
               <h5 class="modal-title label">Multiple Patients</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <label class="label f-weight-550">Select the patient record you would like to manage</label>
-              <button type="button" class="mb-1 mt-1 mr-1 btn btn-default btn-lg btn-block"
-                v-for="patient in patientList" :key="patient.id" @click="patientSelect(patient)">
+              <label class="label f-weight-550"
+                >Select the patient record you would like to manage</label
+              >
+              <button
+                type="button"
+                class="mb-1 mt-1 mr-1 btn btn-default btn-lg btn-block"
+                v-for="patient in patientList"
+                :key="patient.id"
+                @click="patientSelect(patient)"
+              >
                 {{ patient.firstName }} {{ patient.lastName }}
                 <h6>
                   {{ patient.officeName }}
@@ -103,17 +125,31 @@
               <!-- to error: add class "has-danger" -->
               <div class="form-group">
                 <label class="label f-weight-550">Email Address</label>
-                <input type="email" class="form-control form-control-sm" required v-model="loginForm.userName" />
+                <input
+                  type="email"
+                  class="form-control form-control-sm"
+                  required
+                  v-model="loginForm.userName"
+                />
               </div>
               <div class="form-group mb-4">
                 <label class="label f-weight-550">Password</label>
                 <!-- <a href="#" style="float:right;font-size:12px;">Forgot password?</a> -->
-                <input type="password" class="form-control form-control-sm" required v-model="loginForm.password" />
+                <input
+                  type="password"
+                  class="form-control form-control-sm"
+                  required
+                  v-model="loginForm.password"
+                />
               </div>
-              <btn-saving :is-saving="isSaving" :loading-text="'Validating...'" :display-text="'Login'" />
-              <!-- <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">
+              <!-- <btn-saving
+                :is-saving="isSaving"
+                :loading-text="'Validating...'"
+                :display-text="'Login'"
+              /> -->
+              <button type="submit" class="mb-1 mt-1 mr-5 btn btn-primary">
                 Login
-              </button> -->
+              </button>
               <router-link to="/account/forgotpassword" class="ml-3">
                 Need help logging in?
               </router-link>
@@ -131,11 +167,33 @@
 <script>
 import '../../assets/FormLayout.css'
 import api from '../../api/http-common.js'
-import { mapGetters, mapActions } from 'vuex'
 import BtnSaving from '../../components/button-saving.vue'
+import { useProfileStore } from '@/stores/profile'
+import { useTaskStore } from '@/stores/task'
+import { useConfigStore } from '@/stores/config'
+import { storeToRefs } from 'pinia'
+
 export default {
+  name: 'LandingPage',
   components: {
     BtnSaving
+  },
+  setup() {
+    const profileStore = useProfileStore()
+    const taskStore = useTaskStore()
+    const configStore = useConfigStore()
+
+    const { currentPatientAssociated } = storeToRefs(profileStore)
+    const { getUrlLinkInfo, getTaskInfo } = storeToRefs(taskStore)
+
+    return {
+      profileStore,
+      taskStore,
+      configStore,
+      currentPatientAssociated,
+      getUrlLinkInfo,
+      getTaskInfo
+    }
   },
   data() {
     return {
@@ -152,22 +210,19 @@ export default {
       confirmLink: false
     }
   },
-  computed: {
-    ...mapGetters(['currentPatientAssociated', 'getUrlLinkInfo', 'getTaskInfo'])
-  },
   methods: {
-    ...mapActions([
-      'setIsLoading',
-      'setProfileAuthInfo',
-      'setProfilePatientAssociated',
-      'setProfileCurrentPatient',
-      'setTaskCurrentTaskType',
-      'setMsgCurrentPage',
-      'setCurrentMsgInfo',
-      'setBillingStatementTask',
-      'setTaskInfo',
-      'setTaskItem'
-    ]),
+    setIsLoading(value) {
+      this.configStore.setIsLoading(value)
+    },
+    setProfileAuthInfo(info) {
+      this.profileStore.setProfileAuthInfo(info)
+    },
+    setProfilePatientAssociated(patients) {
+      this.profileStore.setProfilePatientAssociated(patients)
+    },
+    setProfileCurrentPatient(patient) {
+      this.profileStore.setCurrentPatient(patient)
+    },
     async login() {
       this.isSaving = true
       const userData = await this.$auth.login(
@@ -230,7 +285,7 @@ export default {
 
         // Check if account already exist
         const isPatientExist = patientAssosicated.data.find(
-          el =>
+          (el) =>
             el.patientID === this.linkInfo.patientID &&
             el.facilityID === this.linkInfo.facilityID
         )
@@ -328,9 +383,7 @@ export default {
       if (taskList.length === 1) {
         switch (taskList[0].taskType) {
           case 'MSG':
-            taskRes = await api.task.request.getSpecificTask(
-              taskList[0].taskID
-            )
+            taskRes = await api.task.request.getSpecificTask(taskList[0].taskID)
 
             this.setCurrentMsgInfo({
               id: parseInt(taskRes.data.info),
@@ -340,22 +393,31 @@ export default {
             this.$router.push({ path: '/menu/messages' })
             break
           case 'STMT':
-            taskRes = await api.task.request.getSpecificTask(
-              taskList[0].taskID
-            )
+            taskRes = await api.task.request.getSpecificTask(taskList[0].taskID)
             this.setBillingStatementTask(taskRes.data)
             this.$router.push({ path: '/menu/statement' })
             break
           case 'FORM':
             if (taskList[0].taskID > 0) {
-              var info = JSON.parse(taskList[0].info)
-              var routeData = this.$router.resolve({ name: 'HandlerForm', query: { i: info.FacilityFormID, t: info.FormName, p: info.Data.PatientName, pid: taskList[0].patientID, tid: taskList[0].taskID } })
+              const info = JSON.parse(taskList[0].info)
+              const routeData = this.$router.resolve({
+                name: 'HandlerForm',
+                query: {
+                  i: info.FacilityFormID,
+                  t: info.FormName,
+                  p: info.Data.PatientName,
+                  pid: taskList[0].patientID,
+                  tid: taskList[0].taskID
+                }
+              })
               // window.open(routeData.href, '_blank')
-              var isMobileDevice = window.navigator.userAgent.toLowerCase().includes('mobi')
+              const isMobileDevice = window.navigator.userAgent
+                .toLowerCase()
+                .includes('mobi')
               if (isMobileDevice) {
                 window.location.href = routeData.href
               } else {
-                var newWindow = window.open(routeData.href, '_blank')
+                const newWindow = window.open(routeData.href, '_blank')
                 setTimeout(function () {
                   newWindow.document.title = info.Action + ': ' + info.FormName
                 }, 100)

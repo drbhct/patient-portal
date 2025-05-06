@@ -34,7 +34,7 @@
                         <router-link
                           to="/menu/messages"
                           class="nav-link bg-blue sidebar-w"
-                          v-on:click.native="closeSidebar"
+                          @click="closeSidebar"
                         >
                           <i class="far fa-comment" aria-hidden="true"></i>
                           <span>Messages</span>
@@ -48,7 +48,7 @@
                         <router-link
                           to="/menu/documents"
                           class="nav-link bg-green sidebar-w"
-                          v-on:click.native="closeSidebar"
+                          @click="closeSidebar"
                         >
                           <i class="fas fa-file" aria-hidden="true"></i>
                           <span>Documents</span>
@@ -63,7 +63,7 @@
                         <router-link
                           to="/menu/appointments"
                           class="nav-link bg-orange sidebar-w"
-                          v-on:click.native="closeSidebar"
+                          @click="closeSidebar"
                         >
                           <i class="far fa-calendar" aria-hidden="true"></i>
                           <span>Appointments</span>
@@ -92,7 +92,7 @@
                         <router-link
                           to="/menu/profile"
                           class="nav-link bg-purple sidebar-w"
-                          v-on:click.native="closeSidebar"
+                          @click="closeSidebar"
                         >
                           <i class="fas fa-user" aria-hidden="true"></i>
                           <span>Profile</span>
@@ -107,7 +107,7 @@
                         <router-link
                           to="/menu/tasks"
                           class="nav-link bg-red sidebar-w"
-                          v-on:click.native="closeSidebar"
+                          @click="closeSidebar"
                         >
                           <i class="fas fa-tasks" aria-hidden="true"></i>
                           <span>Tasks</span>
@@ -121,7 +121,7 @@
                         <router-link
                           to="/"
                           class="nav-link bg-gray sidebar-w"
-                          v-on:click.native="closeSidebar"
+                          @click="closeSidebar"
                         >
                           <i class="fas fa-home" aria-hidden="true"></i>
                           <span>Home</span>
@@ -159,100 +159,108 @@
     </section>
   </div>
 </template>
-<script>
-import { mapActions } from 'vuex'
-export default {
-  computed: {
-    isAuthenticated() {
-      return this.$auth.isAuthenticated
-    },
-    currentRouteName() {
-      let route = this.$route.name
-      if (route) {
-        route = route.toLowerCase()
-      }
-      return route
-    },
-    title() {
-      switch (this.currentRouteName) {
-        case 'statement':
-          return 'Patient Statement'
-        case 'viewpdf':
-          return 'Patient Statement File'
-        default:
-          return this.currentRouteName
-      }
-    },
-    checkMenuHeader: function() {
-      if (this.currentRouteName === 'messages') {
-        // this.setCurrentMsgInfo({})
-        // this.setMsgCurrentPage('List')
-        return 'bg-blue'
-      }
-      if (this.currentRouteName === 'documents') {
-        return 'bg-green'
-      }
-      if (this.currentRouteName === 'appointments') {
-        return 'bg-orange'
-      }
-      if (this.currentRouteName === 'billing') {
-        return 'bg-success'
-      }
-      if (this.currentRouteName === 'profile') {
-        return 'bg-purple'
-      }
-      if (this.currentRouteName === 'tasks') {
-        return 'bg-red'
-      }
-      if (this.currentRouteName === 'statement') {
-        return 'bg-red'
-      }
-      if (this.currentRouteName === 'viewpdf') {
-        return 'bg-green'
-      }
-      return ''
-    },
-    menuIcon: function() {
-      if (this.currentRouteName === 'messages') {
-        return 'far fa-comment'
-      }
-      if (this.currentRouteName === 'documents') {
-        return 'fas fa-file'
-      }
-      if (this.currentRouteName === 'appointments') {
-        return 'far fa-calendar'
-      }
-      if (this.currentRouteName === 'billing') {
-        return 'fas fa-dollar-sign'
-      }
-      if (this.currentRouteName === 'profile') {
-        return 'fas fa-user'
-      }
-      if (this.currentRouteName === 'tasks') {
-        return 'fas fa-tasks'
-      }
-      if (this.currentRouteName.toLowerCase() === 'statement') {
-        return 'fas fa-tasks'
-      }
-      if (this.currentRouteName === 'viewpdf') {
-        return 'fas fa-file'
-      }
-      return ''
-    }
-  },
-  methods: {
-    ...mapActions(['logoutApp', 'setMsgCurrentPage', 'setCurrentMsgInfo']),
-    closeSidebar() {
-      // console.log('closing sidebar')
-      document
-        .getElementsByTagName('html')[0]
-        .classList.remove('sidebar-left-opened')
-    },
-    async logout() {
-      this.$auth.logout()
-      this.$router.push('/account/login')
-    }
+<script setup>
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useMessageStore } from '@/stores/message'
+import { useConfigStore } from '@/stores/config'
+import { useRouter, useRoute } from 'vue-router'
+
+// Store and router setup
+const router = useRouter()
+const route = useRoute()
+const authStore = useAuthStore()
+const messageStore = useMessageStore()
+const configStore = useConfigStore()
+
+// Computed properties
+const isAuthenticated = computed(() => authStore.isAuthenticated)
+
+const currentRouteName = computed(() => {
+  let routeName = route.name
+  if (routeName) {
+    routeName = routeName.toLowerCase()
   }
+  return routeName
+})
+
+const title = computed(() => {
+  switch (currentRouteName.value) {
+    case 'statement':
+      return 'Patient Statement'
+    case 'viewpdf':
+      return 'Patient Statement File'
+    default:
+      return currentRouteName.value
+  }
+})
+
+const checkMenuHeader = computed(() => {
+  if (currentRouteName.value === 'messages') {
+    return 'bg-blue'
+  }
+  if (currentRouteName.value === 'documents') {
+    return 'bg-green'
+  }
+  if (currentRouteName.value === 'appointments') {
+    return 'bg-orange'
+  }
+  if (currentRouteName.value === 'billing') {
+    return 'bg-success'
+  }
+  if (currentRouteName.value === 'profile') {
+    return 'bg-purple'
+  }
+  if (currentRouteName.value === 'tasks') {
+    return 'bg-red'
+  }
+  if (currentRouteName.value === 'statement') {
+    return 'bg-red'
+  }
+  if (currentRouteName.value === 'viewpdf') {
+    return 'bg-green'
+  }
+  return ''
+})
+
+const menuIcon = computed(() => {
+  if (currentRouteName.value === 'messages') {
+    return 'far fa-comment'
+  }
+  if (currentRouteName.value === 'documents') {
+    return 'fas fa-file'
+  }
+  if (currentRouteName.value === 'appointments') {
+    return 'far fa-calendar'
+  }
+  if (currentRouteName.value === 'billing') {
+    return 'fas fa-dollar-sign'
+  }
+  if (currentRouteName.value === 'profile') {
+    return 'fas fa-user'
+  }
+  if (currentRouteName.value === 'tasks') {
+    return 'fas fa-tasks'
+  }
+  if (currentRouteName.value.toLowerCase() === 'statement') {
+    return 'fas fa-tasks'
+  }
+  if (currentRouteName.value === 'viewpdf') {
+    return 'fas fa-file'
+  }
+  return ''
+})
+
+// Methods
+function closeSidebar() {
+  document
+    .getElementsByTagName('html')[0]
+    .classList.remove('sidebar-left-opened')
+}
+
+async function logout() {
+  await authStore.logout()
+  router.push('/account/login')
 }
 </script>
 <style scoped>

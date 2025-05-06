@@ -1,63 +1,96 @@
 <template>
-  <div class="col-10">
-    <!--<a href="javascript:void(0)" @click="setMsgCurrentPage('List')">
-      <i class="fas fa-angle-left"></i>
-      Back to Messages
-    </a>-->
-    <section class="card">
-      <header class="card-header">
-        <div class="card-actions">
-          <a href="#" class="card-action card-action-toggle" data-card-toggle=""></a>
-          <a href="#" class="card-action card-action-dismiss" data-card-dismiss=""></a>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2>New Message</h2>
+          <button class="btn btn-secondary" @click="goBack">
+            Back to Messages
+          </button>
         </div>
-      </header>
-      <div class="card-body">
-        <form class="form-horizontal form-bordered" method="get">
-          <div class="form-group row">
-            <label class="col-lg-2 control-label text-lg-right pt-2" for="textareaDefault">Subject</label>
-            <div class="col-lg-6">
-              <input type="text" class="form-control" id="subject" v-model="form.subject" required>
-            </div>
+
+        <div class="card">
+          <div class="card-body">
+            <form @submit.prevent="sendMessage">
+              <div class="form-group">
+                <label for="subject">Subject</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="subject"
+                  v-model="form.subject"
+                  required
+                  maxlength="100"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea
+                  class="form-control"
+                  id="message"
+                  v-model="form.message"
+                  rows="10"
+                  required
+                  maxlength="8000"
+                  style="resize: none"
+                ></textarea>
+              </div>
+
+              <div class="text-center">
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-lg"
+                  :disabled="isSending"
+                >
+                  {{ isSending ? 'Sending...' : 'Send Message' }}
+                </button>
+              </div>
+            </form>
           </div>
-          <div class="form-group row">
-            <label class="col-lg-2 control-label text-lg-right pt-2" for="textareaAutosize">Message</label>
-            <div class="col-lg-6">
-              <textarea class="form-control" rows="8" id="textareaAutosize" v-model="form.message" data-plugin-textarea-autosize="" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 89px;"></textarea>
-            </div>
-          </div>
-        </form>
+        </div>
       </div>
-    </section>
+    </div>
   </div>
 </template>
 
-<script>
-// import api from '../../api/http-common.js'
-import { mapActions, mapGetters } from 'vuex'
-export default {
-  data () {
-    return {
-      form: {
-        subject: '',
-        message: ''
-      }
-    }
-  },
-  methods: {
-    ...mapActions(['setMsgCurrentPage'])
-  },
-  computed: {
-    ...mapGetters(['getMsgInfo', 'getProfilePatientAssociated', 'currentPatientAssociated'])
-  },
-  mounted () {
+<script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
+import { useMessageStore } from '@/stores/message'
+
+const router = useRouter()
+const toast = useToast()
+const messageStore = useMessageStore()
+
+const isSending = ref(false)
+const form = ref({
+  subject: '',
+  message: ''
+})
+
+const sendMessage = async () => {
+  isSending.value = true
+  try {
+    await messageStore.createMessage(form.value)
+    toast.success('Message sent successfully')
+    router.push('/messages')
+  } catch (error) {
+    console.error('Error sending message:', error)
+    toast.error('Failed to send message')
+  } finally {
+    isSending.value = false
   }
+}
+
+const goBack = () => {
+  router.push('/messages')
 }
 </script>
 
 <style scoped>
-  .btn-w-120 {
-    width: 120px !important;
-    margin-right: 5px;
-    margin-left: 5px;
-  }
+.form-group {
+  margin-bottom: 1.5rem;
+}
 </style>

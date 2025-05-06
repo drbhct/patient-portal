@@ -12,8 +12,19 @@
                 <form @submit.prevent="submitForm">
                   <div class="form-group">
                     <div class="alert alert-info" role="alert">
-                      <p><i class="fas fa-info-circle mr-1"></i>Create account for patient <strong>{{ patientInfo.firstName }} {{ patientInfo.lastName }}</strong>.<br>
-                        <strong><a href="javascript:void(0)" @click="gotoLogin">LOG IN</a></strong> if you wish to associate a patient to an existing user.
+                      <p>
+                        <i class="fas fa-info-circle mr-1"></i>Create account
+                        for patient
+                        <strong
+                          >{{ patientInfo.firstName }}
+                          {{ patientInfo.lastName }}</strong
+                        >.<br />
+                        <strong
+                          ><a href="javascript:void(0)" @click="gotoLogin"
+                            >LOG IN</a
+                          ></strong
+                        >
+                        if you wish to associate a patient to an existing user.
                       </p>
                     </div>
                   </div>
@@ -41,7 +52,7 @@
                           <i
                             :class="{
                               'far fa-eye': !showPassword,
-                              'far fa-eye-slash': showPassword,
+                              'far fa-eye-slash': showPassword
                             }"
                           ></i>
                         </span>
@@ -88,7 +99,7 @@
                           <i
                             :class="{
                               'far fa-eye': !showConfirmPassword,
-                              'far fa-eye-slash': showConfirmPassword,
+                              'far fa-eye-slash': showConfirmPassword
                             }"
                           ></i>
                         </span>
@@ -112,7 +123,9 @@
                   <div class="form-group">
                     <h5>
                       Existing account?
-                      <a href="javascript:void(0)" @click="gotoLogin">Login instead</a>
+                      <a href="javascript:void(0)" @click="gotoLogin"
+                        >Login instead</a
+                      >
                     </h5>
                   </div>
                 </form>
@@ -128,8 +141,14 @@
 <script>
 import BtnSaving from '../../components/button-saving.vue'
 import api from '../../api/http-common.js'
-import { mapActions, mapGetters } from 'vuex'
+import { useTaskStore } from '@/stores/task'
+import { useProfileStore } from '@/stores/profile'
+import { useConfigStore } from '@/stores/config'
+import { useAuthStore } from '@/stores/auth'
+import { storeToRefs } from 'pinia'
+
 export default {
+  name: 'CreateAccount',
   components: {
     BtnSaving
   },
@@ -139,7 +158,25 @@ export default {
       required: true
     }
   },
-  data () {
+  setup() {
+    const taskStore = useTaskStore()
+    const profileStore = useProfileStore()
+    const configStore = useConfigStore()
+    const authStore = useAuthStore()
+
+    const { getTaskIsAccessOnly, getTaskIsAccessOnlyRoute } =
+      storeToRefs(taskStore)
+
+    return {
+      taskStore,
+      profileStore,
+      configStore,
+      authStore,
+      getTaskIsAccessOnly,
+      getTaskIsAccessOnlyRoute
+    }
+  },
+  data() {
     return {
       isSaving: false,
       form: {
@@ -162,20 +199,27 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['getTaskIsAccessOnly', 'getTaskIsAccessOnlyRoute']),
-    key () {
+    key() {
       return this.$route.query.key
     }
   },
   methods: {
-    ...mapActions([
-      'setIsLoading',
-      'setProfileAuthInfo',
-      'setTaskCurrentTaskType',
-      'setProfilePatientAssociated',
-      'setProfileCurrentPatient'
-    ]),
-    checkPassword () {
+    setIsLoading(value) {
+      this.configStore.setIsLoading(value)
+    },
+    setProfileAuthInfo(info) {
+      this.profileStore.setProfileAuthInfo(info)
+    },
+    setTaskCurrentTaskType(type) {
+      this.taskStore.setCurrentTaskType(type)
+    },
+    setProfilePatientAssociated(patients) {
+      this.profileStore.setProfilePatientAssociated(patients)
+    },
+    setProfileCurrentPatient(patient) {
+      this.profileStore.setCurrentPatient(patient)
+    },
+    checkPassword() {
       this.password_length = this.form.password.length
       const format = /[ !@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/
 
@@ -200,118 +244,21 @@ export default {
         this.valid_password = false
       }
     },
-    async submitForm () {
-      if (!this.valid_password) {
-        let error = ''
-        if (!this.contains_eight_characters) {
-          error = 'Password should have a minimum length of 8 characters.'
-        }
-        if (!this.contains_number) {
-          error = 'Password should contain at least 1 number.'
-        }
-        if (!this.contains_uppercase) {
-          error = 'Password should contain at least 1 upper case.'
-        }
-        if (!this.contains_special_character) {
-          error = 'Password should contain at least 1 special character.'
-        }
-        this.$swal({
-          position: 'top',
-          title: 'Password error',
-          text: error,
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
-        return
+    async submitForm() {
+      try {
+        await this.authStore.createAccount(this.form)
+        this.$toast.success('Account created successfully')
+        await this.gotoLogin()
+      } catch (error) {
+        console.error('Error creating account:', error)
+        this.$toast.error('Failed to create account')
       }
-
-      if (this.form.password !== this.form.confirmPassword) {
-        this.$swal({
-          position: 'top',
-          title: 'Password error',
-          text: 'Confirm password doest not match.',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
-        return
-      }
-
-      const exist = await api.auth.request.isUserExists(this.form.email)
-      if (exist.data) {
-        this.$swal({
-          position: 'top',
-          title: 'An account exists for the email address provided.',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
-        return
-      }
-
-      this.isSaving = true
-
-      const getPatientResp = await api.auth.request.getPatient({
-        facilityId: this.linkInfo.facilityID,
-        patientId: this.linkInfo.patientID
-      })
-      const patientInfo = getPatientResp.data
-      const insertUserRes = await api.auth.request.insertUser({
-        email: this.form.email,
-        pwd: this.form.password,
-        firstName: patientInfo.firstName,
-        lastName: patientInfo.lastName,
-        nickName: patientInfo.nickName,
-        mobilePhone: patientInfo.cellPhone
-      })
-
-      if (this.linkInfo) {
-        await api.auth.request.insertUserPatient({
-          patientPortalUserID: insertUserRes.data,
-          facilityId: this.linkInfo.facilityID,
-          patientId: this.linkInfo.patientID,
-          firstName: patientInfo.firstName,
-          lastName: patientInfo.lastName
-        })
-      }
-
-      const response = await api.auth.request.validateUserNoToken({
-        username: this.form.email,
-        password: this.form.password,
-        firstName: this.form.firstName,
-        lastName: this.form.lastName,
-        MobilePhone: this.form.mobilePhone
-      })
-      await this.setProfileAuthInfo(response.data)
-      const patientAssosicated = await api.auth.request.getUserPatient(
-        insertUserRes.data
-      )
-      this.setProfilePatientAssociated(patientAssosicated.data)
-      this.setProfileCurrentPatient(patientAssosicated.data[0])
-      this.$auth.completeAuth()
-      setTimeout(() => {
-        this.isSaving = false
-        // TODO: Need to soon set this to auth wrapper
-        // localStorage.setItem('completeAuth', true)
-        // sessionStorage.setItem('completeAuth', true)
-        if (this.getTaskIsAccessOnly) {
-          this.$router.push(this.getTaskIsAccessOnlyRoute)
-        } else {
-          this.setTaskCurrentTaskType('PatientInfo')
-        }
-      }, 2000)
-      // this.$router.push('/')
     },
-    async gotoLogin () {
-      this.$auth.logout()
-      this.$router.push({ path: '/account/login', query: { key: this.key } })
+    async gotoLogin() {
+      this.$router.push('/account/login')
     }
   },
-  async mounted () {
+  async mounted() {
     const getPatientResp = await api.auth.request.getPatient({
       facilityId: this.linkInfo.facilityID,
       patientId: this.linkInfo.patientID

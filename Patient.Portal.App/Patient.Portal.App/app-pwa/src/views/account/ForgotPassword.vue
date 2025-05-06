@@ -42,11 +42,19 @@
 <script>
 import api from '../../api/http-common.js'
 import BtnSaving from '../../components/button-saving.vue'
+import { useAuthStore } from '@/stores/auth'
+
 export default {
   components: {
     BtnSaving
   },
-  data () {
+  setup() {
+    const authStore = useAuthStore()
+    return {
+      authStore
+    }
+  },
+  data() {
     return {
       isSaving: false,
       form: {
@@ -55,55 +63,21 @@ export default {
     }
   },
   methods: {
-    async forgotPassword () {
+    async forgotPassword() {
       try {
         this.isSaving = true
-        const response = await api.auth.request.resetUserPassword({
-          email: this.form.userName
-        })
-        this.isSaving = false
-        if (!response.value) {
-          this.$swal({
-            toast: false,
-            position: 'top',
-            title: 'Sending Link failed',
-            text: 'Sending email link for reset password failed. Please try again.',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-          return
-        }
-
-        this.$swal({
-          toast: false,
-          position: 'top',
-          title: 'Sending Link Success',
-          text: 'Sending email link for reset password successful. Please check on your email for the reset password link.',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'success'
-        })
-
+        await this.authStore.forgotPassword(this.form.userName)
+        this.$toast.success('Password reset instructions sent to your email')
         this.form.userName = ''
-      } catch (ex) {
+      } catch (error) {
+        console.error('Error requesting password reset:', error)
+        this.$toast.error('Failed to send password reset instructions')
+      } finally {
         this.isSaving = false
-        this.$swal({
-          toast: false,
-          position: 'top',
-          title: 'Exception occured',
-          text: 'Exception occured while sending email link for password reset.',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'error'
-        })
       }
     }
   },
-  async mounted () {
+  async mounted() {
     const apiRes = await api.auth.request.apiLogin()
     // NOTE: Temporary will be move to cookies soon!
     // localStorage.setItem('config', apiRes.data.token)
@@ -112,5 +86,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

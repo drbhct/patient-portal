@@ -1,0 +1,83 @@
+{
+  "name": "app-pwa",
+  "version": "1.9.63",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve --host localhost",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@sentry/tracing": "^7.0.0",
+    "@sentry/vue": "^7.0.0",
+    "@vueuse/core": "^13.1.0",
+    "core-js": "^3.30.0",
+    "jquery": "^3.7.1",
+    "jspdf": "^2.5.1",
+    "moment": "^2.29.4",
+    "pdfvuer": "^2.0.0",
+    "pinia": "^3.0.2",
+    "pinia-plugin-persistedstate": "^4.2.0",
+    "print-js": "^1.6.0",
+    "register-service-worker": "^1.7.2",
+    "survey-pdf": "^1.9.0",
+    "survey-vue-ui": "^1.9.0",
+    "vue": "^3.3.0",
+    "vue-input-mask": "^0.0.11",
+    "vue-loading-overlay": "^6.0.6",
+    "vue-router": "^4.2.0",
+    "vue-toastification": "^2.0.0-rc.5"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.23.3",
+    "@vue/cli-plugin-babel": "^5.0.0",
+    "@vue/cli-plugin-eslint": "^5.0.0",
+    "@vue/cli-plugin-pwa": "^5.0.0",
+    "@vue/cli-plugin-router": "^5.0.0",
+    "@vue/cli-service": "^5.0.0",
+    "@vue/compiler-sfc": "^3.3.0",
+    "@vue/eslint-config-standard": "^8.0.1",
+    "axios": "^1.4.0",
+    "eslint": "^8.40.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-vue": "^9.11.0",
+    "eslint-plugin-vue-scoped-css": "^2.4.0",
+    "strip-bom": "^5.0.0",
+    "v-mask": "^2.2.4",
+    "vue-content-placeholders": "^0.2.1",
+    "vue-cookies": "^1.8.6",
+    "vue-multiselect": "^3.0.0-beta.2",
+    "vue-slider-component": "^4.1.0-beta.7",
+    "vue-sweetalert2": "^5.0.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "@vue/standard"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {
+      "space-before-function-paren": "off",
+      "new-cap": "off",
+      "no-undef": "warn",
+      "no-empty": "warn",
+      "no-unused-vars": "warn",
+      "vue/no-unused-components": "warn",
+      "vue/multi-word-component-names": "off",
+      "prefer-regex-literals": "off"
+    }
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

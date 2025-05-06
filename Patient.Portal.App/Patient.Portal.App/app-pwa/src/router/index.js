@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from '../layouts/Dashboard.vue'
-Vue.use(VueRouter)
+import { useAuthStore } from '../stores/auth'
+
 const routes = [
   {
     path: '/menu',
@@ -106,8 +106,8 @@ const routes = [
     children: [
       {
         path: 'login',
-        name: 'Landing',
-        component: () => import('../views/account/Landing.vue')
+        name: 'Login',
+        component: () => import('../views/account/Login.vue')
       },
       {
         path: 'create',
@@ -142,45 +142,30 @@ const routes = [
     component: () => import('../views/HandlerForm.vue')
   },
   {
-    path: '*',
+    path: '/:pathMatch(.*)*',
     name: 'PageNotFound',
     component: () => import('../layouts/PageNotFound.vue')
   }
 ]
 
-const router = new VueRouter({
-  mode: 'history',
+const router = createRouter({
+  history: createWebHistory(),
   routes
 })
 
-router.beforeResolve((to, from, next) => {
-  // console.log('to >', to)
+router.beforeResolve(async (to, from) => {
   if (to.path === '/default.aspx') {
-    next({ path: '/account/login' })
+    return { path: '/account/login' }
   }
-  if (to.matched.some(route => route.meta.requiresAuth)) {
-    let isAuth = false
-    // const user = Vue.$cookies.get('user')
-    // const user = localStorage.getItem('config')
+
+  if (to.matched.some((route) => route.meta.requiresAuth)) {
+    const authStore = useAuthStore()
     const user = sessionStorage.getItem('config')
-    const profile = JSON.parse(localStorage.getItem('vuex'))
-    if (!profile) {
-      next({ path: '/account/login' })
-    } else {
-      const hasProfile = profile.profile.profileAuthInfo !== null
-      if (user) {
-        if (hasProfile) {
-          isAuth = true
-        }
-      }
-      if (isAuth) {
-        next()
-      } else {
-        next({ path: '/account/login' })
-      }
+    const isAuthenticated = authStore.isAuthenticated
+
+    if (!isAuthenticated || !user) {
+      return { path: '/account/login' }
     }
-  } else {
-    next()
   }
 })
 

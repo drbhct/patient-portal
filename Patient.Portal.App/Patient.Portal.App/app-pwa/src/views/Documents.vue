@@ -9,12 +9,11 @@
 <script>
 import List from '../components/documents/DocList.vue'
 export default {
+  name: 'DocumentsView',
   components: {
     List
   }
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -20,7 +20,7 @@ const securedJsonRequest = axios.create({
 })
 
 securedJsonRequest.interceptors.request.use(
-  config => {
+  (config) => {
     // const token = localStorage.getItem('config')
     const token = sessionStorage.getItem('config')
     if (token) {
@@ -28,14 +28,14 @@ securedJsonRequest.interceptors.request.use(
     }
     return config
   },
-  error => {
+  (error) => {
     return Promise.reject(error)
   }
 )
 
 securedJsonRequest.interceptors.response.use(
-  response => response,
-  error => {
+  (response) => response,
+  (error) => {
     // whatever you want to do with the error
     console.log('intercep error', error)
     if (error.response) {
@@ -74,7 +74,7 @@ securedJsonRequest.interceptors.response.use(
 
 export default {
   request: {
-    async apiLogin () {
+    async apiLogin() {
       const payload = {
         username: 'patientportal',
         password:
@@ -91,7 +91,7 @@ export default {
      * @param {String} payload.password
      * @param {String} apiToken
      */
-    async validateUser (payload, apiToken) {
+    async validateUser(payload, apiToken) {
       // NOTE: Need to create another instance due to token still not available until refresh
       const manualReq = axios.create({
         baseURL: apiUrl,
@@ -107,7 +107,7 @@ export default {
      * @param {String} payload.username email is use for the username field
      * @param {String} payload.password
      */
-    async validateUserNoToken (payload) {
+    async validateUserNoToken(payload) {
       return await securedJsonRequest.post(
         '/patientportal/validateuser',
         payload
@@ -120,11 +120,8 @@ export default {
      * @param {String} payload.lastName
      * @param {String} payload.nickName
      */
-    async updateUser (payload) {
-      return await securedJsonRequest.post(
-        '/patientportal/updateuser',
-        payload
-      )
+    async updateUser(payload) {
+      return await securedJsonRequest.post('/patientportal/updateuser', payload)
     },
     /**
      * @param {Object} payload  request object for update user email
@@ -132,7 +129,7 @@ export default {
      * @param {String} payload.email
      * @param {String} payload.pwd
      */
-    async updateUserEmail (payload) {
+    async updateUserEmail(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updateuseremail',
         payload
@@ -143,7 +140,7 @@ export default {
      * @param {String} payload.id
      * @param {String} payload.mobilePhone
      */
-    async updateUserMobilephone (payload) {
+    async updateUserMobilephone(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updateusermobilephone',
         payload
@@ -155,7 +152,7 @@ export default {
      * @param {Boolean} payload.canEmail
      * @param {Boolean} payload.canSms
      */
-    async updateUserCommoptions (payload) {
+    async updateUserCommoptions(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updateusercommoptions',
         payload
@@ -166,7 +163,7 @@ export default {
      * @param {String} payload.id
      * @param {String} payload.pwd
      */
-    async updateUserPwd (payload) {
+    async updateUserPwd(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updateuserpwd',
         payload
@@ -176,7 +173,7 @@ export default {
      * @param {String} payload
      * @param {String} apiToken
      */
-    async getUserWithToken (payload, apiToken) {
+    async getUserWithToken(payload, apiToken) {
       // NOTE: Need to create another instance due to token still not available until refresh
       const manualReq = axios.create({
         baseURL: apiUrl,
@@ -190,13 +187,13 @@ export default {
     /**
      * @param {String} payload
      */
-    async getUser (payload) {
+    async getUser(payload) {
       return await securedJsonRequest.get('/patientportal/getUser/' + payload)
     },
     /**
      * @param {String} userId
      */
-    async getUserPatient (payload) {
+    async getUserPatient(payload) {
       return await securedJsonRequest.get(
         '/patientportal/getuserpatients/' + payload
       )
@@ -206,7 +203,7 @@ export default {
      * @param {Number} payload.facilityId
      * @param {Number} payload.patientId
      */
-    async getPatientCommOptions (payload) {
+    async getPatientCommOptions(payload) {
       return await securedJsonRequest.post(
         '/patientportal/getpatientcommoptions',
         payload
@@ -218,11 +215,8 @@ export default {
      * @param {Number} payload.facilityId
      * @param {Number} payload.patientId
      */
-    async getPatient (payload) {
-      return await securedJsonRequest.post(
-        '/patientportal/GetPatient',
-        payload
-      )
+    async getPatient(payload) {
+      return await securedJsonRequest.post('/patientportal/GetPatient', payload)
     },
     /**
      * API access to update user associated patient communication options
@@ -241,7 +235,7 @@ export default {
      * @param {String} payload.homePhone
      * @param {String} payload.email
      */
-    async updatePatientCommOptions (payload) {
+    async updatePatientCommOptions(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatepatientcommoptions',
         payload
@@ -250,14 +244,14 @@ export default {
     /**
      * @param {String} payload link key to get patient info when associating it to a user
      */
-    async getLink (payload) {
+    async getLink(payload) {
       return await securedJsonRequest.get('/patientportal/GetLink/' + payload)
     },
     /**
      * verify if email is already in use
      * @param {String} payload email to verify
      */
-    async isUserExists (payload) {
+    async isUserExists(payload) {
       return await securedJsonRequest.get(
         '/patientportal/userexists/' + payload
       )
@@ -272,11 +266,8 @@ export default {
      * @param {String} payload.nickName
      * @param {String} payload.mobilePhone
      */
-    async insertUser (payload) {
-      return await securedJsonRequest.post(
-        '/patientportal/InsertUser',
-        payload
-      )
+    async insertUser(payload) {
+      return await securedJsonRequest.post('/patientportal/InsertUser', payload)
     },
     /**
      * Associate patient to portal user account
@@ -287,7 +278,7 @@ export default {
      * @param {String} payload.firstName
      * @param {String} payload.lastName
      */
-    async insertUserPatient (payload) {
+    async insertUserPatient(payload) {
       return await securedJsonRequest.post(
         '/patientportal/InsertUserPatient',
         payload
@@ -302,7 +293,7 @@ export default {
      * @param {String} payload.firstName
      * @param {String} payload.lastName
      */
-    async updatePatient (payload) {
+    async updatePatient(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatePatient',
         payload
@@ -315,7 +306,7 @@ export default {
      * @param {String} payload.patientId
      * @param {String} payload.value
      */
-    async updatePatientMobilePhone (payload) {
+    async updatePatientMobilePhone(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatepatientmobilephone',
         payload
@@ -328,7 +319,7 @@ export default {
      * @param {String} payload.patientId
      * @param {String} payload.value
      */
-    async updatePatientEmail (payload) {
+    async updatePatientEmail(payload) {
       return await securedJsonRequest.post(
         '/patientportal/updatepatientemail',
         payload
@@ -337,7 +328,7 @@ export default {
     /**
      * @param {String} payload facilityId
      */
-    async getFacilityInfo (payload) {
+    async getFacilityInfo(payload) {
       return (
         await securedJsonRequest.get(
           '/patientportal/getfacilityinfo/' + payload
@@ -350,7 +341,7 @@ export default {
      * @param {String} payload.email User account email
      * @returns {{ value: Boolean, reason: String }} api will return the success object
      */
-    async resetUserPassword (payload) {
+    async resetUserPassword(payload) {
       return (
         await securedJsonRequest.post('/patientportal/resetuserpwd', payload)
       ).data

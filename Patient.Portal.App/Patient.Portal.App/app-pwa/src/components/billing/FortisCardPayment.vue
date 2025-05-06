@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-5 pt-5">
     <div class="col-lg-12 mb-5 mt-5">
-      <h4 class="text-center" v-if="close">
+      <h4 class="text-center" v-if="isPaymentComplete">
         Payment complete. You may now close the page
       </h4>
       <div id="payment">
@@ -10,119 +10,129 @@
     </div>
   </div>
 </template>
-<script>
-import { mapGetters, mapActions } from 'vuex'
-// eslint-disable-next-line no-unused-vars
-import api from '../../api/http-common.js'
 
-export default {
-  data() {
-    return {
-      pubNubMsg: {
-        channel: '',
-        msg: []
-      },
-      fortisPaymentResult: null,
-      close: false
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useToast } from 'vue-toastification'
+import { useSweetAlert } from '@/composables/useSweetAlert'
+import { useBillingStore } from '@/stores/billing'
+import { useProfileStore } from '@/stores/profile'
+import { useConfigStore } from '@/stores/config'
+
+// Store setup
+const billingStore = useBillingStore()
+const profileStore = useProfileStore()
+const configStore = useConfigStore()
+
+// Composables
+const toast = useToast()
+const swal = useSweetAlert()
+
+// Component state
+const isPaymentComplete = ref(false)
+const fortisPaymentResult = ref(null)
+const pubNubMsg = ref({
+  channel: '',
+  msg: []
+})
+
+// Payment processing
+const handlePaymentComplete = async (result) => {
+  console.log('payment>done', result)
+
+  try {
+    configStore.setLoading(true)
+    fortisPaymentResult.value = result
+    pubNubMsg.value.channel = billingStore.getFortisPaymentViaUrl.channel
+
+    // Update transaction API ID
+    await billingStore.updateFortisTransactionApiId({
+      facilityId: profileStore.getPatientAssociated.facilityID,
+      posId: billingStore.getFortisPaymentViaUrl.id,
+      transactionId: result.data.id
+    })
+
+    // Complete the transaction
+    const completeResponse = await billingStore.completeFortisTransaction({
+      facilityId: profileStore.getPatientAssociated.facilityID,
+      email: billingStore.getFortisPaymentForm.email,
+      posId: billingStore.getFortisPaymentViaUrl.id,
+      transactionId: fortisPaymentResult.value.data.id,
+      taskId: billingStore.getFortisPaymentForm.taskId,
+      patientId: profileStore.getPatientAssociated.patientID
+    })
+
+    if (!completeResponse.data.value) {
+      await swal.fire({
+        text: completeResponse.data.reason,
+        position: 'top-center',
+        title: 'Payment Unsuccessful. Please try again',
+        showConfirmButton: false,
+        timerProgressBar: true,
+        timer: 2000,
+        icon: 'error'
+      })
+      return
     }
-  },
-  computed: {
-    ...mapGetters([
-      'currentPatientAssociated',
-      'getBillingTaskStatement',
-      'getProfileAuthInfo',
-      'getFacilityInfo',
-      'getFortisPaymentForm',
-      'getFortisStatementInfo',
-      'getFortisPaymentViaUrl'
-    ])
-  },
-  methods: {
-    ...mapActions(['setIsLoading'])
-  },
-  async mounted() {
-    // eslint-disable-next-line no-undef
-    var elements = new Commerce.elements(
-      this.getFortisPaymentViaUrl.clientToken
+
+    await swal.fire({
+      text: completeResponse.data.reason,
+      position: 'top-center',
+      title: 'Payment Successful',
+      showConfirmButton: false,
+      timerProgressBar: true,
+      timer: 2000,
+      icon: 'success'
+    })
+
+    // Publish completion message
+    window.$pnPublish(
+      {
+        channel: `${billingStore.getFortisPaymentViaUrl.channel}-done`,
+        message: Date.now()
+      },
+      (status, response) => {
+        console.log(
+          'publish>',
+          `${billingStore.getFortisPaymentViaUrl.channel}-done`,
+          status,
+          response
+        )
+      }
     )
-    elements.create({
-      container: '#payment',
-      environment: this.getFortisPaymentViaUrl.environment,
-      theme: 'default',
-      digitalWallets: [],
-      fields: {
-        billing: [
-          { name: 'address', required: true },
-          { name: 'postal_code', required: true }
-        ]
-      }
-    })
-    elements.on('done', async result => {
-      console.log('payment>done')
-      console.log('resul>', result)
-
-      try {
-        this.pubNubMsg.channel = this.getFortisPaymentViaUrl.channel
-
-        this.fortisPaymentResult = result
-
-        // Update transaction api Id
-        await api.patient.request.UpdateFortisTransactionApiId({
-          facilityId: this.currentPatientAssociated.facilityID,
-          posId: this.getFortisPaymentViaUrl.id,
-          transactionId: result.data.id
-        })
-
-        var completeResponse = await api.patient.request.fortisTransactionComplete(
-          {
-            facilityId: this.currentPatientAssociated.facilityID,
-            email: this.getFortisPaymentForm.email,
-            posId: this.getFortisPaymentViaUrl.id,
-            transactionId: this.fortisPaymentResult.data.id,
-            taskId: this.getFortisPaymentForm.taskId,
-            patientId: this.currentPatientAssociated.patientID
-          }
-        )
-
-        if (!completeResponse.data.value) {
-          this.$swal({
-            text: completeResponse.data.reason,
-            position: 'top-center',
-            title: 'Payment Unsuccessful. Please try again',
-            showConfirmButton: false,
-            timerProgressBar: true,
-            timer: 2000,
-            icon: 'error'
-          })
-          return
-        }
-
-        this.$swal({
-          text: completeResponse.data.reason,
-          position: 'top-center',
-          title: 'Payment',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 2000,
-          icon: 'success'
-        })
-        this.$pnPublish(
-          {
-            channel: this.getFortisPaymentViaUrl.channel + '-done',
-            message: Date.now()
-          },
-          (status, response) => {
-            console.log(
-              'publish>' + this.getFortisPaymentViaUrl.channel + '-done'
-            )
-            console.log(status, response)
-          }
-        )
-        this.close = true
-      } catch (ex) {
-      } finally {
-      }
-    })
+  } catch (error) {
+    console.error('Error processing payment:', error)
+    toast.error('Failed to process payment')
+  } finally {
+    configStore.setLoading(false)
+    isPaymentComplete.value = true
   }
 }
+
+// Initialize Fortis Elements
+const initializeFortisElements = () => {
+  // eslint-disable-next-line no-undef
+  const elements = new Commerce.Elements(
+    billingStore.getFortisPaymentViaUrl.clientToken
+  )
+
+  elements.create({
+    container: '#payment',
+    environment: billingStore.getFortisPaymentViaUrl.environment,
+    theme: 'default',
+    digitalWallets: [],
+    fields: {
+      billing: [
+        { name: 'address', required: true },
+        { name: 'postal_code', required: true }
+      ]
+    }
+  })
+
+  elements.on('done', handlePaymentComplete)
+}
+
+onMounted(() => {
+  initializeFortisElements()
+})
 </script>

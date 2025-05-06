@@ -46,13 +46,13 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       isAutoAccident: null
     }
   },
   methods: {
-    toggle (val) {
+    toggle(val) {
       this.isAutoAccident = val
     }
   }

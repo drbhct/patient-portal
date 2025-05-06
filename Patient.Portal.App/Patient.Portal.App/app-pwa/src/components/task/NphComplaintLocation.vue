@@ -18,7 +18,7 @@
                     visit</label
                   >
                   <multiselect
-                  :searchable="false"
+                    :searchable="false"
                     v-model="form.regions"
                     :options="regionsLocation"
                     :group-select="true"
@@ -26,9 +26,10 @@
                     @select="selectChange"
                     :max="4"
                   >
-                    <span slot="maxElements">
-                      Maximum of 4 regions selected. Remove a region to select another.
-                    </span>
+                    <template #maxElements>
+                      Maximum of 4 regions selected. Remove a region to select
+                      another.
+                    </template>
                   </multiselect>
                 </div>
               </div>
@@ -80,7 +81,6 @@
                   />
                 </div>
               </div>
-
             </div>
             <div v-if="isLoading">
               <div class="col-12">
@@ -115,14 +115,28 @@
 import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
 import api from '../../api/http-common.js'
-import { mapGetters, mapActions } from 'vuex'
 import btnSaving from '../button-saving.vue'
+import { useTaskStore } from '@/stores/task'
+import { storeToRefs } from 'pinia'
+
 export default {
   components: {
     Multiselect,
     btnSaving
   },
-  data () {
+  setup() {
+    const taskStore = useTaskStore()
+    const { getTaskPreviousTaskType, getTaskCurrentTaskType, getTaskInfo } =
+      storeToRefs(taskStore)
+
+    return {
+      taskStore,
+      getTaskPreviousTaskType,
+      getTaskCurrentTaskType,
+      getTaskInfo
+    }
+  },
+  data() {
     return {
       isLoading: true,
       isSaving: false,
@@ -138,92 +152,14 @@ export default {
     }
   },
   watch: {
-    // 'form.complaint1': function (val) { -------------------- COMMENTED OUT BY RIZZA 04/02/2022
-    //  if (!val) {
-    //    const index = this.problems.findIndex((el) => el.ordinal === 1)
-    //    if (index >= 0) {
-    //      this.problems.splice(index, 1)
-    //    }
-    //    return
-    //  }
-    //  if (val) {
-    //    const existing = this.problems.find((el) => el.ordinal === 1)
-    //    if (!existing) {
-    //      this.problems.push({
-    //        id: 0,
-    //        ordinal: 1,
-    //        region: val
-    //      })
-    //    } else {
-    //      existing.region = val
-    //    }
-    //  }
-    // },
-    // 'form.complaint2': function (val) {
-    //  if (!val) {
-    //    const index = this.problems.findIndex((el) => el.ordinal === 2)
-    //    if (index >= 0) {
-    //      this.problems.splice(index, 1)
-    //    }
-    //    return
-    //  }
-
-    //  const existing = this.problems.find((el) => el.ordinal === 2)
-    //  if (!existing) {
-    //    this.problems.push({
-    //      id: 0,
-    //      ordinal: 2,
-    //      region: val
-    //    })
-    //  } else {
-    //    existing.region = val
-    //  }
-    // },
-    // 'form.complaint3': function (val) {
-    //  if (!val) {
-    //    const index = this.problems.findIndex((el) => el.ordinal === 3)
-    //    if (index >= 0) {
-    //      this.problems.splice(index, 1)
-    //    }
-    //    return
-    //  }
-    //  const existing = this.problems.find((el) => el.ordinal === 3)
-    //  if (!existing) {
-    //    this.problems.push({
-    //      id: 0,
-    //      ordinal: 3,
-    //      region: val
-    //    })
-    //  }
-    // },
-    // 'form.complaint4': function (val) {
-    //  if (!val) {
-    //    const index = this.problems.findIndex((el) => el.ordinal === 4)
-    //    if (index >= 0) {
-    //      this.problems.splice(index, 1)
-    //    }
-    //    return
-    //  }
-    //  const existing = this.problems.find((el) => el.ordinal === 4)
-    //  if (!existing) {
-    //    this.problems.push({
-    //      id: 0,
-    //      ordinal: 4,
-    //      region: val
-    //    })
-    //  } else {
-    //    existing.region = val
-    //  }
-    // },
-    'form.regions': function () {
-      // added by Rizza 04/02/2022
+    'form.regions'() {
       this.problems = []
       this.form.complaint1 = ''
       this.form.complaint2 = ''
       this.form.complaint3 = ''
       this.form.complaint4 = ''
 
-      for (var i = 0; i < this.form.regions.length; i++) {
+      for (let i = 0; i < this.form.regions.length; i++) {
         const region = this.form.regions[i]
         const ctr = i + 1
         const name = 'complaint' + ctr
@@ -232,20 +168,13 @@ export default {
         this.problems.push({
           id: 0,
           ordinal: ctr,
-          region: region
+          region
         })
       }
     }
   },
   computed: {
-    ...mapGetters([
-      'getProfilePatientAssociated',
-      'getTaskCurrentCaseHistoryId',
-      'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType',
-      'currentPatientAssociated'
-    ]),
-    regionsLocation () {
+    regionsLocation() {
       return [
         'Neck',
         'Lower Back',
@@ -267,13 +196,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'setTaskCurrentCaseHistoryProblems',
-      'setTaskCurrentTaskType',
-      'setTaskCurrentCaseHistoryOats',
-      'setTaskCurrentTaskTypeRemove'
-    ]),
-    selectChange (selected) {
+    setTaskCurrentTaskType(type) {
+      this.taskStore.setCurrentTaskType(type)
+    },
+    setTaskInfo(info) {
+      this.taskStore.setTaskInfo(info)
+    },
+    selectChange(selected) {
       if (!this.form.complaint1) {
         this.form.complaint1 = selected
         return
@@ -290,24 +219,7 @@ export default {
         this.form.complaint4 = selected
       }
     },
-    // selectRemove (removed) { -------------------- COMMENTED OUT BY RIZZA 04/02/2022
-    //  if (this.form.complaint1 === removed) {
-    //    this.form.complaint1 = ''
-    //    return
-    //  }
-    //  if (this.form.complaint2 === removed) {
-    //    this.form.complaint2 = ''
-    //    return
-    //  }
-    //  if (this.form.complaint3 === removed) {
-    //    this.form.complaint3 = ''
-    //    return
-    //  }
-    //  if (this.form.complaint4 === removed) {
-    //    this.form.complaint4 = ''
-    //  }
-    // },
-    async next () {
+    async next() {
       if (this.form.regions.length === 0) {
         this.$swal({
           text: 'Please select a region that pertains to your visit.',
@@ -322,16 +234,6 @@ export default {
       }
       this.isSaving = true
       if (this.forDelete.length > 0) {
-        // this.forDelete.forEach(async (el) => {
-        //  await api.task.request.deleteCaseHistoryProblem({
-        //    facilityId: this.currentPatientAssociated.facilityID,
-        //    caseHistoryProblemId: el.id
-        //  })
-        //  console.log('deleteCaseHistoryProblem: ' + el.id)
-        // })
-
-        // modified and added by Rizza 10/13/2023
-        // foreach above is not working async
         for await (const result of this.forDelete) {
           await api.task.request.deleteCaseHistoryProblem({
             facilityId: this.currentPatientAssociated.facilityID,
@@ -373,15 +275,14 @@ export default {
       this.isSaving = false
       await this.setTaskCurrentTaskType('NphComplaintQuestions')
     },
-    async previous () {
+    async previous() {
       const currentIndex = this.getTaskPreviousTaskType.findIndex(
         (c) => c === this.getTaskCurrentTaskType
       )
       let prevPage = ''
       if (currentIndex === -1) {
-        prevPage = this.getTaskPreviousTaskType[
-          this.getTaskPreviousTaskType.length - 1
-        ]
+        prevPage =
+          this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
       } else {
         prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
       }
@@ -393,34 +294,8 @@ export default {
       })
     }
   },
-  async mounted () {
-    // const result = await api.task.request.getCaseHistoryProblems({
-    //   facilityId: this.currentPatientAssociated.facilityID,
-    //   caseHistoryId: this.getTaskCurrentCaseHistoryId
-    // })
-    // this.forDelete = result.data
-    // if (this.forDelete.length > 0) {
-    //   this.forDelete.forEach((el) => {
-    //     this.form.regions.push(el.region)
-    //     switch (el.ordinal) {
-    //       case 1:
-    //         this.form.complaint1 = el.region
-    //         break
-    //       case 2:
-    //         this.form.complaint2 = el.region
-    //         break
-    //       case 3:
-    //         this.form.complaint3 = el.region
-    //         break
-    //       case 4:
-    //         this.form.complaint4 = el.region
-    //         break
-    //     }
-    //   })
-    // }
-    // this.isLoading = false
-  },
-  async activated () {
+  async mounted() {},
+  async activated() {
     this.form = {
       regions: [],
       complaint1: '',
@@ -429,7 +304,6 @@ export default {
       complaint4: ''
     }
 
-    // console.log('activated!')
     this.isLoading = true
     const result = await api.task.request.getCaseHistoryProblems({
       facilityId: this.currentPatientAssociated.facilityID,
@@ -437,11 +311,8 @@ export default {
     })
     this.form.regions = []
     this.forDelete = result.data
-    // console.log('this.form.regions>', this.form.regions)
-    // console.log('this.forDelete>', this.forDelete)
     if (this.forDelete.length > 0) {
       this.forDelete.forEach((el) => {
-        // console.log('pushing this.form.regions>el.region', el.region)
         this.form.regions.push(el.region)
         switch (el.ordinal) {
           case 1:
@@ -464,7 +335,6 @@ export default {
     setTimeout(() => {
       const el = document.getElementById('frmBody')
       el.scrollIntoView({ behavior: 'smooth' })
-      // console.log('should be scrolling to top!')
     }, 1000)
   }
 }

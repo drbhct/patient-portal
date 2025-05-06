@@ -9,19 +9,23 @@
 import List from '../components/messages/MsgList.vue'
 import Detail from '../components/messages/MsgDetails.vue'
 import Create from '../components/messages/MsgCreate.vue'
-import { mapGetters } from 'vuex'
+import { useMessageStore } from '@/stores/message'
+import { storeToRefs } from 'pinia'
+
 export default {
+  name: 'MessagesList',
   components: {
     List,
     Detail,
     Create
   },
-  data () {
+  setup() {
+    const messageStore = useMessageStore()
+    const { getMsgCurrentPage } = storeToRefs(messageStore)
+
     return {
+      getMsgCurrentPage
     }
-  },
-  computed: {
-    ...mapGetters(['getMsgCurrentPage'])
   }
 }
 </script>

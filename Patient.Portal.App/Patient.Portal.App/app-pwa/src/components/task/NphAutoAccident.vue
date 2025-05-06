@@ -726,969 +726,166 @@
   </section>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import Multiselect from 'vue-multiselect'
-import api from '../../api/http-common.js'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
-import 'vue2-timepicker/dist/VueTimepicker.css'
-import Datepicker from 'vuejs-datepicker'
-import TimePicker from 'vue2-timepicker'
-import { mapGetters, mapActions } from 'vuex'
-import btnSaving from '../button-saving.vue'
-export default {
-  components: {
-    Multiselect,
-    Datepicker,
-    TimePicker,
-    btnSaving
+import '@vuepic/vue-datepicker/dist/main.css'
+import Datepicker from '@vuepic/vue-datepicker'
+import TimePicker from 'vue3-timepicker'
+import 'vue3-timepicker/dist/VueTimepicker.css'
+import { useTaskStore } from '@/stores/task'
+import BtnSaving from '../button-saving.vue'
+
+const router = useRouter()
+const taskStore = useTaskStore()
+
+const isLoading = ref(true)
+const isSaving = ref(false)
+const form = ref({
+  dateAccident: '',
+  timeAccident: {
+    hh: '12',
+    mm: '00',
+    A: 'AM'
   },
-  data() {
-    return {
-      isLoading: true,
-      isSaving: false,
-      form: {
-        dateAccident: '',
-        timeAccident: {
-          hh: '12',
-          mm: '00',
-          A: 'AM'
-        },
-        estimatedDamage: 0,
-        numVehicles: 0,
-        streetAddress: '',
-        city: '',
-        state: '',
-        aaConditions: '',
-        aaDescription: '',
-        aaImpact: '',
-        aaLocationVehicle: '',
-        aaAwareness: '',
-        aaVehicleType: '',
-        aaVehicleTypeOther: '',
-        aaVehicleState: '',
-        aaVehicleSpeed: 0,
-        aaOtherVehicleSpeed: 0,
-        aaConsciousness: '',
-        aaAirbags: '',
-        aaHeadrestType: '',
-        aaHeadrestPosition: '',
-        aaSeatbeltType: '',
-        aaSeatbeltEffect: '',
-        aaVehicleDamage: [],
-        aaVehicleDents: [],
-        aaVehicleDoors: [],
-        aaHeadPosition: '',
-        aaTorso: '',
-        aaHandPosition: '',
-        aaImpactLocations: [],
-        aaHospital: '',
-        aaHospitalName: '',
-        aaHospitalTranspo: '',
-        aaHospitalized: '',
-        aaPainMed: '',
-        aaMuscleRelaxers: '',
-        aaStitches: '',
-        aaMedEquip: [],
-        aaXray: '',
-        aaMRI: '',
-        aaOtherImages: ''
-      },
-      accidentInfo: [],
-      aaConditions: '',
-      aaDescription: '',
-      aaImpact: '',
-      aaLocationVehicle: '',
-      aaAwareness: '',
-      aaVehicleType: '',
-      aaVehicleTypeOther: '',
-      aaVehicleState: '',
-      aaSeatbeltType: '',
-      disabledDates: {
-        from: new Date()
-      },
-      TimeVal: {
-        hh: '12',
-        mm: '00',
-        A: 'AM'
-      },
-      numList: ['1', '2', '3+'],
-      usStates: []
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'getProfilePatientAssociated',
-      'getTaskCurrentCaseHistoryId',
-      'getTaskPreviousTaskType',
-      'getTaskCurrentCaseHistoryAutoAccident',
-      'getTaskCurrentCaseHistoryAAFormValues',
-      'getTaskCurrentTaskType',
-      'currentPatientAssociated'
-    ]),
-    accidentConditions: function () {
-      return ['Icy', 'Wet', 'Dry', 'Slick', 'Other']
-    },
-    accidentDescription: function () {
-      return [
-        'Vehicle was rear-ended',
-        'Vehicle rear-ended another vehicle',
-        "Vehicle was hit on driver's side",
-        "Vehicle was hit on passenger's side",
-        'Other'
-      ]
-    },
-    accidentImpact: function () {
-      return [
-        'Hit a guardrail',
-        'Hit a tree or pole',
-        'Rolled over',
-        'Ran off the road',
-        'Other'
-      ]
-    },
-    accidentLocationVehicle: function () {
-      return [
-        "Driver's seat",
-        'Front passenger seat',
-        'Rear left passenger seat',
-        'Rear right passenger seat',
-        'Other'
-      ]
-    },
-    accidentAwareness: function () {
-      return [
-        'No - Unaware of the impending collision',
-        'Yes - aware of the impending collision and relaxed',
-        'Yes - aware of the impending collision and braced',
-        'Other'
-      ]
-    },
-    accidentVehicleType: function () {
-      return [
-        'Subcompact car',
-        'Compact car',
-        'Midsize car',
-        'Full size car',
-        'Truck',
-        'SUV',
-        'MiniVan',
-        'Van',
-        'Larger than one-ton vehicle',
-        'Other'
-      ]
-    },
-    accidentVehicleState: function () {
-      return [
-        'Slowing down',
-        'Stopped',
-        'Gaining Speed',
-        'Moving at a steady speed',
-        'Other'
-      ]
-    },
-    speedList: function () {
-      return [
-        '0',
-        '5',
-        '10',
-        '15',
-        '20',
-        '25',
-        '30',
-        '35',
-        '40',
-        '45',
-        '50',
-        '55',
-        '60',
-        '65',
-        '70',
-        '75',
-        '80',
-        '85',
-        '90',
-        '95',
-        '100',
-        '105',
-        '110',
-        '115',
-        '120',
-        '125',
-        '130',
-        '135',
-        '140',
-        '145',
-        '150'
-      ]
-    },
-    accidentConsciousness: function () {
-      return ['Yes', 'No']
-    },
-    accidentAirbags: function () {
-      return ['Yes', 'No', 'Vehicle not equipped with airbags']
-    },
-    accidentHeadrestType: function () {
-      return [
-        'Movable headrests',
-        'Fixed/Non-movable headrests',
-        'No headrests'
-      ]
-    },
-    accidentHeadrestPosition: function () {
-      return [
-        'Top portion of the back of head',
-        'Middle height of head',
-        'Lower portion of the back of head',
-        'Back of head',
-        'Shoulder blades'
-      ]
-    },
-    accidentSeatbeltType: function () {
-      return [
-        'Shoulder and lap belt',
-        'Lap belt',
-        'Baby car seat',
-        'Booster seat',
-        'No seatbelt',
-        'Other'
-      ]
-    },
-    accidentSeatbeltEffect: function () {
-      return ['Yes completely', 'Yes partially', 'No']
-    },
-    accidentVehicleDamage: function () {
-      return [
-        'Front bumper',
-        'Hood',
-        'Front left quarter panel',
-        'Front right quarter panel',
-        'Front left door',
-        'Front right door',
-        'Back left door',
-        'Back right door',
-        'Back left quarter panel',
-        'Back right quarter panel',
-        'Rear bumper',
-        'Trunk',
-        'Windshield',
-        'Side window',
-        'Rear window',
-        'Steering wheel',
-        'Dashboard',
-        'Rear view mirror',
-        'Seat frame',
-        'Knee bolster'
-      ]
-    },
-    accidentVehicleDents: function () {
-      return [
-        'Front bumper',
-        'Hood',
-        'Front left quarter panel',
-        'Front right quarter panel',
-        'Front left door',
-        'Front right door',
-        'Back left door',
-        'Back right door',
-        'Back left quarter panel',
-        'Back right quarter panel',
-        'Rear bumper',
-        'Trunk'
-      ]
-    },
-    accidentVehicleDoors: function () {
-      return [
-        'Front left door',
-        'Front right door',
-        'Back left door',
-        'Back right door',
-        'Trunk'
-      ]
-    },
-    accidentHeadPosition: function () {
-      return [
-        'Facing forward',
-        'Facing upward',
-        'Facing downward',
-        'Turned left',
-        'Turned right',
-        'Turned left and upward',
-        'Turned right and upward',
-        'Turned left and downward',
-        'Turned right and downward'
-      ]
-    },
-    accidentTorso: function () {
-      return [
-        'Forward',
-        'Twisted to your left',
-        'Twisted to your right',
-        'Bending forward'
-      ]
-    },
-    accidentHandPosition: function () {
-      return [
-        'Left hand on steering wheel',
-        'Right hand on steering wheel',
-        'Both hands on steering wheel',
-        'Left hand on the dashboard',
-        'Right hand on the dashboard',
-        'Both hands on the dashboard',
-        'Left hand on the seat in front of you',
-        'Right hand on the seat in front of you',
-        'Both hands on the seat in front of you'
-      ]
-    },
-    accidentImpactLocations: function () {
-      return [
-        'Head',
-        'Face',
-        'Neck',
-        'Chest',
-        'Right Shoulder',
-        'Right hip',
-        'Right Knee',
-        'Right Foot',
-        'Left Shoulder',
-        'Left Hip',
-        'Left Knee',
-        'Left Foot'
-      ]
-    },
-    accidentLocationParts: function () {
-      return [
-        'Steering wheel',
-        'Dashboard',
-        'Windshield',
-        'Side window',
-        'Side door',
-        'Seat',
-        'Ceiling',
-        'Car frame',
-        'Another passenger'
-      ]
-    },
-    accidentHospitalTranspo: function () {
-      return [
-        'By ambulance',
-        'Rode with someone else',
-        'Drove yourself',
-        'By helicopter',
-        'Walked'
-      ]
-    },
-    accidentYesNo: function () {
-      return ['Yes', 'No']
-    },
-    accidentMedEquip: function () {
-      return ['Cervical collar', 'Back brace', 'Crutches', 'Wheelchair']
-    }
-  },
-  methods: {
-    ...mapActions([
-      'setTaskCurrentTaskType',
-      'setTaskCurrentCaseHistoryAutoAccident',
-      'setTaskCurrentCaseHistoryAAFormValues'
-    ]),
-    async getUsStates() {
-      const result = await api.task.request.getUsStates()
-      this.usStates = result.data
-    },
-    removePart(value) {
-      const obj = 'aaImpactLocCar' + value
-      delete this.form[obj]
-    },
-    async previous() {
-      const currentIndex = this.getTaskPreviousTaskType.findIndex(
-        (c) => c === this.getTaskCurrentTaskType
-      )
-      let prevPage = ''
-      if (currentIndex === -1) {
-        prevPage =
-          this.getTaskPreviousTaskType[this.getTaskPreviousTaskType.length - 1]
-      } else {
-        prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
-      }
-      // await this.setTaskCurrentTaskTypeRemove('NphComplaintLocation')
-      this.setTaskCurrentTaskType({
-        back: true,
-        page: prevPage,
-        removePage: this.getTaskCurrentTaskType
-      })
-    },
-    save() {
-      if (!this.form.dateAccident) {
-        alert('Please specify the date of accident.')
-        return
-      }
-      if (!this.form.timeAccident) {
-        alert('Please specify the time of accident.')
-        return
-      }
+  estimatedDamage: 0,
+  numVehicles: 0,
+  streetAddress: '',
+  city: '',
+  state: '',
+  aaConditions: '',
+  aaDescription: '',
+  aaImpact: '',
+  aaLocationVehicle: '',
+  aaAwareness: '',
+  aaVehicleType: '',
+  aaVehicleTypeOther: '',
+  aaVehicleState: '',
+  aaVehicleSpeed: 0,
+  aaOtherVehicleSpeed: 0,
+  aaConsciousness: '',
+  aaAirbags: '',
+  aaHeadrestType: '',
+  aaHeadrestPosition: '',
+  aaSeatbeltType: '',
+  aaSeatbeltEffect: '',
+  aaVehicleDamage: [],
+  aaVehicleDents: [],
+  aaVehicleDoors: [],
+  aaHeadPosition: '',
+  aaTorso: '',
+  aaHandPosition: '',
+  aaImpactLocations: [],
+  aaHospital: '',
+  aaHospitalName: '',
+  aaHospitalTranspo: '',
+  aaHospitalized: '',
+  aaPainMed: '',
+  aaMuscleRelaxers: '',
+  aaStitches: '',
+  aaMedEquip: [],
+  aaXray: '',
+  aaMRI: '',
+  aaOtherImages: ''
+})
 
-      if (this.form.dateAccident !== '') {
-        this.setCodeValue(this.form.dateAccident, 'AccidentDate')
-      }
-      if (this.form.timeAccident !== null) {
-        const tmeVal = `${this.form.timeAccident.hh}:${this.form.timeAccident.mm} ${this.form.timeAccident.A}`
-        this.setCodeValue(tmeVal, 'AccidentTime')
-      }
-      if (this.form.estimatedDamage > 0) {
-        this.setCodeValue(this.form.estimatedDamage, 'AccidentDamageCost')
-      }
-      if (this.form.numVehicles > 0) {
-        this.setCodeValue(this.form.numVehicles, 'NumVehicles')
-      }
-      if (this.form.streetAddress !== '') {
-        this.setCodeValue(this.form.streetAddress, 'Street')
-      }
-      if (this.form.city !== '') {
-        this.setCodeValue(this.form.city, 'City')
-      }
-      if (this.form.state !== '') {
-        this.setCodeValue(this.form.state, 'State')
-      }
-      if (this.form.aaConditions !== '') {
-        if (this.form.aaConditions === 'Other') {
-          this.setCodeValue(this.aaConditions, 'WeatherCondition')
-        } else {
-          this.setCodeValue(this.form.aaConditions, 'WeatherCondition')
-        }
-      }
-      if (this.form.aaDescription !== '') {
-        if (this.form.aaDescription === 'Other') {
-          this.setCodeValue(this.aaDescription, 'GeneralDescription')
-        } else {
-          this.setCodeValue(this.form.aaDescription, 'GeneralDescription')
-        }
-      }
-      if (this.form.aaImpact !== '') {
-        if (this.form.aaImpact === 'Other') {
-          this.setCodeValue(this.aaImpact, 'AfterImpact')
-        } else {
-          this.setCodeValue(this.form.aaImpact, 'AfterImpact')
-        }
-      }
-      if (this.form.aaLocationVehicle !== '') {
-        if (this.form.aaLocationVehicle === 'Other') {
-          this.setCodeValue(this.aaLocationVehicle, 'PatientLocation')
-        } else {
-          this.setCodeValue(this.form.aaLocationVehicle, 'PatientLocation')
-        }
-      }
-      if (this.form.aaAwareness !== '') {
-        if (this.form.aaAwareness === 'Other') {
-          this.setCodeValue(this.aaAwareness, 'PatientAwareness')
-        } else {
-          this.setCodeValue(this.form.aaAwareness, 'PatientAwareness')
-        }
-      }
-      if (this.form.aaVehicleType !== '') {
-        if (this.form.aaVehicleType === 'Other') {
-          this.setCodeValue(this.aaVehicleType, 'PatientVehicleType')
-        } else {
-          this.setCodeValue(this.form.aaVehicleType, 'PatientVehicleType')
-        }
-      }
-      if (this.form.aaVehicleTypeOther !== '') {
-        if (this.form.aaVehicleTypeOther === 'Other') {
-          this.setCodeValue(this.aaVehicleTypeOther, 'OtherVehicleType')
-        } else {
-          this.setCodeValue(this.form.aaVehicleTypeOther, 'OtherVehicleType')
-        }
-      }
-      if (this.form.aaVehicleState !== '') {
-        if (this.form.aaVehicleState === 'Other') {
-          this.setCodeValue(this.aaVehicleState, 'PatientVehicleVelocity')
-        } else {
-          this.setCodeValue(this.form.aaVehicleState, 'PatientVehicleVelocity')
-        }
-      }
-      if (this.form.aaVehicleSpeed > 0) {
-        this.setCodeValue(this.form.aaVehicleSpeed, 'PatientVehicleSpeed')
-      }
-      if (this.form.numVehicles > 1) {
-        if (this.form.aaOtherVehicleSpeed > 0) {
-          this.setCodeValue(this.form.aaOtherVehicleSpeed, 'OtherVehicleSpeed')
-        }
-      }
-      if (this.form.aaConsciousness !== '') {
-        this.setCodeValue(this.form.aaConsciousness, 'Consciousness')
-      }
-      if (this.form.aaAirbags !== '') {
-        this.setCodeValue(this.form.aaAirbags, 'Airbags')
-      }
-      if (this.form.aaHeadrestType !== '') {
-        this.setCodeValue(this.form.aaHeadrestType, 'HeadrestType')
-      }
-      if (this.form.aaHeadrestPosition !== '') {
-        this.setCodeValue(this.form.aaHeadrestPosition, 'HeadrestPosition')
-      }
-      if (this.form.aaSeatbeltType !== '') {
-        if (this.form.aaVehicleState === 'Other') {
-          this.setCodeValue(this.aaSeatbeltType, 'SeatbeltType')
-        } else {
-          this.setCodeValue(this.form.aaSeatbeltType, 'SeatbeltType')
-        }
-      }
-      if (this.form.aaSeatbeltEffect !== '') {
-        this.setCodeValue(this.form.aaSeatbeltEffect, 'SeatbeltResult')
-      }
-      if (this.form.aaVehicleDamage.length > 0) {
-        this.setCodeValue(this.form.aaVehicleDamage.join(), 'VehicleDamage')
-      }
-      if (this.form.aaVehicleDents.length > 0) {
-        this.setCodeValue(this.form.aaVehicleDents.join(), 'VehicleDents')
-      }
-      if (this.form.aaVehicleDoors.length > 0) {
-        this.setCodeValue(this.form.aaVehicleDoors.join(), 'VehicleDoors')
-      }
-      if (this.form.aaHeadPosition !== '') {
-        this.setCodeValue(this.form.aaHeadPosition, 'HeadPosition')
-      }
-      if (this.form.aaTorso !== '') {
-        this.setCodeValue(this.form.aaTorso, 'TorsoPosition')
-      }
-      if (this.form.aaHandPosition !== '') {
-        this.setCodeValue(this.form.aaHandPosition, 'HandPosition')
-      }
-      if (this.form.aaHospital !== '') {
-        this.setCodeValue(this.form.aaHospital, 'Hospital')
-      }
-      if (this.form.aaHospital === 'Yes') {
-        if (this.form.aaHospitalName !== '') {
-          this.setCodeValue(this.form.aaHospital, 'HospitalName')
-        }
-        if (this.form.aaHospitalTranspo !== '') {
-          this.setCodeValue(this.form.aaHospitalTranspo, 'HospitalTransport')
-        }
-        if (this.form.aaHospitalized !== '') {
-          this.setCodeValue(this.form.aaHospitalized, 'HospitalOvernight')
-        }
-        if (this.form.aaPainMed !== '') {
-          this.setCodeValue(this.form.aaPainMed, 'HospitalPainMeds')
-        }
-        if (this.form.aaMuscleRelaxers !== '') {
-          this.setCodeValue(
-            this.form.aaMuscleRelaxers,
-            'HospitalMuscleRelaxers'
-          )
-        }
-        if (this.form.aaStitches !== '') {
-          this.setCodeValue(this.form.aaStitches, 'HospitalStitches')
-        }
-        if (this.form.aaMedEquip.length > 0) {
-          this.setCodeValue(
-            this.form.aaMedEquip.join(),
-            'HospitalMedicalEquipment'
-          )
-        }
-        if (this.form.aaXray !== '') {
-          this.setCodeValue(this.form.aaXray, 'HospitalXrays')
-        }
-        if (this.form.aaMRI !== '') {
-          this.setCodeValue(this.form.aaMRI, 'HospitalMRI')
-        }
-        if (this.form.aaOtherImages !== '') {
-          this.setCodeValue(this.form.aaOtherImages, 'HospitalImaging')
-        }
-      }
-      if (this.form.aaImpactLocations.length > 0) {
-        var me = this
-        this.setCodeValue(
-          this.form.aaImpactLocations.join(),
-          'BodyPartsImpacted'
-        )
-        this.form.aaImpactLocations.forEach(function (item) {
-          var aaImpactLoc = 'aaImpactLocCar' + item
-          me.setCodeValue(
-            me.form[aaImpactLoc].join(),
-            'Impact_' + item.replace(/ /g, '_')
-          )
-        })
-      }
+const accidentInfo = ref([])
+const aaConditions = ref('')
+const aaDescription = ref('')
+const aaImpact = ref('')
+const aaLocationVehicle = ref('')
+const aaAwareness = ref('')
+const aaVehicleType = ref('')
+const aaVehicleTypeOther = ref('')
+const aaVehicleState = ref('')
+// These variables are already defined in the form.value object
+// const aaVehicleSpeed = ref(0)
+// const aaOtherVehicleSpeed = ref(0)
+// const aaConsciousness = ref('')
+const aaAirbags = ref('')
+const aaHeadrestType = ref('')
+const aaHeadrestPosition = ref('')
+const aaSeatbeltType = ref('')
+const aaSeatbeltEffect = ref('')
+const aaVehicleDamage = ref([])
+const aaVehicleDents = ref([])
+const aaVehicleDoors = ref([])
+const aaHeadPosition = ref('')
+const aaTorso = ref('')
+const aaHandPosition = ref('')
+const aaImpactLocations = ref([])
+const aaHospital = ref('')
+const aaHospitalName = ref('')
+const aaHospitalTranspo = ref('')
+const aaHospitalized = ref('')
+const aaPainMed = ref('')
+const aaMuscleRelaxers = ref('')
+const aaStitches = ref('')
+const aaMedEquip = ref([])
+const aaXray = ref('')
+const aaMRI = ref('')
+const aaOtherImages = ref('')
 
-      if (this.accidentInfo.length > 0) {
-        this.setTaskCurrentCaseHistoryAAFormValues(
-          JSON.parse(JSON.stringify(this.form))
-        )
-        this.setTaskCurrentCaseHistoryAutoAccident(this.accidentInfo)
+// Computed properties
+const getTaskPreviousTaskType = computed(() => taskStore.previousTaskType)
+const getTaskCurrentTaskType = computed(() => taskStore.currentTaskType)
+const currentPatientAssociated = computed(
+  () => taskStore.currentPatientAssociated
+)
+const getTaskCurrentCaseHistoryId = computed(
+  () => taskStore.currentCaseHistoryId
+)
 
-        this.isSaving = true
-        this.setAAValues()
-      } else {
-        this.setTaskCurrentTaskType('NphComplaintLocation')
-      }
-    },
-    loadValue(items) {
-      var me = this
-      for (const i in items) {
-        const code = items[i].code
-        const value = items[i].value
-
-        if (code === 'AccidentDate') {
-          this.form.dateAccident = value
-        }
-        if (code === 'AccidentTime') {
-          this.form.timeAccident = value
-        }
-        if (code === 'AccidentDamageCost') {
-          this.form.estimatedDamage = value
-        }
-        if (code === 'NumVehicles') {
-          this.form.numVehicles = value
-        }
-        if (code === 'Street') {
-          this.form.streetAddress = value
-        }
-        if (code === 'City') {
-          this.form.city = value
-        }
-        if (code === 'State') {
-          this.form.state = value
-        }
-        if (code === 'WeatherCondition') {
-          const found = this.accidentConditions.find(
-            (element) => element === value
-          )
-          if (found) {
-            this.form.aaConditions = value
-          } else {
-            this.form.aaConditions = 'Other'
-            this.aaConditions = value
-          }
-        }
-        if (code === 'GeneralDescription') {
-          const found = this.accidentDescription.find(
-            (element) => element === value
-          )
-          if (found) {
-            this.form.aaDescription = value
-          } else {
-            this.form.aaDescription = 'Other'
-            this.aaDescription = value
-          }
-        }
-        if (code === 'AfterImpact') {
-          const found = this.accidentImpact.find((element) => element === value)
-          if (found) {
-            this.form.aaImpact = value
-          } else {
-            this.form.aaImpact = 'Other'
-            this.aaImpact = value
-          }
-        }
-        if (code === 'PatientLocation') {
-          const found = this.accidentLocationVehicle.find(
-            (element) => element === value
-          )
-          if (found) {
-            this.form.aaLocationVehicle = value
-          } else {
-            this.form.aaLocationVehicle = 'Other'
-            this.aaLocationVehicle = value
-          }
-        }
-        if (code === 'PatientAwareness') {
-          const found = this.accidentAwareness.find(
-            (element) => element === value
-          )
-          if (found) {
-            this.form.aaAwareness = value
-          } else {
-            this.form.aaAwareness = 'Other'
-            this.aaAwareness = value
-          }
-        }
-        if (code === 'PatientVehicleType') {
-          const found = this.accidentVehicleType.find(
-            (element) => element === value
-          )
-          if (found) {
-            this.form.aaVehicleType = value
-          } else {
-            this.form.aaVehicleType = 'Other'
-            this.aaVehicleType = value
-          }
-        }
-        if (code === 'OtherVehicleType') {
-          const found = this.accidentVehicleType.find(
-            (element) => element === value
-          )
-          if (found) {
-            this.form.aaVehicleTypeOther = value
-          } else {
-            this.form.aaVehicleTypeOther = 'Other'
-            this.aaVehicleTypeOther = value
-          }
-        }
-        if (code === 'PatientVehicleVelocity') {
-          const found = this.accidentVehicleState.find(
-            (element) => element === value
-          )
-          if (found) {
-            this.form.aaVehicleState = value
-          } else {
-            this.form.aaVehicleState = 'Other'
-            this.aaVehicleState = value
-          }
-        }
-        if (code === 'PatientVehicleSpeed') {
-          this.form.aaVehicleSpeed = value
-        }
-        if (code === 'OtherVehicleSpeed') {
-          this.form.aaOtherVehicleSpeed = value
-        }
-        if (code === 'Consciousness') {
-          this.form.aaConsciousness = value
-        }
-        if (code === 'Airbags') {
-          this.form.aaAirbags = value
-        }
-        if (code === 'HeadrestType') {
-          this.form.aaHeadrestType = value
-        }
-        if (code === 'HeadrestPosition') {
-          this.form.aaHeadrestPosition = value
-        }
-        if (code === 'SeatbeltType') {
-          const found = this.accidentSeatbeltType.find(
-            (element) => element === value
-          )
-          if (found) {
-            this.form.aaSeatbeltType = value
-          } else {
-            this.form.aaSeatbeltType = 'Other'
-            this.aaSeatbeltType = value
-          }
-        }
-        if (code === 'SeatbeltResult') {
-          this.form.aaSeatbeltEffect = value
-        }
-        if (code === 'VehicleDamage') {
-          this.form.aaVehicleDamage = value.split(',')
-        }
-        if (code === 'VehicleDents') {
-          this.form.aaVehicleDents = value.split(',')
-        }
-        if (code === 'VehicleDoors') {
-          this.form.aaVehicleDoors = value.split(',')
-        }
-        if (code === 'HeadPosition') {
-          this.form.aaHeadPosition = value
-        }
-        if (code === 'TorsoPosition') {
-          this.form.aaTorso = value
-        }
-        if (code === 'HandPosition') {
-          this.form.aaHandPosition = value
-        }
-        if (code === 'Hospital') {
-          this.form.aaHospital = value
-        }
-        if (code === 'HospitalName') {
-          this.form.aaHospital = value
-        }
-        if (code === 'HospitalTransport') {
-          this.form.aaHospitalTranspo = value
-        }
-        if (code === 'HospitalOvernight') {
-          this.form.aaHospitalized = value
-        }
-        if (code === 'HospitalPainMeds') {
-          this.form.aaPainMed = value
-        }
-        if (code === 'HospitalMuscleRelaxers') {
-          this.form.aaMuscleRelaxers = value
-        }
-        if (code === 'HospitalStitches') {
-          this.form.aaStitches = value
-        }
-        if (code === 'HospitalMedicalEquipment') {
-          this.form.aaMedEquip = value.split(',')
-        }
-        if (code === 'HospitalXrays') {
-          this.form.aaXray = value
-        }
-        if (code === 'HospitalMRI') {
-          this.form.aaMRI = value
-        }
-        if (code === 'HospitalImaging') {
-          this.form.aaOtherImages = value
-        }
-        if (code === 'BodyPartsImpacted') {
-          this.form.aaImpactLocations = value.split(',')
-        }
-        this.form.aaImpactLocations.forEach(function (item) {
-          if (code === 'Impact_' + item.replace(/ /g, '_')) {
-            var aaImpactLoc = 'aaImpactLocCar' + item
-            me.form[aaImpactLoc] = value
-          }
-        })
-      }
-    },
-    setCodeValue(value, code) {
-      const found = this.accidentInfo.some((el) => el.code === code)
-      if (!found) {
-        this.accidentInfo.push({ code: code, value: value })
-      } else {
-        var index = this.accidentInfo.findIndex((el) => el.code === code)
-        this.accidentInfo[index].value = value
-      }
-    },
-    async setAAValues() {
-      const param = {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId,
-        values: this.accidentInfo
-      }
-
-      await api.task.request.updateCaseHistoryAaValues(param)
-      this.setTaskCurrentTaskType('NphComplaintLocation')
-    },
-    async getAAValues() {
-      const param = {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId
-      }
-      const response = await api.task.request.getCaseHistoryAaValues(param)
-      this.loadValue(response.data)
-    },
-    initializeData() {
-      console.log('initializeData.......')
-      this.getAAValues()
-      this.form = {
-        dateAccident: '',
-        timeAccident: null,
-        estimatedDamage: 0,
-        numVehicles: 0,
-        streetAddress: '',
-        city: '',
-        state: '',
-        aaConditions: '',
-        aaDescription: '',
-        aaImpact: '',
-        aaLocationVehicle: '',
-        aaAwareness: '',
-        aaVehicleType: '',
-        aaVehicleTypeOther: '',
-        aaVehicleState: '',
-        aaVehicleSpeed: 0,
-        aaOtherVehicleSpeed: 0,
-        aaConsciousness: '',
-        aaAirbags: '',
-        aaHeadrestType: '',
-        aaHeadrestPosition: '',
-        aaSeatbeltType: '',
-        aaSeatbeltEffect: '',
-        aaVehicleDamage: [],
-        aaVehicleDents: [],
-        aaVehicleDoors: [],
-        aaHeadPosition: '',
-        aaTorso: '',
-        aaHandPosition: '',
-        aaImpactLocations: [],
-        aaHospital: '',
-        aaHospitalName: '',
-        aaHospitalTranspo: '',
-        aaHospitalized: '',
-        aaPainMed: '',
-        aaMuscleRelaxers: '',
-        aaStitches: '',
-        aaMedEquip: [],
-        aaXray: '',
-        aaMRI: '',
-        aaOtherImages: ''
-      }
-      this.accidentInfo = this.getTaskCurrentCaseHistoryAutoAccident
-      if (this.getTaskCurrentCaseHistoryAAFormValues) {
-        this.form = JSON.parse(
-          JSON.stringify(this.getTaskCurrentCaseHistoryAAFormValues)
-        )
-
-        if (this.form.aaConditions === 'Other') {
-          const index = this.accidentInfo.findIndex(
-            (el) => el.code === 'WeatherCondition'
-          )
-          if (index >= 0) {
-            this.aaConditions = this.accidentInfo[index].value
-          }
-        }
-        if (this.form.aaDescription === 'Other') {
-          const index = this.accidentInfo.findIndex(
-            (el) => el.code === 'GeneralDescription'
-          )
-          if (index >= 0) {
-            this.aaDescription = this.accidentInfo[index].value
-          }
-        }
-        if (this.form.aaImpact === 'Other') {
-          const index = this.accidentInfo.findIndex(
-            (el) => el.code === 'AfterImpact'
-          )
-          if (index >= 0) {
-            this.aaImpact = this.accidentInfo[index].value
-          }
-        }
-        if (this.form.aaLocationVehicle === 'Other') {
-          const index = this.accidentInfo.findIndex(
-            (el) => el.code === 'PatientLocation'
-          )
-          if (index >= 0) {
-            this.aaLocationVehicle = this.accidentInfo[index].value
-          }
-        }
-        if (this.form.aaAwareness === 'Other') {
-          const index = this.accidentInfo.findIndex(
-            (el) => el.code === 'PatientAwareness'
-          )
-          if (index >= 0) {
-            this.aaAwareness = this.accidentInfo[index].value
-          }
-        }
-        if (this.form.aaVehicleType === 'Other') {
-          const index = this.accidentInfo.findIndex(
-            (el) => el.code === 'PatientVehicleType'
-          )
-          if (index >= 0) {
-            this.aaVehicleType = this.accidentInfo[index].value
-          }
-        }
-        if (this.form.aaVehicleTypeOther === 'Other') {
-          const index = this.accidentInfo.findIndex(
-            (el) => el.code === 'OtherVehicleType'
-          )
-          if (index >= 0) {
-            this.aaVehicleTypeOther = this.accidentInfo[index].value
-          }
-        }
-        if (this.form.aaVehicleState === 'Other') {
-          const index = this.accidentInfo.findIndex(
-            (el) => el.code === 'PatientVehicleVelocity'
-          )
-          if (index >= 0) {
-            this.aaVehicleState = this.accidentInfo[index].value
-          }
-        }
-        if (this.form.aaSeatbeltType === 'Other') {
-          const index = this.accidentInfo.findIndex(
-            (el) => el.code === 'SeatbeltType'
-          )
-          if (index >= 0) {
-            this.aaSeatbeltType = this.accidentInfo[index].value
-          }
-        }
-      }
-    }
-  },
-  async mounted() {
-    const el = document.getElementById('cardAABody')
-    el.scrollIntoView({ behavior: 'smooth' })
-    await this.getUsStates()
-    await this.initializeData()
+// Methods
+const loadAccidentInfo = async () => {
+  try {
+    const response = await taskStore.getAccidentInfo()
+    accidentInfo.value = response.data
+    form.value = response.data
+  } catch (error) {
+    console.error('Error loading accident info:', error)
+  } finally {
+    isLoading.value = false
   }
 }
+
+const save = async () => {
+  isSaving.value = true
+  try {
+    await taskStore.saveAccidentInfo(form.value)
+    router.push('/task/complaint-questions')
+  } catch (error) {
+    console.error('Error saving accident info:', error)
+  } finally {
+    isSaving.value = false
+  }
+}
+
+const prev = () => {
+  const currentIndex = getTaskPreviousTaskType.value.findIndex(
+    (c) => c === getTaskCurrentTaskType.value
+  )
+  let prevPage = ''
+  if (currentIndex === -1) {
+    prevPage =
+      getTaskPreviousTaskType.value[getTaskPreviousTaskType.value.length - 1]
+  } else {
+    prevPage = getTaskPreviousTaskType.value[currentIndex - 1]
+  }
+  taskStore.setTaskCurrentTaskType({
+    back: true,
+    page: prevPage,
+    removePage: getTaskCurrentTaskType.value
+  })
+}
+
+onMounted(() => {
+  loadAccidentInfo()
+})
 </script>
+
 <style scoped>
 .card + .card {
   margin-top: 0;

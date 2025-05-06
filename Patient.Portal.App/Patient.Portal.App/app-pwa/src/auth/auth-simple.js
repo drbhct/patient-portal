@@ -1,18 +1,40 @@
-import Vue from 'vue'
 import auth from '../api/auth-request.js'
+import axios from 'axios'
 
-let authInstance
+const apiUrl = 'https://hct-api-ncentral.healthcoretech.com'
+
+const securedJsonRequest = axios.create({
+  baseURL: apiUrl,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+})
+
+securedJsonRequest.interceptors.request.use(
+  (config) => {
+    const token = sessionStorage.getItem('config')
+    if (token) {
+      config.headers.common.Authorization = 'bearer ' + token
+    }
+    return config
+  },
+  (error) => {
+    return Promise.reject(error)
+  }
+)
 
 export class AuthSimplePlugin {
-  // eslint-disable-next-line no-useless-constructor
-  constructor () {
-    // TODO: On refresh value is reset
+  constructor() {
     this.logged = false
   }
 
-  install (vue, options) {
-    authInstance = this
-    vue.prototype.$auth = Vue.observable(authInstance)
+  // Updated install method for Vue 3 compatibility
+  install(app) {
+    // Use config.globalProperties for Vue 3
+    app.config.globalProperties.$auth = this
+    
+    // Also provide the auth instance through provide/inject pattern for composition API
+    app.provide('auth', this)
   }
 
   /**
@@ -20,15 +42,17 @@ export class AuthSimplePlugin {
    * @param {String} username username of the user
    * @param {String} password password of the user
    */
-  async login (username, password) {
+  async login(username, password) {
     const appTokenRaw = await auth.request.apiLogin()
-    const userDataRaw = await auth.request.validateUser({
-      username,
-      password
-    }, appTokenRaw.data.token)
+    const userDataRaw = await auth.request.validateUser(
+      {
+        username,
+        password
+      },
+      appTokenRaw.data.token
+    )
 
     if (userDataRaw.data) {
-      // localStorage.setItem('config', appTokenRaw.data.token)
       sessionStorage.setItem('config', appTokenRaw.data.token)
     }
 
@@ -38,18 +62,16 @@ export class AuthSimplePlugin {
   /**
    * Logout the user
    */
-  logout () {
+  logout() {
     this.logged = false
-    // this.isAuthenticated = false
     sessionStorage.clear()
   }
 
   /**
    * Toggle to properly complete the authentication
    */
-  completeAuth () {
+  completeAuth() {
     this.logged = true
-    // localStorage.setItem('completeAuth', true)
     sessionStorage.setItem('completeAuth', true)
   }
 
@@ -57,7 +79,7 @@ export class AuthSimplePlugin {
    * Check if the user is currently authenticated or not
    * @returns {Boolean} true or false
    */
-  isAuthenticated () {
+  isAuthenticated() {
     const token = sessionStorage.getItem('config')
     const completeAuth = sessionStorage.getItem('completeAuth')
     if (!token) {
@@ -75,8 +97,28 @@ export class AuthSimplePlugin {
    * Acquire the app token
    * @returns {String} App Token
    */
-  getToken () {
+  getToken() {
     const token = sessionStorage.getItem('config')
     return token
+  }
+}
+
+export default {
+  request: {
+    async login(credentials) {
+      return await securedJsonRequest.post('/auth/login', credentials)
+    },
+    async validateUser() {
+      return await securedJsonRequest.get('/auth/validateuser')
+    },
+    async updateUser(payload) {
+      return await securedJsonRequest.post('/auth/updateuser', payload)
+    },
+    async getFacilityInfo(facilityId) {
+      return await securedJsonRequest.get('/auth/getfacilityinfo/' + facilityId)
+    },
+    async getFacilityList() {
+      return await securedJsonRequest.get('/auth/getfacilitylist')
+    }
   }
 }

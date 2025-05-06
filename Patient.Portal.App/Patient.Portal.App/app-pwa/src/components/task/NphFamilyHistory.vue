@@ -42,14 +42,14 @@
                     {{ famCondition.question }}
                   </label>
                   <span
-                    style="margin-left:10px;cursor: pointer;"
+                    style="margin-left: 10px; cursor: pointer"
                     @click="addSameConditionToFam(famCondition)"
                   >
                     <i class="fa-solid fa-person-circle-plus"></i>
                     Add Family
                   </span>
                   <span
-                    style="margin-left:10px;cursor: pointer;"
+                    style="margin-left: 10px; cursor: pointer"
                     @click="removeFamCondition(famCondition, index)"
                   >
                     <i class="fa-solid fa-person-circle-xmark"></i>
@@ -106,209 +106,146 @@
   </section>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useTaskStore } from '@/stores/task'
+import BtnSaving from '../button-saving.vue'
 import Multiselect from 'vue-multiselect'
 import '../../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
-import api from '../../api/http-common.js'
-import { mapGetters, mapActions } from 'vuex'
-import BtnSaving from '../button-saving.vue'
-export default {
-  components: {
-    Multiselect,
-    BtnSaving
-  },
-  data () {
-    return {
-      isLoading: false,
-      isSaving: false,
-      form: {
-        condition: [],
-        familyCondition: []
-      },
-      familyHistoryData: null
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'getProfilePatientAssociated',
-      'getTaskCurrentCaseHistoryId',
-      'getTaskPreviousTaskType',
-      'getTaskCurrentTaskType',
-      'currentPatientAssociated'
-    ]),
-    conditionSelection () {
-      return [
-        'Cancer',
-        'Stroke',
-        'Thyroid problems',
-        'Asthma',
-        'Heart attack',
-        'HIV',
-        'Angina/Chest pain',
-        'Diabetes',
-        'Arthritis',
-        'Nothing significant',
-        'Unknown'
-      ]
-    },
-    familySelection () {
-      return [
-        'Father',
-        'Mother',
-        'Brother',
-        'Sister',
-        'Grandfather',
-        'Grandmother',
-        'Son',
-        'Daughter'
-      ]
-    },
-    statusSelection () {
-      return ['Past', 'Present']
-    }
-  },
-  watch: {
-    'form.condition': function (val) {
-      //   console.log('val', val)
-    }
-  },
-  methods: {
-    ...mapActions(['setTaskCurrentTaskType']),
-    addSameConditionToFam (famCondition) {
-      this.form.familyCondition.push({
-        question: famCondition.question,
+
+const router = useRouter()
+const taskStore = useTaskStore()
+
+const isLoading = ref(false)
+const isSaving = ref(false)
+const form = ref({})
+
+const loadFamilyHistory = async () => {
+  try {
+    const response = await taskStore.getFamilyHistory()
+    form.value = response.data
+  } catch (error) {
+    console.error('Error fetching family history:', error)
+  }
+}
+
+const saveFamilyHistory = async () => {
+  isSaving.value = true
+  try {
+    await taskStore.saveFamilyHistory(form.value)
+    router.push('/task/thankyou')
+  } catch (error) {
+    console.error('Error saving family history:', error)
+  } finally {
+    isSaving.value = false
+  }
+}
+
+onMounted(() => {
+  loadFamilyHistory()
+})
+
+const conditionSelection = [
+  'Cancer',
+  'Stroke',
+  'Thyroid problems',
+  'Asthma',
+  'Heart attack',
+  'HIV',
+  'Angina/Chest pain',
+  'Diabetes',
+  'Arthritis',
+  'Nothing significant',
+  'Unknown'
+]
+
+const familySelection = [
+  'Father',
+  'Mother',
+  'Brother',
+  'Sister',
+  'Grandfather',
+  'Grandmother',
+  'Son',
+  'Daughter'
+]
+
+const statusSelection = ['Past', 'Present']
+
+const addSameConditionToFam = (famCondition) => {
+  form.value.familyCondition.push({
+    question: famCondition.question,
+    family: [],
+    stat: []
+  })
+}
+
+const removeFamCondition = (famCondition, index) => {
+  form.value.familyCondition.splice(index, 1)
+
+  const containsQuestion = form.value.familyCondition.find(
+    (el) => el.question === famCondition.question
+  )
+  if (!containsQuestion) {
+    form.value.condition = form.value.condition.filter(
+      (el) => el !== famCondition.question
+    )
+  }
+}
+
+const selectChange = (selected) => {
+  switch (selected) {
+    case 'Nothing significant':
+    case 'Unknown':
+      setTimeout(() => {
+        form.value.condition = [selected]
+        form.value.familyCondition = []
+      }, 1500)
+      break
+    default:
+      form.value.familyCondition.push({
+        question: selected,
         family: [],
         stat: []
       })
-    },
-    removeFamCondition (famCondition, index) {
-      this.form.familyCondition.splice(index, 1)
+      break
+  }
+}
 
-      const containsQuestion = this.form.familyCondition.find(
-        el => el.question === famCondition.question
-      )
-      if (!containsQuestion) {
-        this.form.condition = this.form.condition.filter(
-          el => el !== famCondition.question
-        )
-      }
-    },
-    selectChange (selected) {
-      switch (selected) {
-        case 'Nothing significant':
-        case 'Unknown':
-          setTimeout(() => {
-            this.form.condition = [selected]
-            this.form.familyCondition = []
-          }, 1500)
-          break
-        default:
-          this.form.familyCondition.push({
-            question: selected,
-            family: [],
-            stat: []
-          })
-          break
-      }
-    },
-    removeChange (remove) {
-      if (remove === 'Nothing significant' || remove === 'Unknown') {
-        this.form.familyCondition = []
-        return
-      }
-      this.form.familyCondition = this.form.familyCondition.filter(
-        x => x.question !== remove
-      )
-    },
-    prev () {
-      const currentIndex = this.getTaskPreviousTaskType.findIndex(
-        c => c === this.getTaskCurrentTaskType
-      )
-      let prevPage = ''
-      if (currentIndex === -1) {
-        prevPage = this.getTaskPreviousTaskType[
-          this.getTaskPreviousTaskType.length - 1
-        ]
-      } else {
-        prevPage = this.getTaskPreviousTaskType[currentIndex - 1]
-      }
-      this.setTaskCurrentTaskType({
-        back: true,
-        page: prevPage,
-        removePage: this.getTaskCurrentTaskType
-      })
-    },
-    async submit () {
-      this.isSaving = true
-      // alert('payload!')
-      const payload = []
-      this.form.familyCondition.forEach((el, index) => {
-        payload.push({
-          facilityId: this.currentPatientAssociated.facilityID,
-          caseHistoryId: this.getTaskCurrentCaseHistoryId,
-          id: 0,
-          description: el.question,
-          relation: el.family,
-          present: el.stat === 'Present',
-          notPresent: false,
-          past: el.stat === 'Past',
-          unknown: el.question === 'Unknown'
-        })
-      })
+const removeChange = (remove) => {
+  if (remove === 'Nothing significant' || remove === 'Unknown') {
+    form.value.familyCondition = []
+    return
+  }
+  form.value.familyCondition = form.value.familyCondition.filter(
+    (x) => x.question !== remove
+  )
+}
 
-      await api.task.request.insertCaseHistoryFamilyHealthHistory({
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId,
-        histories: payload
-      })
+const prev = () => {
+  const currentIndex = getTaskPreviousTaskType.value.findIndex(
+    (c) => c === getTaskCurrentTaskType.value
+  )
+  let prevPage = ''
+  if (currentIndex === -1) {
+    prevPage =
+      getTaskPreviousTaskType.value[getTaskPreviousTaskType.value.length - 1]
+  } else {
+    prevPage = getTaskPreviousTaskType.value[currentIndex - 1]
+  }
+  setTaskCurrentTaskType({
+    back: true,
+    page: prevPage,
+    removePage: getTaskCurrentTaskType.value
+  })
+}
 
-      this.isSaving = false
-      this.setTaskCurrentTaskType('NphThankyou')
-    }
-  },
-  async activated () {
-    this.isLoading = true
-    const familyHistoryData = await api.task.request.getCaseHistoryFamilyHealthHistory(
-      {
-        facilityId: this.currentPatientAssociated.facilityID,
-        caseHistoryId: this.getTaskCurrentCaseHistoryId
-      }
-    )
-    this.familyHistoryData = familyHistoryData.data
-    this.form.familyCondition = []
-    this.form.condition = []
-
-    // Construct data
-    this.familyHistoryData.forEach(el => {
-      var isConditionAlreadyAdded = this.form.condition.find(
-        el2 => el.description
-      )
-      if (!isConditionAlreadyAdded) {
-        this.form.condition.push(el.description)
-      }
-
-      let stat = ''
-      if (el.past) {
-        stat = 'Past'
-      }
-      if (el.present) {
-        stat = 'Present'
-      }
-
-      this.form.familyCondition.push({
-        family: el.relation,
-        question: el.description,
-        stat: stat
-      })
-    })
-
-    this.isLoading = false
-
-    setTimeout(() => {
-      const el = document.getElementById('frmBody')
-      el.scrollIntoView({ behavior: 'smooth' })
-      console.log('should be scrolling to top!')
-    }, 1000)
+const submit = async () => {
+  try {
+    await saveFamilyHistory()
+  } catch (error) {
+    console.error('Error submitting family history:', error)
   }
 }
 </script>

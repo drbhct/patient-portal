@@ -1,124 +1,191 @@
 <template>
-  <div>
-    <form class="form-horizontal m-lg-4" @submit.prevent="updatePatientInfo">
-      <h3>Patient Information</h3>
-      <div class="form-group row">
-        <label class="col-lg-2 control-label text-lg-right text-xl-right pt-2" for="firstname">First Name:</label>
-        <div class="col-lg-4 col-xl-4">
-          <input type="text" class="form-control" id="inputDefault" v-model="form.firstName" required>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-lg-2 control-label text-lg-right text-xl-right pt-2" for="inputDefault">Last Name:</label>
-        <div class="col-lg-4 col-xl-4">
-          <input type="text" class="form-control" id="lastname" v-model="form.lastName" required>
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-lg-2 control-label text-lg-right text-xl-right pt-2" for="inputDefault">Nickname :</label>
-        <div class="col-lg-4 col-xl-4">
-          <input type="text" class="form-control" id="nickname" v-model="form.nickName">
-        </div>
-      </div>
-      <div class="form-group row">
-        <label class="col-lg-2 control-label text-lg-right text-xl-right pt-2" for="inputDefault">Email:</label>
-        <div class="col-lg-4 col-xl-4">
-          <input type="email" disabled pattern="^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$" class="form-control" id="email" v-model="form.email" required>
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-12 col-lg-6 col-xl-6">
-          <div class="checkbox-custom checkbox-default">
-            <input type="checkbox" v-model="form.paperStmt">
-            <label>Opt out of paper statements</label>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h2>Profile Information</h2>
+        <div v-if="isLoading" class="text-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
           </div>
         </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-lg-2">
+        <div v-else-if="!profileInfo" class="alert alert-info">
+          No profile information available.
         </div>
-        <div class="col-lg-4 col-xl-4">
-          <button class="btn btn-primary btn-w-160" type="submit">UPDATE</button>
+        <div v-else>
+          <form @submit.prevent="updateProfile">
+            <div class="card mb-4">
+              <div class="card-body">
+                <h5 class="card-title">Personal Information</h5>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="firstName">First Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="firstName"
+                        v-model="profile.firstName"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="lastName">Last Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="lastName"
+                        v-model="profile.lastName"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="dateOfBirth">Date of Birth</label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        id="dateOfBirth"
+                        v-model="profile.dateOfBirth"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="gender">Gender</label>
+                      <select
+                        class="form-control"
+                        id="gender"
+                        v-model="profile.gender"
+                        required
+                      >
+                        <option value="">Select Gender</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                        <option value="O">Other</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card mb-4">
+              <div class="card-body">
+                <h5 class="card-title">Contact Information</h5>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        v-model="profile.email"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="phone">Phone</label>
+                      <input
+                        type="tel"
+                        class="form-control"
+                        id="phone"
+                        v-model="profile.phone"
+                        required
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+                :disabled="isSaving"
+              >
+                {{ isSaving ? 'Saving...' : 'Save Changes' }}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
-    </form>
+    </div>
   </div>
 </template>
-<script>
-import api from '../../api/http-common.js'
-import { mapGetters, mapActions } from 'vuex'
-export default {
-  data () {
-    return {
-      form: {
-        patientId: '',
-        facilityId: '',
-        firstName: '',
-        lastName: '',
-        nickName: '',
-        email: '',
-        paperStmt: false
-      }
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { useToast } from 'vue-toastification'
+import { useProfileStore } from '@/stores/profile'
+
+const toast = useToast()
+const profileStore = useProfileStore()
+
+const isLoading = ref(false)
+const isSaving = ref(false)
+const profileInfo = ref(null)
+
+const profile = ref({
+  firstName: '',
+  lastName: '',
+  dateOfBirth: '',
+  gender: '',
+  email: '',
+  phone: ''
+})
+
+const loadProfile = async () => {
+  isLoading.value = true
+  try {
+    const info = await profileStore.getProfileInfo()
+    profileInfo.value = info
+    profile.value = {
+      firstName: info.firstName,
+      lastName: info.lastName,
+      dateOfBirth: info.dateOfBirth,
+      gender: info.gender,
+      email: info.email,
+      phone: info.phone
     }
-  },
-  computed: {
-    ...mapGetters(['getProfileAuthInfo', 'currentPatientAssociated'])
-  },
-  methods: {
-    ...mapActions(['setProfileCurrentPatient']),
-    async getPatientInfo () {
-      this.isLoading = true
-      const patientInfo = await api.task.request.getPatient({
-        facilityId: this.currentPatientAssociated.facilityID,
-        patientId: this.currentPatientAssociated.patientID
-      })
-
-      this.form = patientInfo.data
-      this.form.facilityId = this.currentPatientAssociated.facilityID
-      this.form.patientId = this.form.id
-      this.paperStmt = this.form.paperStmt
-      this.isLoading = false
-    },
-    async updatePatientInfo () {
-      await api.task.request.updatePatient(this.form)
-
-      const patientAssosicated = await api.auth.request.getUserPatient(
-        this.getProfileAuthInfo.id
-      )
-      const patientList = patientAssosicated.data
-      const patientSelected = patientList.find(x => x.patientID === this.form.patientId)
-
-      await this.setProfileCurrentPatient(patientSelected)
-      await this.updatePatientField()
-
-      this.$swal({
-        position: 'top-center',
-        title: 'Patient Info updated',
-        showConfirmButton: false,
-        timerProgressBar: true,
-        timer: 2000,
-        icon: 'success'
-      })
-    },
-    async updatePatientField () {
-      const param = {
-        facilityId: this.form.facilityId,
-        patientId: this.form.patientId,
-        field: 'PaperStmt',
-        value: this.form.paperStmt
-      }
-      await api.task.request.updatePatientField(param)
-    }
-  },
-  mounted () {
-    if (this.getProfileAuthInfo.id) {
-      this.getPatientInfo()
-    }
+  } catch (error) {
+    console.error('Error loading profile:', error)
+    toast.error('Failed to load profile information')
+  } finally {
+    isLoading.value = false
   }
 }
-</script>
-<style scoped>
-  .btn-w-160 {
-    width: 160px !important;
+
+const updateProfile = async () => {
+  isSaving.value = true
+  try {
+    await profileStore.updateProfile(profile.value)
+    toast.success('Profile updated successfully')
+    await loadProfile()
+  } catch (error) {
+    console.error('Error updating profile:', error)
+    toast.error('Failed to update profile')
+  } finally {
+    isSaving.value = false
   }
+}
+
+onMounted(() => {
+  loadProfile()
+})
+</script>
+
+<style scoped>
+.form-group {
+  margin-bottom: 1rem;
+}
 </style>

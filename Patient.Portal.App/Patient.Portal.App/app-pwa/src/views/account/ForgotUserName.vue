@@ -9,7 +9,10 @@
           <div class="card-body">
             <form @submit.prevent="forgetUserName">
               <div class="form-group">
-                <label>If an email address is connected to your account, request an email message containing your username.</label>
+                <label
+                  >If an email address is connected to your account, request an
+                  email message containing your username.</label
+                >
                 <input
                   type="email"
                   class="form-control"
@@ -19,7 +22,9 @@
                 />
               </div>
               <div class="form-goup text-center">
-                  <button type="submit" class="btn btn-primary">SEND MY USERNAME</button>
+                <button type="submit" class="btn btn-primary">
+                  SEND MY USERNAME
+                </button>
               </div>
             </form>
           </div>
@@ -31,7 +36,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       form: {
         email: ''
@@ -39,12 +44,14 @@ export default {
     }
   },
   methods: {
-    forgetUserName () {
+    async forgotUsername() {
       alert('Forgot UserName!')
+    },
+    async mounted() {
+      // ... existing code ...
     }
   }
 }
 </script>
 
-<style>
-</style>
+<style></style>

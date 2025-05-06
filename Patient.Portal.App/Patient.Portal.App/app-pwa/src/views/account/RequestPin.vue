@@ -51,10 +51,12 @@
                 />
               </div>
               <div class="form-goup text-center">
-                  <button type="submit" class="btn btn-primary">REQUEST NEW PIN</button>
+                <button type="submit" class="btn btn-primary">
+                  REQUEST NEW PIN
+                </button>
               </div>
               <div class="form-group text-center mt-2">
-                  <router-link to="/account/login">Return to Login</router-link>
+                <router-link to="/account/login">Return to Login</router-link>
               </div>
             </form>
           </div>
@@ -66,7 +68,7 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       form: {
         firstName: '',
@@ -77,12 +79,14 @@ export default {
     }
   },
   methods: {
-    requestPin () {
+    async requestPin() {
       alert('Requesting PIN!')
+    },
+    async mounted() {
+      // ... existing code ...
     }
   }
 }
 </script>
 
-<style>
-</style>
+<style></style>
